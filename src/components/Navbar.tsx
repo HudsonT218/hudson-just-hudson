@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
@@ -13,6 +13,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
   useEffect(() => {
@@ -24,6 +25,39 @@ const Navbar = () => {
   const resolveHref = (href: string) => {
     if (href.startsWith("/")) return href;
     return isHome ? href : `/${href}`;
+  };
+
+  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const resolved = resolveHref(href);
+
+    // Hash-only link on the current page — let the browser scroll natively
+    if (resolved.startsWith("#")) return;
+
+    // Route with hash (e.g. "/#services") — navigate then scroll
+    if (resolved.startsWith("/") && resolved.includes("#")) {
+      e.preventDefault();
+      const [path, hash] = resolved.split("#");
+      const target = path || "/";
+      if (location.pathname === target) {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        navigate(target);
+        // Wait for render then scroll
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+          }, 50);
+        });
+      }
+      return;
+    }
+
+    // Pure route link (e.g. "/packages") — client-side navigate
+    if (resolved.startsWith("/")) {
+      e.preventDefault();
+      navigate(resolved);
+      window.scrollTo(0, 0);
+    }
   };
 
   const logoHref = isHome ? "#hero" : "/";
@@ -43,6 +77,7 @@ const Navbar = () => {
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <a
           href={logoHref}
+          onClick={(e) => handleNav(e, logoHref)}
           className="text-xl font-extrabold text-white tracking-tight"
           style={{ letterSpacing: "-0.03em" }}
         >
@@ -55,6 +90,7 @@ const Navbar = () => {
             <a
               key={link.label}
               href={resolveHref(link.href)}
+              onClick={(e) => handleNav(e, link.href)}
               className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
             >
               {link.label}
@@ -101,8 +137,11 @@ const Navbar = () => {
             <a
               key={link.label}
               href={resolveHref(link.href)}
+              onClick={(e) => {
+                handleNav(e, link.href);
+                setOpen(false);
+              }}
               className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
-              onClick={() => setOpen(false)}
             >
               {link.label}
             </a>
