@@ -8,8 +8,6 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 
-const CALENDLY = "https://calendly.com/hudsonturansky/30min";
-
 const WEBSITE_PACKAGES = [
   {
     title: "Landing Page",
@@ -26,6 +24,7 @@ const WEBSITE_PACKAGES = [
     ],
     popular: false,
     rgb: "255,255,255",
+    calendly: "https://calendly.com/hudsonturansky/landing-page-discovery-call",
   },
   {
     title: "Business Site",
@@ -43,6 +42,7 @@ const WEBSITE_PACKAGES = [
     ],
     popular: true,
     rgb: "59,130,246",
+    calendly: "https://calendly.com/hudsonturansky/business-site-discovery-call",
   },
   {
     title: "Operations Software",
@@ -61,6 +61,7 @@ const WEBSITE_PACKAGES = [
     ],
     popular: false,
     rgb: "255,255,255",
+    calendly: "https://calendly.com/hudsonturansky/operations-software-discovery-call",
   },
 ];
 
@@ -79,6 +80,7 @@ const AI_PACKAGES = [
       "2 rounds of revisions",
     ],
     rgb: "255,255,255",
+    calendly: "https://calendly.com/hudsonturansky/personal-ai-assistant-discovery-call",
   },
   {
     title: "Company AI Agent",
@@ -96,6 +98,7 @@ const AI_PACKAGES = [
       "30 days post-launch support",
     ],
     rgb: "255,255,255",
+    calendly: "https://calendly.com/hudsonturansky/company-ai-agent-discovery-call",
   },
 ];
 
@@ -146,6 +149,7 @@ const PackageCard = ({
   features,
   popular,
   rgb,
+  calendly,
 }: {
   title: string;
   price: string;
@@ -153,6 +157,7 @@ const PackageCard = ({
   features: string[];
   popular?: boolean;
   rgb: string;
+  calendly: string;
 }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -236,7 +241,7 @@ const PackageCard = ({
       </div>
 
       <a
-        href={CALENDLY}
+        href={calendly}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center justify-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200 w-full"
