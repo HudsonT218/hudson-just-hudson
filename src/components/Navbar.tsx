@@ -27,7 +27,6 @@ const Navbar = () => {
   };
 
   const logoHref = isHome ? "#hero" : "/";
-  const ctaHref = isHome ? "#contact" : "/#contact";
 
   return (
     <nav
@@ -61,22 +60,6 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <a
-            href={ctaHref}
-            className="text-sm font-medium text-white px-4 py-2 rounded-md transition-colors duration-200"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-            }}
-          >
-            Let's Talk
-          </a>
         </div>
 
         {/* Mobile toggle */}
@@ -124,17 +107,6 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <a
-            href={ctaHref}
-            className="inline-block mt-3 text-sm font-medium text-white px-4 py-2 rounded-md"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-            onClick={() => setOpen(false)}
-          >
-            Let's Talk
-          </a>
         </div>
       </div>
     </nav>
