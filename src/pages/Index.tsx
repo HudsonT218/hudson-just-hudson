@@ -94,36 +94,7 @@ const Index = () => {
             move faster.
           </p>
 
-          {/* Hero buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-            {/* Outline — See My Work */}
-            <a
-              href="#services"
-              className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
-              style={{
-                backgroundColor: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.1)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-              }}
-            >
-              See My Work
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M7 3L7 11M7 11L3 7M7 11L11 7"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-
-            {/* Primary — Book a Call */}
+          <div className="flex justify-center mb-8">
             <a
               href="#contact"
               className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
