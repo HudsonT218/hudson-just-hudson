@@ -84,8 +84,7 @@ const Contact = () => {
             no pitch — just a conversation about what you need.
           </p>
 
-          {/* Buttons */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="mb-6">
             <a
               href="https://calendly.com/hudsonturansky/30min"
               target="_blank"
@@ -109,32 +108,6 @@ const Contact = () => {
                 />
               </svg>
               Book a Call
-            </a>
-
-            <a
-              href="mailto:hudsonturansky@gmail.com"
-              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
-              style={{
-                backgroundColor: "#ffffff",
-                color: "#09090b",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.9)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#ffffff";
-              }}
-            >
-              Get started
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M5.5 3L9.5 7L5.5 11"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
             </a>
           </div>
 
