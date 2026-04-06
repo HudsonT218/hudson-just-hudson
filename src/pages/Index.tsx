@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import DottedSurface from "@/components/DottedSurface";
 import Navbar from "@/components/Navbar";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
@@ -19,7 +18,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative">
-      <DottedSurface interactive />
       <Navbar />
 
       {/* Hero */}

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DottedSurface from "@/components/DottedSurface";
 import Navbar from "@/components/Navbar";
 import {
   Accordion,
@@ -285,7 +284,6 @@ const PackageCard = ({
 const Packages = () => {
   return (
     <div className="min-h-screen relative">
-      <DottedSurface />
       <Navbar />
 
       {/* Hero */}
