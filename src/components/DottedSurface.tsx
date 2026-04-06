@@ -5,9 +5,9 @@ const GRID = 50;
 const SEP = 100;
 const HOVER_RADIUS = 500;
 const HOVER_STRENGTH = 120;
-const PULSE_SPEED = 1200;
-const PULSE_WIDTH = 400;
-const PULSE_DECAY = 3.5;
+const PULSE_SPEED = 1800;
+const PULSE_WIDTH = 600;
+const PULSE_DECAY = 1.8;
 const MAX_PULSES = 8;
 
 interface Pulse {
