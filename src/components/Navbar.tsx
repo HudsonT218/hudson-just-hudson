@@ -1,21 +1,33 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "Process", href: "#process" },
+  { label: "Packages", href: "/packages" },
   { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const resolveHref = (href: string) => {
+    if (href.startsWith("/")) return href;
+    return isHome ? href : `/${href}`;
+  };
+
+  const logoHref = isHome ? "#hero" : "/";
+  const ctaHref = isHome ? "#contact" : "/#contact";
 
   return (
     <nav
@@ -31,7 +43,7 @@ const Navbar = () => {
     >
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
         <a
-          href="#hero"
+          href={logoHref}
           className="text-xl font-extrabold text-white tracking-tight"
           style={{ letterSpacing: "-0.03em" }}
         >
@@ -42,15 +54,15 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <a
-              key={link.href}
-              href={link.href}
+              key={link.label}
+              href={resolveHref(link.href)}
               className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
             >
               {link.label}
             </a>
           ))}
           <a
-            href="#contact"
+            href={ctaHref}
             className="text-sm font-medium text-white px-4 py-2 rounded-md transition-colors duration-200"
             style={{
               backgroundColor: "rgba(255,255,255,0.06)",
@@ -104,8 +116,8 @@ const Navbar = () => {
         >
           {NAV_LINKS.map((link) => (
             <a
-              key={link.href}
-              href={link.href}
+              key={link.label}
+              href={resolveHref(link.href)}
               className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
               onClick={() => setOpen(false)}
             >
@@ -113,7 +125,7 @@ const Navbar = () => {
             </a>
           ))}
           <a
-            href="#contact"
+            href={ctaHref}
             className="inline-block mt-3 text-sm font-medium text-white px-4 py-2 rounded-md"
             style={{
               backgroundColor: "rgba(255,255,255,0.06)",
