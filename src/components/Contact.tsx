@@ -83,37 +83,12 @@ const Contact = () => {
             no pitch — just a conversation about what you need.
           </p>
 
-          {/* Buttons */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            {/* Outline — Book a Call */}
+          {/* Button */}
+          <div className="mb-6">
             <a
-              href="https://calendly.com/hudsonturansky"
+              href="https://calendly.com/hudsonturansky/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
-              style={{
-                border: "1px solid rgba(255,255,255,0.15)",
-                backgroundColor: "transparent",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M13.3 2.7H12V1.3a.67.67 0 0 0-1.33 0v1.34H5.33V1.3A.67.67 0 0 0 4 1.3v1.34H2.67A1.33 1.33 0 0 0 1.33 4v9.33a1.33 1.33 0 0 0 1.34 1.34h10.66a1.33 1.33 0 0 0 1.34-1.34V4a1.33 1.33 0 0 0-1.34-1.3ZM2.67 4H13.3v1.33H2.67V4Zm10.66 9.33H2.67V6.67h10.66v6.66Z"
-                  fill="currentColor"
-                />
-              </svg>
-              Book a Call
-            </a>
-
-            {/* Primary — Get started */}
-            <a
-              href="mailto:hudsonturansky@gmail.com"
               className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
               style={{
                 backgroundColor: "#ffffff",
@@ -126,7 +101,7 @@ const Contact = () => {
                 e.currentTarget.style.backgroundColor = "#ffffff";
               }}
             >
-              Get started
+              Book a Call
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path
                   d="M5.5 3L9.5 7L5.5 11"
@@ -140,7 +115,7 @@ const Contact = () => {
           </div>
 
           <p className="text-gray-700 text-xs">
-            Free 15-minute discovery call. No commitment.
+            Free 30-minute discovery call. No commitment.
           </p>
         </div>
       </div>
