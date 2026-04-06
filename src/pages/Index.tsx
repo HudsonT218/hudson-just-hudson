@@ -7,7 +7,7 @@ import Contact from "@/components/Contact";
 
 const Index = () => {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#09090b" }}>
+    <div className="min-h-screen relative">
       <DottedSurface interactive />
       <Navbar />
 
