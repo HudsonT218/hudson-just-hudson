@@ -53,14 +53,14 @@ const Navbar = () => {
             href="#contact"
             className="text-sm font-medium text-white px-4 py-2 rounded-md transition-colors duration-200"
             style={{
-              backgroundColor: "rgba(255,255,255,0.08)",
+              backgroundColor: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.1)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
+              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)";
+              e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
             }}
           >
             Let's Talk
@@ -116,7 +116,7 @@ const Navbar = () => {
             href="#contact"
             className="inline-block mt-3 text-sm font-medium text-white px-4 py-2 rounded-md"
             style={{
-              backgroundColor: "rgba(255,255,255,0.08)",
+              backgroundColor: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.1)",
             }}
             onClick={() => setOpen(false)}

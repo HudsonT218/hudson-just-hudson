@@ -62,6 +62,7 @@ const Services = () => {
                   border: isHovered
                     ? `1px solid rgba(${s.rgb},0.15)`
                     : "1px solid rgba(255,255,255,0.05)",
+                  transform: isHovered ? "translateY(-2px)" : "none",
                 }}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}

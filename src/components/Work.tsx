@@ -48,14 +48,10 @@ const Work = () => {
               className="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
               style={{ border: "1px solid rgba(255,255,255,0.05)" }}
             >
-              {/* Header */}
               <div
                 className="h-48 relative overflow-hidden flex items-center justify-center"
-                style={{
-                  background: `rgba(${p.rgb},0.02)`,
-                }}
+                style={{ background: `rgba(${p.rgb},0.02)` }}
               >
-                {/* Blurred accent orb */}
                 <div
                   className="absolute w-28 h-28 rounded-full"
                   style={{
@@ -65,7 +61,6 @@ const Work = () => {
                     right: "10%",
                   }}
                 />
-                {/* Ghost text */}
                 <span
                   className="text-7xl font-extrabold select-none"
                   style={{
@@ -77,7 +72,6 @@ const Work = () => {
                 </span>
               </div>
 
-              {/* Info */}
               <div className="p-6" style={{ backgroundColor: "rgba(255,255,255,0.01)" }}>
                 <h3
                   className="text-base font-semibold text-white mb-2"

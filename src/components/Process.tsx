@@ -41,7 +41,6 @@ const Process = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 relative">
-          {/* Connector line (desktop) */}
           <div
             className="hidden lg:block absolute top-10 left-0 right-0 h-px"
             style={{
