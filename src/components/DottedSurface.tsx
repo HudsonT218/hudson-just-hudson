@@ -48,6 +48,12 @@ interface DottedSurfaceProps {
 
 const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const interactiveRef = useRef(interactive);
+
+  // Keep ref in sync with prop without re-running the effect
+  useEffect(() => {
+    interactiveRef.current = interactive;
+  }, [interactive]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -110,9 +116,9 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     let hasMousePos = false;
     const pulses: Pulse[] = [];
 
-    // Listen on window so events aren't blocked by page content above
+    // Always listen — the animation loop checks interactiveRef at render time
     const onMouseMove = (e: MouseEvent) => {
-      if (!interactive) return;
+      if (!interactiveRef.current) return;
       mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouseNDC, camera);
@@ -127,7 +133,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     };
 
     const onClick = (e: MouseEvent) => {
-      if (!interactive) return;
+      if (!interactiveRef.current) return;
       mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouseNDC, camera);
@@ -141,11 +147,9 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
       }
     };
 
-    if (interactive) {
-      window.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseleave", onMouseLeave);
-      window.addEventListener("click", onClick);
-    }
+    window.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("click", onClick);
 
     // Animation
     const clock = new THREE.Clock();
@@ -175,7 +179,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
           let s = 8;
 
           // Mouse hover
-          if (interactive && hasMousePos) {
+          if (interactiveRef.current && hasMousePos) {
             const dx = px - mouseWorld.x;
             const dz = pz - mouseWorld.y;
             const dist = Math.sqrt(dx * dx + dz * dz);
@@ -230,11 +234,9 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
-      if (interactive) {
-        window.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseleave", onMouseLeave);
-        window.removeEventListener("click", onClick);
-      }
+      window.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseleave", onMouseLeave);
+      window.removeEventListener("click", onClick);
       renderer.dispose();
       geometry.dispose();
       material.dispose();
@@ -242,7 +244,8 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
         container.removeChild(renderer.domElement);
       }
     };
-  }, [interactive]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
