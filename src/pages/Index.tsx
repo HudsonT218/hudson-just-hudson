@@ -150,10 +150,6 @@ const Index = () => {
               </svg>
             </a>
           </div>
-
-          <p className="text-gray-600 text-xs">
-            Click anywhere to send a pulse &middot; Hover to interact
-          </p>
         </div>
       </section>
 
