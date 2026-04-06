@@ -11,13 +11,13 @@ const STEPS = [
   },
   {
     num: "03",
-    title: "Build & Iterate",
-    desc: "I build in short cycles with regular check-ins so you see progress and can steer the direction.",
+    title: "Build & Deliver",
+    desc: "I build your project fast using AI-powered workflows and deliver a polished result. You get up to 5 rounds of revisions to make sure it\u2019s exactly right.",
   },
   {
     num: "04",
-    title: "Launch & Support",
-    desc: "We ship it, I make sure everything runs smooth, and I stick around for any tweaks you need.",
+    title: "Launch & Handoff",
+    desc: "Once revisions are complete, I launch your project and hand over everything. Need ongoing work after that? We can set up a retainer or hourly arrangement.",
   },
 ];
 
@@ -55,7 +55,7 @@ const Process = () => {
                 className="block text-5xl font-extrabold leading-none select-none mb-4"
                 style={{
                   background:
-                    "linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",
+                    "linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1))",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   letterSpacing: "-0.04em",

@@ -46,16 +46,16 @@ const Work = () => {
             <div
               key={p.title}
               className="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-              style={{ border: "1px solid rgba(255,255,255,0.05)" }}
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)" }}
             >
               <div
                 className="h-48 relative overflow-hidden flex items-center justify-center"
-                style={{ background: `rgba(${p.rgb},0.02)` }}
+                style={{ background: `rgba(${p.rgb},0.06)` }}
               >
                 <div
                   className="absolute w-28 h-28 rounded-full"
                   style={{
-                    background: `rgba(${p.rgb},0.06)`,
+                    background: `rgba(${p.rgb},0.1)`,
                     filter: "blur(35px)",
                     top: "20%",
                     right: "10%",
@@ -65,14 +65,14 @@ const Work = () => {
                   className="text-7xl font-extrabold select-none"
                   style={{
                     letterSpacing: "-0.04em",
-                    color: `rgba(${p.rgb},0.08)`,
+                    color: `rgba(${p.rgb},0.15)`,
                   }}
                 >
                   {p.word}
                 </span>
               </div>
 
-              <div className="p-6" style={{ backgroundColor: "rgba(255,255,255,0.01)" }}>
+              <div className="p-6" style={{ backgroundColor: "rgba(255,255,255,0.025)" }}>
                 <h3
                   className="text-base font-semibold text-white mb-2"
                   style={{ letterSpacing: "-0.01em" }}
