@@ -2,7 +2,7 @@ const STEPS = [
   {
     num: "01",
     title: "Discovery Call",
-    desc: "We talk about your goals, pain points, and what success looks like — no commitment needed.",
+    desc: "We talk about your goals, pain points, and what success looks like \u2014 no commitment needed.",
   },
   {
     num: "02",
@@ -27,13 +27,13 @@ const Process = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-16">
           <h2
-            className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight"
+            className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
             style={{ letterSpacing: "-0.03em" }}
           >
             Simple process,
           </h2>
           <h2
-            className="text-3xl sm:text-4xl font-extrabold text-gray-300 leading-tight"
+            className="text-3xl sm:text-4xl font-extrabold text-gray-600 leading-tight"
             style={{ letterSpacing: "-0.03em" }}
           >
             exceptional results.
@@ -41,11 +41,12 @@ const Process = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 relative">
-          {/* Connector line (desktop only) */}
+          {/* Connector line (desktop) */}
           <div
             className="hidden lg:block absolute top-10 left-0 right-0 h-px"
             style={{
-              background: "linear-gradient(90deg, transparent, #e5e7eb 10%, #e5e7eb 90%, transparent)",
+              background:
+                "linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 10%, rgba(255,255,255,0.06) 90%, transparent)",
             }}
           />
 
@@ -54,7 +55,8 @@ const Process = () => {
               <span
                 className="block text-5xl font-extrabold leading-none select-none mb-4"
                 style={{
-                  background: "linear-gradient(180deg, #d1d5db, #f3f4f6)",
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   letterSpacing: "-0.04em",
@@ -63,12 +65,12 @@ const Process = () => {
                 {s.num}
               </span>
               <h3
-                className="text-base font-semibold text-gray-900 mb-2"
+                className="text-sm font-semibold text-white mb-2"
                 style={{ letterSpacing: "-0.01em" }}
               >
                 {s.title}
               </h3>
-              <p className="text-gray-400 text-sm font-light leading-relaxed">
+              <p className="text-gray-500 text-sm font-light leading-relaxed">
                 {s.desc}
               </p>
             </div>

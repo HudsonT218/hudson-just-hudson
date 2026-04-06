@@ -3,55 +3,146 @@ const Contact = () => {
     <section
       id="contact"
       className="relative py-28 px-6 overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)",
-      }}
+      style={{ backgroundColor: "#09090b" }}
     >
-      {/* Radial glow */}
+      {/* Radial overlays */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, rgba(37,99,235,0.1) 0%, transparent 60%)",
+          background:
+            "radial-gradient(20% 80% at 20% 0%, rgba(255,255,255,0.06), transparent)",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.06) 0%, transparent 60%)",
         }}
       />
 
-      <div className="relative max-w-lg mx-auto text-center">
-        <h2
-          className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-2"
-          style={{ letterSpacing: "-0.03em" }}
-        >
-          Ready to build
-        </h2>
-        <h2
-          className="text-3xl sm:text-4xl font-extrabold leading-tight mb-6"
-          style={{
-            letterSpacing: "-0.03em",
-            background: "linear-gradient(135deg, #60a5fa, #a78bfa)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          something great?
-        </h2>
-        <p className="text-gray-400 font-light mb-10">
-          Let's hop on a quick call and figure out how I can help. No pressure, no pitch — just a
-          conversation about what you need.
-        </p>
-        <a
-          href="https://calendly.com/hudsonturansky"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block text-white font-semibold px-8 py-3.5 rounded-full transition-all duration-200 hover:scale-105"
-          style={{
-            background: "linear-gradient(135deg, #2563eb, #7c3aed)",
-            boxShadow: "0 0 40px rgba(37,99,235,0.25)",
-          }}
-        >
-          Book a Call
-        </a>
-        <p className="text-gray-600 text-xs mt-5">
-          Free 15-minute discovery call. No commitment.
-        </p>
+      <div className="relative max-w-5xl mx-auto">
+        <div className="max-w-2xl">
+          {/* OPEN badge */}
+          <a
+            href="https://calendly.com/hudsonturansky"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 mb-8 group"
+            style={{
+              border: "1px solid rgba(255,255,255,0.1)",
+              backgroundColor: "rgba(255,255,255,0.05)",
+              borderRadius: "9999px",
+              padding: "4px 14px 4px 4px",
+            }}
+          >
+            <span
+              className="font-mono text-xs font-medium px-2 py-0.5 rounded-full"
+              style={{
+                backgroundColor: "rgba(59,130,246,0.15)",
+                color: "#60a5fa",
+              }}
+            >
+              OPEN
+            </span>
+            <span className="text-sm text-gray-400">
+              scheduling discovery calls now
+            </span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              className="text-gray-500 transition-transform duration-200 group-hover:translate-x-0.5"
+            >
+              <path
+                d="M5.5 3L9.5 7L5.5 11"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+
+          {/* Heading */}
+          <h2
+            className="text-4xl md:text-5xl font-medium text-white leading-tight mb-6"
+            style={{ textWrap: "balance", letterSpacing: "-0.03em" }}
+          >
+            Ready to Build Something
+            <br />
+            That Drives Growth?
+          </h2>
+
+          <p
+            className="text-gray-500 text-sm sm:text-lg font-light mb-10"
+            style={{ letterSpacing: "0.02em" }}
+          >
+            Let's hop on a quick call and figure out how I can help. No pressure,
+            no pitch — just a conversation about what you need.
+          </p>
+
+          {/* Buttons */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            {/* Outline — Book a Call */}
+            <a
+              href="https://calendly.com/hudsonturansky"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
+              style={{
+                border: "1px solid rgba(255,255,255,0.15)",
+                backgroundColor: "transparent",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M13.3 2.7H12V1.3a.67.67 0 0 0-1.33 0v1.34H5.33V1.3A.67.67 0 0 0 4 1.3v1.34H2.67A1.33 1.33 0 0 0 1.33 4v9.33a1.33 1.33 0 0 0 1.34 1.34h10.66a1.33 1.33 0 0 0 1.34-1.34V4a1.33 1.33 0 0 0-1.34-1.3ZM2.67 4H13.3v1.33H2.67V4Zm10.66 9.33H2.67V6.67h10.66v6.66Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Book a Call
+            </a>
+
+            {/* Primary — Get started */}
+            <a
+              href="mailto:hudsonturansky@gmail.com"
+              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
+              style={{
+                backgroundColor: "#ffffff",
+                color: "#09090b",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.9)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#ffffff";
+              }}
+            >
+              Get started
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M5.5 3L9.5 7L5.5 11"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+
+          <p className="text-gray-700 text-xs">
+            Free 15-minute discovery call. No commitment.
+          </p>
+        </div>
       </div>
     </section>
   );

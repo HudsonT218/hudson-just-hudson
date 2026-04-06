@@ -103,9 +103,8 @@ const NodeMap = () => {
         const targetX = cx + Math.cos(driftAngle) * n.orbitRadius;
         const targetY = cy + Math.sin(driftAngle) * n.orbitRadius;
 
-        const springK = 0.018;
-        n.vx += (targetX - n.x) * springK;
-        n.vy += (targetY - n.y) * springK;
+        n.vx += (targetX - n.x) * 0.018;
+        n.vy += (targetY - n.y) * 0.018;
 
         for (let j = 0; j < nodes.length; j++) {
           if (i === j) continue;
@@ -128,15 +127,15 @@ const NodeMap = () => {
 
       ctx.clearRect(0, 0, dimensions.w, dimensions.h);
 
-      // Connection lines (gradient)
+      // Connection lines
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
         const isHovered = hoverIndexRef.current === i;
-        const alpha = isHovered ? 0.3 : 0.06;
+        const alpha = isHovered ? 0.25 : 0.05;
 
         const grad = ctx.createLinearGradient(cx, cy, n.x, n.y);
-        grad.addColorStop(0, `rgba(37,99,235,${alpha})`);
-        grad.addColorStop(1, `rgba(79,70,229,${alpha})`);
+        grad.addColorStop(0, `rgba(59,130,246,${alpha})`);
+        grad.addColorStop(1, `rgba(124,58,237,${alpha})`);
 
         ctx.beginPath();
         ctx.moveTo(cx, cy);
@@ -145,24 +144,23 @@ const NodeMap = () => {
         ctx.lineWidth = isHovered ? 1.5 : 1;
         ctx.stroke();
 
-        // Animated dot on hover
         if (isHovered) {
           const dotT = (t * 1.5) % 1;
           const dotX = cx + (n.x - cx) * dotT;
           const dotY = cy + (n.y - cy) * dotT;
           ctx.beginPath();
           ctx.arc(dotX, dotY, 3, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(37,99,235,0.6)";
+          ctx.fillStyle = "rgba(59,130,246,0.6)";
           ctx.fill();
         }
       }
 
       // Center glow
-      const glowGrad = ctx.createRadialGradient(cx, cy, centerR * 0.5, cx, cy, centerR * 2.5);
-      glowGrad.addColorStop(0, "rgba(37,99,235,0.12)");
-      glowGrad.addColorStop(1, "rgba(37,99,235,0)");
+      const glowGrad = ctx.createRadialGradient(cx, cy, centerR * 0.5, cx, cy, centerR * 3);
+      glowGrad.addColorStop(0, "rgba(59,130,246,0.1)");
+      glowGrad.addColorStop(1, "rgba(59,130,246,0)");
       ctx.beginPath();
-      ctx.arc(cx, cy, centerR * 2.5, 0, Math.PI * 2);
+      ctx.arc(cx, cy, centerR * 3, 0, Math.PI * 2);
       ctx.fillStyle = glowGrad;
       ctx.fill();
 
@@ -170,11 +168,11 @@ const NodeMap = () => {
       ctx.beginPath();
       ctx.arc(cx, cy, centerR, 0, Math.PI * 2);
       const centerGrad = ctx.createLinearGradient(cx - centerR, cy - centerR, cx + centerR, cy + centerR);
-      centerGrad.addColorStop(0, "#2563eb");
-      centerGrad.addColorStop(1, "#4f46e5");
+      centerGrad.addColorStop(0, "#3b82f6");
+      centerGrad.addColorStop(1, "#7c3aed");
       ctx.fillStyle = centerGrad;
-      ctx.shadowColor = "rgba(37,99,235,0.3)";
-      ctx.shadowBlur = 40;
+      ctx.shadowColor = "rgba(59,130,246,0.3)";
+      ctx.shadowBlur = 50;
       ctx.fill();
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
@@ -195,40 +193,42 @@ const NodeMap = () => {
         const n = nodes[i];
         const isHovered = hoverIndexRef.current === i;
 
-        // Breathing scale
-        const breath = 1 + Math.sin(t * 1.2 + n.phase) * 0.025;
+        const breath = 1 + Math.sin(t * 1.2 + n.phase) * 0.02;
         const hoverScale = isHovered ? 1.06 : 1;
         const r = n.r * breath * hoverScale;
 
         // Shadow
-        ctx.shadowColor = isHovered ? "rgba(37,99,235,0.15)" : "rgba(0,0,0,0.04)";
-        ctx.shadowBlur = isHovered ? 24 : 10;
-        ctx.shadowOffsetY = isHovered ? 4 : 2;
+        if (isHovered) {
+          ctx.shadowColor = "rgba(59,130,246,0.2)";
+          ctx.shadowBlur = 20;
+        }
 
+        // Fill
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = isHovered ? "rgba(24,24,27,0.95)" : "rgba(15,15,18,0.9)";
         ctx.fill();
         ctx.shadowColor = "transparent";
         ctx.shadowBlur = 0;
-        ctx.shadowOffsetY = 0;
 
         // Border
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        ctx.strokeStyle = isHovered ? "rgba(79,70,229,0.2)" : "rgba(0,0,0,0.04)";
+        ctx.strokeStyle = isHovered
+          ? "rgba(59,130,246,0.3)"
+          : "rgba(255,255,255,0.06)";
         ctx.lineWidth = 1;
         ctx.stroke();
 
         // Emoji
-        ctx.font = `${Math.round(r * 0.45)}px serif`;
+        ctx.font = `${Math.round(r * 0.42)}px serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(n.emoji, n.x, n.y - r * 0.14);
+        ctx.fillText(n.emoji, n.x, n.y - r * 0.13);
 
         // Label
-        ctx.fillStyle = isHovered ? "#111827" : "#9ca3af";
-        const fontSize = Math.max(8, Math.round(r * 0.21));
+        ctx.fillStyle = isHovered ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.35)";
+        const fontSize = Math.max(8, Math.round(r * 0.2));
         ctx.font = `500 ${fontSize}px Inter, system-ui, sans-serif`;
         ctx.fillText(n.label, n.x, n.y + r * 0.36);
       }
@@ -289,7 +289,11 @@ const NodeMap = () => {
       const canvas = canvasRef.current;
       if (canvas) {
         canvas.style.cursor =
-          dragIndexRef.current !== null ? "grabbing" : hoverIndexRef.current !== null ? "grab" : "default";
+          dragIndexRef.current !== null
+            ? "grabbing"
+            : hoverIndexRef.current !== null
+              ? "grab"
+              : "default";
       }
     },
     [getCanvasCoords, getNodeAtPoint]
