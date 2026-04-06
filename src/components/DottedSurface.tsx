@@ -2,8 +2,8 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 
 const GRID = 50;
-const SEP = 150;
-const HOVER_RADIUS = 600;
+const SEP = 100;
+const HOVER_RADIUS = 500;
 const HOVER_STRENGTH = 120;
 const PULSE_SPEED = 1200;
 const PULSE_WIDTH = 400;
@@ -22,7 +22,7 @@ const vertexShader = `
   void main() {
     vHeight = position.y;
     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = size * (400.0 / -mvPosition.z);
+    gl_PointSize = size * (600.0 / -mvPosition.z);
     gl_Position = projectionMatrix * mvPosition;
   }
 `;
@@ -32,12 +32,12 @@ const fragmentShader = `
   void main() {
     float dist = length(gl_PointCoord - vec2(0.5));
     if (dist > 0.5) discard;
-    float edge = smoothstep(0.5, 0.3, dist);
-    float hf = clamp(vHeight / 150.0, 0.0, 1.0);
-    vec3 neutral = vec3(0.7, 0.75, 0.85);
+    float edge = smoothstep(0.5, 0.25, dist);
+    float hf = clamp(vHeight / 120.0, 0.0, 1.0);
+    vec3 neutral = vec3(0.55, 0.58, 0.68);
     vec3 blue = vec3(0.35, 0.55, 1.0);
     vec3 color = mix(neutral, blue, hf);
-    float alpha = mix(0.4, 0.9, hf) * edge;
+    float alpha = mix(0.5, 1.0, hf) * edge;
     gl_FragColor = vec4(color, alpha);
   }
 `;
@@ -53,17 +53,16 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Scene
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x09090b, 0.00018);
+    scene.fog = new THREE.FogExp2(0x09090b, 0.00025);
 
     const camera = new THREE.PerspectiveCamera(
       55,
       container.clientWidth / container.clientHeight,
       1,
-      20000
+      15000
     );
-    camera.position.set(0, 800, 2200);
+    camera.position.set(0, 500, 1200);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -76,7 +75,6 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     const count = GRID * GRID;
     const positions = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
-    const baseY = new Float32Array(count);
     const half = ((GRID - 1) * SEP) / 2;
 
     for (let ix = 0; ix < GRID; ix++) {
@@ -85,7 +83,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
         positions[idx * 3] = ix * SEP - half;
         positions[idx * 3 + 1] = 0;
         positions[idx * 3 + 2] = iy * SEP - half;
-        sizes[idx] = 6;
+        sizes[idx] = 8;
       }
     }
 
@@ -112,11 +110,11 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     let hasMousePos = false;
     const pulses: Pulse[] = [];
 
+    // Listen on window so events aren't blocked by page content above
     const onMouseMove = (e: MouseEvent) => {
       if (!interactive) return;
-      const rect = container.getBoundingClientRect();
-      mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouseNDC, camera);
       if (raycaster.ray.intersectPlane(plane, intersectPoint)) {
         mouseWorld.set(intersectPoint.x, intersectPoint.z);
@@ -130,9 +128,8 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
 
     const onClick = (e: MouseEvent) => {
       if (!interactive) return;
-      const rect = container.getBoundingClientRect();
-      mouseNDC.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouseNDC.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouseNDC, camera);
       if (raycaster.ray.intersectPlane(plane, intersectPoint)) {
         if (pulses.length >= MAX_PULSES) pulses.shift();
@@ -145,9 +142,9 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     };
 
     if (interactive) {
-      container.addEventListener("mousemove", onMouseMove);
-      container.addEventListener("mouseleave", onMouseLeave);
-      container.addEventListener("click", onClick);
+      window.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseleave", onMouseLeave);
+      window.addEventListener("click", onClick);
     }
 
     // Animation
@@ -161,7 +158,6 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
       const pos = geometry.attributes.position as THREE.BufferAttribute;
       const sizeAttr = geometry.attributes.size as THREE.BufferAttribute;
 
-      // Remove expired pulses
       for (let p = pulses.length - 1; p >= 0; p--) {
         if (now - pulses[p].time > 4) pulses.splice(p, 1);
       }
@@ -176,7 +172,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
           let y =
             Math.sin((ix + elapsed * 1.5) * 0.3) * 30 +
             Math.sin((iy + elapsed * 2) * 0.4) * 25;
-          let s = 6;
+          let s = 8;
 
           // Mouse hover
           if (interactive && hasMousePos) {
@@ -187,7 +183,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
               const factor = 1 - dist / HOVER_RADIUS;
               const smooth = factor * factor * (3 - 2 * factor);
               y += smooth * HOVER_STRENGTH;
-              s += smooth * 6;
+              s += smooth * 8;
             }
           }
 
@@ -206,11 +202,10 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
                 pulse.strength *
                 Math.exp(-age * PULSE_DECAY);
               y += wave;
-              s += (wave / pulse.strength) * 4;
+              s += (wave / pulse.strength) * 5;
             }
           }
 
-          baseY[idx] = y;
           pos.setY(idx, y);
           sizeAttr.setX(idx, s);
         }
@@ -236,9 +231,9 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
       if (interactive) {
-        container.removeEventListener("mousemove", onMouseMove);
-        container.removeEventListener("mouseleave", onMouseLeave);
-        container.removeEventListener("click", onClick);
+        window.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseleave", onMouseLeave);
+        window.removeEventListener("click", onClick);
       }
       renderer.dispose();
       geometry.dispose();
@@ -252,11 +247,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 -z-10"
-      style={{
-        pointerEvents: interactive ? "auto" : "none",
-        cursor: interactive ? "crosshair" : "default",
-      }}
+      className="fixed inset-0 -z-10 pointer-events-none"
     />
   );
 };
