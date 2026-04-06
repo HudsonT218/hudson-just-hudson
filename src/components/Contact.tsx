@@ -25,7 +25,7 @@ const Contact = () => {
         <div className="max-w-2xl">
           {/* OPEN badge */}
           <a
-            href="https://calendly.com/hudsonturansky"
+            href="https://calendly.com/hudsonturansky/30min"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 mb-8 group"
