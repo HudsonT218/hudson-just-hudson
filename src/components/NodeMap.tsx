@@ -10,17 +10,18 @@ interface SkillNode {
   y: number;
   vx: number;
   vy: number;
+  phase: number;
 }
 
-const SKILLS: Omit<SkillNode, "baseAngle" | "orbitRadius" | "x" | "y" | "vx" | "vy">[] = [
-  { label: "Website Development", emoji: "🌐", r: 46 },
-  { label: "AI Agents", emoji: "🤖", r: 42 },
-  { label: "Custom Software OS", emoji: "⚙️", r: 44 },
-  { label: "OpenClaw", emoji: "🔗", r: 38 },
-  { label: "Automation & Scripts", emoji: "📜", r: 40 },
-  { label: "Bots", emoji: "💬", r: 34 },
-  { label: "Landing Pages", emoji: "🚀", r: 38 },
-  { label: "Full Stack Dev", emoji: "🛠️", r: 40 },
+const SKILLS: Omit<SkillNode, "baseAngle" | "orbitRadius" | "x" | "y" | "vx" | "vy" | "phase">[] = [
+  { label: "Website Development", emoji: "\u{1F310}", r: 48 },
+  { label: "AI Agents", emoji: "\u{1F916}", r: 44 },
+  { label: "Custom Software OS", emoji: "\u2699\uFE0F", r: 46 },
+  { label: "OpenClaw", emoji: "\u{1F517}", r: 40 },
+  { label: "Automation & Scripts", emoji: "\u{1F4DC}", r: 42 },
+  { label: "Bots", emoji: "\u{1F4AC}", r: 36 },
+  { label: "Landing Pages", emoji: "\u{1F680}", r: 40 },
+  { label: "Full Stack Dev", emoji: "\u{1F6E0}\uFE0F", r: 42 },
 ];
 
 const NodeMap = () => {
@@ -31,8 +32,7 @@ const NodeMap = () => {
   const timeRef = useRef(0);
   const dragIndexRef = useRef<number | null>(null);
   const hoverIndexRef = useRef<number | null>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const [dimensions, setDimensions] = useState({ w: 900, h: 520 });
+  const [dimensions, setDimensions] = useState({ w: 850, h: 480 });
 
   const getCenterX = useCallback(() => dimensions.w / 2, [dimensions.w]);
   const getCenterY = useCallback(() => dimensions.h / 2, [dimensions.h]);
@@ -40,11 +40,11 @@ const NodeMap = () => {
   const initNodes = useCallback(() => {
     const cx = getCenterX();
     const cy = getCenterY();
-    const baseOrbit = Math.min(dimensions.w, dimensions.h) * 0.34;
+    const baseOrbit = Math.min(dimensions.w, dimensions.h) * 0.36;
 
     nodesRef.current = SKILLS.map((s, i) => {
       const angle = (i / SKILLS.length) * Math.PI * 2 - Math.PI / 2;
-      const orbit = baseOrbit + (i % 2 === 0 ? 10 : -10);
+      const orbit = baseOrbit + (i % 2 === 0 ? 12 : -8);
       return {
         ...s,
         baseAngle: angle,
@@ -53,6 +53,7 @@ const NodeMap = () => {
         y: cy + Math.sin(angle) * orbit,
         vx: 0,
         vy: 0,
+        phase: i * 0.8,
       };
     });
   }, [dimensions, getCenterX, getCenterY]);
@@ -65,7 +66,8 @@ const NodeMap = () => {
     const handleResize = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      setDimensions({ w: rect.width, h: Math.min(520, rect.width * 0.58) });
+      const w = Math.min(rect.width, 850);
+      setDimensions({ w, h: Math.min(480, w * 0.56) });
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -88,96 +90,121 @@ const NodeMap = () => {
     const centerR = 52;
 
     const draw = () => {
-      timeRef.current += 0.004;
+      timeRef.current += 0.005;
       const t = timeRef.current;
       const nodes = nodesRef.current;
 
-      // Physics: orbit drift + spring back + repulsion
+      // Physics
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
         if (dragIndexRef.current === i) continue;
 
-        // Target position with gentle orbit drift
-        const driftAngle = n.baseAngle + Math.sin(t + i * 0.7) * 0.12;
+        const driftAngle = n.baseAngle + Math.sin(t * 0.6 + n.phase) * 0.1;
         const targetX = cx + Math.cos(driftAngle) * n.orbitRadius;
         const targetY = cy + Math.sin(driftAngle) * n.orbitRadius;
 
-        // Spring force toward base position
-        const springK = 0.02;
+        const springK = 0.018;
         n.vx += (targetX - n.x) * springK;
         n.vy += (targetY - n.y) * springK;
 
-        // Repulsion between nodes
         for (let j = 0; j < nodes.length; j++) {
           if (i === j) continue;
           const dx = n.x - nodes[j].x;
           const dy = n.y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          const minDist = n.r + nodes[j].r + 20;
+          const minDist = n.r + nodes[j].r + 16;
           if (dist < minDist && dist > 0) {
-            const force = (minDist - dist) * 0.05;
+            const force = (minDist - dist) * 0.04;
             n.vx += (dx / dist) * force;
             n.vy += (dy / dist) * force;
           }
         }
 
-        // Damping
-        n.vx *= 0.88;
-        n.vy *= 0.88;
+        n.vx *= 0.94;
+        n.vy *= 0.94;
         n.x += n.vx;
         n.y += n.vy;
       }
 
-      // Clear
       ctx.clearRect(0, 0, dimensions.w, dimensions.h);
 
-      // Connection lines
+      // Connection lines (gradient)
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
         const isHovered = hoverIndexRef.current === i;
+        const alpha = isHovered ? 0.3 : 0.06;
+
+        const grad = ctx.createLinearGradient(cx, cy, n.x, n.y);
+        grad.addColorStop(0, `rgba(37,99,235,${alpha})`);
+        grad.addColorStop(1, `rgba(79,70,229,${alpha})`);
+
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(n.x, n.y);
-        ctx.strokeStyle = isHovered ? "rgba(37,99,235,0.45)" : "rgba(37,99,235,0.12)";
-        ctx.lineWidth = isHovered ? 2 : 1;
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = isHovered ? 1.5 : 1;
         ctx.stroke();
+
+        // Animated dot on hover
+        if (isHovered) {
+          const dotT = (t * 1.5) % 1;
+          const dotX = cx + (n.x - cx) * dotT;
+          const dotY = cy + (n.y - cy) * dotT;
+          ctx.beginPath();
+          ctx.arc(dotX, dotY, 3, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(37,99,235,0.6)";
+          ctx.fill();
+        }
       }
+
+      // Center glow
+      const glowGrad = ctx.createRadialGradient(cx, cy, centerR * 0.5, cx, cy, centerR * 2.5);
+      glowGrad.addColorStop(0, "rgba(37,99,235,0.12)");
+      glowGrad.addColorStop(1, "rgba(37,99,235,0)");
+      ctx.beginPath();
+      ctx.arc(cx, cy, centerR * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = glowGrad;
+      ctx.fill();
 
       // Center node
       ctx.beginPath();
       ctx.arc(cx, cy, centerR, 0, Math.PI * 2);
-      const centerGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, centerR);
-      centerGrad.addColorStop(0, "#3b82f6");
-      centerGrad.addColorStop(1, "#2563eb");
+      const centerGrad = ctx.createLinearGradient(cx - centerR, cy - centerR, cx + centerR, cy + centerR);
+      centerGrad.addColorStop(0, "#2563eb");
+      centerGrad.addColorStop(1, "#4f46e5");
       ctx.fillStyle = centerGrad;
-      ctx.fill();
-      ctx.shadowColor = "rgba(37,99,235,0.35)";
-      ctx.shadowBlur = 20;
+      ctx.shadowColor = "rgba(37,99,235,0.3)";
+      ctx.shadowBlur = 40;
       ctx.fill();
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
 
       // Center text
       ctx.fillStyle = "#ffffff";
-      ctx.font = "600 11px Inter, system-ui, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("Hudson", cx, cy - 7);
-      ctx.fillText("Turansky", cx, cy + 7);
+      ctx.font = "600 14px Inter, system-ui, sans-serif";
+      ctx.fillText("Hudson", cx, cy - 8);
+      ctx.globalAlpha = 0.7;
+      ctx.font = "300 11px Inter, system-ui, sans-serif";
+      ctx.fillText("Turansky", cx, cy + 8);
+      ctx.globalAlpha = 1;
 
       // Skill nodes
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
         const isHovered = hoverIndexRef.current === i;
-        const scale = isHovered ? 1.08 : 1;
-        const r = n.r * scale;
+
+        // Breathing scale
+        const breath = 1 + Math.sin(t * 1.2 + n.phase) * 0.025;
+        const hoverScale = isHovered ? 1.06 : 1;
+        const r = n.r * breath * hoverScale;
 
         // Shadow
-        ctx.shadowColor = isHovered ? "rgba(37,99,235,0.3)" : "rgba(0,0,0,0.08)";
-        ctx.shadowBlur = isHovered ? 18 : 8;
-        ctx.shadowOffsetY = 2;
+        ctx.shadowColor = isHovered ? "rgba(37,99,235,0.15)" : "rgba(0,0,0,0.04)";
+        ctx.shadowBlur = isHovered ? 24 : 10;
+        ctx.shadowOffsetY = isHovered ? 4 : 2;
 
-        // Circle
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
@@ -189,30 +216,21 @@ const NodeMap = () => {
         // Border
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        ctx.strokeStyle = isHovered ? "rgba(37,99,235,0.5)" : "rgba(0,0,0,0.08)";
-        ctx.lineWidth = isHovered ? 2 : 1;
+        ctx.strokeStyle = isHovered ? "rgba(79,70,229,0.2)" : "rgba(0,0,0,0.04)";
+        ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Glow on hover
-        if (isHovered) {
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, r + 4, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(37,99,235,0.15)";
-          ctx.lineWidth = 3;
-          ctx.stroke();
-        }
-
         // Emoji
-        ctx.font = `${Math.round(r * 0.48)}px serif`;
+        ctx.font = `${Math.round(r * 0.45)}px serif`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(n.emoji, n.x, n.y - r * 0.15);
+        ctx.fillText(n.emoji, n.x, n.y - r * 0.14);
 
         // Label
-        ctx.fillStyle = "#1e293b";
-        const fontSize = Math.max(8, Math.round(r * 0.22));
+        ctx.fillStyle = isHovered ? "#111827" : "#9ca3af";
+        const fontSize = Math.max(8, Math.round(r * 0.21));
         ctx.font = `500 ${fontSize}px Inter, system-ui, sans-serif`;
-        ctx.fillText(n.label, n.x, n.y + r * 0.35);
+        ctx.fillText(n.label, n.x, n.y + r * 0.36);
       }
 
       animFrameRef.current = requestAnimationFrame(draw);
@@ -228,7 +246,7 @@ const NodeMap = () => {
       for (let i = nodes.length - 1; i >= 0; i--) {
         const dx = px - nodes[i].x;
         const dy = py - nodes[i].y;
-        if (dx * dx + dy * dy <= nodes[i].r * nodes[i].r) return i;
+        if (dx * dx + dy * dy <= nodes[i].r * nodes[i].r * 1.15) return i;
       }
       return null;
     },
@@ -240,10 +258,7 @@ const NodeMap = () => {
       const canvas = canvasRef.current;
       if (!canvas) return { x: 0, y: 0 };
       const rect = canvas.getBoundingClientRect();
-      return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
     },
     []
   );
@@ -263,8 +278,6 @@ const NodeMap = () => {
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       const { x, y } = getCanvasCoords(e);
-      mouseRef.current = { x, y };
-
       if (dragIndexRef.current !== null) {
         const n = nodesRef.current[dragIndexRef.current];
         n.x = x;
@@ -272,12 +285,11 @@ const NodeMap = () => {
         n.vx = 0;
         n.vy = 0;
       }
-
       hoverIndexRef.current = getNodeAtPoint(x, y);
       const canvas = canvasRef.current;
       if (canvas) {
-        canvas.style.cursor = hoverIndexRef.current !== null ? "grab" : "default";
-        if (dragIndexRef.current !== null) canvas.style.cursor = "grabbing";
+        canvas.style.cursor =
+          dragIndexRef.current !== null ? "grabbing" : hoverIndexRef.current !== null ? "grab" : "default";
       }
     },
     [getCanvasCoords, getNodeAtPoint]
@@ -296,7 +308,7 @@ const NodeMap = () => {
     <div ref={containerRef} className="w-full flex justify-center">
       <canvas
         ref={canvasRef}
-        style={{ width: dimensions.w, height: dimensions.h, maxWidth: 900 }}
+        style={{ width: dimensions.w, height: dimensions.h, maxWidth: 850 }}
         className="touch-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

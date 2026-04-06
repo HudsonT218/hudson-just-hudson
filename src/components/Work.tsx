@@ -1,55 +1,97 @@
 const PROJECTS = [
   {
-    emoji: "🏗️",
     title: "Custom Organizational OS",
+    word: "Custom",
     desc: "A full-stack internal platform with dashboards, volunteer management, and real-time reporting for a nonprofit.",
     tags: ["Full Stack", "Custom Software", "Dashboard"],
-    gradient: "from-blue-50 to-indigo-50",
+    gradient: "#f8fafc, #f1f5f9",
+    accent: "#0f172a",
   },
   {
-    emoji: "🤖",
     title: "AI Agent Workflows",
+    word: "Agent",
     desc: "Multi-step AI agents that automate research, outreach, and data processing — built with OpenClaw.",
     tags: ["AI Agents", "OpenClaw", "Automation"],
-    gradient: "from-purple-50 to-pink-50",
+    gradient: "#eff6ff, #eef2ff",
+    accent: "#2563eb",
   },
   {
-    emoji: "🚀",
     title: "AI-Built Landing Pages",
+    word: "Landing",
     desc: "A scalable pipeline for generating high-quality landing pages using AI — from design to deployment.",
     tags: ["Web Dev", "AI Pipeline", "Scalable"],
-    gradient: "from-emerald-50 to-teal-50",
+    gradient: "#faf5ff, #fdf2f8",
+    accent: "#7c3aed",
   },
 ];
 
 const Work = () => {
   return (
-    <section id="work" className="py-24 px-6 bg-white">
+    <section id="work" className="py-28 px-6">
       <div className="max-w-5xl mx-auto">
-        <p className="text-sm font-semibold text-blue-600 tracking-wide uppercase mb-2">
-          Portfolio
-        </p>
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-14">What I've Built</h2>
+        <div className="mb-16">
+          <h2
+            className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            Things I've built
+          </h2>
+          <h2
+            className="text-3xl sm:text-4xl font-extrabold text-gray-300 leading-tight"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            that actually ship.
+          </h2>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {PROJECTS.map((p) => (
             <div
               key={p.title}
-              className="border border-gray-200 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-200"
+              className="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+              style={{ border: "1px solid #f1f1f1" }}
             >
+              {/* Header */}
               <div
-                className={`bg-gradient-to-br ${p.gradient} h-40 flex items-center justify-center`}
+                className="h-48 relative overflow-hidden flex items-center justify-center"
+                style={{ background: `linear-gradient(135deg, ${p.gradient})` }}
               >
-                <span className="text-5xl">{p.emoji}</span>
+                {/* Blurred accent circle */}
+                <div
+                  className="absolute w-24 h-24 rounded-full opacity-20"
+                  style={{
+                    background: p.accent,
+                    filter: "blur(30px)",
+                    top: "20%",
+                    right: "15%",
+                  }}
+                />
+                {/* Large decorative word */}
+                <span
+                  className="text-6xl font-extrabold select-none opacity-[0.07]"
+                  style={{ letterSpacing: "-0.04em", color: p.accent }}
+                >
+                  {p.word}
+                </span>
               </div>
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{p.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-4">{p.desc}</p>
+
+              {/* Info */}
+              <div className="p-6 bg-white">
+                <h3
+                  className="text-base font-semibold text-gray-900 mb-2"
+                  style={{ letterSpacing: "-0.01em" }}
+                >
+                  {p.title}
+                </h3>
+                <p className="text-gray-400 text-sm font-light leading-relaxed mb-4">
+                  {p.desc}
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {p.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full"
+                      className="text-xs px-3 py-1 rounded-full"
+                      style={{ background: "#f5f5f5", color: "#999" }}
                     >
                       {tag}
                     </span>
