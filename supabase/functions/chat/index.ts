@@ -157,7 +157,8 @@ serve(async (req) => {
     let history = sessions.get(sessionId) || [];
 
     // Build the user message
-    const userMessage = message || "Hi";
+    const isInit = !message || message.trim() === "";
+    const userMessage = isInit ? "Hi, I just opened the chat." : message;
 
     // Add user message to history
     history.push({ role: "user", parts: [{ text: userMessage }] });
