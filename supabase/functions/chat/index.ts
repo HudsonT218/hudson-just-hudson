@@ -1,9 +1,5 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import {
-  GoogleGenerativeAI,
-  SchemaType,
-} from "https://esm.sh/@google/generative-ai@0.24.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -48,16 +44,11 @@ const SYSTEM_PROMPT = `You are Hudson's AI assistant on his freelance web develo
 - Keep responses SHORT. 2-4 sentences max.`;
 
 const CALENDLY_MAP: Record<string, string> = {
-  landing_page:
-    "https://calendly.com/hudsonturansky/landing-page-discovery-call",
-  business_site:
-    "https://calendly.com/hudsonturansky/business-site-discovery-call",
-  ops_software:
-    "https://calendly.com/hudsonturansky/operations-software-discovery-call",
-  personal_ai:
-    "https://calendly.com/hudsonturansky/personal-ai-assistant-discovery-call",
-  company_agent:
-    "https://calendly.com/hudsonturansky/company-ai-agent-discovery-call",
+  landing_page: "https://calendly.com/hudsonturansky/landing-page-discovery-call",
+  business_site: "https://calendly.com/hudsonturansky/business-site-discovery-call",
+  ops_software: "https://calendly.com/hudsonturansky/operations-software-discovery-call",
+  personal_ai: "https://calendly.com/hudsonturansky/personal-ai-assistant-discovery-call",
+  company_agent: "https://calendly.com/hudsonturansky/company-ai-agent-discovery-call",
   unclear: "https://calendly.com/hudsonturansky/30min",
 };
 
@@ -70,11 +61,52 @@ const SERVICE_LABELS: Record<string, string> = {
   unclear: "General Discovery",
 };
 
+const QUALIFY_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "qualify_lead",
+    description:
+      "Call this when you have enough information to qualify the lead and suggest next steps.",
+    parameters: {
+      type: "object",
+      properties: {
+        service_interest: {
+          type: "string",
+          enum: [
+            "landing_page",
+            "business_site",
+            "ops_software",
+            "personal_ai",
+            "company_agent",
+            "unclear",
+          ],
+          description: "The service that best matches what they need",
+        },
+        qualification_score: {
+          type: "number",
+          description: "1-10 score. 10 = ready to buy today. 1 = just browsing.",
+        },
+        summary: {
+          type: "string",
+          description: "2-sentence summary of what this person needs and why.",
+        },
+        action: {
+          type: "string",
+          enum: ["show_calendly", "keep_chatting"],
+          description:
+            "Next step. show_calendly = ready to book. keep_chatting = need more info.",
+        },
+      },
+      required: ["service_interest", "qualification_score", "summary", "action"],
+    },
+  },
+};
+
 // In-memory conversation store (resets on cold start, fine for a chatbot)
-const sessions = new Map<
-  string,
-  { role: string; parts: { text: string }[] }[]
->();
+const sessions = new Map<string, { role: string; content: string }[]>();
+
+const AI_GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const AI_MODEL = "google/gemini-2.5-flash";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -91,86 +123,30 @@ serve(async (req) => {
       );
     }
 
-    const apiKey = Deno.env.get("GEMINI_API_KEY");
+    const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
-      throw new Error("GEMINI_API_KEY not set");
+      throw new Error("LOVABLE_API_KEY not set");
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash-lite",
-      systemInstruction: SYSTEM_PROMPT,
-      tools: [
-        {
-          functionDeclarations: [
-            {
-              name: "qualify_lead",
-              description:
-                "Call this when you have enough information to qualify the lead and suggest next steps.",
-              parameters: {
-                type: SchemaType.OBJECT,
-                properties: {
-                  service_interest: {
-                    type: SchemaType.STRING,
-                    format: "enum",
-                    enum: [
-                      "landing_page",
-                      "business_site",
-                      "ops_software",
-                      "personal_ai",
-                      "company_agent",
-                      "unclear",
-                    ],
-                    description: "The service that best matches what they need",
-                  },
-                  qualification_score: {
-                    type: SchemaType.NUMBER,
-                    description:
-                      "1-10 score. 10 = ready to buy today. 1 = just browsing.",
-                  },
-                  summary: {
-                    type: SchemaType.STRING,
-                    description:
-                      "2-sentence summary of what this person needs and why.",
-                  },
-                  action: {
-                    type: SchemaType.STRING,
-                    format: "enum",
-                    enum: ["show_calendly", "keep_chatting"],
-                    description:
-                      "Next step. show_calendly = ready to book. keep_chatting = need more info.",
-                  },
-                },
-                required: [
-                  "service_interest",
-                  "qualification_score",
-                  "summary",
-                  "action",
-                ],
-              },
-            },
-          ],
-        },
-      ],
-    });
-
-    const normalizedClientHistory = Array.isArray(clientHistory)
+    // Build message history from client or server-side session
+    const normalizedClientHistory: { role: string; content: string }[] = Array.isArray(clientHistory)
       ? clientHistory
           .filter(
-            (entry) =>
+            (entry: { role?: string; content?: string }) =>
               entry &&
               typeof entry.role === "string" &&
               typeof entry.content === "string" &&
               entry.content.trim() !== ""
           )
-          .map((entry) => ({
-            role: entry.role === "assistant" ? "model" : "user",
-            parts: [{ text: entry.content.trim() }],
+          .map((entry: { role: string; content: string }) => ({
+            role: entry.role === "model" ? "assistant" : entry.role,
+            content: entry.content.trim(),
           }))
       : [];
 
+    // Remove leading assistant messages (API requires user-first)
     const sanitizedClientHistory = [...normalizedClientHistory];
-    while (sanitizedClientHistory[0]?.role === "model") {
+    while (sanitizedClientHistory[0]?.role === "assistant") {
       sanitizedClientHistory.shift();
     }
 
@@ -180,31 +156,49 @@ serve(async (req) => {
 
     const isInit = !message || message.trim() === "";
     const userMessage = isInit ? "Hi, I just opened the chat." : message.trim();
-    const lastHistoryMessage = history[history.length - 1]?.parts?.[0]?.text;
+    const lastHistoryMessage = history[history.length - 1]?.content;
 
     if (!isInit || lastHistoryMessage !== userMessage) {
-      history.push({ role: "user", parts: [{ text: userMessage }] });
+      history.push({ role: "user", content: userMessage });
     }
 
-    const chatHistory = history.slice(0, -1);
-    const chatSession = model.startChat({
-      history: chatHistory.length > 0 ? chatHistory : undefined,
+    // Build messages array for OpenAI-compatible API
+    const messages = [
+      { role: "system", content: SYSTEM_PROMPT },
+      ...history,
+    ];
+
+    const response = await fetch(AI_GATEWAY_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        messages,
+        tools: [QUALIFY_TOOL],
+      }),
     });
 
-    const result = await chatSession.sendMessage([{ text: userMessage }]);
-    const response = result.response;
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`AI Gateway error ${response.status}: ${errorText}`);
+    }
 
-    let reply = "";
+    const data = await response.json();
+    const choice = data.choices?.[0]?.message;
+
+    let reply = choice?.content || "";
     let action = undefined;
 
-    for (const candidate of response.candidates || []) {
-      for (const part of candidate.content?.parts || []) {
-        if (part.text) {
-          reply += part.text;
-        }
-        if (part.functionCall) {
-          const args = part.functionCall.args as Record<string, unknown>;
-          const serviceInterest = (args.service_interest as string) || "unclear";
+    // Check for tool calls
+    const toolCalls = choice?.tool_calls;
+    if (toolCalls && toolCalls.length > 0) {
+      for (const toolCall of toolCalls) {
+        if (toolCall.function?.name === "qualify_lead") {
+          const args = JSON.parse(toolCall.function.arguments);
+          const serviceInterest = args.service_interest || "unclear";
 
           if (args.action === "show_calendly") {
             action = {
@@ -224,7 +218,7 @@ serve(async (req) => {
       reply = "Tell me more about what you're looking for!";
     }
 
-    history.push({ role: "model", parts: [{ text: reply }] });
+    history.push({ role: "assistant", content: reply });
     sessions.set(sessionId, history);
 
     return new Response(
