@@ -48,9 +48,9 @@ export function useChatSession() {
         const headers: Record<string, string> = {
           "Content-Type": "application/json",
         };
-        if (SUPABASE_ANON_KEY) {
-          headers["apikey"] = SUPABASE_ANON_KEY;
-          headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
+        if (SUPABASE_PUBLISHABLE_KEY) {
+          headers["apikey"] = SUPABASE_PUBLISHABLE_KEY;
+          headers["Authorization"] = `Bearer ${SUPABASE_PUBLISHABLE_KEY}`;
         }
 
         const res = await fetch(CHAT_FUNCTION_URL, {
