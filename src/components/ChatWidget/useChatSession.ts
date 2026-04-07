@@ -31,15 +31,21 @@ export function useChatSession() {
     async (text: string) => {
       if (isLoading) return;
 
-      // Add user message to UI (unless it's the init greeting)
+      const nextMessages =
+        text === "__init__"
+          ? messages
+          : [
+              ...messages,
+              {
+                id: `msg-${++messageCounter}`,
+                role: "user" as const,
+                content: text,
+                timestamp: Date.now(),
+              },
+            ];
+
       if (text !== "__init__") {
-        const userMsg: ChatMessage = {
-          id: `msg-${++messageCounter}`,
-          role: "user",
-          content: text,
-          timestamp: Date.now(),
-        };
-        setMessages((prev) => [...prev, userMsg]);
+        setMessages(nextMessages);
       }
 
       setIsLoading(true);
@@ -59,6 +65,7 @@ export function useChatSession() {
           body: JSON.stringify({
             sessionId: sessionId.current,
             message: text === "__init__" ? "" : text,
+            history: nextMessages.map(({ role, content }) => ({ role, content })),
           }),
         });
 
@@ -90,14 +97,13 @@ export function useChatSession() {
         setIsLoading(false);
       }
     },
-    [isLoading]
+    [isLoading, messages]
   );
 
   const handleOpen = useCallback(() => {
     setIsOpen(true);
     setHasUnread(false);
 
-    // Auto-greet on first open
     if (!initialized.current) {
       initialized.current = true;
       sendMessage("__init__");
