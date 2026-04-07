@@ -1,7 +1,11 @@
 import { useState, useCallback, useRef } from "react";
 import type { ChatMessage, ChatAction, ChatApiResponse } from "./types";
 
-const API_URL = import.meta.env.VITE_CHAT_API_URL || "http://localhost:3001";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const CHAT_FUNCTION_URL = SUPABASE_URL
+  ? `${SUPABASE_URL}/functions/v1/chat`
+  : "http://localhost:3001/api/chat";
 const SESSION_KEY = "hjh-chat-session";
 
 function getSessionId(): string {
@@ -43,9 +47,17 @@ export function useChatSession() {
       setIsLoading(true);
 
       try {
-        const res = await fetch(`${API_URL}/api/chat`, {
+        const headers: Record<string, string> = {
+          "Content-Type": "application/json",
+        };
+        if (SUPABASE_ANON_KEY) {
+          headers["apikey"] = SUPABASE_ANON_KEY;
+          headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
+        }
+
+        const res = await fetch(CHAT_FUNCTION_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify({
             sessionId: sessionId.current,
             message: text === "__init__" ? "" : text,
@@ -95,10 +107,16 @@ export function useChatSession() {
   }, [sendMessage]);
 
   const handleBookCall = useCallback(() => {
-    // Fire tracking event
-    fetch(`${API_URL}/api/chat`, {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (SUPABASE_ANON_KEY) {
+      headers["apikey"] = SUPABASE_ANON_KEY;
+      headers["Authorization"] = `Bearer ${SUPABASE_ANON_KEY}`;
+    }
+    fetch(CHAT_FUNCTION_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({
         sessionId: sessionId.current,
         message: "",
