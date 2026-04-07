@@ -81,7 +81,7 @@ serve(async (req) => {
   }
 
   try {
-    const { sessionId, message } = await req.json();
+    const { sessionId, message, history: clientHistory } = await req.json();
 
     if (!sessionId) {
       return new Response(
@@ -153,17 +153,38 @@ serve(async (req) => {
       ],
     });
 
-    // Get or create conversation history
-    let history = sessions.get(sessionId) || [];
+    const normalizedClientHistory = Array.isArray(clientHistory)
+      ? clientHistory
+          .filter(
+            (entry) =>
+              entry &&
+              typeof entry.role === "string" &&
+              typeof entry.content === "string" &&
+              entry.content.trim() !== ""
+          )
+          .map((entry) => ({
+            role: entry.role === "assistant" ? "model" : "user",
+            parts: [{ text: entry.content.trim() }],
+          }))
+      : [];
 
-    // Build the user message
+    const sanitizedClientHistory = [...normalizedClientHistory];
+    while (sanitizedClientHistory[0]?.role === "model") {
+      sanitizedClientHistory.shift();
+    }
+
+    let history = sanitizedClientHistory.length > 0
+      ? sanitizedClientHistory
+      : sessions.get(sessionId) || [];
+
     const isInit = !message || message.trim() === "";
-    const userMessage = isInit ? "Hi, I just opened the chat." : message;
+    const userMessage = isInit ? "Hi, I just opened the chat." : message.trim();
+    const lastHistoryMessage = history[history.length - 1]?.parts?.[0]?.text;
 
-    // Add user message to history
-    history.push({ role: "user", parts: [{ text: userMessage }] });
+    if (!isInit || lastHistoryMessage !== userMessage) {
+      history.push({ role: "user", parts: [{ text: userMessage }] });
+    }
 
-    // Start chat with history (excluding last message)
     const chatHistory = history.slice(0, -1);
     const chatSession = model.startChat({
       history: chatHistory.length > 0 ? chatHistory : undefined,
@@ -195,7 +216,6 @@ serve(async (req) => {
       }
     }
 
-    // Fallback if only tool call returned
     if (!reply && action) {
       reply =
         "Sounds like Hudson could really help with this! You can book a free 30-minute discovery call to go over the details together.";
@@ -203,7 +223,6 @@ serve(async (req) => {
       reply = "Tell me more about what you're looking for!";
     }
 
-    // Save assistant response to history
     history.push({ role: "model", parts: [{ text: reply }] });
     sessions.set(sessionId, history);
 
