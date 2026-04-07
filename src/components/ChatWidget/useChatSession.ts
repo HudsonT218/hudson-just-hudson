@@ -2,10 +2,8 @@ import { useState, useCallback, useRef } from "react";
 import type { ChatMessage, ChatAction, ChatApiResponse } from "./types";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const CHAT_FUNCTION_URL = SUPABASE_URL
-  ? `${SUPABASE_URL}/functions/v1/chat`
-  : "http://localhost:3001/api/chat";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const CHAT_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/chat`;
 const SESSION_KEY = "hjh-chat-session";
 
 function getSessionId(): string {
