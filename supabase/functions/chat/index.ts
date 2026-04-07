@@ -168,8 +168,13 @@ serve(async (req) => {
           }))
       : [];
 
-    let history = normalizedClientHistory.length > 0
-      ? normalizedClientHistory
+    const sanitizedClientHistory = [...normalizedClientHistory];
+    while (sanitizedClientHistory[0]?.role === "model") {
+      sanitizedClientHistory.shift();
+    }
+
+    let history = sanitizedClientHistory.length > 0
+      ? sanitizedClientHistory
       : sessions.get(sessionId) || [];
 
     const isInit = !message || message.trim() === "";
