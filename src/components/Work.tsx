@@ -9,27 +9,27 @@ const PROJECTS = [
     tags: ["Full Stack", "Custom Software", "Dashboard"],
     rgb: "255,255,255",
     backDesc:
-      "A nonprofit needed a way to track volunteer hours and coordinate scheduling across their team. I built them a full redesign of their public-facing site plus a custom volunteer management system integrated into the backend — giving staff a single platform for scheduling, hour tracking, and reporting.",
+      "A nonprofit needed a way to track volunteer hours and coordinate scheduling across their team. I built them a full redesign of their public-facing site plus a custom volunteer management system integrated into the backend, giving staff a single platform for scheduling, hour tracking, and reporting.",
     backTags: ["React", "Full Stack", "Volunteer Mgmt", "Custom Software"],
   },
   {
     title: "AI Agent Workflows",
     word: "Agent",
-    desc: "Multi-step AI agents that automate research, outreach, and data processing — built with OpenClaw.",
+    desc: "Multi-step AI agents that automate research, outreach, and data processing, built with OpenClaw.",
     tags: ["AI Agents", "OpenClaw", "Automation"],
     rgb: "59,130,246",
     backDesc:
-      "I run a team of 9 OpenClaw agents that help me manage day-to-day business operations — from research to scheduling to lead generation. I also build Claude Code agents that run automated research loops, surface qualified leads, and draft personalized outreach — all hands-off.",
+      "I run a team of 9 OpenClaw agents that help me manage day-to-day business operations, from research to scheduling to lead generation. I also build Claude Code agents that run automated research loops, surface qualified leads, and draft personalized outreach, all hands-off.",
     backTags: ["OpenClaw", "Claude Code", "Automation", "Lead Gen"],
   },
   {
     title: "AI-Built Landing Pages",
     word: "Landing",
-    desc: "A scalable pipeline for generating high-quality landing pages using AI — from design to deployment.",
+    desc: "A scalable pipeline for generating high-quality landing pages using AI, from design to deployment.",
     tags: ["Web Dev", "AI Pipeline", "Scalable"],
     rgb: "139,92,246",
     backDesc:
-      "I've built landing pages for companies, projects, and personal brands — designed for conversion and shipped fast. My AI-accelerated workflow means clients get polished, production-ready sites at a fraction of the typical agency timeline and cost.",
+      "I've built landing pages for companies, projects, and personal brands, designed for conversion and shipped fast. My AI-accelerated workflow means clients get polished, production-ready sites at a fraction of the typical agency timeline and cost.",
     backTags: ["Web Dev", "Landing Pages", "AI Pipeline", "Fast Delivery"],
   },
 ];
