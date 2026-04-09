@@ -171,7 +171,6 @@ const Work = () => {
               top: cardRect.top,
               left: cardRect.left,
               width: cardRect.width,
-              scale: 1,
               opacity: 1,
             }}
             animate={{
@@ -179,8 +178,7 @@ const Work = () => {
               left: window.innerWidth / 2,
               x: "-50%",
               y: "-50%",
-              width: 380,
-              scale: 1.2,
+              width: 456,
               opacity: 1,
             }}
             exit={{
@@ -189,7 +187,6 @@ const Work = () => {
               x: "0%",
               y: "0%",
               width: cardRect.width,
-              scale: 1,
               opacity: 1,
             }}
             transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
