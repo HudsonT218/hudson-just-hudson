@@ -85,6 +85,7 @@ const Work = () => {
                 border: "1px solid rgba(255,255,255,0.1)",
                 opacity: selectedIdx === i ? 0 : 1,
                 visibility: selectedIdx === i ? "hidden" as const : "visible" as const,
+                transition: "opacity 0.3s ease",
               }}
               onClick={() => handleCardClick(i)}
             >
@@ -186,8 +187,8 @@ const Work = () => {
               left: cardRect.left,
               x: "0%",
               y: "0%",
-              width: cardRect.width,
-              opacity: 1,
+              width: 456,
+              opacity: 0,
             }}
             transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
             style={{
