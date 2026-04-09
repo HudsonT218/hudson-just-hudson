@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 
 const PROJECTS = [
   {
@@ -64,104 +64,111 @@ const Work = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {PROJECTS.map((p, i) => (
-            <div
-              key={p.title}
-              className="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.1)",
-              }}
-              onClick={() => setSelectedIdx(i)}
-            >
-              <div
-                className="h-48 relative overflow-hidden flex items-center justify-center"
-                style={{ background: `rgba(${p.rgb},0.06)` }}
+        <LayoutGroup>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {PROJECTS.map((p, i) => (
+              <motion.div
+                key={p.title}
+                layout
+                layoutId={`card-${i}`}
+                className="rounded-2xl overflow-hidden cursor-pointer"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  opacity: selectedIdx === i ? 0 : 1,
+                  visibility: selectedIdx === i ? "hidden" as const : "visible" as const,
+                }}
+                whileHover={selectedIdx === null ? { y: -4 } : undefined}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                onClick={() => setSelectedIdx(i)}
               >
                 <div
-                  className="absolute w-28 h-28 rounded-full"
-                  style={{
-                    background: `rgba(${p.rgb},0.1)`,
-                    filter: "blur(35px)",
-                    top: "20%",
-                    right: "10%",
-                  }}
-                />
-                <span
-                  className="text-7xl font-extrabold select-none"
-                  style={{
-                    letterSpacing: "-0.04em",
-                    color: `rgba(${p.rgb},0.15)`,
-                  }}
+                  className="h-48 relative overflow-hidden flex items-center justify-center"
+                  style={{ background: `rgba(${p.rgb},0.06)` }}
                 >
-                  {p.word}
-                </span>
-              </div>
-
-              <div className="p-6">
-                <h3
-                  className="text-base font-semibold text-white mb-2"
-                  style={{ letterSpacing: "-0.01em" }}
-                >
-                  {p.title}
-                </h3>
-                <p className="text-gray-500 text-sm font-light leading-relaxed mb-4">
-                  {p.desc}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-3 py-1 rounded-full"
-                      style={{
-                        backgroundColor: "rgba(255,255,255,0.04)",
-                        color: "rgba(255,255,255,0.35)",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <div
+                    className="absolute w-28 h-28 rounded-full"
+                    style={{
+                      background: `rgba(${p.rgb},0.1)`,
+                      filter: "blur(35px)",
+                      top: "20%",
+                      right: "10%",
+                    }}
+                  />
+                  <span
+                    className="text-7xl font-extrabold select-none"
+                    style={{
+                      letterSpacing: "-0.04em",
+                      color: `rgba(${p.rgb},0.15)`,
+                    }}
+                  >
+                    {p.word}
+                  </span>
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Overlay + Flip Card */}
-      <AnimatePresence>
-        {selectedIdx !== null && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            onClick={() => setSelectedIdx(null)}
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.7)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <motion.div
-              className="relative max-w-[90vw]"
-              style={{
-                width: 380,
-                perspective: 1000,
-              }}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1.2, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <FlipCard project={PROJECTS[selectedIdx]} />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <div className="p-6">
+                  <h3
+                    className="text-base font-semibold text-white mb-2"
+                    style={{ letterSpacing: "-0.01em" }}
+                  >
+                    {p.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm font-light leading-relaxed mb-4">
+                    {p.desc}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {p.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-xs px-3 py-1 rounded-full"
+                        style={{
+                          backgroundColor: "rgba(255,255,255,0.04)",
+                          color: "rgba(255,255,255,0.35)",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Overlay + Flip Card */}
+          <AnimatePresence>
+            {selectedIdx !== null && (
+              <motion.div
+                className="fixed inset-0 z-50 flex items-center justify-center pb-[5vh]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                onClick={() => setSelectedIdx(null)}
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                <motion.div
+                  layoutId={`card-${selectedIdx}`}
+                  className="relative max-w-[90vw]"
+                  style={{
+                    width: 380,
+                    perspective: 1000,
+                    scale: 1.2,
+                  }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <FlipCard project={PROJECTS[selectedIdx]} />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </LayoutGroup>
+      </div>
     </section>
   );
 };
