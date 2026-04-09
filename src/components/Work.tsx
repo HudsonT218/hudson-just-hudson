@@ -234,15 +234,16 @@ const FlipCard = ({
       >
         {/* Front Face */}
         <div
-          className="rounded-2xl overflow-hidden w-full"
+          className="rounded-2xl overflow-hidden w-full flex flex-col"
           style={{
             background: "rgba(255,255,255,0.03)",
             border: "1px solid rgba(255,255,255,0.1)",
             backfaceVisibility: "hidden",
+            minHeight: 420,
           }}
         >
           <div
-            className="h-48 relative overflow-hidden flex items-center justify-center"
+            className="h-48 relative overflow-hidden flex items-center justify-center shrink-0"
             style={{ background: `rgba(${project.rgb},0.06)` }}
           >
             <div
@@ -265,7 +266,7 @@ const FlipCard = ({
             </span>
           </div>
 
-          <div className="p-6">
+          <div className="p-6 flex-1 flex flex-col">
             <h3
               className="text-base font-semibold text-white mb-2"
               style={{ letterSpacing: "-0.01em" }}
@@ -275,7 +276,7 @@ const FlipCard = ({
             <p className="text-gray-500 text-sm font-light leading-relaxed mb-4">
               {project.desc}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mt-auto">
               {project.tags.map((tag) => (
                 <span
                   key={tag}
@@ -295,16 +296,17 @@ const FlipCard = ({
 
         {/* Back Face */}
         <div
-          className="rounded-2xl overflow-hidden w-full absolute top-0 left-0"
+          className="rounded-2xl overflow-hidden w-full absolute top-0 left-0 flex flex-col"
           style={{
             background: "rgba(255,255,255,0.03)",
             border: `1px solid rgba(${project.rgb},0.15)`,
             backfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
+            minHeight: 420,
           }}
         >
           <div
-            className="h-48 relative overflow-hidden flex items-center justify-center"
+            className="h-48 relative overflow-hidden flex items-center justify-center shrink-0"
             style={{ background: `rgba(${project.rgb},0.08)` }}
           >
             <div
@@ -327,7 +329,7 @@ const FlipCard = ({
             </span>
           </div>
 
-          <div className="p-6">
+          <div className="p-6 flex-1 flex flex-col">
             <h3
               className="text-base font-semibold text-white mb-3"
               style={{ letterSpacing: "-0.01em" }}
@@ -337,7 +339,7 @@ const FlipCard = ({
             <p className="text-gray-400 text-sm font-light leading-relaxed mb-4">
               {project.backDesc}
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 mt-auto">
               {project.backTags.map((tag) => (
                 <span
                   key={tag}
