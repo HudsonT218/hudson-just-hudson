@@ -140,7 +140,7 @@ const Work = () => {
           <AnimatePresence>
             {selectedIdx !== null && (
               <motion.div
-                className="fixed inset-0 z-50 flex items-center justify-center pb-[5vh]"
+                className="fixed inset-0 z-50 flex items-center justify-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -155,9 +155,8 @@ const Work = () => {
                   layoutId={`card-${selectedIdx}`}
                   className="relative max-w-[90vw]"
                   style={{
-                    width: 380,
+                    width: 456,
                     perspective: 1000,
-                    scale: 1.2,
                   }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                   onClick={(e) => e.stopPropagation()}
