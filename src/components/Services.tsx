@@ -35,16 +35,11 @@ const Services = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-16">
           <h2
-            className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
+            className="text-3xl sm:text-4xl font-extrabold leading-tight"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Services built for the
-          </h2>
-          <h2
-            className="text-3xl sm:text-4xl font-extrabold text-gray-600 leading-tight"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            modern business.
+            <span className="block text-white">Services built for the</span>
+            <span className="block text-gray-600">modern business.</span>
           </h2>
         </div>
 

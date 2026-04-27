@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import {
   Accordion,
@@ -313,6 +314,14 @@ const PackageCard = ({
 const Packages = () => {
   return (
     <div className="min-h-screen relative z-10">
+      <Helmet>
+        <title>Packages & Pricing — Hudson Turansky</title>
+        <meta
+          name="description"
+          content="Affordable web design and AI development packages. Landing pages from $250, business sites from $750, AI agents from $500. Launch sale — 50% off for the first 5 clients."
+        />
+        <link rel="canonical" href="https://hudsonturansky.com/packages" />
+      </Helmet>
       <Navbar />
 
       {/* Hero */}
@@ -364,16 +373,11 @@ const Packages = () => {
               Website Development
             </p>
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
+              className="text-3xl sm:text-4xl font-extrabold leading-tight"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Sites that ship fast
-            </h2>
-            <h2
-              className="text-3xl sm:text-4xl font-extrabold text-gray-600 leading-tight"
-              style={{ letterSpacing: "-0.03em" }}
-            >
-              and actually convert.
+              <span className="block text-white">Sites that ship fast</span>
+              <span className="block text-gray-600">and actually convert.</span>
             </h2>
           </div>
 
@@ -399,16 +403,11 @@ const Packages = () => {
               AI Agents & Automation
             </p>
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
+              className="text-3xl sm:text-4xl font-extrabold leading-tight"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Agents that work
-            </h2>
-            <h2
-              className="text-3xl sm:text-4xl font-extrabold text-gray-600 leading-tight"
-              style={{ letterSpacing: "-0.03em" }}
-            >
-              while you sleep.
+              <span className="block text-white">Agents that work</span>
+              <span className="block text-gray-600">while you sleep.</span>
             </h2>
           </div>
 

@@ -27,16 +27,11 @@ const Process = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-16">
           <h2
-            className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
+            className="text-3xl sm:text-4xl font-extrabold leading-tight"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Simple process,
-          </h2>
-          <h2
-            className="text-3xl sm:text-4xl font-extrabold text-gray-600 leading-tight"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            exceptional results.
+            <span className="block text-white">Simple process,</span>
+            <span className="block text-gray-600">exceptional results.</span>
           </h2>
         </div>
 

@@ -61,16 +61,11 @@ const Work = () => {
       <div className="max-w-5xl mx-auto">
         <div className="mb-16">
           <h2
-            className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
+            className="text-3xl sm:text-4xl font-extrabold leading-tight"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Things I've built
-          </h2>
-          <h2
-            className="text-3xl sm:text-4xl font-extrabold text-gray-600 leading-tight"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            that actually ship.
+            <span className="block text-white">Things I've built</span>
+            <span className="block text-gray-600">that actually ship.</span>
           </h2>
         </div>
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
@@ -18,6 +19,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative z-10">
+      <Helmet>
+        <title>Hudson Turansky — Web Design, AI Agents & Custom Software</title>
+        <meta
+          name="description"
+          content="I build custom websites, AI agents, and software that help businesses move faster. Landing pages, business sites, and AI solutions — fast delivery, affordable pricing."
+        />
+        <link rel="canonical" href="https://hudsonturansky.com/" />
+      </Helmet>
       <Navbar />
 
       {/* Hero */}
