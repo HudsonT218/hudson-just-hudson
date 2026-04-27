@@ -11,6 +11,7 @@ const WEBSITE_PACKAGES = [
   {
     title: "Landing Page",
     price: "$500",
+    salePrice: "$250",
     description:
       "A single-page site that looks great and converts — perfect for launches, services, or personal brands.",
     features: [
@@ -28,6 +29,7 @@ const WEBSITE_PACKAGES = [
   {
     title: "Business Site",
     price: "$1,500",
+    salePrice: "$750",
     description:
       "A multi-page website for businesses and organizations that need more than a single page.",
     features: [
@@ -46,6 +48,7 @@ const WEBSITE_PACKAGES = [
   {
     title: "Operations Software",
     price: "$5,000",
+    salePrice: "$2,500",
     description:
       "Custom internal tools, dashboards, and platforms built around how your team actually works.",
     features: [
@@ -144,6 +147,7 @@ const FAQ = [
 const PackageCard = ({
   title,
   price,
+  salePrice,
   description,
   features,
   popular,
@@ -152,6 +156,7 @@ const PackageCard = ({
 }: {
   title: string;
   price: string;
+  salePrice?: string;
   description: string;
   features: string[];
   popular?: boolean;
@@ -182,16 +187,32 @@ const PackageCard = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {popular && (
-        <span
-          className="absolute top-6 right-6 text-xs font-medium px-3 py-1 rounded-full"
-          style={{
-            backgroundColor: "rgba(59,130,246,0.12)",
-            color: "#60a5fa",
-          }}
-        >
-          Most Popular
-        </span>
+      {(salePrice || popular) && (
+        <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
+          {salePrice && (
+            <span
+              className="text-xs font-semibold px-3 py-1 rounded-full"
+              style={{
+                backgroundColor: "rgba(59,130,246,0.2)",
+                color: "#ffffff",
+                border: "1px solid rgba(59,130,246,0.35)",
+              }}
+            >
+              50% OFF
+            </span>
+          )}
+          {popular && (
+            <span
+              className="text-xs font-medium px-3 py-1 rounded-full"
+              style={{
+                backgroundColor: "rgba(59,130,246,0.12)",
+                color: "#60a5fa",
+              }}
+            >
+              Most Popular
+            </span>
+          )}
+        </div>
       )}
 
       <h3
@@ -201,13 +222,21 @@ const PackageCard = ({
         {title}
       </h3>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-baseline gap-3">
         <span
           className="text-5xl font-extrabold text-white"
           style={{ letterSpacing: "-0.03em" }}
         >
-          {price}
+          {salePrice ?? price}
         </span>
+        {salePrice && (
+          <span
+            className="text-xl font-light text-gray-500 line-through"
+            style={{ letterSpacing: "-0.01em" }}
+          >
+            {price}
+          </span>
+        )}
       </div>
 
       <p className="text-gray-500 text-sm font-light leading-relaxed mb-6">

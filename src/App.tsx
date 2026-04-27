@@ -31,6 +31,22 @@ const AppRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <div
+        className="fixed top-0 left-0 right-0 z-[60] py-2 px-4 text-center"
+        style={{
+          backgroundColor: "rgba(59,130,246,0.15)",
+          borderBottom: "1px solid rgba(59,130,246,0.25)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+        }}
+      >
+        <p
+          className="text-xs font-medium text-white"
+          style={{ letterSpacing: "0.02em" }}
+        >
+          Launch Sale — 50% off all website packages. First 5 clients only.
+        </p>
+      </div>
       <Toaster />
       <Sonner />
       <ChatWidget />
