@@ -10,7 +10,7 @@ import {
 const WEBSITE_PACKAGES = [
   {
     title: "Landing Page",
-    price: "$400",
+    price: "$500",
     description:
       "A single-page site that looks great and converts — perfect for launches, services, or personal brands.",
     features: [
@@ -27,7 +27,7 @@ const WEBSITE_PACKAGES = [
   },
   {
     title: "Business Site",
-    price: "$800",
+    price: "$1,500",
     description:
       "A multi-page website for businesses and organizations that need more than a single page.",
     features: [
@@ -45,7 +45,7 @@ const WEBSITE_PACKAGES = [
   },
   {
     title: "Operations Software",
-    price: "$2,500",
+    price: "$5,000",
     description:
       "Custom internal tools, dashboards, and platforms built around how your team actually works.",
     features: [
