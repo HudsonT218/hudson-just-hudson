@@ -318,7 +318,7 @@ const Packages = () => {
         <title>Packages & Pricing — Hudson Turansky</title>
         <meta
           name="description"
-          content="Affordable web design and AI development packages. Landing pages from $250, business sites from $750, AI agents from $500. Launch sale — 50% off for the first 5 clients."
+          content="Affordable web design and AI development packages. Landing pages from $250, business sites from $750, AI agents from $1,000. Launch sale — 50% off for the first 5 clients."
         />
         <link rel="canonical" href="https://hudsonturansky.com/packages" />
       </Helmet>
