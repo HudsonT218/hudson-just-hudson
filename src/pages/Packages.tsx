@@ -191,11 +191,11 @@ const PackageCard = ({
         <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
           {salePrice && (
             <span
-              className="text-xs font-semibold px-3 py-1 rounded-full"
+              className="text-xs font-bold text-white px-3 py-1 rounded-full"
               style={{
-                backgroundColor: "rgba(59,130,246,0.2)",
-                color: "#ffffff",
-                border: "1px solid rgba(59,130,246,0.35)",
+                background:
+                  "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
+                textShadow: "0 1px 2px rgba(0,0,0,0.25)",
               }}
             >
               50% OFF
