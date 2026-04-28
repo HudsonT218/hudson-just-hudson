@@ -43,8 +43,9 @@ const App = () => (
             }
           }
         `}</style>
-        <div
-          className="fixed top-0 left-0 right-0 z-[60] py-2 px-4 text-center"
+        <a
+          href="/packages"
+          className="fixed top-0 left-0 right-0 z-[60] py-2 px-4 text-center block cursor-pointer hover:brightness-110 transition-all"
           style={{
             background:
               "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
@@ -69,7 +70,7 @@ const App = () => (
             </svg>
             Launch Sale — 50% off all website packages. First 5 clients only.
           </p>
-        </div>
+        </a>
         <Toaster />
         <Sonner />
         <ChatWidget />
