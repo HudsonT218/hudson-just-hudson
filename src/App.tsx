@@ -23,13 +23,16 @@ import AdminOrderDetailPage from "./pages/configurator/AdminOrderDetailPage.tsx"
 
 const queryClient = new QueryClient();
 
+const CONFIGURATOR_PREFIXES = ["/configure", "/dashboard", "/preview", "/admin"];
+
 const AppRoutes = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isConfigurator = CONFIGURATOR_PREFIXES.some((p) => location.pathname.startsWith(p));
 
   return (
     <>
-      <DottedSurface interactive={isHome} />
+      {!isConfigurator && <DottedSurface interactive={isHome} />}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/packages" element={<Packages />} />
