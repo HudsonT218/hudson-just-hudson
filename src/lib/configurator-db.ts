@@ -216,13 +216,13 @@ export async function submitFeedback(input: {
 }): Promise<Feedback | null> {
   const { data } = await supabase
     .from('feedback')
-    .insert({
+    .insert([{
       order_id: input.orderId,
       user_id: input.userId,
       iteration_number: input.iterationNumber,
-      changes: input.changes,
+      changes: input.changes as never,
       status: 'pending',
-    })
+    }])
     .select()
     .single();
   return data ? mapFeedback(data as Record<string, unknown>) : null;
