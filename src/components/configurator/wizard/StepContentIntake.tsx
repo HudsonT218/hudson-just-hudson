@@ -1,10 +1,27 @@
-import { useState } from 'react';
-import { Globe, Edit3, Loader2, Plus, Trash2 } from 'lucide-react';
-import type { SectionSelection } from '@/lib/configurator-types';
-import { SECTION_TYPE_DEFINITIONS } from '@/lib/configurator-constants';
-import { Input, Textarea, Field } from '@/components/configurator/ui/form-helpers';
-import { Button } from '@/components/configurator/ui/loading-button';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import {
+  Globe,
+  Edit3,
+  Sparkles,
+  Plus,
+  Trash2,
+  Loader2,
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { SECTION_TYPE_DEFINITIONS } from "@/lib/configurator-constants";
+import type { SectionSelection, SectionType } from "@/lib/configurator-types";
+import { cn } from "@/lib/utils";
+import { SECTION_FORM_SCHEMA, type ContentField } from "./contentSchema";
 
 interface StepContentIntakeProps {
   sections: SectionSelection[];
@@ -14,174 +31,13 @@ interface StepContentIntakeProps {
   onScrapedUrlChange: (url: string | null) => void;
 }
 
-type IntakeMode = 'url' | 'manual';
+type IntakeMode = "url" | "manual";
 
 /**
- * Form schemas per section type. Drives the dynamic ContentForm.
- * Field type maps:
- *   text → Input, textarea → Textarea, image → Input (URL for now),
- *   array → Repeatable group of fields
+ * Step 4 — full-form layout. Left vertical section nav + form fields for the
+ * selected section. Plain-English labels via SECTION_FORM_SCHEMA. AI Assist
+ * tooltip placeholder on text fields.
  */
-type FieldDef =
-  | { key: string; label: string; type: 'text' | 'textarea' | 'image' }
-  | {
-      key: string;
-      label: string;
-      type: 'array';
-      itemFields: { key: string; label: string; type: 'text' | 'textarea' | 'image' }[];
-      defaultItem: Record<string, string>;
-    };
-
-const SECTION_FORM_SCHEMA: Partial<Record<string, FieldDef[]>> = {
-  navbar: [
-    { key: 'logo', label: 'Logo text', type: 'text' },
-    { key: 'logoImage', label: 'Logo image URL', type: 'image' },
-    { key: 'ctaLabel', label: 'CTA label', type: 'text' },
-    { key: 'ctaHref', label: 'CTA href', type: 'text' },
-    {
-      key: 'links',
-      label: 'Nav links',
-      type: 'array',
-      defaultItem: { label: '', href: '' },
-      itemFields: [
-        { key: 'label', label: 'Label', type: 'text' },
-        { key: 'href', label: 'Href', type: 'text' },
-      ],
-    },
-  ],
-  hero: [
-    { key: 'eyebrow', label: 'Eyebrow / badge', type: 'text' },
-    { key: 'headline', label: 'Headline', type: 'text' },
-    { key: 'subheadline', label: 'Subheadline', type: 'textarea' },
-    { key: 'primaryCtaLabel', label: 'Primary CTA label', type: 'text' },
-    { key: 'primaryCtaHref', label: 'Primary CTA href', type: 'text' },
-    { key: 'secondaryCtaLabel', label: 'Secondary CTA label', type: 'text' },
-    { key: 'secondaryCtaHref', label: 'Secondary CTA href', type: 'text' },
-    { key: 'image', label: 'Image URL (split/form variants)', type: 'image' },
-  ],
-  features: [
-    { key: 'title', label: 'Section title', type: 'text' },
-    { key: 'subtitle', label: 'Section subtitle', type: 'textarea' },
-    {
-      key: 'features',
-      label: 'Features',
-      type: 'array',
-      defaultItem: { icon: 'Sparkles', title: '', description: '' },
-      itemFields: [
-        { key: 'icon', label: 'Icon (Lucide name)', type: 'text' },
-        { key: 'title', label: 'Title', type: 'text' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-      ],
-    },
-  ],
-  'social-proof': [
-    { key: 'label', label: 'Label (e.g. "Trusted by")', type: 'text' },
-    {
-      key: 'logos',
-      label: 'Logos',
-      type: 'array',
-      defaultItem: { name: '', src: '' },
-      itemFields: [
-        { key: 'name', label: 'Company name', type: 'text' },
-        { key: 'src', label: 'Logo image URL', type: 'image' },
-      ],
-    },
-  ],
-  'how-it-works': [
-    { key: 'title', label: 'Section title', type: 'text' },
-    { key: 'subtitle', label: 'Section subtitle', type: 'textarea' },
-    {
-      key: 'steps',
-      label: 'Steps',
-      type: 'array',
-      defaultItem: { title: '', description: '' },
-      itemFields: [
-        { key: 'title', label: 'Step title', type: 'text' },
-        { key: 'description', label: 'Step description', type: 'textarea' },
-      ],
-    },
-  ],
-  pricing: [
-    { key: 'title', label: 'Section title', type: 'text' },
-    { key: 'subtitle', label: 'Section subtitle', type: 'textarea' },
-    {
-      key: 'plans',
-      label: 'Plans',
-      type: 'array',
-      defaultItem: { name: '', priceMonthly: '', priceAnnual: '', ctaLabel: 'Get started' },
-      itemFields: [
-        { key: 'name', label: 'Plan name', type: 'text' },
-        { key: 'priceMonthly', label: 'Monthly price', type: 'text' },
-        { key: 'priceAnnual', label: 'Annual price', type: 'text' },
-        { key: 'ctaLabel', label: 'CTA label', type: 'text' },
-      ],
-    },
-  ],
-  testimonials: [
-    { key: 'title', label: 'Section title', type: 'text' },
-    { key: 'subtitle', label: 'Section subtitle', type: 'textarea' },
-    {
-      key: 'testimonials',
-      label: 'Testimonials',
-      type: 'array',
-      defaultItem: { quote: '', authorName: '', authorRole: '', authorCompany: '' },
-      itemFields: [
-        { key: 'quote', label: 'Quote', type: 'textarea' },
-        { key: 'authorName', label: 'Author name', type: 'text' },
-        { key: 'authorRole', label: 'Author role', type: 'text' },
-        { key: 'authorCompany', label: 'Company', type: 'text' },
-      ],
-    },
-  ],
-  cta: [
-    { key: 'headline', label: 'Headline', type: 'text' },
-    { key: 'subtext', label: 'Supporting text', type: 'textarea' },
-    { key: 'ctaLabel', label: 'CTA label', type: 'text' },
-    { key: 'ctaHref', label: 'CTA href', type: 'text' },
-  ],
-  footer: [
-    { key: 'logo', label: 'Logo text', type: 'text' },
-    { key: 'copyrightText', label: 'Copyright text', type: 'text' },
-    {
-      key: 'socialLinks',
-      label: 'Social links',
-      type: 'array',
-      defaultItem: { platform: '', href: '' },
-      itemFields: [
-        { key: 'platform', label: 'Platform', type: 'text' },
-        { key: 'href', label: 'URL', type: 'text' },
-      ],
-    },
-  ],
-  faq: [
-    { key: 'title', label: 'Section title', type: 'text' },
-    { key: 'subtitle', label: 'Section subtitle', type: 'textarea' },
-    {
-      key: 'items',
-      label: 'Q&A',
-      type: 'array',
-      defaultItem: { question: '', answer: '' },
-      itemFields: [
-        { key: 'question', label: 'Question', type: 'text' },
-        { key: 'answer', label: 'Answer', type: 'textarea' },
-      ],
-    },
-  ],
-  stats: [
-    { key: 'title', label: 'Section title (optional)', type: 'text' },
-    {
-      key: 'stats',
-      label: 'Stats',
-      type: 'array',
-      defaultItem: { value: '', label: '' },
-      itemFields: [
-        { key: 'value', label: 'Value', type: 'text' },
-        { key: 'label', label: 'Label', type: 'text' },
-      ],
-    },
-  ],
-};
-
 export function StepContentIntake({
   sections,
   content,
@@ -189,253 +45,328 @@ export function StepContentIntake({
   onContentChange,
   onScrapedUrlChange,
 }: StepContentIntakeProps) {
-  const [mode, setMode] = useState<IntakeMode>(scrapedUrl ? 'url' : 'manual');
-  const [openSection, setOpenSection] = useState<string | null>(sections[0]?.type ?? null);
+  const [mode, setMode] = useState<IntakeMode>(scrapedUrl ? "url" : "manual");
+  const [selectedSection, setSelectedSection] = useState<SectionType | null>(
+    sections[0]?.type ?? null,
+  );
   const [scraping, setScraping] = useState(false);
   const [scrapeStatus, setScrapeStatus] = useState<string | null>(null);
 
   function updateSectionContent(type: string, key: string, value: unknown) {
-    const next = {
+    onContentChange({
       ...content,
       [type]: { ...(content[type] ?? {}), [key]: value },
-    };
-    onContentChange(next);
-  }
-
-  function setSection(type: string, value: Record<string, unknown>) {
-    onContentChange({ ...content, [type]: value });
+    });
   }
 
   async function startScrape() {
     if (!scrapedUrl) return;
     setScraping(true);
     setScrapeStatus(null);
-    // The actual scraping happens server-side in the build agent.
-    // We just capture the URL here; build-agent will do the work post-checkout.
     setTimeout(() => {
       setScraping(false);
       setScrapeStatus(
-        'Saved. Content will be extracted from this URL when your site is built.',
+        "Saved. Content will be extracted from this URL when your site is built.",
       );
     }, 600);
   }
 
   return (
-    <div>
-      <div className="mb-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Mode tabs */}
+      <div className="mb-6">
         <h2 className="text-lg font-bold text-foreground">Add your content</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Either point us at an existing site to scrape, or fill in the fields per section.
+        <p className="text-sm text-muted-foreground mt-1">
+          Either point us at an existing site to extract from, or fill in your content directly.
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 rounded-lg border border-border p-1 bg-card mb-6 w-full max-w-md">
-        <button
-          type="button"
-          onClick={() => setMode('url')}
-          className={cn(
-            'flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-            mode === 'url' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
-          )}
-        >
-          <Globe className="h-4 w-4" />
+      <div className="flex gap-1 rounded-md border border-border bg-card/40 p-1 mb-6 w-full max-w-md">
+        <ModeTab active={mode === "url"} onClick={() => setMode("url")} icon={<Globe className="h-4 w-4" />}>
           I have a website
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode('manual')}
-          className={cn(
-            'flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-            mode === 'manual' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground',
-          )}
+        </ModeTab>
+        <ModeTab
+          active={mode === "manual"}
+          onClick={() => setMode("manual")}
+          icon={<Edit3 className="h-4 w-4" />}
         >
-          <Edit3 className="h-4 w-4" />
           Enter manually
-        </button>
+        </ModeTab>
       </div>
 
-      {mode === 'url' ? (
-        <div className="rounded-lg border border-border bg-card p-5 max-w-md">
-          <Field
-            label="Existing site URL"
-            htmlFor="scrape-url"
-            description="We'll extract headlines, copy, and images, then map them to your selected sections."
-          >
+      {mode === "url" ? (
+        <div className="rounded-lg border border-border bg-card/40 backdrop-blur-sm p-5 max-w-md">
+          <div className="space-y-1.5">
+            <Label htmlFor="scrape-url">Existing site URL</Label>
             <Input
               id="scrape-url"
               type="url"
               placeholder="https://your-existing-site.com"
-              value={scrapedUrl ?? ''}
+              value={scrapedUrl ?? ""}
               onChange={(e) => onScrapedUrlChange(e.target.value || null)}
             />
-          </Field>
+            <p className="text-xs text-muted-foreground">
+              We&apos;ll extract headlines, copy, and images, then map them to your selected sections.
+              You can review everything before approving the build.
+            </p>
+          </div>
           <Button
             type="button"
             className="mt-3 w-full"
             onClick={startScrape}
-            disabled={!scrapedUrl}
-            loading={scraping}
+            disabled={!scrapedUrl || scraping}
           >
+            {scraping ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : null}
             Save URL for extraction
           </Button>
-          {scraping && (
-            <p className="text-xs text-muted-foreground/70 mt-3 inline-flex items-center gap-1">
-              <Loader2 className="h-3 w-3 animate-spin" /> Saving…
-            </p>
-          )}
           {scrapeStatus && <p className="text-xs text-emerald-500 mt-3">{scrapeStatus}</p>}
-          <p className="text-xs text-muted-foreground/70 mt-4">
-            You can still edit anything we extract before approving the build.
-          </p>
         </div>
+      ) : sections.length === 0 ? (
+        <p className="text-sm text-muted-foreground">Add sections in step 3 first.</p>
       ) : (
-        <div className="space-y-3">
-          {sections.length === 0 && (
-            <p className="text-muted-foreground">Add sections in step 3 first.</p>
-          )}
-          {sections.map((section) => {
-            const def = SECTION_TYPE_DEFINITIONS.find((d) => d.id === section.type);
-            const schema = SECTION_FORM_SCHEMA[section.type] ?? [];
-            const values = content[section.type] ?? {};
-            const isOpen = openSection === section.type;
-            return (
-              <div
-                key={section.type}
-                className="rounded-lg border border-border bg-card overflow-hidden"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenSection(isOpen ? null : section.type)}
-                  className="w-full flex items-center justify-between px-4 py-3 text-left"
-                >
-                  <div>
-                    <div className="font-medium text-foreground">
-                      {def?.name ?? section.type}
-                    </div>
-                    <div className="text-xs text-muted-foreground/70">{section.variant}</div>
-                  </div>
-                  <span className="text-xs text-muted-foreground/70">{isOpen ? 'Hide' : 'Edit'}</span>
-                </button>
+        <TooltipProvider>
+          <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-6">
+            {/* Section nav */}
+            <nav className="lg:sticky lg:top-[50px] lg:self-start" aria-label="Sections">
+              <ul className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible">
+                {sections.map((section) => {
+                  const def = SECTION_TYPE_DEFINITIONS.find((d) => d.id === section.type);
+                  const active = selectedSection === section.type;
+                  return (
+                    <li key={section.type} className="shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedSection(section.type)}
+                        className={cn(
+                          "w-full text-left px-3 py-2 text-sm rounded-md transition-colors lg:border-l-2",
+                          active
+                            ? "lg:border-blue-400 text-foreground bg-blue-400/5 lg:bg-transparent"
+                            : "lg:border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/40",
+                        )}
+                      >
+                        {def?.name ?? section.type}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
 
-                {isOpen && (
-                  <div className="px-4 pb-4 pt-1 border-t border-border space-y-4">
-                    {schema.map((field) => (
-                      <FieldRenderer
-                        key={field.key}
-                        field={field}
-                        value={values[field.key]}
-                        onChange={(v) => updateSectionContent(section.type, field.key, v)}
-                      />
-                    ))}
-                    {schema.length === 0 && (
-                      <p className="text-xs text-muted-foreground/70">No editable fields for this section type yet.</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+            {/* Form */}
+            <div className="min-w-0">
+              {selectedSection ? (
+                <SectionForm
+                  type={selectedSection}
+                  values={content[selectedSection] ?? {}}
+                  onChange={(key, value) => updateSectionContent(selectedSection, key, value)}
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground">Select a section on the left to edit its content.</p>
+              )}
+            </div>
+          </div>
+        </TooltipProvider>
       )}
     </div>
   );
 }
 
-function FieldRenderer({
-  field,
-  value,
-  onChange,
+function ModeTab({
+  active,
+  onClick,
+  icon,
+  children,
 }: {
-  field: FieldDef;
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+      )}
+    >
+      {icon}
+      {children}
+    </button>
+  );
+}
+
+interface SectionFormProps {
+  type: SectionType;
+  values: Record<string, unknown>;
+  onChange: (key: string, value: unknown) => void;
+}
+
+function SectionForm({ type, values, onChange }: SectionFormProps) {
+  const def = SECTION_TYPE_DEFINITIONS.find((d) => d.id === type);
+  const schema = SECTION_FORM_SCHEMA[type] ?? [];
+
+  return (
+    <div>
+      <h3 className="text-base font-semibold text-foreground mb-1">{def?.name}</h3>
+      <p className="text-xs text-muted-foreground mb-5">{def?.description}</p>
+      <div className="space-y-5 max-w-2xl">
+        {schema.map((field) => (
+          <FieldRenderer
+            key={field.key}
+            field={field}
+            value={values[field.key]}
+            onChange={(v) => onChange(field.key, v)}
+          />
+        ))}
+        {schema.length === 0 && (
+          <p className="text-xs text-muted-foreground">No editable fields for this section yet.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+interface FieldRendererProps {
+  field: ContentField;
   value: unknown;
   onChange: (v: unknown) => void;
-}) {
-  if (field.type === 'array') {
-    const items: Record<string, string>[] = Array.isArray(value)
-      ? (value as Record<string, string>[])
+}
+
+function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
+  if (field.type === "array") {
+    const items: Record<string, string | boolean>[] = Array.isArray(value)
+      ? (value as Record<string, string | boolean>[])
       : [];
     return (
       <div>
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-foreground">{field.label}</span>
+          <Label>{field.label}</Label>
           <Button
             size="sm"
             variant="outline"
             type="button"
             onClick={() => onChange([...items, { ...field.defaultItem }])}
           >
-            <Plus className="h-3.5 w-3.5 mr-1" /> Add
+            <Plus className="h-3.5 w-3.5 mr-1" />
+            {field.addLabel}
           </Button>
         </div>
+        {field.helper && <p className="text-xs text-muted-foreground mb-3">{field.helper}</p>}
         <div className="space-y-3">
           {items.map((item, i) => (
-            <div key={i} className="rounded-md border border-border p-3 bg-muted">
+            <div key={i} className="rounded-md border border-border p-3 bg-card/30">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-muted-foreground/70">#{i + 1}</span>
+                <span className="text-xs text-muted-foreground">#{i + 1}</span>
                 <button
                   type="button"
                   onClick={() => onChange(items.filter((_, idx) => idx !== i))}
-                  className="text-muted-foreground/70 hover:text-destructive"
+                  className="text-muted-foreground hover:text-destructive"
                   aria-label="Remove"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {field.itemFields.map((sub) => (
-                  <Field key={sub.key} label={sub.label}>
-                    {sub.type === 'textarea' ? (
-                      <Textarea
-                        value={item[sub.key] ?? ''}
-                        onChange={(e) =>
-                          onChange(
-                            items.map((it, idx) =>
-                              idx === i ? { ...it, [sub.key]: e.target.value } : it,
-                            ),
-                          )
-                        }
-                      />
-                    ) : (
-                      <Input
-                        value={item[sub.key] ?? ''}
-                        onChange={(e) =>
-                          onChange(
-                            items.map((it, idx) =>
-                              idx === i ? { ...it, [sub.key]: e.target.value } : it,
-                            ),
-                          )
-                        }
-                      />
-                    )}
-                  </Field>
+                  <ScalarField
+                    key={sub.key}
+                    field={sub}
+                    value={item[sub.key]}
+                    onChange={(v) =>
+                      onChange(
+                        items.map((it, idx) =>
+                          idx === i ? { ...it, [sub.key]: v as string | boolean } : it,
+                        ),
+                      )
+                    }
+                  />
                 ))}
               </div>
             </div>
           ))}
           {items.length === 0 && (
-            <p className="text-xs text-muted-foreground/70">None yet — click Add.</p>
+            <p className="text-xs text-muted-foreground">None yet — click {field.addLabel.toLowerCase()}.</p>
           )}
         </div>
       </div>
     );
   }
 
+  return <ScalarField field={field} value={value} onChange={onChange} />;
+}
+
+function ScalarField({
+  field,
+  value,
+  onChange,
+}: {
+  field: Exclude<ContentField, { type: "array" }>;
+  value: unknown;
+  onChange: (v: unknown) => void;
+}) {
+  const id = `f-${field.key}-${Math.random().toString(36).slice(2, 8)}`;
+
+  if (field.type === "boolean") {
+    return (
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <Label htmlFor={id} className="text-sm">
+            {field.label}
+          </Label>
+          {field.helper && (
+            <p className="text-xs text-muted-foreground mt-0.5">{field.helper}</p>
+          )}
+        </div>
+        <Switch id={id} checked={Boolean(value)} onCheckedChange={(c) => onChange(c)} />
+      </div>
+    );
+  }
+
   return (
-    <Field label={field.label}>
-      {field.type === 'textarea' ? (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <Label htmlFor={id} className="text-sm">
+          {field.label}
+        </Label>
+        {field.ai && <AIAssistButton />}
+      </div>
+      {field.type === "textarea" ? (
         <Textarea
-          value={(value as string) ?? ''}
+          id={id}
+          rows={field.rows ?? 3}
+          placeholder={field.placeholder}
+          value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
         />
       ) : (
         <Input
-          type={field.type === 'image' ? 'url' : 'text'}
-          value={(value as string) ?? ''}
+          id={id}
+          type={field.type === "url" || field.type === "image" ? "url" : "text"}
+          placeholder={field.placeholder}
+          value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={field.type === 'image' ? 'https://…' : ''}
         />
       )}
-    </Field>
+      {field.helper && <p className="text-xs text-muted-foreground">{field.helper}</p>}
+    </div>
+  );
+}
+
+function AIAssistButton() {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 text-[11px] text-blue-400 hover:text-blue-300 transition-colors"
+        >
+          <Sparkles className="h-3 w-3" />
+          AI Assist
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top">AI copywriting coming soon</TooltipContent>
+    </Tooltip>
   );
 }

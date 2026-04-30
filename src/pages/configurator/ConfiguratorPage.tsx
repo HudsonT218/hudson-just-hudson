@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import Navbar from "@/components/Navbar";
 import { useAuth } from "@/components/configurator/auth/AuthProvider";
 import { useDraft } from "@/hooks/use-draft";
-import { WizardShell } from "@/components/configurator/wizard/WizardShell";
+import { WizardShell, type WizardLayoutMode } from "@/components/configurator/wizard/WizardShell";
 import { StepModelPicker } from "@/components/configurator/wizard/StepModelPicker";
 import { StepThemePicker } from "@/components/configurator/wizard/StepThemePicker";
 import { StepSectionBuilder } from "@/components/configurator/wizard/StepSectionBuilder";
@@ -12,15 +11,31 @@ import { StepContentIntake } from "@/components/configurator/wizard/StepContentI
 import { StepReviewCheckout } from "@/components/configurator/wizard/StepReviewCheckout";
 import { LivePreview } from "@/components/configurator/preview/LivePreview";
 import { AuthGateDialog } from "@/components/configurator/auth/AuthGateDialog";
-import { MODEL_DEFINITIONS, SECTION_TYPE_DEFINITIONS } from "@/lib/configurator-constants";
+import {
+  MODEL_DEFINITIONS,
+  SECTION_TYPE_DEFINITIONS,
+} from "@/lib/configurator-constants";
 import { generateOrderNumber } from "@/lib/utils";
 import { createOrder } from "@/lib/configurator-db";
 import { isStripeConfigured } from "@/lib/stripe";
-import type { SectionSelection, SiteModel, ThemeId, SiteSpec } from "@/lib/configurator-types";
+import type {
+  SectionSelection,
+  SiteModel,
+  ThemeId,
+  SiteSpec,
+} from "@/lib/configurator-types";
 
 const TOTAL_STEPS = 5;
 /** Steps 1-3 are open. Step 4 (Content) is the auth gate. */
 const AUTH_GATE_STEP = 4;
+
+const STEP_MODES: Record<number, WizardLayoutMode> = {
+  1: "strip",
+  2: "strip",
+  3: "panel",
+  4: "form",
+  5: "form",
+};
 
 export default function ConfiguratorPage() {
   const { user, loading: authLoading } = useAuth();
@@ -40,20 +55,17 @@ export default function ConfiguratorPage() {
     if (!hydrating && draft.currentStep) setStep(draft.currentStep);
   }, [hydrating, draft.currentStep]);
 
-  // Apply theme tokens to root for whole-app preview consistency.
   useEffect(() => {
     if (draft.theme) {
       document.documentElement.dataset.theme = draft.theme;
     }
     return () => {
-      // Clean up so theme tokens don't leak into other pages.
       delete document.documentElement.dataset.theme;
     };
   }, [draft.theme]);
 
   function gotoStep(n: number) {
     const clamped = Math.min(Math.max(n, 1), TOTAL_STEPS);
-    // Auth gate: stepping into Step 4+ requires login.
     if (clamped >= AUTH_GATE_STEP && !user) {
       setPendingStep(clamped);
       setAuthGateOpen(true);
@@ -63,7 +75,6 @@ export default function ConfiguratorPage() {
     update("currentStep", clamped);
   }
 
-  // After auth completes, advance to the pending step.
   useEffect(() => {
     if (user && pendingStep !== null) {
       setStep(pendingStep);
@@ -158,6 +169,7 @@ export default function ConfiguratorPage() {
   }
 
   const previewPanel = <LivePreview spec={spec} />;
+  const mode = STEP_MODES[step] ?? "strip";
 
   if (hydrating || authLoading) {
     return (
@@ -176,39 +188,39 @@ export default function ConfiguratorPage() {
           content="Configure your custom landing page in minutes. Pick a theme, choose sections, and our AI builds it."
         />
       </Helmet>
-      <Navbar />
 
-      {/* pt-16 clears the fixed Navbar; WizardShell occupies the rest of the viewport. */}
-      <div className="pt-16">
-        <WizardShell
-          step={step}
-          totalSteps={TOTAL_STEPS}
-          panelMode={
-            step === 4 ? "expanded" : step === 5 ? "fullscreen" : "compact"
-          }
-          saving={saving}
-          lastSavedAt={lastSavedAt}
-          onPrev={step > 1 ? () => gotoStep(step - 1) : undefined}
-          onNext={step < TOTAL_STEPS ? () => gotoStep(step + 1) : undefined}
-          onJumpToStep={gotoStep}
-          nextDisabled={nextDisabled}
-          preview={previewPanel}
-          onSaveDraft={handleSaveDraft}
-        >
-          {step === 1 && <StepModelPicker selected={draft.model} onSelect={pickModel} />}
-          {step === 2 && (
+      <WizardShell
+        step={step}
+        totalSteps={TOTAL_STEPS}
+        mode={mode}
+        saving={saving}
+        lastSavedAt={lastSavedAt}
+        onPrev={step > 1 ? () => gotoStep(step - 1) : undefined}
+        onNext={step < TOTAL_STEPS ? () => gotoStep(step + 1) : undefined}
+        onJumpToStep={gotoStep}
+        nextDisabled={nextDisabled}
+        preview={previewPanel}
+        onSaveDraft={handleSaveDraft}
+        stripContent={
+          step === 1 ? (
+            <StepModelPicker selected={draft.model} onSelect={pickModel} />
+          ) : step === 2 ? (
             <StepThemePicker
               selected={draft.theme}
               onSelect={(theme: ThemeId) => update("theme", theme)}
             />
-          )}
-          {step === 3 && (
+          ) : null
+        }
+        panelContent={
+          step === 3 ? (
             <StepSectionBuilder
               sections={draft.sections}
               onChange={(s) => update("sections", s)}
             />
-          )}
-          {step === 4 && (
+          ) : null
+        }
+        formContent={
+          step === 4 ? (
             <StepContentIntake
               sections={draft.sections}
               content={draft.content}
@@ -216,16 +228,15 @@ export default function ConfiguratorPage() {
               onContentChange={(c) => update("content", c)}
               onScrapedUrlChange={(u) => update("scrapedUrl", u)}
             />
-          )}
-          {step === 5 && (
+          ) : step === 5 ? (
             <StepReviewCheckout
               draft={draft}
               onJumpToStep={gotoStep}
               onCheckout={handleCheckout}
             />
-          )}
-        </WizardShell>
-      </div>
+          ) : null
+        }
+      />
 
       <AuthGateDialog
         open={authGateOpen}
