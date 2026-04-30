@@ -141,16 +141,16 @@ export async function createOrder(input: {
 }): Promise<Order | null> {
   const { data } = await supabase
     .from('orders')
-    .insert({
+    .insert([{
       user_id: input.userId,
       draft_id: input.draftId,
       order_number: input.orderNumber,
       status: 'paid',
-      spec: input.spec,
+      spec: input.spec as never,
       amount_paid: input.amountPaid,
       stripe_checkout_session_id: input.stripeCheckoutSessionId ?? null,
       stripe_payment_intent_id: input.stripePaymentIntentId ?? null,
-    })
+    }])
     .select()
     .single();
   return data ? mapOrder(data as Record<string, unknown>) : null;
