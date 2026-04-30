@@ -79,7 +79,7 @@ export async function upsertDraft(
     updated_at: new Date().toISOString(),
   };
   if (draft.id) payload.id = draft.id;
-  const { data } = await supabase.from('drafts').upsert(payload).select().single();
+  const { data } = await supabase.from('drafts').upsert(payload as never).select().single();
   return data ? mapDraft(data as Record<string, unknown>) : null;
 }
 
