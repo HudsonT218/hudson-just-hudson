@@ -141,16 +141,16 @@ export async function createOrder(input: {
 }): Promise<Order | null> {
   const { data } = await supabase
     .from('orders')
-    .insert({
+    .insert([{
       user_id: input.userId,
       draft_id: input.draftId,
       order_number: input.orderNumber,
       status: 'paid',
-      spec: input.spec,
+      spec: input.spec as never,
       amount_paid: input.amountPaid,
       stripe_checkout_session_id: input.stripeCheckoutSessionId ?? null,
       stripe_payment_intent_id: input.stripePaymentIntentId ?? null,
-    })
+    }])
     .select()
     .single();
   return data ? mapOrder(data as Record<string, unknown>) : null;
@@ -216,13 +216,13 @@ export async function submitFeedback(input: {
 }): Promise<Feedback | null> {
   const { data } = await supabase
     .from('feedback')
-    .insert({
+    .insert([{
       order_id: input.orderId,
       user_id: input.userId,
       iteration_number: input.iterationNumber,
-      changes: input.changes,
+      changes: input.changes as never,
       status: 'pending',
-    })
+    }])
     .select()
     .single();
   return data ? mapFeedback(data as Record<string, unknown>) : null;
