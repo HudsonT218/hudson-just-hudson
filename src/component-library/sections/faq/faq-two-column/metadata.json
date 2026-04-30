@@ -1,0 +1,24 @@
+{
+  "id": "faq-two-column",
+  "name": "FAQ Two Column",
+  "sectionType": "faq",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "FAQ",
+    "headline": "Got questions?",
+    "subheadline": "Quick answers to the things people ask most. Still curious? We are happy to chat.",
+    "contactLabel": "Cannot find what you are looking for?",
+    "contactHref": "#",
+    "contactCtaLabel": "Contact support",
+    "items": [
+      { "question": "How long does it take to launch?", "answer": "Most teams ship a polished site in a single day. The editor handles design and performance for you." },
+      { "question": "Can I use a custom domain?", "answer": "Yes — connect any domain and we will handle SSL automatically. You can also export to host elsewhere." },
+      { "question": "Do you support teams?", "answer": "Invite teammates, leave inline comments, and review changes before they ship — all in real time." },
+      { "question": "What about accessibility?", "answer": "Every section is built to WCAG 2.1 AA standards by default, so your site is accessible from day one." },
+      { "question": "Is there a free trial?", "answer": "Start free for 14 days, no credit card required. Cancel any time from your dashboard." },
+      { "question": "How do you handle data?", "answer": "We are SOC 2 Type II compliant, support SSO, and encrypt data at rest and in transit." }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "contactLabel", "contactHref", "contactCtaLabel", "items"],
+  "tags": ["faq", "two-column", "always-visible"]
+}

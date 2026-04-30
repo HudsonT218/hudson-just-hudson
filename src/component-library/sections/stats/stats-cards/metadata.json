@@ -1,0 +1,19 @@
+{
+  "id": "stats-cards",
+  "name": "Stats Cards",
+  "sectionType": "stats",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "By the numbers",
+    "headline": "Real outcomes for real teams",
+    "subheadline": "A snapshot of the impact our customers see in the first 90 days.",
+    "stats": [
+      { "icon": "Users", "label": "Active users", "value": "25,400", "trend": 18, "trendLabel": "vs last quarter" },
+      { "icon": "BarChart3", "label": "Avg. conversion lift", "value": "+34%", "trend": 6, "trendLabel": "vs last month" },
+      { "icon": "Zap", "label": "Avg. page load", "value": "0.8s", "trend": -22, "trendLabel": "faster than before" },
+      { "icon": "Globe", "label": "Countries served", "value": "180+", "trend": 12, "trendLabel": "new markets" }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "stats"],
+  "tags": ["stats", "cards", "trend"]
+}

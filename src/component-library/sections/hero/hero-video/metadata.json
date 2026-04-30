@@ -1,0 +1,15 @@
+{
+  "id": "hero-video",
+  "name": "Video Background Hero",
+  "sectionType": "hero",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "headline": "Build beautiful websites without limits",
+    "subheadline": "A complete toolkit for designers, marketers, and founders who care about every pixel.",
+    "ctaLabel": "Start free trial",
+    "ctaHref": "#",
+    "overlayOpacity": 0.55
+  },
+  "configurableProps": ["videoUrl", "posterUrl", "headline", "subheadline", "ctaLabel", "ctaHref", "overlayOpacity"],
+  "tags": ["video", "hero", "fullscreen"]
+}

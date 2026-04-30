@@ -1,0 +1,25 @@
+{
+  "id": "social-proof-grid",
+  "name": "Social Proof Grid",
+  "sectionType": "social-proof",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "label": "Powering thousands of fast-growing businesses",
+    "logos": [
+      { "name": "Acme" },
+      { "name": "Globex" },
+      { "name": "Initech" },
+      { "name": "Umbrella" },
+      { "name": "Stark" },
+      { "name": "Wayne" },
+      { "name": "Pied Piper" },
+      { "name": "Hooli" },
+      { "name": "Soylent" },
+      { "name": "Cyberdyne" },
+      { "name": "Tyrell" },
+      { "name": "Vandelay" }
+    ]
+  },
+  "configurableProps": ["label", "logos"],
+  "tags": ["social-proof", "grid", "logos"]
+}

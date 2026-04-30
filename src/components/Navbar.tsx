@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const NAV_LINKS = [
+const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
   { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "Process", href: "#process" },
   { label: "Packages", href: "/packages" },
+  { label: "Build Your Site", href: "/configure", badge: "New" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -91,9 +92,14 @@ const Navbar = () => {
               key={link.label}
               href={resolveHref(link.href)}
               onClick={(e) => handleNav(e, link.href)}
-              className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
+              className="text-sm text-gray-500 hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5"
             >
               {link.label}
+              {link.badge && (
+                <span className="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded-sm leading-none bg-blue-500/15 text-blue-400">
+                  {link.badge}
+                </span>
+              )}
             </a>
           ))}
         </div>
@@ -143,7 +149,14 @@ const Navbar = () => {
               }}
               className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
             >
-              {link.label}
+              <span className="inline-flex items-center gap-1.5">
+                {link.label}
+                {link.badge && (
+                  <span className="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded-sm leading-none bg-blue-500/15 text-blue-400">
+                    {link.badge}
+                  </span>
+                )}
+              </span>
             </a>
           ))}
         </div>

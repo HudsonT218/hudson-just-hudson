@@ -1,0 +1,52 @@
+{
+  "id": "testimonials-cards-grid",
+  "name": "Testimonials Cards Grid",
+  "sectionType": "testimonials",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Testimonials",
+    "headline": "Loved by teams that ship",
+    "subheadline": "Hear what our customers say about working with us.",
+    "showRatings": true,
+    "testimonials": [
+      {
+        "quote": "We launched our marketing site in two days instead of two months. The result looked better than anything we have ever shipped.",
+        "name": "Sarah Chen",
+        "role": "Head of Marketing, Northwind",
+        "rating": 5
+      },
+      {
+        "quote": "The editor finally lets non-engineers iterate on the site without breaking the design system. It is a complete win.",
+        "name": "Marcus Adebayo",
+        "role": "Director of Brand, Lumio",
+        "rating": 5
+      },
+      {
+        "quote": "Performance is incredible. Our pages went from 3.5 seconds to under one second on mobile after the migration.",
+        "name": "Priya Patel",
+        "role": "Engineering Manager, Hyperion",
+        "rating": 5
+      },
+      {
+        "quote": "Honestly, I was skeptical. Then we shipped three campaigns in a single sprint. I am no longer skeptical.",
+        "name": "David Rivera",
+        "role": "Growth Lead, Stratus",
+        "rating": 4
+      },
+      {
+        "quote": "The built-in analytics tell us exactly what to fix next. No more guessing — we just iterate where the data points us.",
+        "name": "Emily Foster",
+        "role": "Product Lead, Vantage",
+        "rating": 5
+      },
+      {
+        "quote": "It pays for itself in the first month. We canceled three other tools and our site improved.",
+        "name": "Jordan Kim",
+        "role": "Founder, Pillar",
+        "rating": 5
+      }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "testimonials", "showRatings"],
+  "tags": ["testimonials", "grid", "cards"]
+}

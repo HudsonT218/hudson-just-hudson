@@ -1,0 +1,38 @@
+{
+  "id": "features-alternating",
+  "name": "Features Alternating",
+  "sectionType": "features",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "headline": "A platform that grows with you",
+    "subheadline": "From the first prototype to a fully optimized funnel, every step is built in.",
+    "rows": [
+      {
+        "eyebrow": "Build",
+        "title": "A drag-and-drop editor that respects your design system",
+        "description": "Compose pages from polished sections without breaking your design tokens.",
+        "bullets": ["Token-aware editor", "Section library", "Realtime preview"],
+        "ctaLabel": "Explore the editor",
+        "ctaHref": "#"
+      },
+      {
+        "eyebrow": "Ship",
+        "title": "Deploy globally with one click",
+        "description": "Built-in CDN, automatic image optimization, and instant rollbacks.",
+        "bullets": ["Edge deploys", "Atomic rollbacks", "Preview environments"],
+        "ctaLabel": "See the runtime",
+        "ctaHref": "#"
+      },
+      {
+        "eyebrow": "Grow",
+        "title": "Understand what works and double down",
+        "description": "Built-in analytics surface the sections, copy, and CTAs that drive results.",
+        "bullets": ["Funnel breakdowns", "Heatmaps", "A/B testing"],
+        "ctaLabel": "Browse analytics",
+        "ctaHref": "#"
+      }
+    ]
+  },
+  "configurableProps": ["headline", "subheadline", "rows"],
+  "tags": ["features", "alternating", "rows"]
+}

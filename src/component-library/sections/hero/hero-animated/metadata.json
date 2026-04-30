@@ -1,0 +1,17 @@
+{
+  "id": "hero-animated",
+  "name": "Animated Hero",
+  "sectionType": "hero",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "New • AI-powered",
+    "headline": "Design that thinks alongside you",
+    "subheadline": "A creative platform built for speed, polish, and the parts of the work you actually enjoy.",
+    "primaryCtaLabel": "Get Started",
+    "primaryCtaHref": "#",
+    "secondaryCtaLabel": "Watch demo",
+    "secondaryCtaHref": "#"
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "primaryCtaLabel", "primaryCtaHref", "secondaryCtaLabel", "secondaryCtaHref"],
+  "tags": ["animated", "hero", "gradient"]
+}

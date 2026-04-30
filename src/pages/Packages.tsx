@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import {
@@ -107,13 +108,6 @@ const AI_PACKAGES = [
 
 const COMING_SOON = [
   {
-    title: "Build Your Website",
-    description:
-      "Design your own site with our configurator — pick a style, choose your sections, and we'll build it. No calls needed.",
-    mailto:
-      "mailto:hudsonturansky@gmail.com?subject=Build Your Website Waitlist",
-  },
-  {
     title: "Scripts & Bots Store",
     description:
       "Browse our library of pre-built AI automations and bots. Pick what you need, we'll help you set it up.",
@@ -121,6 +115,24 @@ const COMING_SOON = [
       "mailto:hudsonturansky@gmail.com?subject=Scripts %26 Bots Store Waitlist",
   },
 ];
+
+const SELF_SERVE_BUILD = {
+  title: "Build Your Site",
+  price: "$500",
+  salePrice: "$250",
+  description:
+    "Design your own landing page with our configurator. Pick a style, choose your sections, and our AI builds it — no calls needed.",
+  features: [
+    "5-step guided wizard",
+    "8 design themes to choose from",
+    "33 section variants (heroes, pricing, testimonials, more)",
+    "Optional content extraction from an existing site",
+    "Live preview as you build",
+    "5 rounds of revisions included",
+    "Delivered as a deployed Vercel site",
+  ],
+  href: "/configure",
+};
 
 const FAQ = [
   {
@@ -415,6 +427,122 @@ const Packages = () => {
             {AI_PACKAGES.map((pkg) => (
               <PackageCard key={pkg.title} {...pkg} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      />
+
+      {/* Self-serve build (configurator) */}
+      <section className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12">
+            <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
+              No Calls Needed
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold text-white leading-tight"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              <span className="block text-white">{SELF_SERVE_BUILD.title}</span>
+              <span className="block text-gray-600">in under an hour.</span>
+            </h2>
+          </div>
+
+          <div
+            className="rounded-2xl p-8 md:p-10 transition-all duration-300 relative flex flex-col md:flex-row gap-8"
+            style={{
+              backgroundColor: "rgba(59,130,246,0.04)",
+              border: "1px solid rgba(59,130,246,0.18)",
+              boxShadow: "0 0 60px rgba(59,130,246,0.08)",
+            }}
+          >
+            {/* Sale badge */}
+            <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
+              <span
+                className="text-xs font-bold text-white px-3 py-1 rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
+                  textShadow: "0 1px 2px rgba(0,0,0,0.25)",
+                }}
+              >
+                LAUNCH 50% OFF
+              </span>
+              <span
+                className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400"
+              >
+                NEW
+              </span>
+            </div>
+
+            <div className="flex-1">
+              <h3
+                className="text-2xl font-bold text-white mb-3"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                {SELF_SERVE_BUILD.title}
+              </h3>
+              <div className="flex items-baseline gap-3 mb-4">
+                <span className="text-3xl font-extrabold text-white">
+                  {SELF_SERVE_BUILD.salePrice}
+                </span>
+                <span className="text-sm text-gray-500 line-through">
+                  {SELF_SERVE_BUILD.price}
+                </span>
+              </div>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-md">
+                {SELF_SERVE_BUILD.description}
+              </p>
+              <Link
+                to={SELF_SERVE_BUILD.href}
+                className="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-md transition-colors duration-200"
+                style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+              >
+                Start Building
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path
+                    d="M5.5 3L9.5 7L5.5 11"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            </div>
+
+            <div className="md:w-px md:bg-white/5 hidden md:block" />
+
+            <ul className="space-y-2.5 md:flex-1">
+              {SELF_SERVE_BUILD.features.map((feature) => (
+                <li
+                  key={feature}
+                  className="flex items-start gap-2.5 text-sm text-gray-400"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    className="text-blue-400 mt-0.5 shrink-0"
+                  >
+                    <path
+                      d="M2.5 7L6 10.5L11.5 4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

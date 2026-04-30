@@ -1,0 +1,17 @@
+{
+  "id": "footer-simple",
+  "name": "Simple Footer",
+  "sectionType": "footer",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "logo": "Brand",
+    "copyright": "© 2026 Brand, Inc. All rights reserved.",
+    "socials": [
+      { "platform": "twitter", "href": "#" },
+      { "platform": "github", "href": "#" },
+      { "platform": "linkedin", "href": "#" }
+    ]
+  },
+  "configurableProps": ["logo", "logoImage", "copyright", "socials"],
+  "tags": ["footer", "simple", "minimal"]
+}

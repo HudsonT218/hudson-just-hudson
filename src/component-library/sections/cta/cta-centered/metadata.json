@@ -1,0 +1,17 @@
+{
+  "id": "cta-centered",
+  "name": "CTA Centered",
+  "sectionType": "cta",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "headline": "Ready to launch a site you are proud of?",
+    "subheadline": "Start free in minutes. No credit card required.",
+    "primaryCtaLabel": "Get started",
+    "primaryCtaHref": "#",
+    "secondaryCtaLabel": "Talk to sales",
+    "secondaryCtaHref": "#",
+    "variant": "gradient"
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "primaryCtaLabel", "primaryCtaHref", "secondaryCtaLabel", "secondaryCtaHref", "variant"],
+  "tags": ["cta", "centered", "banner"]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "hero-centered",
+  "name": "Centered Hero",
+  "sectionType": "hero",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Now in public beta",
+    "headline": "The fastest way to launch a beautiful website",
+    "subheadline": "Build, customize, and ship a polished site in minutes. No code, no compromises — just clean design that converts.",
+    "primaryCtaLabel": "Start free trial",
+    "primaryCtaHref": "#",
+    "secondaryCtaLabel": "See how it works",
+    "secondaryCtaHref": "#",
+    "logoStrip": [
+      { "name": "Acme" },
+      { "name": "Globex" },
+      { "name": "Initech" },
+      { "name": "Umbrella" },
+      { "name": "Stark" }
+    ],
+    "showLogoStrip": true
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "primaryCtaLabel", "primaryCtaHref", "secondaryCtaLabel", "secondaryCtaHref", "logoStrip", "showLogoStrip"],
+  "tags": ["centered", "hero", "logo-strip"]
+}

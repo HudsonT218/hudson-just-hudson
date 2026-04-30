@@ -1,0 +1,45 @@
+{
+  "id": "pricing-three-tier",
+  "name": "Pricing Three Tier",
+  "sectionType": "pricing",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Pricing",
+    "headline": "Simple pricing, no surprises",
+    "subheadline": "Pick a plan that scales with your needs. Upgrade or downgrade any time.",
+    "showToggle": true,
+    "currency": "$",
+    "tiers": [
+      {
+        "name": "Starter",
+        "description": "For small projects and personal sites.",
+        "monthlyPrice": 9,
+        "annualPrice": 7,
+        "features": ["1 site", "Custom domain", "Basic analytics", "Community support"],
+        "ctaLabel": "Start free",
+        "ctaHref": "#"
+      },
+      {
+        "name": "Pro",
+        "description": "For growing teams and businesses.",
+        "monthlyPrice": 29,
+        "annualPrice": 24,
+        "features": ["10 sites", "Custom domains", "Advanced analytics", "Priority support", "A/B testing", "Team collaboration"],
+        "ctaLabel": "Start free trial",
+        "ctaHref": "#",
+        "recommended": true
+      },
+      {
+        "name": "Enterprise",
+        "description": "For larger organizations with custom needs.",
+        "monthlyPrice": "Custom",
+        "annualPrice": "Custom",
+        "features": ["Unlimited sites", "SSO & SAML", "Dedicated CSM", "SLA guarantees", "Custom integrations", "Audit logs"],
+        "ctaLabel": "Contact sales",
+        "ctaHref": "#"
+      }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "tiers", "showToggle", "currency"],
+  "tags": ["pricing", "three-tier", "toggle"]
+}

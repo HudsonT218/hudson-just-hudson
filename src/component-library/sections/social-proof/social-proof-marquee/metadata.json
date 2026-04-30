@@ -1,0 +1,22 @@
+{
+  "id": "social-proof-marquee",
+  "name": "Social Proof Marquee",
+  "sectionType": "social-proof",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "label": "Trusted by leading teams worldwide",
+    "logos": [
+      { "name": "Acme" },
+      { "name": "Globex" },
+      { "name": "Initech" },
+      { "name": "Umbrella" },
+      { "name": "Stark Industries" },
+      { "name": "Wayne Co." },
+      { "name": "Pied Piper" },
+      { "name": "Hooli" }
+    ],
+    "speed": "normal"
+  },
+  "configurableProps": ["label", "logos", "speed"],
+  "tags": ["social-proof", "marquee", "logos"]
+}

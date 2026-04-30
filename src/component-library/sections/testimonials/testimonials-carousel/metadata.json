@@ -1,0 +1,34 @@
+{
+  "id": "testimonials-carousel",
+  "name": "Testimonials Carousel",
+  "sectionType": "testimonials",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "What people are saying",
+    "headline": "Trusted by teams across every industry",
+    "autoplay": true,
+    "intervalMs": 5500,
+    "testimonials": [
+      {
+        "quote": "We replaced three tools with one and shipped a brand-new marketing site in a single sprint. The team is more aligned than ever.",
+        "name": "Sarah Chen",
+        "role": "Head of Marketing",
+        "company": "Northwind"
+      },
+      {
+        "quote": "The platform pays for itself in the first month. Performance, polish, and pace — we got all three without trade-offs.",
+        "name": "Marcus Adebayo",
+        "role": "Director of Brand",
+        "company": "Lumio"
+      },
+      {
+        "quote": "I never thought I would say this about a website tool, but it is genuinely a joy to use every day.",
+        "name": "Priya Patel",
+        "role": "Engineering Manager",
+        "company": "Hyperion"
+      }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "testimonials", "autoplay", "intervalMs"],
+  "tags": ["testimonials", "carousel", "autoplay"]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "testimonials-large-quote",
+  "name": "Testimonials Large Quote",
+  "sectionType": "testimonials",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Customer story",
+    "autoCycle": true,
+    "intervalMs": 7000,
+    "testimonials": [
+      {
+        "quote": "We rebuilt the entire marketing site in a weekend, and the result is the best work our team has ever shipped. It changed how we work.",
+        "name": "Sarah Chen",
+        "role": "Head of Marketing",
+        "company": "Northwind"
+      },
+      {
+        "quote": "Polished, fast, and a joy to use. It is rare to find a tool that gets all three right.",
+        "name": "Marcus Adebayo",
+        "role": "Director of Brand",
+        "company": "Lumio"
+      }
+    ]
+  },
+  "configurableProps": ["eyebrow", "testimonials", "autoCycle", "intervalMs"],
+  "tags": ["testimonials", "large-quote", "spotlight"]
+}

@@ -1,0 +1,75 @@
+:root[data-theme="vibrant-startup"] {
+  --color-bg: #FFFFFF;
+  --color-bg-secondary: #FAFAFA;
+  --color-bg-tertiary: #F5F5F5;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #FAFAFA;
+  --color-text-primary: #171717;
+  --color-text-secondary: #525252;
+  --color-text-muted: #A3A3A3;
+  --color-text-inverse: #FFFFFF;
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-primary-text: #FFFFFF;
+  --color-secondary: #EC4899;
+  --color-secondary-hover: #DB2777;
+  --color-accent: #F59E0B;
+  --color-accent-hover: #D97706;
+  --color-border: #E5E5E5;
+  --color-border-hover: #D4D4D4;
+  --color-success: #10B981;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3rem;
+  --font-size-display: 4rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 800;
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.7;
+  --letter-spacing-tight: -0.03em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.05em;
+
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-section: 6rem;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(124, 58, 237, 0.08);
+  --shadow-md: 0 4px 12px rgba(124, 58, 237, 0.12);
+  --shadow-lg: 0 8px 24px rgba(124, 58, 237, 0.16);
+  --shadow-xl: 0 16px 48px rgba(124, 58, 237, 0.2);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  --gradient-primary: linear-gradient(135deg, #7C3AED, #EC4899);
+  --gradient-accent: linear-gradient(135deg, #F59E0B, #EF4444);
+  --gradient-bg: linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);
+}

@@ -1,0 +1,19 @@
+{
+  "id": "stats-inline",
+  "name": "Stats Inline",
+  "sectionType": "stats",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "headline": "Trusted at scale",
+    "subheadline": "Numbers that reflect the work we put in for our customers every day.",
+    "durationMs": 1500,
+    "stats": [
+      { "value": 25000, "label": "Active customers", "suffix": "+" },
+      { "value": 99.99, "label": "Uptime", "suffix": "%" },
+      { "value": 180, "label": "Countries served", "suffix": "+" },
+      { "value": 4.9, "label": "Avg. customer rating", "suffix": "/5" }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "stats", "durationMs"],
+  "tags": ["stats", "inline", "count-up"]
+}

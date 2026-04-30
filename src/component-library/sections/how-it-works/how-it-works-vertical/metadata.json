@@ -1,0 +1,19 @@
+{
+  "id": "how-it-works-vertical",
+  "name": "How It Works Vertical",
+  "sectionType": "how-it-works",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "How it works",
+    "headline": "Live in four simple steps",
+    "subheadline": "A streamlined flow from idea to a polished, public site.",
+    "steps": [
+      { "title": "Pick a starting point", "description": "Choose from a curated set of beautifully designed templates and section variants." },
+      { "title": "Make it yours", "description": "Edit copy, swap images, and tune your brand tokens — every change updates instantly." },
+      { "title": "Publish anywhere", "description": "Deploy to our global edge network, your custom domain, or export clean code." },
+      { "title": "Iterate with data", "description": "See exactly what is working and refine your funnel with built-in analytics." }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "steps"],
+  "tags": ["how-it-works", "vertical", "steps"]
+}

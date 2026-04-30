@@ -1,0 +1,57 @@
+{
+  "id": "footer-multi-column",
+  "name": "Multi-Column Footer",
+  "sectionType": "footer",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "logo": "Brand",
+    "description": "Beautiful, fast websites for modern teams.",
+    "copyright": "© 2026 Brand, Inc. All rights reserved.",
+    "columns": [
+      {
+        "heading": "Product",
+        "links": [
+          { "label": "Features", "href": "#" },
+          { "label": "Pricing", "href": "#" },
+          { "label": "Integrations", "href": "#" },
+          { "label": "Changelog", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Company",
+        "links": [
+          { "label": "About", "href": "#" },
+          { "label": "Customers", "href": "#" },
+          { "label": "Careers", "href": "#" },
+          { "label": "Contact", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Resources",
+        "links": [
+          { "label": "Blog", "href": "#" },
+          { "label": "Guides", "href": "#" },
+          { "label": "Help center", "href": "#" },
+          { "label": "Status", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Legal",
+        "links": [
+          { "label": "Privacy", "href": "#" },
+          { "label": "Terms", "href": "#" },
+          { "label": "Security", "href": "#" },
+          { "label": "Cookies", "href": "#" }
+        ]
+      }
+    ],
+    "socials": [
+      { "platform": "twitter", "href": "#" },
+      { "platform": "github", "href": "#" },
+      { "platform": "linkedin", "href": "#" },
+      { "platform": "youtube", "href": "#" }
+    ]
+  },
+  "configurableProps": ["logo", "logoImage", "description", "columns", "socials", "copyright"],
+  "tags": ["footer", "multi-column", "links"]
+}

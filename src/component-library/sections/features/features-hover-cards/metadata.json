@@ -1,0 +1,21 @@
+{
+  "id": "features-hover-cards",
+  "name": "Features Hover Cards",
+  "sectionType": "features",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Why teams choose us",
+    "headline": "Everything you need to launch",
+    "subheadline": "A focused platform that helps you build, ship, and grow.",
+    "features": [
+      { "icon": "Zap", "title": "Lightning fast", "description": "Sub-second loads with global edge caching.", "linkLabel": "See benchmarks", "href": "#" },
+      { "icon": "Shield", "title": "Secure by default", "description": "SOC 2, SSO, encrypted at rest and in transit.", "linkLabel": "Read the report", "href": "#" },
+      { "icon": "Sparkles", "title": "AI-assisted editing", "description": "Generate copy and refine layouts in seconds.", "linkLabel": "Try the editor", "href": "#" },
+      { "icon": "BarChart3", "title": "Built-in analytics", "description": "Track engagement and conversion out of the box.", "linkLabel": "View dashboard", "href": "#" },
+      { "icon": "Users", "title": "Team collaboration", "description": "Comment, review, and ship together in real time.", "linkLabel": "Invite teammates", "href": "#" },
+      { "icon": "Globe", "title": "Global CDN", "description": "Auto-deploy to over 200 edge locations worldwide.", "linkLabel": "Explore the network", "href": "#" }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "features"],
+  "tags": ["features", "hover", "cards"]
+}

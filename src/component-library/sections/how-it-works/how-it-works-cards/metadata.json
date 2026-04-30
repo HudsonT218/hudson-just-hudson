@@ -1,0 +1,18 @@
+{
+  "id": "how-it-works-cards",
+  "name": "How It Works Cards",
+  "sectionType": "how-it-works",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "How it works",
+    "headline": "A simple process from start to launch",
+    "subheadline": "Three steps. Hours, not weeks.",
+    "steps": [
+      { "title": "Plan your launch", "description": "Map out your goals, audience, and key messaging in our guided onboarding flow." },
+      { "title": "Design your site", "description": "Pick polished sections, swap in your content, and tweak your brand tokens." },
+      { "title": "Launch and grow", "description": "Publish in one click, track engagement, and iterate based on real visitor data." }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "steps"],
+  "tags": ["how-it-works", "cards", "watermark"]
+}

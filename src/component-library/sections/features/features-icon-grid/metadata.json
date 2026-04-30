@@ -1,0 +1,21 @@
+{
+  "id": "features-icon-grid",
+  "name": "Features Icon Grid",
+  "sectionType": "features",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Why teams choose us",
+    "headline": "Everything you need, nothing you do not",
+    "subheadline": "A focused toolkit that helps you build, launch, and grow without the bloat.",
+    "features": [
+      { "icon": "Zap", "title": "Lightning fast", "description": "Page loads in under a second with global edge caching and smart pre-rendering." },
+      { "icon": "Shield", "title": "Secure by default", "description": "Enterprise-grade security with SOC 2, SSO, and end-to-end encryption." },
+      { "icon": "Sparkles", "title": "AI-assisted editing", "description": "Generate copy, refine layouts, and adjust styles with a single prompt." },
+      { "icon": "BarChart3", "title": "Built-in analytics", "description": "See exactly how visitors engage and which sections drive the most conversions." },
+      { "icon": "Users", "title": "Team collaboration", "description": "Comment, review, and ship updates together with realtime presence." },
+      { "icon": "Globe", "title": "Global CDN", "description": "Auto-deploy to over 200 edge locations so visitors get the fastest experience." }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "features"],
+  "tags": ["features", "grid", "icons"]
+}

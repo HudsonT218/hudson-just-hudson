@@ -1,0 +1,19 @@
+{
+  "id": "how-it-works-horizontal",
+  "name": "How It Works Horizontal",
+  "sectionType": "how-it-works",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "How it works",
+    "headline": "From signup to live in minutes",
+    "subheadline": "A clear path forward at every stage.",
+    "steps": [
+      { "title": "Sign up", "description": "Create a free account in under a minute." },
+      { "title": "Pick a template", "description": "Start from a polished design tuned for your industry." },
+      { "title": "Customize", "description": "Edit content, brand, and layout to fit your story." },
+      { "title": "Publish", "description": "Ship to a custom domain with one click." }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "steps"],
+  "tags": ["how-it-works", "horizontal", "steps"]
+}

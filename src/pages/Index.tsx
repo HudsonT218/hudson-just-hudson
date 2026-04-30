@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
 import Process from "@/components/Process";
+import ConfiguratorPromo from "@/components/ConfiguratorPromo";
 import Contact from "@/components/Contact";
 
 const Index = () => {
@@ -188,6 +189,13 @@ const Index = () => {
       />
 
       <Process />
+
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      />
+
+      <ConfiguratorPromo />
 
       <Contact />
 

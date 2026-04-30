@@ -1,0 +1,36 @@
+{
+  "id": "faq-accordion",
+  "name": "FAQ Accordion",
+  "sectionType": "faq",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "FAQ",
+    "headline": "Frequently asked questions",
+    "subheadline": "Everything you need to know before getting started.",
+    "allowMultiple": false,
+    "items": [
+      {
+        "question": "How long does it take to launch a site?",
+        "answer": "Most teams ship a polished marketing site within a day. The editor handles the design system, performance, and SEO so you can focus on content."
+      },
+      {
+        "question": "Can I use my own custom domain?",
+        "answer": "Yes. Connect any domain you own, and we will provision SSL automatically. You can also export your site to host wherever you like."
+      },
+      {
+        "question": "Do you support team collaboration?",
+        "answer": "Absolutely. Invite teammates, leave inline comments, and review changes before they ship. Real-time presence keeps everyone in sync."
+      },
+      {
+        "question": "What about accessibility and SEO?",
+        "answer": "Every section is built to WCAG 2.1 AA standards out of the box. Pages are pre-rendered and ship with structured data, sitemaps, and clean semantic HTML."
+      },
+      {
+        "question": "Can I cancel any time?",
+        "answer": "Yes — cancel from your dashboard whenever you like. Your site will continue running until the end of your billing period."
+      }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "items", "allowMultiple"],
+  "tags": ["faq", "accordion", "expandable"]
+}

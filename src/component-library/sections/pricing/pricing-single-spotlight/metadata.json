@@ -1,0 +1,33 @@
+{
+  "id": "pricing-single-spotlight",
+  "name": "Pricing Single Spotlight",
+  "sectionType": "pricing",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "One simple plan",
+    "headline": "Everything you need, one price",
+    "subheadline": "No tiers, no upsells. One plan that includes every feature.",
+    "planName": "All-in-One",
+    "planDescription": "Includes every feature, every integration, and every future update.",
+    "price": 49,
+    "priceSuffix": "per user / month",
+    "currency": "$",
+    "features": [
+      "Unlimited sites and pages",
+      "Custom domains with SSL",
+      "Advanced analytics dashboard",
+      "A/B testing and experiments",
+      "Team collaboration with roles",
+      "Priority email and chat support",
+      "SSO and SAML authentication",
+      "Audit logs and access controls",
+      "99.9% uptime SLA",
+      "24/7 monitoring and alerts"
+    ],
+    "ctaLabel": "Start free trial",
+    "ctaHref": "#",
+    "guarantee": "14-day free trial. No credit card required."
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "planName", "planDescription", "price", "priceSuffix", "currency", "features", "ctaLabel", "ctaHref", "guarantee"],
+  "tags": ["pricing", "single", "spotlight"]
+}

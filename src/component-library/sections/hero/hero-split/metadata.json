@@ -1,0 +1,18 @@
+{
+  "id": "hero-split",
+  "name": "Split Hero",
+  "sectionType": "hero",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Built for modern teams",
+    "headline": "Beautiful sites, shipped in record time",
+    "subheadline": "Pick a layout, edit your content, and publish. Our system handles design, performance, and SEO so you can focus on growth.",
+    "primaryCtaLabel": "Start free trial",
+    "primaryCtaHref": "#",
+    "secondaryCtaLabel": "View demo",
+    "secondaryCtaHref": "#",
+    "imageAlt": "Product screenshot"
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "primaryCtaLabel", "primaryCtaHref", "secondaryCtaLabel", "secondaryCtaHref", "imageUrl", "imageAlt"],
+  "tags": ["split", "hero", "image"]
+}

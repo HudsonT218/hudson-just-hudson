@@ -1,0 +1,38 @@
+{
+  "id": "navbar-megamenu",
+  "name": "Mega Menu Navbar",
+  "sectionType": "navbar",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "logo": "Brand",
+    "items": [
+      {
+        "label": "Product",
+        "columns": [
+          {
+            "heading": "Platform",
+            "links": [
+              { "label": "Overview", "href": "#", "description": "Tour the entire product" },
+              { "label": "Integrations", "href": "#", "description": "Connect your stack" },
+              { "label": "Security", "href": "#", "description": "Enterprise-grade safety" }
+            ]
+          },
+          {
+            "heading": "For teams",
+            "links": [
+              { "label": "Engineering", "href": "#", "description": "Ship faster, together" },
+              { "label": "Marketing", "href": "#", "description": "Launch campaigns quickly" },
+              { "label": "Sales", "href": "#", "description": "Close more deals" }
+            ]
+          }
+        ]
+      },
+      { "label": "Pricing", "href": "#pricing" },
+      { "label": "Company", "href": "#company" }
+    ],
+    "ctaLabel": "Get Started",
+    "ctaHref": "#"
+  },
+  "configurableProps": ["logo", "logoImage", "items", "ctaLabel", "ctaHref"],
+  "tags": ["megamenu", "dropdown", "responsive"]
+}

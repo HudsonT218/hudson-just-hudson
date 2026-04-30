@@ -1,0 +1,21 @@
+{
+  "id": "navbar-centered",
+  "name": "Centered Navbar",
+  "sectionType": "navbar",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "logo": "Brand",
+    "links": [
+      { "label": "Product", "href": "#product" },
+      { "label": "Features", "href": "#features" },
+      { "label": "Pricing", "href": "#pricing" },
+      { "label": "Resources", "href": "#resources" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "announcement": "New: Our Spring release is live — explore what is new.",
+    "announcementHref": "#",
+    "showAnnouncement": true
+  },
+  "configurableProps": ["logo", "logoImage", "links", "announcement", "announcementHref", "showAnnouncement"],
+  "tags": ["centered", "announcement", "responsive"]
+}

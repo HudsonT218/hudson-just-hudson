@@ -1,0 +1,20 @@
+{
+  "id": "cta-split",
+  "name": "CTA Split",
+  "sectionType": "cta",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "headline": "Get product updates and growth tips, monthly",
+    "subheadline": "Join 25,000 founders, marketers, and engineers who trust our newsletter for thoughtful, practical insights.",
+    "mode": "form",
+    "emailPlaceholder": "you@company.com",
+    "submitLabel": "Subscribe",
+    "primaryCtaLabel": "Get started",
+    "primaryCtaHref": "#",
+    "secondaryCtaLabel": "Learn more",
+    "secondaryCtaHref": "#",
+    "privacyText": "No spam. Unsubscribe any time."
+  },
+  "configurableProps": ["headline", "subheadline", "mode", "emailPlaceholder", "submitLabel", "primaryCtaLabel", "primaryCtaHref", "secondaryCtaLabel", "secondaryCtaHref", "privacyText"],
+  "tags": ["cta", "split", "form"]
+}

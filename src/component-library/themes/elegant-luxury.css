@@ -1,0 +1,75 @@
+:root[data-theme="elegant-luxury"] {
+  --color-bg: #0A0A0A;
+  --color-bg-secondary: #141414;
+  --color-bg-tertiary: #1F1F1F;
+  --color-surface: #141414;
+  --color-surface-hover: #1F1F1F;
+  --color-text-primary: #F5F0E8;
+  --color-text-secondary: #C4B99A;
+  --color-text-muted: #8A7F6B;
+  --color-text-inverse: #0A0A0A;
+  --color-primary: #C9A84C;
+  --color-primary-hover: #D4B85C;
+  --color-primary-text: #0A0A0A;
+  --color-secondary: #A67C52;
+  --color-secondary-hover: #B88B5E;
+  --color-accent: #E8D5B5;
+  --color-accent-hover: #F0E0C8;
+  --color-border: #2A2A2A;
+  --color-border-hover: #3A3A3A;
+  --color-success: #4ADE80;
+  --color-error: #F87171;
+  --color-warning: #FBBF24;
+
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3.25rem;
+  --font-size-display: 4.5rem;
+  --font-weight-normal: 300;
+  --font-weight-medium: 400;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.55;
+  --line-height-relaxed: 1.8;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.15em;
+
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 5rem;
+  --space-section: 8rem;
+
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 8px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  --gradient-primary: linear-gradient(135deg, #C9A84C, #A67C52);
+  --gradient-accent: linear-gradient(135deg, #E8D5B5, #C9A84C);
+  --gradient-bg: linear-gradient(180deg, #0A0A0A 0%, #141414 100%);
+}

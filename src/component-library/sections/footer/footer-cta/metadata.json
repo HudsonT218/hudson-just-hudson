@@ -1,0 +1,48 @@
+{
+  "id": "footer-cta",
+  "name": "CTA Footer",
+  "sectionType": "footer",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "ctaHeadline": "Ready to build something great?",
+    "ctaSubheadline": "Try it free for 14 days. No credit card required.",
+    "ctaLabel": "Get started",
+    "ctaHref": "#",
+    "logo": "Brand",
+    "description": "Beautiful, fast websites for modern teams.",
+    "copyright": "© 2026 Brand, Inc. All rights reserved.",
+    "columns": [
+      {
+        "heading": "Product",
+        "links": [
+          { "label": "Features", "href": "#" },
+          { "label": "Pricing", "href": "#" },
+          { "label": "Changelog", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Company",
+        "links": [
+          { "label": "About", "href": "#" },
+          { "label": "Careers", "href": "#" },
+          { "label": "Contact", "href": "#" }
+        ]
+      },
+      {
+        "heading": "Resources",
+        "links": [
+          { "label": "Blog", "href": "#" },
+          { "label": "Help center", "href": "#" },
+          { "label": "Status", "href": "#" }
+        ]
+      }
+    ],
+    "socials": [
+      { "platform": "twitter", "href": "#" },
+      { "platform": "github", "href": "#" },
+      { "platform": "linkedin", "href": "#" }
+    ]
+  },
+  "configurableProps": ["ctaHeadline", "ctaSubheadline", "ctaLabel", "ctaHref", "logo", "logoImage", "description", "columns", "socials", "copyright"],
+  "tags": ["footer", "cta", "multi-column"]
+}

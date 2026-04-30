@@ -1,0 +1,24 @@
+{
+  "id": "features-bento",
+  "name": "Features Bento Grid",
+  "sectionType": "features",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "The toolkit",
+    "headline": "A complete kit for shipping work you are proud of",
+    "subheadline": "Each part of the stack is designed to work beautifully on its own and even better together.",
+    "hero": {
+      "icon": "Sparkles",
+      "title": "Designed to ship",
+      "description": "Pre-built sections, polished animations, and smart defaults — so the first version is the right version."
+    },
+    "features": [
+      { "icon": "Zap", "title": "Fast by default", "description": "Edge-rendered, cached globally." },
+      { "icon": "Shield", "title": "Secure", "description": "SOC 2, SSO, encrypted at rest." },
+      { "icon": "BarChart3", "title": "Analytics", "description": "Built-in metrics that matter." },
+      { "icon": "Users", "title": "Collaboration", "description": "Real-time editing with your team." }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "hero", "features"],
+  "tags": ["features", "bento", "grid"]
+}

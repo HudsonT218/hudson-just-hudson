@@ -1,0 +1,35 @@
+{
+  "id": "pricing-two-toggle",
+  "name": "Pricing Two Plans with Toggle",
+  "sectionType": "pricing",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Pricing",
+    "headline": "Choose what fits your team",
+    "subheadline": "Start free and upgrade as you grow. Save 20% with annual billing.",
+    "currency": "$",
+    "savingsLabel": "Save 20%",
+    "plans": [
+      {
+        "name": "Personal",
+        "description": "For individuals and small projects.",
+        "monthlyPrice": 12,
+        "annualPrice": 10,
+        "features": ["Up to 3 sites", "Custom domain", "Standard analytics", "Email support"],
+        "ctaLabel": "Get started",
+        "ctaHref": "#"
+      },
+      {
+        "name": "Team",
+        "description": "For teams that ship together.",
+        "monthlyPrice": 39,
+        "annualPrice": 32,
+        "features": ["Unlimited sites", "Team collaboration", "Advanced analytics", "Priority support", "A/B testing"],
+        "ctaLabel": "Start free trial",
+        "ctaHref": "#"
+      }
+    ]
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "plans", "currency", "savingsLabel"],
+  "tags": ["pricing", "two-tier", "toggle"]
+}

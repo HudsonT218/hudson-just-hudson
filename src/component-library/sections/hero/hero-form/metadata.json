@@ -1,0 +1,22 @@
+{
+  "id": "hero-form",
+  "name": "Hero with Form",
+  "sectionType": "hero",
+  "compatibleModels": ["landing"],
+  "defaultContent": {
+    "eyebrow": "Start free",
+    "headline": "Get started in under two minutes",
+    "subheadline": "Create an account, pick a template, and watch your site come together. No setup fees, no surprises.",
+    "benefits": [
+      "No credit card required",
+      "Cancel anytime",
+      "Free for 14 days"
+    ],
+    "formTitle": "Create your free account",
+    "formSubtitle": "We will email you a magic link to get started.",
+    "submitLabel": "Get started",
+    "privacyText": "By signing up you agree to our Terms and Privacy Policy."
+  },
+  "configurableProps": ["eyebrow", "headline", "subheadline", "benefits", "formTitle", "formSubtitle", "submitLabel", "privacyText"],
+  "tags": ["form", "hero", "lead-capture"]
+}
