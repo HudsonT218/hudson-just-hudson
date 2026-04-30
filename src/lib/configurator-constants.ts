@@ -2,7 +2,7 @@ import type {
   ModelDefinition,
   ThemeDefinition,
   SectionTypeDefinition,
-} from './types';
+} from './configurator-types';
 
 export const MODEL_DEFINITIONS: ModelDefinition[] = [
   {

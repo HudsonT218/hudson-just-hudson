@@ -18,13 +18,13 @@ const FILTERS: Array<{ id: 'all' | OrderStatus; label: string }> = [
   { id: 'revision_requested', label: 'Revision' },
 ];
 
-const STATUS_VARIANT_MAP: Record<string, 'primary' | 'success' | 'warning' | 'error' | 'default'> = {
-  paid: 'primary',
-  building: 'warning',
-  review: 'warning',
-  approved: 'success',
-  delivered: 'success',
-  revision_requested: 'primary',
+const STATUS_VARIANT_MAP: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  paid: 'default',
+  building: 'secondary',
+  review: 'secondary',
+  approved: 'default',
+  delivered: 'default',
+  revision_requested: 'outline',
 };
 
 export function AdminOrderList() {

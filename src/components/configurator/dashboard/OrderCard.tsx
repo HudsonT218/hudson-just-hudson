@@ -6,13 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { STATUS_LABELS, MODEL_DEFINITIONS, THEME_DEFINITIONS } from '@/lib/configurator-constants';
 import { formatDate, formatCurrency } from '@/lib/utils';
 
-const STATUS_VARIANT_MAP: Record<string, 'primary' | 'success' | 'warning' | 'error' | 'default'> = {
-  paid: 'primary',
-  building: 'warning',
-  review: 'warning',
-  approved: 'success',
-  delivered: 'success',
-  revision_requested: 'primary',
+const STATUS_VARIANT_MAP: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
+  paid: 'default',
+  building: 'secondary',
+  review: 'secondary',
+  approved: 'default',
+  delivered: 'default',
+  revision_requested: 'outline',
 };
 
 export function OrderCard({ order }: { order: Order }) {
