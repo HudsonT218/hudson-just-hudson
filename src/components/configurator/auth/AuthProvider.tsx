@@ -35,31 +35,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
 
+    // Set up listener FIRST (per Supabase best-practices) so we don't miss INITIAL_SESSION
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      if (cancelled) return;
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
+      // Defer the profile fetch — calling supabase from inside the auth callback
+      // can deadlock the auth client.
+      if (newSession?.user) {
+        setTimeout(() => {
+          getCurrentProfile().then((p) => {
+            if (!cancelled) setProfile(p);
+          });
+        }, 0);
+      } else {
+        setProfile(null);
+      }
+      setLoading(false);
+    });
+
+    // Then check existing session
     supabase.auth
       .getSession()
-      .then(async ({ data }) => {
+      .then(({ data }) => {
         if (cancelled) return;
         setSession(data.session);
         setUser(data.session?.user ?? null);
         if (data.session?.user) {
-          const p = await getCurrentProfile();
-          if (!cancelled) setProfile(p);
+          getCurrentProfile().then((p) => {
+            if (!cancelled) setProfile(p);
+          });
         }
+        setLoading(false);
       })
-      .finally(() => {
+      .catch(() => {
         if (!cancelled) setLoading(false);
       });
-
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      setSession(newSession);
-      setUser(newSession?.user ?? null);
-      if (newSession?.user) {
-        const p = await getCurrentProfile();
-        setProfile(p);
-      } else {
-        setProfile(null);
-      }
-    });
 
     return () => {
       cancelled = true;
