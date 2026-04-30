@@ -33,6 +33,39 @@ const AppRoutes = () => {
   return (
     <>
       {!isConfigurator && <DottedSurface interactive={isHome} />}
+      {!isConfigurator && (
+        <>
+          <ChatWidget />
+          <Link
+            to="/packages"
+            className="fixed top-0 left-0 right-0 z-[60] py-2 px-4 text-center block cursor-pointer hover:brightness-110 transition-all"
+            style={{
+              background:
+                "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
+              animation: "saleBannerGlow 2.5s ease-in-out infinite",
+            }}
+          >
+            <p
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white"
+              style={{
+                letterSpacing: "0.05em",
+                textShadow: "0 1px 2px rgba(0,0,0,0.25)",
+              }}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+              </svg>
+              Launch Sale — 50% off all website packages. First 5 clients only.
+            </p>
+          </Link>
+        </>
+      )}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/packages" element={<Packages />} />
