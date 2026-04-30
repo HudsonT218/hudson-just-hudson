@@ -178,15 +178,19 @@ export default function ConfiguratorPage() {
       </Helmet>
       <Navbar />
 
-      {/* Top padding clears the fixed Navbar (h-16 + top-0 = 64px) */}
+      {/* pt-16 clears the fixed Navbar; WizardShell occupies the rest of the viewport. */}
       <div className="pt-16">
         <WizardShell
           step={step}
           totalSteps={TOTAL_STEPS}
+          panelMode={
+            step === 4 ? "expanded" : step === 5 ? "fullscreen" : "compact"
+          }
           saving={saving}
           lastSavedAt={lastSavedAt}
           onPrev={step > 1 ? () => gotoStep(step - 1) : undefined}
           onNext={step < TOTAL_STEPS ? () => gotoStep(step + 1) : undefined}
+          onJumpToStep={gotoStep}
           nextDisabled={nextDisabled}
           preview={previewPanel}
           onSaveDraft={handleSaveDraft}

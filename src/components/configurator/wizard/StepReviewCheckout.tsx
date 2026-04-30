@@ -36,9 +36,9 @@ export function StepReviewCheckout({ draft, onJumpToStep, onCheckout }: StepRevi
 
   return (
     <div>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-foreground">Review and check out</h2>
-        <p className="text-muted-foreground mt-1">
+      <div className="mb-4">
+        <h2 className="text-lg font-bold text-foreground">Review and check out</h2>
+        <p className="text-sm text-muted-foreground mt-0.5">
           Confirm your build, then pay. We&apos;ll start work right after payment clears.
         </p>
       </div>

@@ -68,16 +68,16 @@ export function StepSectionBuilder({ sections, onChange }: StepSectionBuilderPro
 
   return (
     <div>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-foreground">Build your sections</h2>
-        <p className="text-muted-foreground mt-1">
-          Drag to reorder, click a section to swap its variant, or remove sections you don&apos;t need.
+      <div className="mb-4">
+        <h2 className="text-lg font-bold text-foreground">Build your sections</h2>
+        <p className="text-sm text-muted-foreground mt-0.5">
+          Drag to reorder, click to swap variants, or remove sections you don&apos;t need.
         </p>
       </div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={sections.map((s) => s.type)} strategy={verticalListSortingStrategy}>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {sections.map((section, idx) => {
               const def = SECTION_TYPE_DEFINITIONS.find((d) => d.id === section.type)!;
               const isOpen = openType === section.type;

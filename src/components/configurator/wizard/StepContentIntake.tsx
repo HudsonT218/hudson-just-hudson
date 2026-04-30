@@ -222,9 +222,9 @@ export function StepContentIntake({
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-foreground">Add your content</h2>
-        <p className="text-muted-foreground mt-1">
+      <div className="mb-4">
+        <h2 className="text-lg font-bold text-foreground">Add your content</h2>
+        <p className="text-sm text-muted-foreground mt-0.5">
           Either point us at an existing site to scrape, or fill in the fields per section.
         </p>
       </div>
