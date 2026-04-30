@@ -73,7 +73,17 @@ export function useDraft({ userId, draftId, debounceMs = 2000 }: UseDraftOptions
     };
   }, [draftId]);
 
-  // Auto-save (debounced)
+  // When the user logs in mid-wizard, persist whatever they've configured so far.
+  const wasLoggedIn = useRef<boolean>(Boolean(userId));
+  useEffect(() => {
+    const isLoggedIn = Boolean(userId);
+    if (isLoggedIn && !wasLoggedIn.current) {
+      dirtyRef.current = true;
+    }
+    wasLoggedIn.current = isLoggedIn;
+  }, [userId]);
+
+  // Auto-save (debounced) — only runs when logged in.
   useEffect(() => {
     if (!userId) return;
     if (!didHydrate.current) return;

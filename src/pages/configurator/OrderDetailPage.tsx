@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ExternalLink } from 'lucide-react';
+import Navbar from '@/components/Navbar';
 import { useAuth } from '@/components/configurator/auth/AuthProvider';
-import { DashboardShell } from '@/components/configurator/dashboard/DashboardShell';
 import { FeedbackForm } from '@/components/configurator/dashboard/FeedbackForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/configurator/ui/loading-button';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getOrder, getFeedbackForOrder } from '@/lib/configurator-db';
 import type { Order, Feedback } from '@/lib/configurator-types';
@@ -43,15 +44,15 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <DashboardShell>
+      <PageShell>
         <p className="text-muted-foreground">Loading order…</p>
-      </DashboardShell>
+      </PageShell>
     );
   }
 
   if (!order) {
     return (
-      <DashboardShell>
+      <PageShell>
         <Card className="p-6">
           <p className="text-foreground">Order not found.</p>
           <Link to="/dashboard">
@@ -60,7 +61,7 @@ export default function OrderDetailPage() {
             </Button>
           </Link>
         </Card>
-      </DashboardShell>
+      </PageShell>
     );
   }
 
@@ -72,7 +73,7 @@ export default function OrderDetailPage() {
   const canFeedback = (order.status === 'approved' || order.status === 'delivered' || order.status === 'review') && order.iterationCount < order.maxIterations;
 
   return (
-    <DashboardShell>
+    <PageShell title={`Order ${order.orderNumber}`}>
       <div className="mb-6">
         <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground">
           ← Back to dashboard
@@ -200,7 +201,21 @@ export default function OrderDetailPage() {
           )}
         </div>
       </div>
-    </DashboardShell>
+    </PageShell>
+  );
+}
+
+function PageShell({ children, title }: { children: React.ReactNode; title?: string }) {
+  return (
+    <>
+      <Helmet>
+        <title>{title ? `${title} — Hudson Turansky` : "Order — Hudson Turansky"}</title>
+      </Helmet>
+      <Navbar />
+      <main className="min-h-screen pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">{children}</div>
+      </main>
+    </>
   );
 }
 

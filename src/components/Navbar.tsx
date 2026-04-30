@@ -10,12 +10,25 @@ const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
   { label: "Contact", href: "#contact" },
 ];
 
+// Routes where the sale banner is hidden — navbar sits at top-0 on these.
+const BANNERLESS_PREFIXES = [
+  "/configure",
+  "/dashboard",
+  "/admin",
+  "/preview",
+  "/login",
+  "/signup",
+];
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
+  const onBannerlessRoute = BANNERLESS_PREFIXES.some(
+    (p) => location.pathname === p || location.pathname.startsWith(`${p}/`),
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -65,7 +78,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className="fixed top-8 left-0 right-0 z-50 transition-all duration-300"
+      className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+        onBannerlessRoute ? "top-0" : "top-8"
+      }`}
       style={{
         backgroundColor: scrolled ? "rgba(9,9,11,0.85)" : "transparent",
         backdropFilter: scrolled ? "blur(20px)" : "none",

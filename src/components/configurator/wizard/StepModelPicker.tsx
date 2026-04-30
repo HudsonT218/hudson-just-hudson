@@ -1,15 +1,13 @@
-import { Check, Rocket, Building2, GalleryHorizontal, Layers } from 'lucide-react';
+import { Check, Rocket, GalleryHorizontal } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { MODEL_DEFINITIONS } from '@/lib/configurator-constants';
 import type { SiteModel } from '@/lib/configurator-types';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 
 const ICONS: Record<string, LucideIcon> = {
   Rocket,
-  Building2,
   GalleryHorizontal,
-  Layers,
 };
 
 interface StepModelPickerProps {
@@ -59,10 +57,16 @@ export function StepModelPicker({ selected, onSelect }: StepModelPickerProps) {
               <h3 className="font-semibold text-foreground">{m.name}</h3>
               <p className="text-sm text-muted-foreground mt-1">{m.description}</p>
               <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground/70">
-                <span>{m.defaultSections.length || '—'} sections included</span>
-                <span className="font-semibold text-foreground">
-                  ${(m.basePrice / 100).toLocaleString()}
+                <span>
+                  {m.defaultSections.length > 0
+                    ? `${m.defaultSections.length} sections included`
+                    : 'Layouts in progress'}
                 </span>
+                {!m.comingSoon && (
+                  <span className="font-semibold text-foreground">
+                    {formatCurrency(m.basePrice)}
+                  </span>
+                )}
               </div>
             </button>
           );

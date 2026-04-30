@@ -23,64 +23,75 @@ import AdminOrderDetailPage from "./pages/configurator/AdminOrderDetailPage.tsx"
 
 const queryClient = new QueryClient();
 
-const CONFIGURATOR_PREFIXES = ["/configure", "/dashboard", "/preview", "/admin"];
+// Configurator routes — DottedSurface, ChatWidget, and the sale banner
+// are hidden on these. Login/signup also count.
+const CONFIGURATOR_PREFIXES = [
+  "/configure",
+  "/dashboard",
+  "/preview",
+  "/admin",
+  "/login",
+  "/signup",
+];
+
+function isConfiguratorRoute(pathname: string): boolean {
+  return CONFIGURATOR_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
+const SaleBanner = () => (
+  <Link
+    to="/packages"
+    className="fixed top-0 left-0 right-0 z-[60] py-2 px-4 text-center block cursor-pointer hover:brightness-110 transition-all"
+    style={{
+      background:
+        "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
+      animation: "saleBannerGlow 2.5s ease-in-out infinite",
+    }}
+  >
+    <p
+      className="inline-flex items-center gap-2 text-xs font-semibold text-white"
+      style={{
+        letterSpacing: "0.05em",
+        textShadow: "0 1px 2px rgba(0,0,0,0.25)",
+      }}
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+      </svg>
+      Launch Sale — 50% off all website packages. First 5 clients only.
+    </p>
+  </Link>
+);
 
 const AppRoutes = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
-  const isConfigurator = CONFIGURATOR_PREFIXES.some((p) => location.pathname.startsWith(p));
+  const inConfigurator = isConfiguratorRoute(location.pathname);
 
   return (
     <>
-      {!isConfigurator && <DottedSurface interactive={isHome} />}
-      {!isConfigurator && (
-        <>
-          <ChatWidget />
-          <Link
-            to="/packages"
-            className="fixed top-0 left-0 right-0 z-[60] py-2 px-4 text-center block cursor-pointer hover:brightness-110 transition-all"
-            style={{
-              background:
-                "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
-              animation: "saleBannerGlow 2.5s ease-in-out infinite",
-            }}
-          >
-            <p
-              className="inline-flex items-center gap-2 text-xs font-semibold text-white"
-              style={{
-                letterSpacing: "0.05em",
-                textShadow: "0 1px 2px rgba(0,0,0,0.25)",
-              }}
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
-              </svg>
-              Launch Sale — 50% off all website packages. First 5 clients only.
-            </p>
-          </Link>
-        </>
-      )}
+      {!inConfigurator && <DottedSurface interactive={isHome} />}
+      {!inConfigurator && <ChatWidget />}
+      {!inConfigurator && <SaleBanner />}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/packages" element={<Packages />} />
 
-        {/* Configurator product (auth + wizard + dashboards) */}
+        {/* Configurator product */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route
-          path="/configure"
-          element={
-            <ProtectedRoute>
-              <ConfiguratorPage />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* /configure is OPEN — Steps 1-3 don't require auth.
+            Step 4 (Content) and beyond gate themselves via the wizard. */}
+        <Route path="/configure" element={<ConfiguratorPage />} />
         <Route
           path="/configure/:draftId"
           element={

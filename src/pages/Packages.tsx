@@ -118,10 +118,9 @@ const COMING_SOON = [
 
 const SELF_SERVE_BUILD = {
   title: "Build Your Site",
-  price: "$500",
-  salePrice: "$250",
+  price: "$250",
   description:
-    "Design your own landing page with our configurator. Pick a style, choose your sections, and our AI builds it — no calls needed.",
+    "Design your own landing page with our configurator. Pick a style, choose your sections, and our AI builds it — no calls, no agency, no waiting.",
   features: [
     "5-step guided wizard",
     "8 design themes to choose from",
@@ -461,18 +460,8 @@ const Packages = () => {
               boxShadow: "0 0 60px rgba(59,130,246,0.08)",
             }}
           >
-            {/* Sale badge */}
-            <div className="absolute top-6 right-6 flex flex-col items-end gap-2">
-              <span
-                className="text-xs font-bold text-white px-3 py-1 rounded-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, #dc2626 0%, #f97316 50%, #dc2626 100%)",
-                  textShadow: "0 1px 2px rgba(0,0,0,0.25)",
-                }}
-              >
-                LAUNCH 50% OFF
-              </span>
+            {/* New badge */}
+            <div className="absolute top-6 right-6">
               <span
                 className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400"
               >
@@ -489,11 +478,9 @@ const Packages = () => {
               </h3>
               <div className="flex items-baseline gap-3 mb-4">
                 <span className="text-3xl font-extrabold text-white">
-                  {SELF_SERVE_BUILD.salePrice}
-                </span>
-                <span className="text-sm text-gray-500 line-through">
                   {SELF_SERVE_BUILD.price}
                 </span>
+                <span className="text-sm text-gray-500">flat</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-md">
                 {SELF_SERVE_BUILD.description}

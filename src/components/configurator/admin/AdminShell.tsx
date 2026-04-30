@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { Inbox, Settings, Home } from 'lucide-react';
 import { useAuth } from '@/components/configurator/auth/AuthProvider';
-import { Button } from '@/components/configurator/ui/loading-button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export function AdminShell({ children }: { children: ReactNode }) {
@@ -14,12 +14,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className="w-56 shrink-0 border-r border-border bg-muted flex flex-col">
-        <div className="px-5 py-5 border-b border-border">
-          <Link to="/admin" className="font-bold text-foreground">
-            Hudson Turansky
+      <aside className="w-56 shrink-0 border-r border-white/5 bg-muted/30 backdrop-blur-md flex flex-col">
+        <div className="px-5 py-5 border-b border-white/5">
+          <Link to="/admin" className="font-extrabold text-foreground tracking-tight">
+            HT
           </Link>
-          <div className="text-xs text-muted-foreground/70 mt-0.5">Admin</div>
+          <div className="text-xs text-muted-foreground mt-1">Admin</div>
         </div>
         <nav className="flex-1 p-3 space-y-1">
           <SidebarLink to="/admin" icon={<Inbox className="h-4 w-4" />} active={isOrders}>

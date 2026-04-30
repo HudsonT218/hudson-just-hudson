@@ -1,24 +1,29 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '@/components/configurator/auth/AuthProvider';
-import { useDraft } from '@/hooks/use-draft';
-import { WizardShell } from '@/components/configurator/wizard/WizardShell';
-import { StepModelPicker } from '@/components/configurator/wizard/StepModelPicker';
-import { StepThemePicker } from '@/components/configurator/wizard/StepThemePicker';
-import { StepSectionBuilder } from '@/components/configurator/wizard/StepSectionBuilder';
-import { StepContentIntake } from '@/components/configurator/wizard/StepContentIntake';
-import { StepReviewCheckout } from '@/components/configurator/wizard/StepReviewCheckout';
-import { LivePreview } from '@/components/configurator/preview/LivePreview';
-import { MODEL_DEFINITIONS, SECTION_TYPE_DEFINITIONS } from '@/lib/configurator-constants';
-import { generateOrderNumber } from '@/lib/utils';
-import { createOrder } from '@/lib/configurator-db';
-import { isStripeConfigured } from '@/lib/stripe';
-import type { SectionSelection, SiteModel, ThemeId, SiteSpec } from '@/lib/configurator-types';
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import Navbar from "@/components/Navbar";
+import { useAuth } from "@/components/configurator/auth/AuthProvider";
+import { useDraft } from "@/hooks/use-draft";
+import { WizardShell } from "@/components/configurator/wizard/WizardShell";
+import { StepModelPicker } from "@/components/configurator/wizard/StepModelPicker";
+import { StepThemePicker } from "@/components/configurator/wizard/StepThemePicker";
+import { StepSectionBuilder } from "@/components/configurator/wizard/StepSectionBuilder";
+import { StepContentIntake } from "@/components/configurator/wizard/StepContentIntake";
+import { StepReviewCheckout } from "@/components/configurator/wizard/StepReviewCheckout";
+import { LivePreview } from "@/components/configurator/preview/LivePreview";
+import { AuthGateDialog } from "@/components/configurator/auth/AuthGateDialog";
+import { MODEL_DEFINITIONS, SECTION_TYPE_DEFINITIONS } from "@/lib/configurator-constants";
+import { generateOrderNumber } from "@/lib/utils";
+import { createOrder } from "@/lib/configurator-db";
+import { isStripeConfigured } from "@/lib/stripe";
+import type { SectionSelection, SiteModel, ThemeId, SiteSpec } from "@/lib/configurator-types";
 
 const TOTAL_STEPS = 5;
+/** Steps 1-3 are open. Step 4 (Content) is the auth gate. */
+const AUTH_GATE_STEP = 4;
 
 export default function ConfiguratorPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { draftId } = useParams<{ draftId: string }>();
   const navigate = useNavigate();
 
@@ -27,8 +32,10 @@ export default function ConfiguratorPage() {
     draftId,
   });
 
-  // Local step state — synced into draft.currentStep
   const [step, setStep] = useState(1);
+  const [authGateOpen, setAuthGateOpen] = useState(false);
+  const [pendingStep, setPendingStep] = useState<number | null>(null);
+
   useEffect(() => {
     if (!hydrating && draft.currentStep) setStep(draft.currentStep);
   }, [hydrating, draft.currentStep]);
@@ -38,18 +45,36 @@ export default function ConfiguratorPage() {
     if (draft.theme) {
       document.documentElement.dataset.theme = draft.theme;
     }
+    return () => {
+      // Clean up so theme tokens don't leak into other pages.
+      delete document.documentElement.dataset.theme;
+    };
   }, [draft.theme]);
 
   function gotoStep(n: number) {
     const clamped = Math.min(Math.max(n, 1), TOTAL_STEPS);
+    // Auth gate: stepping into Step 4+ requires login.
+    if (clamped >= AUTH_GATE_STEP && !user) {
+      setPendingStep(clamped);
+      setAuthGateOpen(true);
+      return;
+    }
     setStep(clamped);
-    update('currentStep', clamped);
+    update("currentStep", clamped);
   }
+
+  // After auth completes, advance to the pending step.
+  useEffect(() => {
+    if (user && pendingStep !== null) {
+      setStep(pendingStep);
+      update("currentStep", pendingStep);
+      setPendingStep(null);
+    }
+  }, [user, pendingStep, update]);
 
   function pickModel(model: SiteModel) {
     const def = MODEL_DEFINITIONS.find((m) => m.id === model);
-    if (!def) return;
-    // Pre-populate default sections only if user hasn't built any yet
+    if (!def || def.comingSoon) return;
     const sections: SectionSelection[] =
       draft.sections.length > 0
         ? draft.sections
@@ -62,8 +87,8 @@ export default function ConfiguratorPage() {
 
   const spec: SiteSpec = useMemo(
     () => ({
-      model: draft.model ?? 'landing',
-      theme: draft.theme ?? 'clean-modern',
+      model: draft.model ?? "landing",
+      theme: draft.theme ?? "clean-modern",
       sections: draft.sections,
       content: draft.content,
     }),
@@ -83,104 +108,127 @@ export default function ConfiguratorPage() {
     }
   })();
 
+  function handleSaveDraft() {
+    if (!user) {
+      setAuthGateOpen(true);
+      return;
+    }
+    void flush();
+  }
+
   async function handleCheckout() {
-    if (!user) return;
-    // Save the draft one more time before creating the order.
+    if (!user) {
+      setAuthGateOpen(true);
+      return;
+    }
     const savedDraft = await flush();
 
     if (!isStripeConfigured) {
-      // Stub flow — create the order directly so the rest of the app can be exercised.
       const orderNumber = generateOrderNumber();
       const order = await createOrder({
         userId: user.id,
         draftId: savedDraft?.id ?? null,
         spec,
-        amountPaid:
-          MODEL_DEFINITIONS.find((m) => m.id === draft.model)?.basePrice ?? 0,
+        amountPaid: MODEL_DEFINITIONS.find((m) => m.id === draft.model)?.basePrice ?? 0,
         orderNumber,
       });
       if (order) {
         navigate(`/dashboard/order/${order.id}`);
       } else {
         throw new Error(
-          'Stub order creation failed. Connect Supabase first (see HUDSON_TODO.md).',
+          "Stub order creation failed. Connect Supabase first (see HUDSON_TODO.md).",
         );
       }
       return;
     }
 
-    // Real flow — call the Supabase Edge Function for a Stripe Checkout session.
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const res = await fetch(`${supabaseUrl}/functions/v1/create-checkout`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         spec,
         draftId: savedDraft?.id,
         userId: user.id,
       }),
     });
-    if (!res.ok) throw new Error('Could not start checkout');
+    if (!res.ok) throw new Error("Could not start checkout");
     const { url } = (await res.json()) as { url: string };
     window.location.href = url;
   }
 
   const previewPanel = <LivePreview spec={spec} />;
 
-  if (hydrating) {
+  if (hydrating || authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
-        Loading your draft…
+      <div className="min-h-screen flex items-center justify-center text-muted-foreground">
+        Loading…
       </div>
     );
   }
 
   return (
-    <WizardShell
-      step={step}
-      totalSteps={TOTAL_STEPS}
-      saving={saving}
-      lastSavedAt={lastSavedAt}
-      onPrev={step > 1 ? () => gotoStep(step - 1) : undefined}
-      onNext={
-        step < TOTAL_STEPS
-          ? () => gotoStep(step + 1)
-          : undefined
-      }
-      nextDisabled={nextDisabled}
-      preview={previewPanel}
-    >
-      {step === 1 && (
-        <StepModelPicker selected={draft.model} onSelect={pickModel} />
-      )}
-      {step === 2 && (
-        <StepThemePicker
-          selected={draft.theme}
-          onSelect={(theme: ThemeId) => update('theme', theme)}
+    <>
+      <Helmet>
+        <title>Build Your Site — Hudson Turansky</title>
+        <meta
+          name="description"
+          content="Configure your custom landing page in minutes. Pick a theme, choose sections, and our AI builds it."
         />
-      )}
-      {step === 3 && (
-        <StepSectionBuilder
-          sections={draft.sections}
-          onChange={(s) => update('sections', s)}
-        />
-      )}
-      {step === 4 && (
-        <StepContentIntake
-          sections={draft.sections}
-          content={draft.content}
-          scrapedUrl={draft.scrapedUrl}
-          onContentChange={(c) => update('content', c)}
-          onScrapedUrlChange={(u) => update('scrapedUrl', u)}
-        />
-      )}
-      {step === 5 && (
-        <StepReviewCheckout
-          draft={draft}
-          onJumpToStep={gotoStep}
-          onCheckout={handleCheckout}
-        />
-      )}
-    </WizardShell>
+      </Helmet>
+      <Navbar />
+
+      {/* Top padding clears the fixed Navbar (h-16 + top-0 = 64px) */}
+      <div className="pt-16">
+        <WizardShell
+          step={step}
+          totalSteps={TOTAL_STEPS}
+          saving={saving}
+          lastSavedAt={lastSavedAt}
+          onPrev={step > 1 ? () => gotoStep(step - 1) : undefined}
+          onNext={step < TOTAL_STEPS ? () => gotoStep(step + 1) : undefined}
+          nextDisabled={nextDisabled}
+          preview={previewPanel}
+          onSaveDraft={handleSaveDraft}
+        >
+          {step === 1 && <StepModelPicker selected={draft.model} onSelect={pickModel} />}
+          {step === 2 && (
+            <StepThemePicker
+              selected={draft.theme}
+              onSelect={(theme: ThemeId) => update("theme", theme)}
+            />
+          )}
+          {step === 3 && (
+            <StepSectionBuilder
+              sections={draft.sections}
+              onChange={(s) => update("sections", s)}
+            />
+          )}
+          {step === 4 && (
+            <StepContentIntake
+              sections={draft.sections}
+              content={draft.content}
+              scrapedUrl={draft.scrapedUrl}
+              onContentChange={(c) => update("content", c)}
+              onScrapedUrlChange={(u) => update("scrapedUrl", u)}
+            />
+          )}
+          {step === 5 && (
+            <StepReviewCheckout
+              draft={draft}
+              onJumpToStep={gotoStep}
+              onCheckout={handleCheckout}
+            />
+          )}
+        </WizardShell>
+      </div>
+
+      <AuthGateDialog
+        open={authGateOpen}
+        onOpenChange={setAuthGateOpen}
+        title="Sign in to keep going"
+        description="Step 4 needs an account so we can save your draft and process your order. Your selections so far are kept."
+      />
+    </>
   );
 }

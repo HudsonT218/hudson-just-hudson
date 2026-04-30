@@ -25,18 +25,7 @@ export const MODEL_DEFINITIONS: ModelDefinition[] = [
     ],
     optionalSections: ['stats'],
     comingSoon: false,
-    basePrice: 50000, // $500.00 in cents
-  },
-  {
-    id: 'business',
-    name: 'Business Website',
-    description:
-      'Multi-page site for established businesses — services, about, contact, and more.',
-    icon: 'Building2',
-    defaultSections: [],
-    optionalSections: [],
-    comingSoon: true,
-    basePrice: 150000,
+    basePrice: 25000, // $250.00 in cents — flat price, AI-built
   },
   {
     id: 'portfolio',
@@ -47,18 +36,7 @@ export const MODEL_DEFINITIONS: ModelDefinition[] = [
     defaultSections: [],
     optionalSections: [],
     comingSoon: true,
-    basePrice: 100000,
-  },
-  {
-    id: 'saas',
-    name: 'SaaS App Marketing',
-    description:
-      'A multi-section product marketing site purpose-built for SaaS launches.',
-    icon: 'Layers',
-    defaultSections: [],
-    optionalSections: [],
-    comingSoon: true,
-    basePrice: 250000,
+    basePrice: 25000,
   },
 ];
 

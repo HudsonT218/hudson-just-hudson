@@ -48,9 +48,8 @@ const ConfiguratorPromo = () => {
             </h2>
             <p className="text-gray-500 text-sm font-light leading-relaxed max-w-xl mt-5">
               Pick your style, choose your sections, and our AI builds it. No calls
-              needed. Live preview as you go. From{" "}
-              <span className="text-white font-medium">$250</span> with the launch
-              sale.
+              needed. Live preview as you go.{" "}
+              <span className="text-white font-medium">$250 flat.</span>
             </p>
           </div>
           <Link
