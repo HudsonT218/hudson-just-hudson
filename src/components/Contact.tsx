@@ -71,17 +71,15 @@ const Contact = () => {
             className="text-4xl md:text-5xl font-medium text-white leading-tight mb-6"
             style={{ textWrap: "balance", letterSpacing: "-0.03em" }}
           >
-            Ready to Build Something
-            <br />
-            That Drives Growth?
+            Let's talk.
           </h2>
 
           <p
             className="text-gray-500 text-sm sm:text-lg font-light mb-10"
             style={{ letterSpacing: "0.02em" }}
           >
-            Let's hop on a quick call and figure out how I can help. No pressure,
-            no pitch — just a conversation about what you need.
+            Book a free 30-minute call. No pitch, no pressure — just a
+            conversation about what you're working on and whether I can help.
           </p>
 
           <div className="mb-6">

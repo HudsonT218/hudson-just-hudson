@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
-import Services from "@/components/Services";
-import Work from "@/components/Work";
-import Process from "@/components/Process";
-import ConfiguratorPromo from "@/components/ConfiguratorPromo";
+import WhatIBuild from "@/components/WhatIBuild";
 import Contact from "@/components/Contact";
 
 const Index = () => {
@@ -21,10 +18,10 @@ const Index = () => {
   return (
     <div className="min-h-screen relative z-10">
       <Helmet>
-        <title>Hudson Turansky — Web Design, AI Agents & Custom Software</title>
+        <title>Hudson Turansky — AI Solutions & Web Development</title>
         <meta
           name="description"
-          content="I build custom websites, AI agents, and software that help businesses move faster. Landing pages, business sites, and AI solutions — fast delivery, affordable pricing."
+          content="I build custom websites, AI tools, and software for people I know and trust. Book a free call to talk through your project."
         />
         <link rel="canonical" href="https://hudsonturansky.com/" />
       </Helmet>
@@ -45,11 +42,10 @@ const Index = () => {
         />
 
         <div className="relative max-w-2xl mx-auto">
-          {/* NOW badge */}
+          {/* Availability badge */}
           <div className="flex justify-center mb-8">
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-3 group"
+            <div
+              className="inline-flex items-center gap-3"
               style={{
                 border: "1px solid rgba(255,255,255,0.1)",
                 backgroundColor: "rgba(255,255,255,0.05)",
@@ -65,31 +61,16 @@ const Index = () => {
                   color: "#60a5fa",
                 }}
               >
-                NOW
+                OPEN
               </span>
               <span className="text-sm text-gray-400">
-                accepting new client projects
+                Available for new projects
               </span>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                className="text-gray-500 transition-transform duration-200 group-hover:translate-x-0.5"
-              >
-                <path
-                  d="M5.5 3L9.5 7L5.5 11"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
+            </div>
           </div>
 
           <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
-            AI Solutions & Web Development
+            Builder · AI Solutions · Web Development
           </p>
 
           <h1
@@ -109,8 +90,8 @@ const Index = () => {
           </h1>
 
           <p className="text-lg text-gray-400 font-light max-w-lg mx-auto mb-10">
-            I build websites, AI agents, and custom software that help businesses
-            move faster.
+            I build custom websites, AI tools, and software for people I know
+            and trust. I'm early in client work — my pricing reflects that.
           </p>
 
           <div className="flex justify-center mb-8">
@@ -174,28 +155,49 @@ const Index = () => {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
-      <Services />
+      {/* About */}
+      <section id="about" className="py-28 px-6">
+        <div className="max-w-2xl mx-auto">
+          <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
+            About
+          </p>
+          <h2
+            className="text-3xl sm:text-4xl font-extrabold leading-tight mb-8"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            <span className="block text-white">I'm a builder.</span>
+            <span className="block text-gray-600">I work with AI.</span>
+          </h2>
+          <div className="space-y-5 text-gray-400 font-light leading-relaxed">
+            <p>
+              I've been writing code and building software for years. Over the
+              last year I've gone deep into AI — not just using it, but
+              understanding how it works, what it can actually do, and how to
+              build real things on top of it.
+            </p>
+            <p>
+              I started this to help people I know — businesses, friends,
+              anyone who wants to figure out how AI fits into what they're
+              doing. I charge by the hour, I'm transparent about what I'm
+              building, and I'll tell you honestly if something isn't worth
+              doing.
+            </p>
+          </div>
+        </div>
+      </section>
 
+      {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
-      <Work />
+      <WhatIBuild />
 
       <div
         className="max-w-5xl mx-auto"
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
-
-      <Process />
-
-      <div
-        className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
-      />
-
-      <ConfiguratorPromo />
 
       <Contact />
 

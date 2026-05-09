@@ -1,23 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const NAV_LINKS: Array<{ label: string; href: string; badge?: string }> = [
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "Process", href: "#process" },
-  { label: "Packages", href: "/packages" },
-  { label: "Build Your Site", href: "/configure", badge: "New" },
+const NAV_LINKS: Array<{ label: string; href: string }> = [
+  { label: "About",   href: "#about" },
+  { label: "Work",    href: "/work" },
   { label: "Contact", href: "#contact" },
-];
-
-// Routes where the sale banner is hidden — navbar sits at top-0 on these.
-const BANNERLESS_PREFIXES = [
-  "/configure",
-  "/dashboard",
-  "/admin",
-  "/preview",
-  "/login",
-  "/signup",
 ];
 
 const Navbar = () => {
@@ -26,9 +13,6 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
-  const onBannerlessRoute = BANNERLESS_PREFIXES.some(
-    (p) => location.pathname === p || location.pathname.startsWith(`${p}/`),
-  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -78,9 +62,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
-        onBannerlessRoute ? "top-0" : "top-8"
-      }`}
+      className="fixed left-0 right-0 top-0 z-50 transition-all duration-300"
       style={{
         backgroundColor: scrolled ? "rgba(9,9,11,0.85)" : "transparent",
         backdropFilter: scrolled ? "blur(20px)" : "none",
@@ -107,14 +89,9 @@ const Navbar = () => {
               key={link.label}
               href={resolveHref(link.href)}
               onClick={(e) => handleNav(e, link.href)}
-              className="text-sm text-gray-500 hover:text-white transition-colors duration-200 inline-flex items-center gap-1.5"
+              className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
             >
               {link.label}
-              {link.badge && (
-                <span className="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded-sm leading-none bg-blue-500/15 text-blue-400">
-                  {link.badge}
-                </span>
-              )}
             </a>
           ))}
         </div>
@@ -164,14 +141,7 @@ const Navbar = () => {
               }}
               className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
             >
-              <span className="inline-flex items-center gap-1.5">
-                {link.label}
-                {link.badge && (
-                  <span className="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded-sm leading-none bg-blue-500/15 text-blue-400">
-                    {link.badge}
-                  </span>
-                )}
-              </span>
+              {link.label}
             </a>
           ))}
         </div>
