@@ -24,22 +24,23 @@ export async function getCurrentProfile(): Promise<Profile | null> {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
-  const { data } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-  return data ? mapProfile(data as Record<string, unknown>) : null;
+  const [{ data }, { data: roles }] = await Promise.all([
+    supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase.from('user_roles').select('role').eq('user_id', user.id),
+  ]);
+  if (!data) return null;
+  const isAdmin = (roles ?? []).some((r: { role: string }) => r.role === 'admin');
+  return mapProfile(data as Record<string, unknown>, isAdmin);
 }
 
-function mapProfile(row: Record<string, unknown>): Profile {
+function mapProfile(row: Record<string, unknown>, isAdmin = false): Profile {
   return {
     id: row.id as string,
     email: row.email as string,
     fullName: (row.full_name as string | null) ?? null,
     companyName: (row.company_name as string | null) ?? null,
     phone: (row.phone as string | null) ?? null,
-    isAdmin: Boolean(row.is_admin),
+    isAdmin,
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
   };
