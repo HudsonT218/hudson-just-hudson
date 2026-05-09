@@ -54,6 +54,18 @@ function isConfiguratorRoute(pathname: string): boolean {
   );
 }
 
+const PageFallback = () => (
+  <div className="min-h-screen bg-background text-muted-foreground flex items-center justify-center">
+    Loading…
+  </div>
+);
+
+const ConfiguratorBoundary = ({ children }: { children: ReactNode }) => (
+  <Suspense fallback={<PageFallback />}>
+    <AuthProvider>{children}</AuthProvider>
+  </Suspense>
+);
+
 const AppRoutes = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -69,26 +81,30 @@ const AppRoutes = () => {
         <Route path="/packages" element={<Navigate to="/work" replace />} />
 
         {/* Configurator product */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<ConfiguratorBoundary><LoginPage /></ConfiguratorBoundary>} />
+        <Route path="/signup" element={<ConfiguratorBoundary><SignupPage /></ConfiguratorBoundary>} />
 
         {/* /configure is OPEN — Steps 1-3 don't require auth.
             Step 4 (Content) and beyond gate themselves via the wizard. */}
-        <Route path="/configure" element={<ConfiguratorPage />} />
+        <Route path="/configure" element={<ConfiguratorBoundary><ConfiguratorPage /></ConfiguratorBoundary>} />
         <Route
           path="/configure/:draftId"
           element={
-            <ProtectedRoute>
-              <ConfiguratorPage />
-            </ProtectedRoute>
+            <ConfiguratorBoundary>
+              <ProtectedRoute>
+                <ConfiguratorPage />
+              </ProtectedRoute>
+            </ConfiguratorBoundary>
           }
         />
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
+            <ConfiguratorBoundary>
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            </ConfiguratorBoundary>
           }
         />
         <Route
