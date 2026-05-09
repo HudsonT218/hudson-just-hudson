@@ -30,6 +30,8 @@ const AdminRoute = lazy(() =>
 );
 const LoginPage = lazy(() => import("./pages/configurator/LoginPage.tsx"));
 const SignupPage = lazy(() => import("./pages/configurator/SignupPage.tsx"));
+const ForgotPasswordPage = lazy(() => import("./pages/configurator/ForgotPasswordPage.tsx"));
+const ResetPasswordPage = lazy(() => import("./pages/configurator/ResetPasswordPage.tsx"));
 const ConfiguratorPage = lazy(() => import("./pages/configurator/ConfiguratorPage.tsx"));
 const DashboardPage = lazy(() => import("./pages/configurator/DashboardPage.tsx"));
 const OrderDetailPage = lazy(() => import("./pages/configurator/OrderDetailPage.tsx"));
