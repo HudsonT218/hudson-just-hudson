@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { lazy, Suspense, type ReactNode } from "react";
+import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -65,6 +65,33 @@ const ConfiguratorBoundary = ({ children }: { children: ReactNode }) => (
     <AuthProvider>{children}</AuthProvider>
   </Suspense>
 );
+
+class AppErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("App render failed", error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6 text-center">
+          <div>
+            <h1 className="text-2xl font-semibold">Something didn&apos;t load.</h1>
+            <p className="mt-3 text-sm text-muted-foreground">Refresh the page to try again.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 const AppRoutes = () => {
   const location = useLocation();
