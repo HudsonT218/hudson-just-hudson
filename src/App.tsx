@@ -53,6 +53,8 @@ const CONFIGURATOR_PREFIXES = [
   "/admin",
   "/login",
   "/signup",
+  "/forgot-password",
+  "/reset-password",
 ];
 
 function isConfiguratorRoute(pathname: string): boolean {
