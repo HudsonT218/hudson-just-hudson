@@ -119,6 +119,8 @@ const AppRoutes = () => {
         {/* Configurator product */}
         <Route path="/login" element={<ConfiguratorBoundary><LoginPage /></ConfiguratorBoundary>} />
         <Route path="/signup" element={<ConfiguratorBoundary><SignupPage /></ConfiguratorBoundary>} />
+        <Route path="/forgot-password" element={<ConfiguratorBoundary><ForgotPasswordPage /></ConfiguratorBoundary>} />
+        <Route path="/reset-password" element={<ConfiguratorBoundary><ResetPasswordPage /></ConfiguratorBoundary>} />
 
         {/* /configure is OPEN — Steps 1-3 don't require auth.
             Step 4 (Content) and beyond gate themselves via the wizard. */}
