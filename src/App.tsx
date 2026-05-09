@@ -189,7 +189,9 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AppRoutes />
+          <AppErrorBoundary>
+            <AppRoutes />
+          </AppErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
