@@ -30,6 +30,8 @@ const AdminRoute = lazy(() =>
 );
 const LoginPage = lazy(() => import("./pages/configurator/LoginPage.tsx"));
 const SignupPage = lazy(() => import("./pages/configurator/SignupPage.tsx"));
+const ForgotPasswordPage = lazy(() => import("./pages/configurator/ForgotPasswordPage.tsx"));
+const ResetPasswordPage = lazy(() => import("./pages/configurator/ResetPasswordPage.tsx"));
 const ConfiguratorPage = lazy(() => import("./pages/configurator/ConfiguratorPage.tsx"));
 const DashboardPage = lazy(() => import("./pages/configurator/DashboardPage.tsx"));
 const OrderDetailPage = lazy(() => import("./pages/configurator/OrderDetailPage.tsx"));
@@ -51,6 +53,8 @@ const CONFIGURATOR_PREFIXES = [
   "/admin",
   "/login",
   "/signup",
+  "/forgot-password",
+  "/reset-password",
 ];
 
 function isConfiguratorRoute(pathname: string): boolean {
@@ -115,6 +119,8 @@ const AppRoutes = () => {
         {/* Configurator product */}
         <Route path="/login" element={<ConfiguratorBoundary><LoginPage /></ConfiguratorBoundary>} />
         <Route path="/signup" element={<ConfiguratorBoundary><SignupPage /></ConfiguratorBoundary>} />
+        <Route path="/forgot-password" element={<ConfiguratorBoundary><ForgotPasswordPage /></ConfiguratorBoundary>} />
+        <Route path="/reset-password" element={<ConfiguratorBoundary><ResetPasswordPage /></ConfiguratorBoundary>} />
 
         {/* /configure is OPEN — Steps 1-3 don't require auth.
             Step 4 (Content) and beyond gate themselves via the wizard. */}
