@@ -110,33 +110,41 @@ const AppRoutes = () => {
         <Route
           path="/dashboard/order/:orderId"
           element={
-            <ProtectedRoute>
-              <OrderDetailPage />
-            </ProtectedRoute>
+            <ConfiguratorBoundary>
+              <ProtectedRoute>
+                <OrderDetailPage />
+              </ProtectedRoute>
+            </ConfiguratorBoundary>
           }
         />
         <Route
           path="/preview/:orderId"
           element={
-            <ProtectedRoute>
-              <PreviewPage />
-            </ProtectedRoute>
+            <ConfiguratorBoundary>
+              <ProtectedRoute>
+                <PreviewPage />
+              </ProtectedRoute>
+            </ConfiguratorBoundary>
           }
         />
         <Route
           path="/admin"
           element={
-            <AdminRoute>
-              <AdminPage />
-            </AdminRoute>
+            <ConfiguratorBoundary>
+              <AdminRoute>
+                <AdminPage />
+              </AdminRoute>
+            </ConfiguratorBoundary>
           }
         />
         <Route
           path="/admin/order/:orderId"
           element={
-            <AdminRoute>
-              <AdminOrderDetailPage />
-            </AdminRoute>
+            <ConfiguratorBoundary>
+              <AdminRoute>
+                <AdminOrderDetailPage />
+              </AdminRoute>
+            </ConfiguratorBoundary>
           }
         />
 
@@ -154,9 +162,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
+          <AppRoutes />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
