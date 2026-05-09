@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense, type ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,19 +10,32 @@ import Index from "./pages/Index.tsx";
 import WorkPage from "./pages/WorkPage.tsx";
 import InterestedPage from "./pages/InterestedPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
-import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
-import { AdminRoute } from "@/components/configurator/layout/AdminRoute";
-import LoginPage from "./pages/configurator/LoginPage.tsx";
-import SignupPage from "./pages/configurator/SignupPage.tsx";
-import ConfiguratorPage from "./pages/configurator/ConfiguratorPage.tsx";
-import DashboardPage from "./pages/configurator/DashboardPage.tsx";
-import OrderDetailPage from "./pages/configurator/OrderDetailPage.tsx";
-import PreviewPage from "./pages/configurator/PreviewPage.tsx";
-import AdminPage from "./pages/configurator/AdminPage.tsx";
-import AdminOrderDetailPage from "./pages/configurator/AdminOrderDetailPage.tsx";
 
 const queryClient = new QueryClient();
+
+const AuthProvider = lazy(() =>
+  import("@/components/configurator/auth/AuthProvider").then((module) => ({
+    default: module.AuthProvider,
+  })),
+);
+const ProtectedRoute = lazy(() =>
+  import("@/components/configurator/layout/ProtectedRoute").then((module) => ({
+    default: module.ProtectedRoute,
+  })),
+);
+const AdminRoute = lazy(() =>
+  import("@/components/configurator/layout/AdminRoute").then((module) => ({
+    default: module.AdminRoute,
+  })),
+);
+const LoginPage = lazy(() => import("./pages/configurator/LoginPage.tsx"));
+const SignupPage = lazy(() => import("./pages/configurator/SignupPage.tsx"));
+const ConfiguratorPage = lazy(() => import("./pages/configurator/ConfiguratorPage.tsx"));
+const DashboardPage = lazy(() => import("./pages/configurator/DashboardPage.tsx"));
+const OrderDetailPage = lazy(() => import("./pages/configurator/OrderDetailPage.tsx"));
+const PreviewPage = lazy(() => import("./pages/configurator/PreviewPage.tsx"));
+const AdminPage = lazy(() => import("./pages/configurator/AdminPage.tsx"));
+const AdminOrderDetailPage = lazy(() => import("./pages/configurator/AdminOrderDetailPage.tsx"));
 
 // Configurator routes — DottedSurface is hidden on these.
 // Login/signup also count.
