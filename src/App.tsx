@@ -18,8 +18,11 @@ import ConfiguratorPage from "./pages/configurator/ConfiguratorPage.tsx";
 import DashboardPage from "./pages/configurator/DashboardPage.tsx";
 import OrderDetailPage from "./pages/configurator/OrderDetailPage.tsx";
 import PreviewPage from "./pages/configurator/PreviewPage.tsx";
-import AdminPage from "./pages/configurator/AdminPage.tsx";
-import AdminOrderDetailPage from "./pages/configurator/AdminOrderDetailPage.tsx";
+import AdminDashboard from "./pages/admin/Dashboard.tsx";
+import AdminLeads from "./pages/admin/Leads.tsx";
+import AdminLeadDetail from "./pages/admin/LeadDetail.tsx";
+import AdminProjects from "./pages/admin/Projects.tsx";
+import AdminProjectDetail from "./pages/admin/ProjectDetail.tsx";
 
 const queryClient = new QueryClient();
 
@@ -93,19 +96,44 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+        {/* Lead Management OS — Hudson's personal CRM */}
         <Route
           path="/admin"
           element={
             <AdminRoute>
-              <AdminPage />
+              <AdminDashboard />
             </AdminRoute>
           }
         />
         <Route
-          path="/admin/order/:orderId"
+          path="/admin/leads"
           element={
             <AdminRoute>
-              <AdminOrderDetailPage />
+              <AdminLeads />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/leads/:id"
+          element={
+            <AdminRoute>
+              <AdminLeadDetail />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/projects"
+          element={
+            <AdminRoute>
+              <AdminProjects />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/projects/:id"
+          element={
+            <AdminRoute>
+              <AdminProjectDetail />
             </AdminRoute>
           }
         />
