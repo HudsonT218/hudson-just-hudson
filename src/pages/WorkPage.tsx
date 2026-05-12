@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
+import chesapeakePantryCover from "@/assets/chesapeake-pantry.png";
 import MeetingAssistantDemo from "@/components/meeting-assistant-demo/MeetingAssistantDemo";
 
 type PortfolioItem = {
@@ -41,8 +42,10 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   },
   {
     label: "Software · 2026",
-    title: "Food Bank Volunteer OS",
-    desc: "Custom backend software I'm building for a food bank — shift scheduling, volunteer hour tracking, leaderboards, manager dashboards. Coming soon.",
+    title: "Chesapeake Community Pantry",
+    desc: "An example volunteer tracking OS I built — shift scheduling, hour tracking, leaderboards, and manager reports for a food bank.",
+    url: "https://chesapeake-pantry.lovable.app",
+    image: chesapeakePantryCover,
   },
 ];
 
