@@ -102,6 +102,17 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, { hasError: bo
   }
 }
 
+const ScrollToTop = () => {
+  const { pathname, hash } = useLocation();
+  if (typeof window !== "undefined") {
+    // Defer to next tick so route renders first
+    queueMicrotask(() => {
+      if (!hash) window.scrollTo(0, 0);
+    });
+  }
+  return null;
+};
+
 const AppRoutes = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -109,6 +120,7 @@ const AppRoutes = () => {
 
   return (
     <>
+      <ScrollToTop />
       {!inConfigurator && <DottedSurface interactive={isHome} />}
       <Routes>
         <Route path="/" element={<Index />} />
