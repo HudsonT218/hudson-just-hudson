@@ -152,6 +152,9 @@ const WorkPage = () => {
             >
               <span className="block text-white">Things I've built.</span>
             </h2>
+            <p className="text-sm text-gray-500 font-light mt-4">
+              Including this site — built and designed by me.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
