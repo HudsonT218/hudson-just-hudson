@@ -79,7 +79,7 @@ function useTypewriter(text: string, active: boolean, durationMs: number) {
 }
 
 function TranscriptLine({ entry }: { entry: TranscriptEntry }) {
-  const dur = Math.max(200, Math.min(300, entry.text.length * 9));
+  const dur = Math.max(133, Math.min(200, entry.text.length * 6));
   const shown = useTypewriter(entry.text, true, dur);
   const initial = entry.speaker[0];
   return (
@@ -132,7 +132,7 @@ function AnnotationCard({ annotation }: { annotation: Annotation }) {
       layout
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.15 }}
+      transition={{ duration: 0.1 }}
       className="rounded-lg p-4"
       style={{
         backgroundColor: "rgba(255,255,255,0.03)",
@@ -336,7 +336,7 @@ export default function MeetingAssistantDemo() {
       <motion.div
         ref={containerRef}
         layout
-        transition={{ duration: 0.15 }}
+        transition={{ duration: 0.1 }}
         className="rounded-2xl overflow-hidden"
         style={{
           backgroundColor: "rgba(255,255,255,0.02)",
@@ -421,7 +421,7 @@ export default function MeetingAssistantDemo() {
         )}
 
         {/* Body */}
-        <motion.div layout transition={{ duration: 0.15 }} className="p-6">
+        <motion.div layout transition={{ duration: 0.1 }} className="p-6">
           <AnimatePresence mode="wait">
             {showHero ? (
               <HeroContextLoader key="hero-loader" pillsLoaded={pillsLoaded} />

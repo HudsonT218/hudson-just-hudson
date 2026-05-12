@@ -8,7 +8,7 @@ export type PlaybackState =
   | "playing"
   | "idle-post";
 
-const PULSE_LEAD = 0.3;
+const PULSE_LEAD = 0.2;
 const CONTEXT_STAGGER_MS = 280;
 const READY_HOLD_MS = 700;
 const COLLAPSE_MS = 400;
