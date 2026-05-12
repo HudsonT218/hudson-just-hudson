@@ -155,41 +155,82 @@ const WorkPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {PORTFOLIO_PLACEHOLDERS.map((p, i) => (
-              <div
-                key={i}
-                className="rounded-2xl p-8 flex flex-col"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.01)",
-                  border: "1px dashed rgba(255,255,255,0.08)",
-                }}
-              >
-                <p
-                  className="text-xs uppercase tracking-widest font-medium mb-4"
-                  style={{ color: "rgba(255,255,255,0.3)" }}
-                >
-                  {p.label}
-                </p>
-                <h3
-                  className="text-base font-semibold mb-3"
+            {PORTFOLIO_ITEMS.map((p, i) => {
+              const isLive = !!p.url;
+              const Wrapper: React.ElementType = isLive ? "a" : "div";
+              const wrapperProps = isLive
+                ? { href: p.url, target: "_blank", rel: "noopener noreferrer" }
+                : {};
+              return (
+                <Wrapper
+                  key={i}
+                  {...wrapperProps}
+                  className={`rounded-2xl overflow-hidden flex flex-col transition-all duration-300 ${
+                    isLive ? "hover:-translate-y-1 cursor-pointer" : ""
+                  }`}
                   style={{
-                    letterSpacing: "-0.01em",
-                    color: "rgba(255,255,255,0.5)",
+                    backgroundColor: isLive
+                      ? "rgba(255,255,255,0.03)"
+                      : "rgba(255,255,255,0.01)",
+                    border: isLive
+                      ? "1px solid rgba(255,255,255,0.1)"
+                      : "1px dashed rgba(255,255,255,0.08)",
                   }}
                 >
-                  {p.title}
-                </h3>
-                <p className="text-gray-600 text-sm font-light leading-relaxed mb-6 flex-1">
-                  Project coming soon.
-                </p>
-                <span
-                  className="inline-flex items-center gap-1 text-sm font-medium"
-                  style={{ color: "rgba(255,255,255,0.25)" }}
-                >
-                  View →
-                </span>
-              </div>
-            ))}
+                  {p.image && (
+                    <div className="h-48 overflow-hidden">
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div className="p-8 flex flex-col flex-1">
+                    <p
+                      className="text-xs uppercase tracking-widest font-medium mb-4"
+                      style={{
+                        color: isLive
+                          ? "hsl(217, 91%, 60%)"
+                          : "rgba(255,255,255,0.3)",
+                      }}
+                    >
+                      {p.label}
+                    </p>
+                    <h3
+                      className="text-base font-semibold mb-3"
+                      style={{
+                        letterSpacing: "-0.01em",
+                        color: isLive ? "#fff" : "rgba(255,255,255,0.5)",
+                      }}
+                    >
+                      {p.title}
+                    </h3>
+                    <p
+                      className="text-sm font-light leading-relaxed mb-6 flex-1"
+                      style={{
+                        color: isLive
+                          ? "rgba(255,255,255,0.5)"
+                          : "rgba(120,120,120,1)",
+                      }}
+                    >
+                      {p.desc}
+                    </p>
+                    <span
+                      className="inline-flex items-center gap-1 text-sm font-medium"
+                      style={{
+                        color: isLive
+                          ? "hsl(217, 91%, 60%)"
+                          : "rgba(255,255,255,0.25)",
+                      }}
+                    >
+                      {isLive ? "Visit →" : "View →"}
+                    </span>
+                  </div>
+                </Wrapper>
+              );
+            })}
           </div>
         </div>
       </section>
