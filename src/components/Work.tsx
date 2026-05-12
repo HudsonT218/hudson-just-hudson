@@ -45,6 +45,18 @@ const PROJECTS: Project[] = [
       "I've built landing pages for companies, projects, and personal brands, designed for conversion and shipped fast. My AI-accelerated workflow means clients get polished, production-ready sites at a fraction of the typical agency timeline and cost.",
     backTags: ["Web Dev", "Landing Pages", "AI Pipeline", "Fast Delivery"],
   },
+  {
+    title: "Happy Tails Dog Walking",
+    word: "Demo",
+    desc: "An example landing page I built — not for an actual client, just a demo of the kind of site I can ship fast.",
+    tags: ["Landing Page", "Demo", "Web Dev"],
+    rgb: "34,197,94",
+    backDesc:
+      "An example landing page I built — not for an actual client, just a demo of the kind of site I can ship fast.",
+    backTags: ["Landing Page", "Demo"],
+    image: happyTailsCover,
+    url: "https://happytailsdogwalking.lovable.app",
+  },
 ];
 
 const Work = () => {
