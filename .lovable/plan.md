@@ -1,26 +1,27 @@
-# AI Meeting Assistant Demo — Iteration 2
+## Change
 
-Replace the scenario data in `src/components/meeting-assistant-demo/scenario.ts` so the script reads like an actual back-and-forth meeting between Maya and Jordan, with the AI as a silent observer that catches claims — not a Q&A bot the humans are interrogating.
+Replace the single subtitle paragraph in `src/pages/WorkPage.tsx` (lines 264–267) with two distinct paragraphs.
 
-## Changes
+### Before
+```tsx
+<p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
+  A second AI model thinks alongside the meeting — fact-checking claims and
+  surfacing answers from pre-loaded context, all with citations.
+</p>
+```
 
-**File: `src/components/meeting-assistant-demo/scenario.ts`**
+### After
+```tsx
+<p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
+  Before the meeting, the assistant reads in a stack of company documents — reports, dashboards, contracts, market feeds. During the meeting, one model transcribes the conversation in real time while a second model runs silently in the background, cross-referencing what's said against the loaded context. When it catches a misstated number, an unanswered question, or a piece of relevant context no one raised, it drops a note with a citation back to the source. The conversation flows uninterrupted.
+</p>
+<p className="text-lg text-gray-300 font-light mt-4 max-w-2xl">
+  This is one example of a custom AI assistant I can build for your team.
+</p>
+```
 
-- **Context array**: unchanged (same 9 documents).
-- **Transcript**: replace with 23 lines where Jordan attempts answers (sometimes wrong/vague) before the AI surfaces the precise version, then Maya reacts. New runtime ~76s.
-- **Annotations**: same 9 cited annotations as iteration 1, only `fireAt` offsets change to match the new transcript timing.
-- **durationSec**: 80.
+Same typography size/font/max-width as the current subtitle. Second paragraph uses `text-gray-300` (slightly brighter than `text-gray-400`) for subtle emphasis, with normal `mt-4` paragraph spacing. No other files touched.
 
-## What's NOT changing
+## Out of scope
 
-- `MeetingAssistantDemo.tsx` — no UI or animation changes.
-- `usePlayback.ts` — no timing constant changes.
-- Hero context loader, auto-start, replay, auto-scroll, mobile inline annotations — all unchanged.
-- Branding stays "AI meeting assistant" — no "Echo" reintroduced.
-
-## Acceptance
-
-- Demo plays through 23 transcript lines + 9 annotations in ~80s.
-- Left transcript pane height roughly matches right annotation pane by end of playback.
-- Script reads as humans talking to each other, AI quietly fact-checking.
-- No regressions on existing demo behavior.
+LIVE DEMO eyebrow, heading, demo container, post-demo description, "Interested in working together?" section — all unchanged.
