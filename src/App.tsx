@@ -104,12 +104,9 @@ class AppErrorBoundary extends Component<{ children: ReactNode }, { hasError: bo
 
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
-  if (typeof window !== "undefined") {
-    // Defer to next tick so route renders first
-    queueMicrotask(() => {
-      if (!hash) window.scrollTo(0, 0);
-    });
-  }
+  useEffect(() => {
+    if (!hash) window.scrollTo(0, 0);
+  }, [pathname, hash]);
   return null;
 };
 
