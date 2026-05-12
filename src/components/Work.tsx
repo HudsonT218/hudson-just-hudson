@@ -65,6 +65,11 @@ const Work = () => {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleCardClick = (i: number) => {
+    const project = PROJECTS[i];
+    if (project.url) {
+      window.open(project.url, "_blank", "noopener,noreferrer");
+      return;
+    }
     const el = cardRefs.current[i];
     if (el) {
       setCardRect(el.getBoundingClientRect());
