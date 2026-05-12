@@ -336,7 +336,7 @@ export default function MeetingAssistantDemo() {
       <motion.div
         ref={containerRef}
         layout
-        transition={{ duration: 0.15 }}
+        transition={{ duration: 0.1 }}
         className="rounded-2xl overflow-hidden"
         style={{
           backgroundColor: "rgba(255,255,255,0.02)",
@@ -421,7 +421,7 @@ export default function MeetingAssistantDemo() {
         )}
 
         {/* Body */}
-        <motion.div layout transition={{ duration: 0.15 }} className="p-6">
+        <motion.div layout transition={{ duration: 0.1 }} className="p-6">
           <AnimatePresence mode="wait">
             {showHero ? (
               <HeroContextLoader key="hero-loader" pillsLoaded={pillsLoaded} />
