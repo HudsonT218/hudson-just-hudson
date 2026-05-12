@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
+import happyTailsCover from "@/assets/happy-tails.png";
+
+type PortfolioItem = {
+  label: string;
+  title: string;
+  desc: string;
+  url?: string;
+  image?: string;
+};
 
 const CAPABILITIES = [
   {
