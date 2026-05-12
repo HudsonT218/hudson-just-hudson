@@ -170,10 +170,9 @@ const Index = () => {
           </h2>
           <div className="space-y-5 text-gray-400 font-light leading-relaxed">
             <p>
-              I've been writing code and building software for years. Over the
-              last year I've gone deep into AI — not just using it, but
-              understanding how it works, what it can actually do, and how to
-              build real things on top of it.
+              I write code and build software. I've gone deep into AI — not just
+              using it, but understanding how it works, what it can actually do,
+              and how to build real things on top of it.
             </p>
             <p>
               I started this to help people I know — businesses, friends,
