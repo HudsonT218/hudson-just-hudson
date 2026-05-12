@@ -79,7 +79,7 @@ function useTypewriter(text: string, active: boolean, durationMs: number) {
 }
 
 function TranscriptLine({ entry }: { entry: TranscriptEntry }) {
-  const dur = Math.max(200, Math.min(300, entry.text.length * 9));
+  const dur = Math.max(133, Math.min(200, entry.text.length * 6));
   const shown = useTypewriter(entry.text, true, dur);
   const initial = entry.speaker[0];
   return (
