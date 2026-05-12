@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
+import EchoDemo from "@/components/echo-demo/EchoDemo";
 
 type PortfolioItem = {
   label: string;
@@ -38,8 +39,11 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     url: "https://happytailsdogwalking.lovable.app",
     image: happyTailsCover,
   },
-  { label: "AI · 2026", title: "Project Name", desc: "Project coming soon." },
-  { label: "Software · 2026", title: "Project Name", desc: "Project coming soon." },
+  {
+    label: "Software · 2026",
+    title: "Food Bank Volunteer OS",
+    desc: "Custom backend software I'm building for a food bank — shift scheduling, volunteer hour tracking, leaderboards, manager dashboards. Coming soon.",
+  },
 ];
 
 const WorkPage = () => {
@@ -157,7 +161,7 @@ const WorkPage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {PORTFOLIO_ITEMS.map((p, i) => {
               const isLive = !!p.url;
               const Wrapper: React.ElementType = isLive ? "a" : "div";
@@ -235,6 +239,41 @@ const WorkPage = () => {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      />
+
+      {/* Echo demo */}
+      <section className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12">
+            <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
+              Live Demo
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold leading-tight"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              <span className="block text-white">Echo — an AI agent I built.</span>
+            </h2>
+            <p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
+              A second AI model thinks alongside the meeting — fact-checking claims and
+              surfacing answers from pre-loaded context, all with citations.
+            </p>
+          </div>
+
+          <EchoDemo />
+
+          <p className="text-sm text-gray-500 font-light mt-8 max-w-2xl leading-relaxed">
+            A scripted walkthrough of a Q4 review meeting at a fake SaaS company.
+            The demo isn't connected to a live LLM — it's a faithful recreation of
+            a prototype I built and previously deployed. I'd build a real version for you.
+          </p>
         </div>
       </section>
 
