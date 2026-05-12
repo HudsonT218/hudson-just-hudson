@@ -248,7 +248,7 @@ const WorkPage = () => {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
-      {/* Echo demo */}
+      {/* AI meeting assistant demo */}
       <section className="py-28 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="mb-12">
@@ -259,7 +259,7 @@ const WorkPage = () => {
               className="text-3xl sm:text-4xl font-extrabold leading-tight"
               style={{ letterSpacing: "-0.03em" }}
             >
-              <span className="block text-white">Echo — an AI agent I built.</span>
+              <span className="block text-white">AI meeting assistant I built.</span>
             </h2>
             <p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
               A second AI model thinks alongside the meeting — fact-checking claims and
@@ -267,7 +267,7 @@ const WorkPage = () => {
             </p>
           </div>
 
-          <EchoDemo />
+          <MeetingAssistantDemo />
 
           <p className="text-sm text-gray-500 font-light mt-8 max-w-2xl leading-relaxed">
             A scripted walkthrough of a Q4 review meeting at a fake SaaS company.
