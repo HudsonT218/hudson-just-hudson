@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
+import EchoDemo from "@/components/echo-demo/EchoDemo";
 
 type PortfolioItem = {
   label: string;
@@ -38,8 +39,11 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     url: "https://happytailsdogwalking.lovable.app",
     image: happyTailsCover,
   },
-  { label: "AI · 2026", title: "Project Name", desc: "Project coming soon." },
-  { label: "Software · 2026", title: "Project Name", desc: "Project coming soon." },
+  {
+    label: "Software · 2026",
+    title: "Food Bank Volunteer OS",
+    desc: "Custom backend software I'm building for a food bank — shift scheduling, volunteer hour tracking, leaderboards, manager dashboards. Coming soon.",
+  },
 ];
 
 const WorkPage = () => {
