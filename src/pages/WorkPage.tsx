@@ -30,10 +30,16 @@ const CAPABILITIES = [
   },
 ];
 
-const PORTFOLIO_PLACEHOLDERS = [
-  { label: "Web · 2026", title: "Project Name" },
-  { label: "AI · 2026", title: "Project Name" },
-  { label: "Software · 2026", title: "Project Name" },
+const PORTFOLIO_ITEMS: PortfolioItem[] = [
+  {
+    label: "Web · 2026",
+    title: "Happy Tails Dog Walking",
+    desc: "An example landing page I built — not for an actual client, just a demo of the kind of site I can ship fast.",
+    url: "https://happytailsdogwalking.lovable.app",
+    image: happyTailsCover,
+  },
+  { label: "AI · 2026", title: "Project Name", desc: "Project coming soon." },
+  { label: "Software · 2026", title: "Project Name", desc: "Project coming soon." },
 ];
 
 const WorkPage = () => {
