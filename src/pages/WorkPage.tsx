@@ -262,8 +262,10 @@ const WorkPage = () => {
               <span className="block text-white">AI meeting assistant I built.</span>
             </h2>
             <p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
-              A second AI model thinks alongside the meeting — fact-checking claims and
-              surfacing answers from pre-loaded context, all with citations.
+              Before the meeting, the assistant reads in a stack of company documents — reports, dashboards, contracts, market feeds. During the meeting, one model transcribes the conversation in real time while a second model runs silently in the background, cross-referencing what's said against the loaded context. When it catches a misstated number, an unanswered question, or a piece of relevant context no one raised, it drops a note with a citation back to the source. The conversation flows uninterrupted.
+            </p>
+            <p className="text-lg text-gray-300 font-light mt-4 max-w-2xl">
+              This is one example of a custom AI assistant I can build for your team.
             </p>
           </div>
 
