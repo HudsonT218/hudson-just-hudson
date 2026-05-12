@@ -25,7 +25,6 @@ const ESTIMATES = [
 const HONEST_NOTES = [
   "I'm early in client work. My rate reflects that — I'm not charging what a senior agency charges.",
   "AI is moving fast. I'll be honest with you if something we build might become obsolete. Sometimes the right answer is a simpler solution.",
-  "I work with people I know or people referred to me. If you're on this page, you probably already know me.",
 ];
 
 const InterestedPage = () => {
