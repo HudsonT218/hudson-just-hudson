@@ -118,24 +118,35 @@ const Work = () => {
                 className="h-48 relative overflow-hidden flex items-center justify-center"
                 style={{ background: `rgba(${p.rgb},0.06)` }}
               >
-                <div
-                  className="absolute w-28 h-28 rounded-full"
-                  style={{
-                    background: `rgba(${p.rgb},0.1)`,
-                    filter: "blur(35px)",
-                    top: "20%",
-                    right: "10%",
-                  }}
-                />
-                <span
-                  className="text-7xl font-extrabold select-none"
-                  style={{
-                    letterSpacing: "-0.04em",
-                    color: `rgba(${p.rgb},0.15)`,
-                  }}
-                >
-                  {p.word}
-                </span>
+                {p.image ? (
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <>
+                    <div
+                      className="absolute w-28 h-28 rounded-full"
+                      style={{
+                        background: `rgba(${p.rgb},0.1)`,
+                        filter: "blur(35px)",
+                        top: "20%",
+                        right: "10%",
+                      }}
+                    />
+                    <span
+                      className="text-7xl font-extrabold select-none"
+                      style={{
+                        letterSpacing: "-0.04em",
+                        color: `rgba(${p.rgb},0.15)`,
+                      }}
+                    >
+                      {p.word}
+                    </span>
+                  </>
+                )}
               </div>
 
               <div className="p-6">
