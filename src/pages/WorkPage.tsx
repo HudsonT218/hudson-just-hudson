@@ -5,11 +5,11 @@ import Navbar from "@/components/Navbar";
 const CAPABILITIES = [
   {
     label: "Web Development",
-    body: "Landing pages, business sites, internal dashboards. Single-page or multi-page. React + Tailwind is my default stack. Fast turnaround, clean code, always deployed and documented on handoff.",
+    body: "Landing pages, business sites, internal dashboards. Single-page or multi-page. Fast turnaround, clean code, always deployed and documented on handoff.",
   },
   {
     label: "AI Agents & Assistants",
-    body: "Custom AI tools built on top of models like Claude and Gemini. Chatbots, research assistants, document processors, workflow agents. I scope what's actually feasible before we build anything.",
+    body: "Custom AI tools built on top of models like Claude and Gemini, including OpenClaw Agents and Hermes Agents. I work with MCP and CLI agents — chatbots, research assistants, document processors, workflow agents. I scope what's actually feasible before we build anything.",
   },
   {
     label: "Operations Software",
