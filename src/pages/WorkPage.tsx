@@ -322,7 +322,10 @@ const WorkPage = () => {
         }}
       >
         <p className="text-xs text-gray-600">
-          &copy; {new Date().getFullYear()} Hudson Turansky
+          &copy; {new Date().getFullYear()} Hudson Turansky &middot;{' '}
+          <a href="mailto:hudsonturansky@gmail.com" className="hover:text-gray-400 transition-colors">
+            hudsonturansky@gmail.com
+          </a>
         </p>
       </footer>
     </div>
