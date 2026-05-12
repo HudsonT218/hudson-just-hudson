@@ -1,7 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import happyTailsCover from "@/assets/happy-tails.png";
 
-const PROJECTS = [
+type Project = {
+  title: string;
+  word: string;
+  desc: string;
+  tags: string[];
+  rgb: string;
+  backDesc: string;
+  backTags: string[];
+  image?: string;
+  url?: string;
+};
+
+const PROJECTS: Project[] = [
   {
     title: "Custom Organizational OS",
     word: "Custom",
