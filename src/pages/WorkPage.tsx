@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
-import EchoDemo from "@/components/echo-demo/EchoDemo";
+import MeetingAssistantDemo from "@/components/meeting-assistant-demo/MeetingAssistantDemo";
 
 type PortfolioItem = {
   label: string;
