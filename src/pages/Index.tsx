@@ -22,7 +22,7 @@ const Index = () => {
         <title>Hudson Turansky — AI Solutions & Web Development</title>
         <meta
           name="description"
-          content="I build custom websites, AI tools, and software for people I know and trust. Book a free call to talk through your project."
+          content="I build custom websites, AI tools, and software for businesses and individuals. Book a free call to talk through your project."
         />
         <link rel="canonical" href="https://hudsonturansky.com/" />
       </Helmet>
@@ -91,8 +91,8 @@ const Index = () => {
           </h1>
 
           <p className="text-lg text-gray-400 font-light max-w-lg mx-auto mb-10">
-            I build custom websites, AI tools, and software for people I know
-            and trust. I'm early in client work — my pricing reflects that.
+            I build custom websites, AI tools, and software for businesses and
+            individuals. I'm early in client work — my pricing reflects that.
           </p>
 
           <div className="flex justify-center mb-8">
