@@ -1,72 +1,90 @@
-## 1. Update `/work` portfolio cards (`src/pages/WorkPage.tsx`)
+# AI Meeting Assistant Demo — Iteration 1
 
-In `PORTFOLIO_ITEMS`:
-- Remove the `AI · 2026` "Project coming soon" card.
-- Replace the Software card with:
-  - `label: "Software · 2026"`
-  - `title: "Food Bank Volunteer OS"`
-  - `desc: "Custom backend software I'm building for a food bank — shift scheduling, volunteer hour tracking, leaderboards, manager dashboards. Coming soon."`
-- Keep the muted/dashed "coming soon" treatment (no `url`, no `image`).
+Three changes to the existing demo on `/work`: drop the "Echo" brand, ~2× faster timing with an extended script, and auto-start on scroll-in with a hero context-loading panel.
 
-Grid: change `md:grid-cols-3` → `md:grid-cols-2` so two cards sit side-by-side intentionally. Keep the `gap-4` and existing card styling.
+## 1. Strip the "Echo" brand
 
-## 2. New Echo demo section
+**Folder/file rename**
+- `src/components/echo-demo/` → `src/components/meeting-assistant-demo/`
+- `EchoDemo.tsx` → `MeetingAssistantDemo.tsx`
+- Component export `EchoDemo` → `MeetingAssistantDemo`
+- Keep `scenario.ts`, `usePlayback.ts`, `useAutoScroll.ts` filenames; rewrite their internals as needed.
+- Update import + JSX usage in `src/pages/WorkPage.tsx`.
 
-Inserted between the portfolio section and the existing "Interested in working together?" CTA in `WorkPage.tsx`. Full-width, dark, matches existing section rhythm (`py-28 px-6`, `max-w-5xl mx-auto`, blue eyebrow + extrabold heading + tagline gray-400).
+**UI string changes (in `WorkPage.tsx`)**
+- Section heading: `Echo — an AI agent I built.` → `AI meeting assistant I built.`
+- Tagline: `A second AI model thinks alongside the meeting — fact-checking claims and surfacing answers from pre-loaded context, all with citations.`
+- Description block: replace any "Echo" mention with "this meeting assistant".
 
-Heading: **Echo — an AI agent I built**
-Tagline: *A second AI model thinks alongside the meeting — fact-checking claims and surfacing answers from pre-loaded context, all with citations.*
+**UI string changes (in component)**
+- Right pane header `ECHO · AGENT NOTES` → `AGENT NOTES`.
+- Status text: `Echo is thinking` → `Thinking…`; `Echo is ready` → `Ready`.
 
-Below the demo container, a single muted left-aligned paragraph:
-> A scripted walkthrough of a Q4 review meeting at a fake SaaS company. The demo isn't connected to a live LLM — it's a faithful recreation of a prototype I built and previously deployed. I'd build a real version for you.
+**Internals**
+- Variables/CSS classes containing `echo` → `assistant` / `meetingAssistant`.
+- Strip any `// Echo …` comments.
 
-## 3. Echo demo component
+Verification: `git grep -i echo src/` returns nothing in component code, scenario data, or rendered strings.
 
-New folder `src/components/echo-demo/`:
+## 2. Speed up ~2× and extend script
 
-- `scenario.ts` — exact data from spec (types + scenario const).
-- `usePlayback.ts` — playback state machine: `idle-pre` → `playing` → `idle-post`. Drives `currentTime` via `requestAnimationFrame`, exposes `revealedTranscriptIds`, `revealedAnnotationIds`, `pendingAnnotationId` (for the ~600ms thinking pulse before reveal), `start()`, `replay()`. Holds `playing` until `scenario.durationSec` (60s), then flips to `idle-post`.
-- `useAutoScroll.ts` — observes a sentinel at the bottom of the demo container; smoothly scrolls window to keep it in view while playing. Detects user `wheel`/`touchmove`/`keydown` to set `isPaused = true`; exposes `catchUp()` that re-enables and snaps to sentinel. Clamps so it never scrolls past the demo's own bottom edge (CTA section stays visible).
-- `EchoDemo.tsx` — main component, composes everything.
+**Timing constants** (in `MeetingAssistantDemo.tsx` / `usePlayback.ts`)
+- Transcript typewriter: clamp `200–300ms` (was 400–600).
+- Annotation thinking pulse: `PULSE_LEAD = 0.3` (was 0.6).
+- Annotation card fade-in: `0.15s` (was 0.25).
+- Container/layout transitions: `0.15s` (was ~0.3).
+- Context card stagger in hero: keep `~250–300ms`.
 
-### EchoDemo.tsx layout
+**Replace `scenario.ts` data** with the exact constant from the user's spec: 9 context docs, 13 transcript lines (last at 49s), 9 annotations (last at 46.5s), `durationSec: 55`. Type aliases (`TranscriptEntry`, `Annotation`, `AnnotationType`) stay the same.
 
-Single rounded dark container (`rounded-2xl`, subtle border + bg matching existing cards). Inside:
+## 3. Auto-start on scroll-in + hero context loader
 
-**Title bar** — three colored dots (red/yellow/green), title text (`Q4 Review · Recording` while playing, `Q4 Review · Idle` otherwise; short fade-cross on change), right side: `● Live` (red dot, 2s ease-in-out infinite pulse, only animates while `playing`) + `Replay` button (more prominent in `idle-post`).
+**Playback state machine (`usePlayback.ts`)**
+- Add states: `idle-pre` → `loading-context` → `transitioning` → `playing` → `idle-post`.
+- `start()` runs context cards (one every ~280ms; `~2.5s` total) → holds `Ready — starting meeting` for `700ms` → collapses hero (`400ms`) → begins timeline.
+- `replay()` resets to `idle-pre` and re-runs the full flow including hero.
+- Track `hasAutoStarted` ref so auto-start fires only once per page load.
 
-**Context strip** — horizontal flex of pills (`✓ {name}`). In `idle-pre` they appear one-by-one at 250ms intervals on mount/in-view (IntersectionObserver). Once all loaded, status text reads `Ready` and a prominent `▶ Start demo` button shows. When transitioning to `playing` the panel collapses into a compact strip pinned at top.
+**Auto-start (in `MeetingAssistantDemo.tsx`)**
+- `IntersectionObserver({ threshold: 0.5 })` on container ref. On first intersection AND `state === "idle-pre"` AND `!hasAutoStarted`, call `start()`. Disconnect after firing.
+- Remove the existing ▶ Start demo button entirely.
 
-**Body**:
-- Desktop (`md:` and up): two columns.
-  - Left "Transcript" pane: mic icon + label, then revealed `TranscriptEntry` components. Each: small circular avatar with speaker initial (M / J), muted speaker name, then the line. On reveal: container fades in (~150ms) while text types char-by-char over 400–600ms scaled to length.
-  - Right "Echo · agent notes" pane: sparkle icon + label, then `AnnotationCard`s. When an annotation's `fireAt` hits, show a shimmer/`···` placeholder for ~600ms in the pane, then card fades in (~250ms).
-- Mobile (`< md`): single column. Each annotation renders inline directly under the transcript entry that triggered it (matched by largest `t.startAt <= a.fireAt`). Same card styling.
+**Hero context-loading panel (replaces idle-pre body and the strip during loading)**
+- Eyebrow: `PRE-MEETING CONTEXT`.
+- Status line: `9 documents · 2,840 KB · ready in 1.8s`.
+- Grid of 9 document cards:
+  - Desktop ≥1024px: `lg:grid-cols-3`
+  - Tablet 640–1024: `sm:grid-cols-2`
+  - Mobile: `grid-cols-1`
+- Card content:
+  - Icon by extension (lucide: `FileText` for `.pdf`, `FileSpreadsheet` for `.csv`, `FileType` for `.docx`, `Rss`/`Globe` for `competitor-tracking`).
+  - Filename in readable size (`text-sm` not `text-[11px]`).
+  - Pre-load: subtle pulse / `Loader2` spin (~300ms) → swap to green `Check`.
+- Cards reveal one-by-one at ~280ms intervals. Helper `getDocIcon(name)` keyed off filename extension.
+- Status line under grid cycles: `Reading…` (cards 1–3) → `Indexing…` (cards 4–8) → `Ready — starting meeting` (after card 9).
 
-**AnnotationCard**: rounded subtle-bg card, top: small uppercase badge (`CLAIM CHECK` yellow / `QUESTION ANSWERED` cyan / `INSIGHT` purple — using accent backgrounds w/ matching text), then annotation text in default color, then citation chip below: subtle bg, mono-ish font, format `📄 {source} · {locator}`. Looks clickable, no handler.
+**Collapse transition**
+- After hero completes, animate the hero panel `height/opacity` out (~400ms via framer-motion), then mount the existing two-pane transcript/notes layout. The compact top strip (existing pill row with green checks) remains as the "loaded context" indicator at top.
+- During `playing`/`idle-post` the top strip behaves exactly as before.
 
-**Container growth**: framer-motion `<motion.div layout>` on the body (and on the transcript/annotation lists) for smooth height transitions. A sentinel `<div ref>` at the bottom feeds `useAutoScroll`.
+**Replay** triggers the same full sequence (cards re-reveal one-by-one).
 
-**Catch-up pill**: when `useAutoScroll.isPaused && playing`, render a fixed `bottom-6 right-6` rounded pill `▼ Catch up` that calls `catchUp()` on click.
+## Files touched
 
-### Timing
+- Rename: `src/components/echo-demo/` → `src/components/meeting-assistant-demo/`
+- Edit: `MeetingAssistantDemo.tsx` (new name; logic + UI changes)
+- Edit: `usePlayback.ts` (new states + faster constants)
+- Edit: `useAutoScroll.ts` (no functional change beyond renaming if needed)
+- Edit: `scenario.ts` (replace data; rename string values not filenames)
+- Edit: `src/pages/WorkPage.tsx` (import path, component name, heading/tagline/description copy)
 
-- All timing keyed off `currentTime` from `usePlayback`.
-- Transcript entry revealed when `currentTime >= startAt`. Typing animation handled inside the entry component (own `useEffect` slicing text on a 400–600ms timer once revealed).
-- Annotation: `pendingAnnotationId` set 0.6s before `fireAt` (or at `fireAt` then card delayed 0.6s — simpler: at `fireAt` show pulse, after 600ms swap to card). State stored per-id so replay works.
+No new dependencies. No backend or routing changes. CTA section below the demo and all other pages untouched.
 
-## 4. Constraints honored
+## Acceptance check
 
-- Only edits `src/pages/WorkPage.tsx` and adds `src/components/echo-demo/*`.
-- Uses existing deps (`framer-motion` 12 already in `package.json`, Tailwind, shadcn). No new packages.
-- No backend, no LLM, no audio. Fully scripted.
-- Existing CTA section + theme tokens untouched.
-- No new READMEs/comments beyond non-obvious why.
-
-## Acceptance check before finishing
-
-- `/work` shows 2 cards in a 2-col grid.
-- Echo section renders with idle-pre → playing → idle-post flow, replay works.
-- Auto-scroll follows demo bottom; manual scroll pauses + shows Catch up pill; never scrolls past demo bottom.
-- Mobile: annotations inline under triggering transcript entry.
-- No console errors; CTA section unchanged and visible after demo.
+- `git grep -i echo src/` returns nothing.
+- Demo auto-plays once on first scroll-in; no Start button in DOM.
+- Hero shows 9 cards in grid with icons + check animation; collapses into top strip.
+- 13 transcript lines + 9 annotations play through ~55s; animations visibly faster.
+- Replay re-runs hero + meeting.
+- Auto-scroll/pause/Catch-up + mobile inline annotations behavior unchanged.
