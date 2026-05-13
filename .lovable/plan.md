@@ -1,49 +1,67 @@
-## References Collection System — Backend Phase
+## References Admin UI — Phase B
 
-Build a backend-only references collection workflow: admins invite people via email, recipients submit a short reference via a tokenized public link, admin moderates, approved entries are publicly readable.
+Build the admin moderation UI for the references system. All work is admin-side; public pages and configurator are untouched.
 
-### 1. Migration
-New file: `supabase/migrations/003_references_system.sql`
+### 1. Status badge support
+Extend `src/pages/admin/_components/StatusBadge.tsx` with two new exports:
+- `ReferenceRequestStatusBadge` — pending=gray, submitted=green, expired=amber, revoked=red
+- `ReferenceStatusBadge` — pending_review=amber, approved=green, rejected=red, hidden=gray
 
-- `reference_requests` table (id, invited_email, invited_name, token unique, expires_at, submitted_at, status pending|submitted|expired|revoked, notes) + indexes on token & status
-- Trigger `normalize_reference_request_email` lowercases/trims `invited_email` on insert/update
-- `references` table (FK→requests on delete cascade, name, role_title, email, headline ≤140, linkedin_url, status pending_review|approved|rejected|hidden, approved_at, display_order) + indexes + UNIQUE(request_id) so each request yields at most one reference
-- RLS enabled on both; admin-only ALL via `has_role(auth.uid(),'admin')`; public SELECT on `references` where status='approved'
-- View `approved_references_public` exposing only safe fields, granted to anon + authenticated
+Reuses the existing `Pill` component for visual consistency.
 
-### 2. Frontend types & data layer (no UI)
-- `src/lib/references-types.ts` — hand-rolled `ReferenceRequest`, `Reference`, status enums + label maps, `PublicApprovedReference` (view shape). Mirror snake_case style of `lead-os-types.ts`.
-- `src/lib/references-db.ts` — mirrors `lead-os-db.ts` (cast shared client to `any`). Functions:
-  - `listReferenceRequests`, `listPendingReviewReferences` (joins parent request for invited_email), `listApprovedReferencesPublic` (queries the view), `listArchivedReferences` (rejected+hidden), `updateReferenceStatus`, `updateReferenceDisplayOrder`, `revokeReferenceRequest`
+### 2. New admin page: `src/pages/admin/References.tsx`
+Wraps `<AdminLayout>` + `<Helmet noindex>`. Matches `Leads.tsx` styling (dark theme, semi-opaque cards, mono pills, `letter-spacing: -0.02em` headings).
 
-### 3. Edge functions
-All follow `notify-feedback`'s Deno shape + `_shared/cors.ts`. Service-role Supabase client used for DB writes inside functions.
+**Section 1 — Request a Reference (form row)**
+Inline `<form>` with email input, name input, "Send Invite" button. Calls `supabase.functions.invoke('send-reference-invite', { body: { email, name } })`. Sonner toasts on success/error; refreshes the invites table.
 
-- **`send-reference-invite`** — admin-gated. Validates auth + admin via `has_role`. Normalizes email, revokes prior pending requests for same email, generates 32-char URL-safe token (crypto.getRandomValues + base64url), inserts request with `expires_at = now() + 7 days`, sends Resend email from `hudson@hudsonturansky.com` (fallback `onboarding@resend.dev` w/ TODO comment) with reply-to `hudsonturansky@gmail.com`. Returns `{ ok, request_id }`.
-- **`verify-reference-access`** — public. Looks up token; flips expired-pending rows to `expired`; returns `{ valid, reason?, expires_at? }`. Never leaks `invited_email`.
-- **`submit-reference`** — public. Validates lengths, email format, optional linkedin URL regex, strips control chars. Re-runs validity checks; rejects 403 if `invited_email !== email`. Inserts reference row `pending_review`, updates request to `submitted` + `submitted_at`. Sends notification email to `hudsonturansky@gmail.com`. Returns `{ ok }`.
-- **`revoke-reference-invite`** — admin-gated. Sets request `status='revoked'`. Returns `{ ok }`.
+**Section 2 — Invites Sent (table)**
+- `listReferenceRequests()` powers the rows.
+- Columns: Email · Name · Status · Sent · Expires · Submitted · Actions.
+- Status chip uses new `ReferenceRequestStatusBadge`.
+- Actions on `pending` rows: **Resend** (re-invokes `send-reference-invite` with same email; server revokes old + creates new), **Revoke** (invokes `revoke-reference-invite`).
+- Empty state: "No invites yet. Send your first one above."
 
-Each new function gets a `supabase/config.toml` block only if needed; public functions (`verify-reference-access`, `submit-reference`) deploy with `verify_jwt = false`.
+**Section 3 — Pending Review (cards)**
+- `listPendingReviewReferences()`.
+- Card: name + role/title (gray-400, sm), headline (`text-lg italic`), submitted date, LinkedIn (target=_blank, rel=noopener), buttons: **Approve** (white bg) → `updateReferenceStatus(id,'approved')`, **Reject** (red border) → AlertDialog confirm → `updateReferenceStatus(id,'rejected')`, **View Raw** (ghost) → toggles a `<pre>` JSON view of the record.
+- Empty state: "No pending references."
 
-### 4. robots.txt
-Append `Disallow: /reference/` to `public/robots.txt`.
+**Section 4 — Live on Site (sortable list)**
+- `listApprovedReferencesPublic()` → ordered by `display_order` asc.
+  - Note: this view exposes `id, name, role_title, headline, linkedin_url, display_order, created_at` — sufficient for the row UI. The admin RLS already allows full reads, but using the view keeps a single source of truth for ordering.
+- `@dnd-kit/core` + `@dnd-kit/sortable` (already installed for the configurator). Vertical `SortableContext` with `verticalListSortingStrategy`.
+- Each row: drag handle (`GripVertical` lucide icon, left, `cursor-grab`), name + role, headline truncated to one line. Right side: **Hide** button → `updateReferenceStatus(id,'hidden')`.
+- On drag-end: optimistic local reorder, then `updateReferenceDisplayOrder(updates)` with new indices for all moved items (simple full-resequence on change).
+- Empty state: "No approved references yet."
 
-### Secrets check
-`RESEND_API_KEY` is **not** currently in the project secrets (only `GEMINI_API_KEY`, Supabase keys, `LOVABLE_API_KEY` are set). I'll request it via the secrets tool before deploying the email-sending functions.
+**Section 5 — Archive (collapsible)**
+- shadcn `Accordion` (single, collapsed by default) at the bottom.
+- `listArchivedReferences()` → rejected + hidden.
+- Row: name + role + status chip + **Un-archive** → `updateReferenceStatus(id,'pending_review')`.
 
-### Sanity check
-RLS policies reference `public.has_role(uuid, app_role)` — already exists (used throughout `lead_os_schema.sql` policies and visible in `<db-functions>`), so the policies will compile against current schema.
+Local state pattern follows `Leads.tsx`: per-section loading/error, single `refresh()` reloads everything, `useEffect` initial fetch with `cancelled` guard.
 
-### Out of scope (this phase)
-No App.tsx routes, no admin UI, no `/reference/:token` page, no changes to existing configurator/admin code.
+### 3. Sidebar nav
+Add `{ label: "References", to: "/admin/references" }` to the `NAV` array in `src/components/admin/AdminLayout.tsx`.
+
+### 4. Routing
+In `src/App.tsx`:
+```ts
+const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
+```
+Add the route alongside the other admin routes:
+```tsx
+<Route path="/admin/references" element={
+  <ConfiguratorBoundary><AdminRoute><AdminReferences /></AdminRoute></ConfiguratorBoundary>
+} />
+```
 
 ### Files touched
-- `supabase/migrations/003_references_system.sql` (new)
-- `src/lib/references-types.ts` (new)
-- `src/lib/references-db.ts` (new)
-- `supabase/functions/send-reference-invite/index.ts` (new)
-- `supabase/functions/verify-reference-access/index.ts` (new)
-- `supabase/functions/submit-reference/index.ts` (new)
-- `supabase/functions/revoke-reference-invite/index.ts` (new)
-- `public/robots.txt` (append one line)
+- `src/pages/admin/References.tsx` (new)
+- `src/pages/admin/_components/StatusBadge.tsx` (extend)
+- `src/components/admin/AdminLayout.tsx` (nav entry)
+- `src/App.tsx` (lazy import + route)
+
+### Out of scope
+Public `/reference/:token` submit page (Phase C), public references display on `/work` or `/`, any changes to the configurator, public marketing pages, or edge functions.

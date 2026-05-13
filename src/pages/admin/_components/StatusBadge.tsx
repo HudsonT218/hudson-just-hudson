@@ -6,6 +6,12 @@ import {
   type ProjectStatus,
   type ProjectType,
 } from "@/lib/lead-os-types";
+import {
+  REFERENCE_REQUEST_STATUS_LABEL,
+  REFERENCE_STATUS_LABEL,
+  type ReferenceRequestStatus,
+  type ReferenceStatus,
+} from "@/lib/references-types";
 
 const LEAD_COLORS: Record<LeadStatus, { bg: string; fg: string }> = {
   cold: { bg: "rgba(255,255,255,0.06)", fg: "rgb(156,163,175)" },
@@ -54,6 +60,38 @@ export const ProjectStatusBadge = ({ status }: { status: ProjectStatus }) => {
   return (
     <Pill bg={c.bg} fg={c.fg}>
       {PROJECT_STATUS_LABEL[status].toUpperCase()}
+    </Pill>
+  );
+};
+
+const REFERENCE_REQUEST_COLORS: Record<ReferenceRequestStatus, { bg: string; fg: string }> = {
+  pending: { bg: "rgba(255,255,255,0.06)", fg: "rgb(156,163,175)" },
+  submitted: { bg: "rgba(16,185,129,0.15)", fg: "#34d399" },
+  expired: { bg: "rgba(245,158,11,0.15)", fg: "#fbbf24" },
+  revoked: { bg: "rgba(127,29,29,0.25)", fg: "rgb(252,165,165)" },
+};
+
+const REFERENCE_COLORS: Record<ReferenceStatus, { bg: string; fg: string }> = {
+  pending_review: { bg: "rgba(245,158,11,0.15)", fg: "#fbbf24" },
+  approved: { bg: "rgba(16,185,129,0.15)", fg: "#34d399" },
+  rejected: { bg: "rgba(127,29,29,0.25)", fg: "rgb(252,165,165)" },
+  hidden: { bg: "rgba(255,255,255,0.06)", fg: "rgb(156,163,175)" },
+};
+
+export const ReferenceRequestStatusBadge = ({ status }: { status: ReferenceRequestStatus }) => {
+  const c = REFERENCE_REQUEST_COLORS[status];
+  return (
+    <Pill bg={c.bg} fg={c.fg}>
+      {REFERENCE_REQUEST_STATUS_LABEL[status].toUpperCase()}
+    </Pill>
+  );
+};
+
+export const ReferenceStatusBadge = ({ status }: { status: ReferenceStatus }) => {
+  const c = REFERENCE_COLORS[status];
+  return (
+    <Pill bg={c.bg} fg={c.fg}>
+      {REFERENCE_STATUS_LABEL[status].toUpperCase()}
     </Pill>
   );
 };

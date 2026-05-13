@@ -43,6 +43,7 @@ const AdminLeads = lazy(() => import("./pages/admin/Leads.tsx"));
 const AdminLeadDetail = lazy(() => import("./pages/admin/LeadDetail.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/Projects.tsx"));
 const AdminProjectDetail = lazy(() => import("./pages/admin/ProjectDetail.tsx"));
+const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
 
 // Configurator routes — DottedSurface is hidden on these.
 // Login/signup also count.
@@ -222,6 +223,16 @@ const AppRoutes = () => {
             <ConfiguratorBoundary>
               <AdminRoute>
                 <AdminProjectDetail />
+              </AdminRoute>
+            </ConfiguratorBoundary>
+          }
+        />
+        <Route
+          path="/admin/references"
+          element={
+            <ConfiguratorBoundary>
+              <AdminRoute>
+                <AdminReferences />
               </AdminRoute>
             </ConfiguratorBoundary>
           }
