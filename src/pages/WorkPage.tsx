@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
 import chesapeakePantryCover from "@/assets/chesapeake-pantry.png";
-import SocialProof from "@/components/SocialProof";
+import Collaborators from "@/components/Collaborators";
 
 const MeetingAssistantDemo = lazy(() =>
   import("@/components/meeting-assistant-demo/MeetingAssistantDemo")
@@ -264,7 +264,7 @@ const WorkPage = () => {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
-      <SocialProof />
+      <Collaborators />
 
       {/* Divider */}
       <div
