@@ -28,6 +28,10 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    preloadAdminChunks();
+  }, []);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/login", { replace: true });
