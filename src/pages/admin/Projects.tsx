@@ -160,6 +160,7 @@ const Projects = () => {
         onOpenChange={setDrawerOpen}
         onCreated={(projectId) => {
           setDrawerOpen(false);
+          qc.invalidateQueries({ queryKey: PROJECTS_KEY });
           navigate(`/admin/projects/${projectId}`);
         }}
       />
