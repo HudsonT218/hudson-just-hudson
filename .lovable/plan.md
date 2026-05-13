@@ -1,52 +1,49 @@
-## Codebase Cleanup Plan
+# SEO & Social Unfurl Truth-Up
 
-Goal: remove unused pages and components while preserving the live site (Home, Work, Interested, 404) and the entire **Build-Your-Own-Site (Configurator)** product including admin/lead management.
+No visible UI changes. No touching homepage layout, Navbar, DottedSurface, configurator, /admin, or /configure code.
 
-### What stays (in active use)
+## 1. Generate OG images
 
-- **Public site**: `Index.tsx`, `WorkPage.tsx`, `InterestedPage.tsx`, `NotFound.tsx`
-- **Shared components**: `Navbar.tsx`, `NavLink.tsx`, `WhatIBuild.tsx`, `Contact.tsx`, `DottedSurface.tsx`
-- **Configurator product** (untouched): all of `src/pages/configurator/*` (LoginPage, SignupPage, ForgotPasswordPage, ResetPasswordPage, ConfiguratorPage, DashboardPage, OrderDetailPage, PreviewPage), all of `src/components/configurator/*`, `src/component-library/*`, `src/lib/configurator-*`, `src/lib/stripe.ts`, `src/hooks/use-draft.ts`
-- **Lead Management OS / Admin**: `src/pages/admin/*`, `src/components/admin/*`, `src/lib/lead-os-*`
-- **Edge functions in use**: `create-checkout`, `stripe-webhook`, `notify-feedback`, `notify-preview-ready`, `_shared`
-- **Assets used**: `happy-tails.png`, `chesapeake-pantry.png`
-- **MeetingAssistantDemo** (rendered on WorkPage)
+Use imagegen (premium for legible text) to produce two 1200×630 PNGs on a zinc-900 (#18181b) background:
 
-### What gets deleted (zero importers, confirmed)
+- `public/og-image.png` — "Hudson Turansky" wordmark with blue→purple gradient (#3b82f6 → #8b5cf6), subtitle "AI Solutions · Web Development · Custom Software".
+- `public/og-work.png` — same treatment, subtitle "Work · Capabilities · Portfolio".
 
-**Unused pages**
-- `src/pages/Packages.tsx` — orphan; the `/packages` route is a redirect to `/work` and doesn't import this file. Keep the redirect route in `App.tsx`, just delete the file.
+QA each by viewing the generated PNG before moving on; regenerate if text is clipped/illegible.
 
-**Unused top-level components**
-- `src/components/ConfiguratorPromo.tsx`
-- `src/components/Services.tsx`
-- `src/components/Process.tsx`
-- `src/components/Work.tsx` (the page is `WorkPage.tsx`; this older component is unused)
+## 2. `index.html` — replace `<head>` meta + JSON-LD
 
-**Unused ChatWidget (entire directory)**
-- `src/components/ChatWidget/` — `index.tsx`, `ChatPanel.tsx`, `ChatInput.tsx`, `ChatMessage.tsx`, `TypingIndicator.tsx`, `CalendlyCard.tsx`, `useChatSession.ts`, `types.ts`. Nothing in the app imports it.
+- Swap title, description, og:*, twitter:* to the new "AI Solutions & Web Development" positioning (verbatim from request).
+- Add `og:image:width`/`og:image:height` (1200/630).
+- Drop `<meta name="keywords">`.
+- Replace the ProfessionalService JSON-LD with the new schema (3 serviceTypes, no fixed-price offers, `priceRange: "$$"`, empty `sameAs` with TODO comment above it).
+- Keep charset, viewport, favicon, font preconnect/link, root div, main script untouched.
 
-**Duplicate/legacy admin pages inside the configurator folder** (the live admin lives under `/admin/*` via `src/pages/admin/`)
-- `src/pages/configurator/AdminPage.tsx`
-- `src/pages/configurator/AdminOrderDetailPage.tsx`
+## 3. Per-page Helmet updates
 
-**Unused edge function**
-- `supabase/functions/chat/` — only the deleted ChatWidget called it.
+- `src/pages/Index.tsx` — replace `<Helmet>` with full og:*/twitter:* block pointing at `/og-image.png`.
+- `src/pages/WorkPage.tsx` — replace `<Helmet>` with full og:*/twitter:* block pointing at `/og-work.png`, canonical `/work`.
+- `src/pages/InterestedPage.tsx` — replace `<Helmet>` to add canonical `/interested` alongside existing `noindex`; preserve title/description.
 
-### Small `App.tsx` edits
+(All three use exact markup from the request.)
 
-- Remove the now-dead `Packages` import path (it's already not imported, just confirm clean).
-- Keep the `/packages → /work` redirect route (cheap, protects any old links).
+## 4. `public/sitemap.xml`
 
-### Risk check
+Full replacement: `/` (priority 1.0) and `/work` (priority 0.9), both `lastmod` 2026-05-13, `changefreq` monthly. `/interested` deliberately omitted (noindex). `/packages` removed (redirect).
 
-- All four "unused component" files have **zero** import sites across `src/`.
-- Configurator content schema references the strings "Process" / "Work" / "Services" as section *names*, not as imports of these component files — safe.
-- `Navbar`, `NavLink`, `Contact` appear inside `src/component-library/sections/*` template files (string references in JSX templates for the configurator), but those are self-contained and don't import the top-level deleted files.
-- Deleting `supabase/functions/chat/` only affects the removed widget.
+## 5. `public/robots.txt`
 
-### Result
+Full replacement: single `User-agent: *` with `Allow: /` plus `Disallow:` for `/configure`, `/admin`, `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/dashboard`, `/preview`, `/packages`, `/interested`. Keep `Sitemap:` line.
 
-~14 files + 1 edge function removed. No change to the live UI or to the Build-Your-Own-Site flow.
+## Files touched
 
-After approval, I'll execute the deletions in one pass and verify the build.
+1. `public/og-image.png` (new)
+2. `public/og-work.png` (new)
+3. `index.html`
+4. `src/pages/Index.tsx`
+5. `src/pages/WorkPage.tsx`
+6. `src/pages/InterestedPage.tsx`
+7. `public/sitemap.xml`
+8. `public/robots.txt`
+
+No build server run; verification limited to viewing generated OG images and re-reading edited files.
