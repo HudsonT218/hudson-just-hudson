@@ -50,7 +50,7 @@ const Navbar = () => {
       return;
     }
 
-    // Pure route link (e.g. "/packages") — client-side navigate
+    // Pure route link (e.g. "/work") — client-side navigate
     if (resolved.startsWith("/")) {
       e.preventDefault();
       navigate(resolved);

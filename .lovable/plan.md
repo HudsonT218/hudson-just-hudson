@@ -1,29 +1,12 @@
-## Accessibility Hardening
+## Cleanup, 404 fix, social-proof slot
 
-Add ARIA landmarks, keyboard navigation parity, skip-to-content link, reduced-motion guard, and focus visibility across the public site. No visible layout changes except the skip-link appearing on keyboard focus.
+1. **Delete** `src/components/NavLink.tsx` (verified: zero imports in src/).
+2. **`src/components/Navbar.tsx`** — update stale comment from `/packages` → `/work`.
+3. **`src/pages/NotFound.tsx`** — rewrite to match marketing pages: dark bg, Navbar, Helmet noindex, big "404" gradient heading, "Page not found" subhead, return-home button styled like the hero CTA. Keeps the `console.error` effect.
+4. **NEW `src/components/SocialProof.tsx`** — placeholder "Collaborators & References" row with TODO comment at top, eyebrow "Trust", H3, and 4–6 uppercase gray-500 placeholder labels in a flex-wrap row.
+5. **`src/pages/WorkPage.tsx`** — import and mount `<SocialProof />` between the divider after Portfolio and the divider before the AI meeting assistant demo.
 
-### Changes
-
-1. **src/components/Navbar.tsx**
-   - Logo `aria-label="Hudson Turansky — Home"`
-   - Mobile toggle: `aria-expanded={open}`, `aria-controls="mobile-nav"`
-   - Mobile dropdown: `id="mobile-nav"`, `role="menu"`
-   - Nav links (desktop + mobile): `aria-current="page"` when active
-
-2. **src/App.tsx**
-   - Add skip-to-content link as first child inside `BrowserRouter`
-
-3. **src/pages/Index.tsx, WorkPage.tsx, InterestedPage.tsx**
-   - Top-level `<div>`: `id="main-content"`, `role="main"`
-
-4. **src/index.css**
-   - Add `prefers-reduced-motion` guard in `@layer base`
-
-5. **src/components/WhatIBuild.tsx**
-   - Keyboard focus parity with hover using `focusedIdx` state
-   - Cards: `tabIndex={0}`, `onFocus`, `onBlur`
-   - Visible focus ring when focused
-
-### Verification
-- Confirm no layout shifts
-- Test focus order: skip link → logo → nav links → "Book a Call" → About → cards → contact CTA → footer
+### Files modified
+- deleted: `src/components/NavLink.tsx`
+- edited: `src/components/Navbar.tsx`, `src/pages/NotFound.tsx`, `src/pages/WorkPage.tsx`
+- created: `src/components/SocialProof.tsx`

@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
 import chesapeakePantryCover from "@/assets/chesapeake-pantry.png";
 import MeetingAssistantDemo from "@/components/meeting-assistant-demo/MeetingAssistantDemo";
+import SocialProof from "@/components/SocialProof";
 
 type PortfolioItem = {
   label: string;
@@ -252,6 +253,14 @@ const WorkPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Divider */}
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      />
+
+      <SocialProof />
 
       {/* Divider */}
       <div
