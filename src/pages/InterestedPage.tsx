@@ -32,10 +32,8 @@ const InterestedPage = () => {
     <div className="min-h-screen relative z-10">
       <Helmet>
         <title>Pricing — Hudson Turansky</title>
-        <meta
-          name="description"
-          content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises."
-        />
+        <meta name="description" content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises." />
+        <link rel="canonical" href="https://hudsonturansky.com/interested" />
         <meta name="robots" content="noindex" />
       </Helmet>
       <Navbar />

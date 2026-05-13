@@ -20,11 +20,19 @@ const Index = () => {
     <div className="min-h-screen relative z-10">
       <Helmet>
         <title>Hudson Turansky — AI Solutions & Web Development</title>
-        <meta
-          name="description"
-          content="I build custom websites, AI tools, and software for businesses and individuals. Book a free call to talk through your project."
-        />
+        <meta name="description" content="I build custom websites, AI tools, and software for businesses and individuals. Book a free call to talk through your project." />
         <link rel="canonical" href="https://hudsonturansky.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hudsonturansky.com/" />
+        <meta property="og:title" content="Hudson Turansky — AI Solutions & Web Development" />
+        <meta property="og:description" content="Custom websites, AI tools, and software. Hourly, transparent, built with AI." />
+        <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Hudson Turansky — AI Solutions & Web Development" />
+        <meta name="twitter:description" content="Custom websites, AI tools, and software. Hourly, transparent, built with AI." />
+        <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
       </Helmet>
       <Navbar />
 

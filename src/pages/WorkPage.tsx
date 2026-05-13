@@ -54,11 +54,19 @@ const WorkPage = () => {
     <div className="min-h-screen relative z-10">
       <Helmet>
         <title>Work — Hudson Turansky</title>
-        <meta
-          name="description"
-          content="Web development, AI solutions, and custom software. A look at what I build and what I've shipped."
-        />
+        <meta name="description" content="Web development, AI solutions, and custom software. A look at what I build and what I've shipped." />
         <link rel="canonical" href="https://hudsonturansky.com/work" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hudsonturansky.com/work" />
+        <meta property="og:title" content="Work — Hudson Turansky" />
+        <meta property="og:description" content="Capabilities and portfolio. Web, AI, software." />
+        <meta property="og:image" content="https://hudsonturansky.com/og-work.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Work — Hudson Turansky" />
+        <meta name="twitter:description" content="Capabilities and portfolio. Web, AI, software." />
+        <meta name="twitter:image" content="https://hudsonturansky.com/og-work.png" />
       </Helmet>
       <Navbar />
 
