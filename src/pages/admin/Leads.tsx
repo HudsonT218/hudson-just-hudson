@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -31,44 +32,20 @@ const FILTERS: { value: Filter; label: string }[] = [
   ...LEAD_STATUSES.map((s) => ({ value: s as Filter, label: LEAD_STATUS_LABEL[s] })),
 ];
 
+const LEADS_KEY = ["admin", "leads"] as const;
+
 const Leads = () => {
-  const [leads, setLeads] = useState<Lead[]>([]);
+  const qc = useQueryClient();
+  const { data: leads = [], isLoading, error } = useQuery({
+    queryKey: LEADS_KEY,
+    queryFn: () => listLeads(),
+  });
   const [filter, setFilter] = useState<Filter>("all");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [mutationError, setMutationError] = useState<string | null>(null);
 
-  const refresh = async () => {
-    try {
-      const result = await listLeads();
-      setLeads(result);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    let cancelled = false;
-    listLeads()
-      .then((result) => {
-        if (cancelled) return;
-        setLeads(result);
-        setError(null);
-      })
-      .catch((e) => {
-        if (cancelled) return;
-        setError(e instanceof Error ? e.message : "Failed to load");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const loading = isLoading && leads.length === 0;
+  const errMsg = mutationError ?? (error instanceof Error ? error.message : null);
 
   const counts = useMemo(() => {
     const acc: Record<string, number> = {};
@@ -82,12 +59,15 @@ const Leads = () => {
   );
 
   const handleStatusChange = async (id: string, status: LeadStatus) => {
-    setLeads((prev) => prev.map((l) => (l.id === id ? { ...l, status } : l)));
+    qc.setQueryData<Lead[]>(LEADS_KEY, (prev) =>
+      prev ? prev.map((l) => (l.id === id ? { ...l, status } : l)) : prev,
+    );
     try {
       await updateLead(id, { status });
+      qc.invalidateQueries({ queryKey: LEADS_KEY });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to update");
-      refresh();
+      setMutationError(e instanceof Error ? e.message : "Failed to update");
+      qc.invalidateQueries({ queryKey: LEADS_KEY });
     }
   };
 
