@@ -265,6 +265,92 @@ export type Database = {
         }
         Relationships: []
       }
+      reference_requests: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          invited_email: string
+          invited_name: string | null
+          notes: string | null
+          status: string
+          submitted_at: string | null
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          invited_email: string
+          invited_name?: string | null
+          notes?: string | null
+          status?: string
+          submitted_at?: string | null
+          token: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          invited_email?: string
+          invited_name?: string | null
+          notes?: string | null
+          status?: string
+          submitted_at?: string | null
+          token?: string
+        }
+        Relationships: []
+      }
+      references: {
+        Row: {
+          approved_at: string | null
+          created_at: string
+          display_order: number
+          email: string
+          headline: string
+          id: string
+          linkedin_url: string | null
+          name: string
+          request_id: string
+          role_title: string
+          status: string
+        }
+        Insert: {
+          approved_at?: string | null
+          created_at?: string
+          display_order?: number
+          email: string
+          headline: string
+          id?: string
+          linkedin_url?: string | null
+          name: string
+          request_id: string
+          role_title: string
+          status?: string
+        }
+        Update: {
+          approved_at?: string | null
+          created_at?: string
+          display_order?: number
+          email?: string
+          headline?: string
+          id?: string
+          linkedin_url?: string | null
+          name?: string
+          request_id?: string
+          role_title?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "references_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "reference_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -288,7 +374,36 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      approved_references_public: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          headline: string | null
+          id: string | null
+          linkedin_url: string | null
+          name: string | null
+          role_title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          headline?: string | null
+          id?: string | null
+          linkedin_url?: string | null
+          name?: string | null
+          role_title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          headline?: string | null
+          id?: string | null
+          linkedin_url?: string | null
+          name?: string | null
+          role_title?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
