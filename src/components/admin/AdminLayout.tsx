@@ -6,6 +6,7 @@ const NAV = [
   { label: "Dashboard", to: "/admin" },
   { label: "Leads", to: "/admin/leads" },
   { label: "Projects", to: "/admin/projects" },
+  { label: "References", to: "/admin/references" },
 ];
 
 function isActive(currentPath: string, target: string): boolean {
