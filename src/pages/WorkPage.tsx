@@ -293,7 +293,9 @@ const WorkPage = () => {
             </p>
           </div>
 
-          <MeetingAssistantDemo />
+          <Suspense fallback={<div className="h-96 rounded-2xl border border-white/5 bg-white/[0.02]" />}>
+            <MeetingAssistantDemo />
+          </Suspense>
 
           <p className="text-sm text-gray-500 font-light mt-8 max-w-2xl leading-relaxed">
             A scripted walkthrough of a Q4 review meeting at a fake SaaS company.
