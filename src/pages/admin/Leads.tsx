@@ -149,7 +149,7 @@ const Leads = () => {
         onOpenChange={setDrawerOpen}
         onCreated={() => {
           setDrawerOpen(false);
-          refresh();
+          qc.invalidateQueries({ queryKey: LEADS_KEY });
         }}
       />
     </AdminLayout>
