@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { listProjects } from "@/lib/lead-os-db";
@@ -8,7 +9,6 @@ import {
   PROJECT_STATUSES,
   PROJECT_STATUS_LABEL,
   type ProjectStatus,
-  type ProjectWithStats,
 } from "@/lib/lead-os-types";
 import { ProjectStatusBadge, ProjectTypeBadge } from "./_components/StatusBadge";
 import { formatCurrency } from "./_components/format";
@@ -21,33 +21,20 @@ const FILTERS: { value: Filter; label: string }[] = [
   ...PROJECT_STATUSES.map((s) => ({ value: s as Filter, label: PROJECT_STATUS_LABEL[s] })),
 ];
 
+const PROJECTS_KEY = ["admin", "projects"] as const;
+
 const Projects = () => {
   const navigate = useNavigate();
-  const [projects, setProjects] = useState<ProjectWithStats[]>([]);
+  const qc = useQueryClient();
+  const { data: projects = [], isLoading, error } = useQuery({
+    queryKey: PROJECTS_KEY,
+    queryFn: () => listProjects(),
+  });
   const [filter, setFilter] = useState<Filter>("all");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    listProjects()
-      .then((result) => {
-        if (cancelled) return;
-        setProjects(result);
-        setError(null);
-      })
-      .catch((e) => {
-        if (cancelled) return;
-        setError(e instanceof Error ? e.message : "Failed to load");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const loading = isLoading && projects.length === 0;
+  const errMsg = error instanceof Error ? error.message : null;
 
   const counts = useMemo(() => {
     const acc: Record<string, number> = {};
@@ -104,7 +91,7 @@ const Projects = () => {
           })}
         </div>
 
-        {error && (
+        {errMsg && (
           <div
             className="mb-6 rounded-md p-4 text-sm text-red-300"
             style={{
@@ -112,7 +99,7 @@ const Projects = () => {
               border: "1px solid rgba(239,68,68,0.2)",
             }}
           >
-            {error}
+            {errMsg}
           </div>
         )}
 
@@ -173,6 +160,7 @@ const Projects = () => {
         onOpenChange={setDrawerOpen}
         onCreated={(projectId) => {
           setDrawerOpen(false);
+          qc.invalidateQueries({ queryKey: PROJECTS_KEY });
           navigate(`/admin/projects/${projectId}`);
         }}
       />

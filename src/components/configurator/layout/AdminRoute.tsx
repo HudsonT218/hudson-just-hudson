@@ -4,7 +4,9 @@ import type { ReactNode } from 'react';
 
 export function AdminRoute({ children }: { children: ReactNode }) {
   const { user, profile, loading } = useAuth();
-  if (loading) {
+  // Only block on the very first auth load (no user known yet).
+  // Once we have a user cached in context, navigations are instant.
+  if (loading && !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
         Loading…

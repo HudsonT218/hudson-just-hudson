@@ -1,6 +1,16 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+
+// Warm sibling admin chunks so tab switching never hits the suspense fallback.
+const preloadAdminChunks = () => {
+  void import("@/pages/admin/Dashboard");
+  void import("@/pages/admin/Leads");
+  void import("@/pages/admin/LeadDetail");
+  void import("@/pages/admin/Projects");
+  void import("@/pages/admin/ProjectDetail");
+  void import("@/pages/admin/References");
+};
 
 const NAV = [
   { label: "Dashboard", to: "/admin" },
@@ -17,6 +27,10 @@ function isActive(currentPath: string, target: string): boolean {
 export function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    preloadAdminChunks();
+  }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

@@ -6,7 +6,7 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  if (loading && !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
         Loading…

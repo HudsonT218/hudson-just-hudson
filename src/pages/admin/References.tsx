@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
 import {
@@ -73,61 +74,30 @@ const sectionCard: React.CSSProperties = {
   border: "1px solid rgba(255,255,255,0.05)",
 };
 
-const References = () => {
-  const [requests, setRequests] = useState<ReferenceRequest[]>([]);
-  const [pending, setPending] = useState<ReferenceWithRequest[]>([]);
-  const [approved, setApproved] = useState<PublicApprovedReference[]>([]);
-  const [archived, setArchived] = useState<Reference[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const REFS_KEY = ["admin", "references"] as const;
 
-  const refresh = async () => {
-    try {
+const References = () => {
+  const qc = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: REFS_KEY,
+    queryFn: async () => {
       const [r, p, a, ar] = await Promise.all([
         listReferenceRequests(),
         listPendingReviewReferences(),
         listApprovedReferencesPublic(),
         listArchivedReferences(),
       ]);
-      setRequests(r);
-      setPending(p);
-      setApproved(a);
-      setArchived(ar);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load");
-    } finally {
-      setLoading(false);
-    }
-  };
+      return { requests: r, pending: p, approved: a, archived: ar };
+    },
+  });
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const [r, p, a, ar] = await Promise.all([
-          listReferenceRequests(),
-          listPendingReviewReferences(),
-          listApprovedReferencesPublic(),
-          listArchivedReferences(),
-        ]);
-        if (cancelled) return;
-        setRequests(r);
-        setPending(p);
-        setApproved(a);
-        setArchived(ar);
-        setError(null);
-      } catch (e) {
-        if (cancelled) return;
-        setError(e instanceof Error ? e.message : "Failed to load");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const requests: ReferenceRequest[] = data?.requests ?? [];
+  const pending: ReferenceWithRequest[] = data?.pending ?? [];
+  const approved: PublicApprovedReference[] = data?.approved ?? [];
+  const archived: Reference[] = data?.archived ?? [];
+  const loading = isLoading && !data;
+  const errorMsg = error instanceof Error ? error.message : null;
+  const refresh = () => qc.invalidateQueries({ queryKey: REFS_KEY });
 
   return (
     <AdminLayout>
@@ -143,7 +113,7 @@ const References = () => {
           References
         </h1>
 
-        {error && (
+        {errorMsg && (
           <div
             className="rounded-md p-4 text-sm text-red-300"
             style={{
@@ -151,7 +121,7 @@ const References = () => {
               border: "1px solid rgba(239,68,68,0.2)",
             }}
           >
-            {error}
+            {errorMsg}
           </div>
         )}
 
