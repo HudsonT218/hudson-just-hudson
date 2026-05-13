@@ -1,37 +1,17 @@
-## Phase D — Real Collaborators section on /work
+I found the reset request succeeds, but the reset page only waits for an auth event/session. If that event is missed or delayed, it stays stuck on “Verifying reset link…” and looks like the link is expired.
 
-### 1) New file: `src/components/Collaborators.tsx`
+Plan:
 
-Client component, fetches on mount via `useEffect` + `useState`. No react-query (matches existing simple data fetch patterns on the public site).
+1. Update `src/pages/configurator/ResetPasswordPage.tsx`
+   - Add explicit URL recovery handling for reset links.
+   - Support both modern `?code=...` links via `supabase.auth.exchangeCodeForSession(code)` and hash/session links.
+   - Show a real invalid/expired message only after verification fails, not immediately while waiting.
+   - Keep the existing new-password form and `updateUser({ password })` behavior.
 
-```tsx
-const [refs, setRefs] = useState<PublicApprovedReference[] | null>(null);
-useEffect(() => {
-  listApprovedReferencesPublic()
-    .then(setRefs)
-    .catch(() => setRefs([]));
-}, []);
-if (!refs || refs.length === 0) return null;
-```
+2. Improve reset UX copy
+   - Replace the current “If this hangs…” message with clear loading, invalid, and submit-error states.
+   - Keep the “Request a new one” fallback link.
 
-Render the `<section id="references">` exactly per spec, mapping rows → `<ReferenceCard>`. Cards use a 1/2/3 column responsive grid.
-
-**`ReferenceCard` (same file)** — shares card chrome with WorkPage capability cards (`rounded-2xl`, `bg: rgba(255,255,255,0.02)`, `border: 1px solid rgba(255,255,255,0.05)`, `p-6`).
-
-Layout:
-- Top: blockquote with a 2px blue accent bar on the left (`border-l-2 border-blue-400/60 pl-4`), `text-base text-gray-300 italic leading-snug`.
-- Spacer + `border-t border-white/[0.05]` divider.
-- Bottom row: flex justify-between, left = name (`text-white font-semibold text-sm`) over role_title (`text-gray-500 text-xs`); right = if `linkedin_url`, a `Linkedin` lucide icon (size 16, `text-gray-500 hover:text-blue-400`) wrapped in `<a target="_blank" rel="noopener noreferrer">`.
-
-### 2) Edit `src/pages/WorkPage.tsx`
-
-- Replace `import SocialProof from "@/components/SocialProof";` with `import Collaborators from "@/components/Collaborators";`.
-- Replace `<SocialProof />` (line 267) with `<Collaborators />`. Keep the surrounding dividers — `Collaborators` returns `null` when empty so the section vanishes cleanly; the dividers remain but stack harmlessly.
-
-### 3) Delete `src/components/SocialProof.tsx`.
-
-### Out of scope
-Admin pages, configurator, ReferencePage, edge functions, DB.
-
-### Sanity check
-The `approved_references_public` view is read by `listApprovedReferencesPublic()` — `references` table already has a `public read approved references` RLS policy, so anon clients can read approved rows. Insert one approved row directly to verify before the full invite→submit→approve flow.
+3. Verify the flow safely
+   - Check the route compiles structurally and confirm it no longer depends on a race-prone auth event only.
+   - No dev server run.
