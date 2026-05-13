@@ -29,7 +29,7 @@ const HONEST_NOTES = [
 
 const InterestedPage = () => {
   return (
-    <div className="min-h-screen relative z-10">
+    <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
         <title>Pricing — Hudson Turansky</title>
         <meta name="description" content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises." />

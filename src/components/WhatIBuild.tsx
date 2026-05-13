@@ -24,6 +24,7 @@ const CAPABILITIES = [
 
 const WhatIBuild = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [focusedIdx, setFocusedIdx] = useState<number | null>(null);
 
   return (
     <section id="what-i-build" className="py-28 px-6">
@@ -43,19 +44,25 @@ const WhatIBuild = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {CAPABILITIES.map((c, i) => {
-            const isHovered = hoveredIdx === i;
+            const isActive = hoveredIdx === i || focusedIdx === i;
+            const isFocused = focusedIdx === i;
             return (
               <div
                 key={c.title}
-                className="rounded-2xl p-8 transition-all duration-300 cursor-default"
+                tabIndex={0}
+                onFocus={() => setFocusedIdx(i)}
+                onBlur={() => setFocusedIdx(null)}
+                className="rounded-2xl p-8 transition-all duration-300 cursor-default focus:outline-none"
                 style={{
-                  backgroundColor: isHovered
+                  backgroundColor: isActive
                     ? `rgba(${c.rgb},0.04)`
                     : "rgba(255,255,255,0.02)",
-                  border: isHovered
+                  border: isActive
                     ? `1px solid rgba(${c.rgb},0.15)`
                     : "1px solid rgba(255,255,255,0.05)",
-                  transform: isHovered ? "translateY(-2px)" : "none",
+                  transform: isActive ? "translateY(-2px)" : "none",
+                  outline: isFocused ? "2px solid rgba(96,165,250,0.5)" : "none",
+                  outlineOffset: isFocused ? "2px" : undefined,
                 }}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}

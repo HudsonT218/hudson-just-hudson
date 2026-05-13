@@ -17,7 +17,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative z-10">
+    <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
         <title>Hudson Turansky — AI Solutions & Web Development</title>
         <meta name="description" content="I build custom websites, AI tools, and software for businesses and individuals. Book a free call to talk through your project." />
