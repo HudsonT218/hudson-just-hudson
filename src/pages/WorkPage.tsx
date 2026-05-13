@@ -1,10 +1,14 @@
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
 import chesapeakePantryCover from "@/assets/chesapeake-pantry.png";
-import MeetingAssistantDemo from "@/components/meeting-assistant-demo/MeetingAssistantDemo";
 import SocialProof from "@/components/SocialProof";
+
+const MeetingAssistantDemo = lazy(() =>
+  import("@/components/meeting-assistant-demo/MeetingAssistantDemo")
+);
 
 type PortfolioItem = {
   label: string;
