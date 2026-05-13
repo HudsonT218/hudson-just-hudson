@@ -113,7 +113,7 @@ const References = () => {
           References
         </h1>
 
-        {error && (
+        {errorMsg && (
           <div
             className="rounded-md p-4 text-sm text-red-300"
             style={{
@@ -121,7 +121,7 @@ const References = () => {
               border: "1px solid rgba(239,68,68,0.2)",
             }}
           >
-            {error}
+            {errorMsg}
           </div>
         )}
 
