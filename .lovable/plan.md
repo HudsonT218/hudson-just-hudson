@@ -1,67 +1,69 @@
-## References Admin UI — Phase B
+## Public Reference Form — Phase C
 
-Build the admin moderation UI for the references system. All work is admin-side; public pages and configurator are untouched.
+### 1) New file: `src/pages/ReferencePage.tsx`
 
-### 1. Status badge support
-Extend `src/pages/admin/_components/StatusBadge.tsx` with two new exports:
-- `ReferenceRequestStatusBadge` — pending=gray, submitted=green, expired=amber, revoked=red
-- `ReferenceStatusBadge` — pending_review=amber, approved=green, rejected=red, hidden=gray
+Single-purpose dark page (no Navbar) styled after `InterestedPage.tsx`.
 
-Reuses the existing `Pill` component for visual consistency.
+**Helmet**
+- `<title>Write a reference for Hudson Turansky</title>`
+- `<meta name="robots" content="noindex" />`
 
-### 2. New admin page: `src/pages/admin/References.tsx`
-Wraps `<AdminLayout>` + `<Helmet noindex>`. Matches `Leads.tsx` styling (dark theme, semi-opaque cards, mono pills, `letter-spacing: -0.02em` headings).
-
-**Section 1 — Request a Reference (form row)**
-Inline `<form>` with email input, name input, "Send Invite" button. Calls `supabase.functions.invoke('send-reference-invite', { body: { email, name } })`. Sonner toasts on success/error; refreshes the invites table.
-
-**Section 2 — Invites Sent (table)**
-- `listReferenceRequests()` powers the rows.
-- Columns: Email · Name · Status · Sent · Expires · Submitted · Actions.
-- Status chip uses new `ReferenceRequestStatusBadge`.
-- Actions on `pending` rows: **Resend** (re-invokes `send-reference-invite` with same email; server revokes old + creates new), **Revoke** (invokes `revoke-reference-invite`).
-- Empty state: "No invites yet. Send your first one above."
-
-**Section 3 — Pending Review (cards)**
-- `listPendingReviewReferences()`.
-- Card: name + role/title (gray-400, sm), headline (`text-lg italic`), submitted date, LinkedIn (target=_blank, rel=noopener), buttons: **Approve** (white bg) → `updateReferenceStatus(id,'approved')`, **Reject** (red border) → AlertDialog confirm → `updateReferenceStatus(id,'rejected')`, **View Raw** (ghost) → toggles a `<pre>` JSON view of the record.
-- Empty state: "No pending references."
-
-**Section 4 — Live on Site (sortable list)**
-- `listApprovedReferencesPublic()` → ordered by `display_order` asc.
-  - Note: this view exposes `id, name, role_title, headline, linkedin_url, display_order, created_at` — sufficient for the row UI. The admin RLS already allows full reads, but using the view keeps a single source of truth for ordering.
-- `@dnd-kit/core` + `@dnd-kit/sortable` (already installed for the configurator). Vertical `SortableContext` with `verticalListSortingStrategy`.
-- Each row: drag handle (`GripVertical` lucide icon, left, `cursor-grab`), name + role, headline truncated to one line. Right side: **Hide** button → `updateReferenceStatus(id,'hidden')`.
-- On drag-end: optimistic local reorder, then `updateReferenceDisplayOrder(updates)` with new indices for all moved items (simple full-resequence on change).
-- Empty state: "No approved references yet."
-
-**Section 5 — Archive (collapsible)**
-- shadcn `Accordion` (single, collapsed by default) at the bottom.
-- `listArchivedReferences()` → rejected + hidden.
-- Row: name + role + status chip + **Un-archive** → `updateReferenceStatus(id,'pending_review')`.
-
-Local state pattern follows `Leads.tsx`: per-section loading/error, single `refresh()` reloads everything, `useEffect` initial fetch with `cancelled` guard.
-
-### 3. Sidebar nav
-Add `{ label: "References", to: "/admin/references" }` to the `NAV` array in `src/components/admin/AdminLayout.tsx`.
-
-### 4. Routing
-In `src/App.tsx`:
+**State machine**
 ```ts
-const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
-```
-Add the route alongside the other admin routes:
-```tsx
-<Route path="/admin/references" element={
-  <ConfiguratorBoundary><AdminRoute><AdminReferences /></AdminRoute></ConfiguratorBoundary>
-} />
+type State = 'loading' | 'invalid' | 'form' | 'submitting' | 'success' | 'submit_error';
+type InvalidReason = 'invalid' | 'expired' | 'already_submitted' | 'revoked';
 ```
 
-### Files touched
-- `src/pages/admin/References.tsx` (new)
-- `src/pages/admin/_components/StatusBadge.tsx` (extend)
-- `src/components/admin/AdminLayout.tsx` (nav entry)
-- `src/App.tsx` (lazy import + route)
+**On mount** — read `:token` via `useParams()`, call:
+```ts
+supabase.functions.invoke('verify-reference-access', { body: { token } })
+```
+- Valid → `state='form'`, store invited_email for client-side match hint.
+- Otherwise → `state='invalid'` with reason from response.
+
+**Loading state** — centered subtle "Loading…" text matching `PageFallback` style.
+
+**Invalid state** — centered `rounded-2xl` card (same border/bg as InterestedPage cards: `rgba(255,255,255,0.02)` bg, `rgba(255,255,255,0.05)` border) with reason-specific copy, plus muted mailto link to `hudsonturansky@gmail.com`.
+
+**Form state**
+- Hero block (matching InterestedPage hero): radial gradient bg, eyebrow `"Reference"` (blue-400 uppercase tracking-widest), H1 `Write a reference for Hudson.` with gradient on `Hudson.` (`linear-gradient(135deg, #3b82f6, #8b5cf6)`), subtext `"Just a few fields. Should take 2 minutes."`
+- Form card: `max-w-xl mx-auto`, `rounded-2xl p-8`, same bg/border tokens as InterestedPage cards. Fields use shadcn `<Input>` / native `<textarea>` styled to match.
+  1. Your name — required, maxLength 80
+  2. Your email — required, format-validated, helper "Must match the email this link was sent to."
+  3. Your role / title — required, maxLength 80, helper about display
+  4. One-line summary — `<textarea rows={3}>`, required, maxLength 140, live `{n}/140` counter (turns amber > 120, red at 140)
+  5. LinkedIn URL — optional
+- Submit button: `Send Reference →`, full-width on mobile (`w-full sm:w-auto sm:ml-auto`), white bg / dark text matching the Calendly CTA on InterestedPage. Disabled until: name && role_title && headline && headline.length ≤ 140 && email regex passes.
+- Inline error block (red text inside the card) shown when `state='submit_error'`.
+- Small muted mailto to `hudsonturansky@gmail.com` beneath card: "Questions? Email Hudson."
+
+**On submit**
+```ts
+state='submitting';
+const { data, error } = await supabase.functions.invoke('submit-reference', {
+  body: { token, name, role_title, email, headline, linkedin_url: linkedin_url || null }
+});
+```
+- Success → `state='success'`.
+- Error → `state='submit_error'`, surface server message (e.g. "Email doesn't match invite") inline, re-enable form.
+
+**Success state** — replaces form: centered card, H2 `"Thanks!"`, body `"Your reference is in. Hudson will review and publish it shortly. Feel free to close this tab."`
+
+### 2) Edit `src/App.tsx`
+
+- Add lazy import:
+  ```ts
+  const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
+  ```
+- Add route in the public section (after `/interested`, before configurator block, NOT wrapped in `ConfiguratorBoundary`):
+  ```tsx
+  <Route path="/reference/:token" element={<Suspense fallback={<PageFallback />}><ReferencePage /></Suspense>} />
+  ```
+- DottedSurface stays visible (route is not in `CONFIGURATOR_PREFIXES`) — matches the focused-but-branded feel.
 
 ### Out of scope
-Public `/reference/:token` submit page (Phase C), public references display on `/work` or `/`, any changes to the configurator, public marketing pages, or edge functions.
+No Navbar on the page. No changes to admin pages, configurator, edge functions, or DB.
+
+### Sanity checks after build
+- `/reference/<bad-token>` → invalid card.
+- `/reference/<valid-token>` → form renders, submit hits `submit-reference`, success card replaces form.

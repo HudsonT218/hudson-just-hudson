@@ -45,6 +45,8 @@ const AdminProjects = lazy(() => import("./pages/admin/Projects.tsx"));
 const AdminProjectDetail = lazy(() => import("./pages/admin/ProjectDetail.tsx"));
 const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
 
+const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
+
 // Configurator routes — DottedSurface is hidden on these.
 // Login/signup also count.
 const CONFIGURATOR_PREFIXES = [
@@ -125,6 +127,7 @@ const AppRoutes = () => {
         <Route path="/work" element={<WorkPage />} />
         <Route path="/interested" element={<InterestedPage />} />
         <Route path="/packages" element={<Navigate to="/work" replace />} />
+        <Route path="/reference/:token" element={<Suspense fallback={<PageFallback />}><ReferencePage /></Suspense>} />
 
         {/* Configurator product */}
         <Route path="/login" element={<ConfiguratorBoundary><LoginPage /></ConfiguratorBoundary>} />
