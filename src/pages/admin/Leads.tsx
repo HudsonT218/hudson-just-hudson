@@ -115,7 +115,7 @@ const Leads = () => {
           })}
         </div>
 
-        {error && (
+        {errMsg && (
           <div
             className="mb-6 rounded-md p-4 text-sm text-red-300"
             style={{
@@ -123,7 +123,7 @@ const Leads = () => {
               border: "1px solid rgba(239,68,68,0.2)",
             }}
           >
-            {error}
+            {errMsg}
           </div>
         )}
 
