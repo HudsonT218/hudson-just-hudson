@@ -10,5 +10,6 @@ Disallow: /dashboard
 Disallow: /preview
 Disallow: /packages
 Disallow: /interested
+Disallow: /reference/
 
 Sitemap: https://hudsonturansky.com/sitemap.xml
