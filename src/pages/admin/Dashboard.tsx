@@ -1,52 +1,29 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useQuery } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import {
   getDashboardStats,
   listActiveDashboardProjects,
   listNextActions,
-  type DashboardStats,
 } from "@/lib/lead-os-db";
 import {
   LEAD_STATUS_LABEL,
   PROJECT_STATUS_LABEL,
-  type Lead,
-  type ProjectWithStats,
 } from "@/lib/lead-os-types";
 import { LeadStatusBadge, ProjectStatusBadge } from "./_components/StatusBadge";
 import { formatCurrency, formatDate } from "./_components/format";
 
 const Dashboard = () => {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [nextActions, setNextActions] = useState<Lead[]>([]);
-  const [activeProjects, setActiveProjects] = useState<ProjectWithStats[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const statsQ = useQuery({ queryKey: ["admin", "dashboard-stats"], queryFn: getDashboardStats });
+  const naQ = useQuery({ queryKey: ["admin", "next-actions"], queryFn: listNextActions });
+  const apQ = useQuery({ queryKey: ["admin", "active-projects"], queryFn: listActiveDashboardProjects });
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const [s, na, ap] = await Promise.all([
-          getDashboardStats(),
-          listNextActions(),
-          listActiveDashboardProjects(),
-        ]);
-        if (cancelled) return;
-        setStats(s);
-        setNextActions(na);
-        setActiveProjects(ap);
-      } catch (e) {
-        if (!cancelled) setError(e instanceof Error ? e.message : "Failed to load");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const stats = statsQ.data;
+  const nextActions = naQ.data ?? [];
+  const activeProjects = apQ.data ?? [];
+  const loading = (statsQ.isLoading || naQ.isLoading || apQ.isLoading) && !stats;
+  const error = ((statsQ.error ?? naQ.error ?? apQ.error) as Error | null)?.message ?? null;
 
   return (
     <AdminLayout>
