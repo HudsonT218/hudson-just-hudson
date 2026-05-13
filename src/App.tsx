@@ -10,24 +10,21 @@ import Index from "./pages/Index.tsx";
 import WorkPage from "./pages/WorkPage.tsx";
 import InterestedPage from "./pages/InterestedPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
+import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
+import { AdminRoute } from "@/components/configurator/layout/AdminRoute";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
-const AuthProvider = lazy(() =>
-  import("@/components/configurator/auth/AuthProvider").then((module) => ({
-    default: module.AuthProvider,
-  })),
-);
-const ProtectedRoute = lazy(() =>
-  import("@/components/configurator/layout/ProtectedRoute").then((module) => ({
-    default: module.ProtectedRoute,
-  })),
-);
-const AdminRoute = lazy(() =>
-  import("@/components/configurator/layout/AdminRoute").then((module) => ({
-    default: module.AdminRoute,
-  })),
-);
 const LoginPage = lazy(() => import("./pages/configurator/LoginPage.tsx"));
 const SignupPage = lazy(() => import("./pages/configurator/SignupPage.tsx"));
 const ForgotPasswordPage = lazy(() => import("./pages/configurator/ForgotPasswordPage.tsx"));
@@ -47,8 +44,6 @@ const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
 
 const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
 
-// Configurator routes — DottedSurface is hidden on these.
-// Login/signup also count.
 const CONFIGURATOR_PREFIXES = [
   "/configure",
   "/dashboard",
@@ -67,15 +62,9 @@ function isConfiguratorRoute(pathname: string): boolean {
 }
 
 const PageFallback = () => (
-  <div className="min-h-screen bg-background text-muted-foreground flex items-center justify-center">
+  <div className="fixed top-3 right-4 z-50 text-xs text-muted-foreground/70 font-light tracking-wide">
     Loading…
   </div>
-);
-
-const ConfiguratorBoundary = ({ children }: { children: ReactNode }) => (
-  <Suspense fallback={<PageFallback />}>
-    <AuthProvider>{children}</AuthProvider>
-  </Suspense>
 );
 
 class AppErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
@@ -122,128 +111,66 @@ const AppRoutes = () => {
     <>
       <ScrollToTop />
       {!inConfigurator && <DottedSurface interactive={isHome} />}
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/work" element={<WorkPage />} />
-        <Route path="/interested" element={<InterestedPage />} />
-        <Route path="/packages" element={<Navigate to="/work" replace />} />
-        <Route path="/reference/:token" element={<Suspense fallback={<PageFallback />}><ReferencePage /></Suspense>} />
+      <Suspense fallback={<PageFallback />}>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/work" element={<WorkPage />} />
+          <Route path="/interested" element={<InterestedPage />} />
+          <Route path="/packages" element={<Navigate to="/work" replace />} />
+          <Route path="/reference/:token" element={<ReferencePage />} />
 
-        {/* Configurator product */}
-        <Route path="/login" element={<ConfiguratorBoundary><LoginPage /></ConfiguratorBoundary>} />
-        <Route path="/signup" element={<ConfiguratorBoundary><SignupPage /></ConfiguratorBoundary>} />
-        <Route path="/forgot-password" element={<ConfiguratorBoundary><ForgotPasswordPage /></ConfiguratorBoundary>} />
-        <Route path="/reset-password" element={<ConfiguratorBoundary><ResetPasswordPage /></ConfiguratorBoundary>} />
+          {/* Configurator product */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-        {/* /configure is OPEN — Steps 1-3 don't require auth.
-            Step 4 (Content) and beyond gate themselves via the wizard. */}
-        <Route path="/configure" element={<ConfiguratorBoundary><ConfiguratorPage /></ConfiguratorBoundary>} />
-        <Route
-          path="/configure/:draftId"
-          element={
-            <ConfiguratorBoundary>
+          <Route path="/configure" element={<ConfiguratorPage />} />
+          <Route
+            path="/configure/:draftId"
+            element={
               <ProtectedRoute>
                 <ConfiguratorPage />
               </ProtectedRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ConfiguratorBoundary>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
               <ProtectedRoute>
                 <DashboardPage />
               </ProtectedRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/dashboard/order/:orderId"
-          element={
-            <ConfiguratorBoundary>
+            }
+          />
+          <Route
+            path="/dashboard/order/:orderId"
+            element={
               <ProtectedRoute>
                 <OrderDetailPage />
               </ProtectedRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/preview/:orderId"
-          element={
-            <ConfiguratorBoundary>
+            }
+          />
+          <Route
+            path="/preview/:orderId"
+            element={
               <ProtectedRoute>
                 <PreviewPage />
               </ProtectedRoute>
-            </ConfiguratorBoundary>
-          }
-        />
+            }
+          />
 
-        {/* Lead Management OS */}
-        <Route
-          path="/admin"
-          element={
-            <ConfiguratorBoundary>
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/admin/leads"
-          element={
-            <ConfiguratorBoundary>
-              <AdminRoute>
-                <AdminLeads />
-              </AdminRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/admin/leads/:id"
-          element={
-            <ConfiguratorBoundary>
-              <AdminRoute>
-                <AdminLeadDetail />
-              </AdminRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/admin/projects"
-          element={
-            <ConfiguratorBoundary>
-              <AdminRoute>
-                <AdminProjects />
-              </AdminRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/admin/projects/:id"
-          element={
-            <ConfiguratorBoundary>
-              <AdminRoute>
-                <AdminProjectDetail />
-              </AdminRoute>
-            </ConfiguratorBoundary>
-          }
-        />
-        <Route
-          path="/admin/references"
-          element={
-            <ConfiguratorBoundary>
-              <AdminRoute>
-                <AdminReferences />
-              </AdminRoute>
-            </ConfiguratorBoundary>
-          }
-        />
+          {/* Lead Management OS */}
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
+          <Route path="/admin/leads/:id" element={<AdminRoute><AdminLeadDetail /></AdminRoute>} />
+          <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
+          <Route path="/admin/projects/:id" element={<AdminRoute><AdminProjectDetail /></AdminRoute>} />
+          <Route path="/admin/references" element={<AdminRoute><AdminReferences /></AdminRoute>} />
 
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 };
@@ -262,7 +189,9 @@ const App = () => (
             Skip to main content
           </a>
           <AppErrorBoundary>
-            <AppRoutes />
+            <AuthProvider>
+              <AppRoutes />
+            </AuthProvider>
           </AppErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
