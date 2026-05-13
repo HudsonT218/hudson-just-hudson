@@ -6,6 +6,12 @@ import {
   type ProjectStatus,
   type ProjectType,
 } from "@/lib/lead-os-types";
+import {
+  REFERENCE_REQUEST_STATUS_LABEL,
+  REFERENCE_STATUS_LABEL,
+  type ReferenceRequestStatus,
+  type ReferenceStatus,
+} from "@/lib/references-types";
 
 const LEAD_COLORS: Record<LeadStatus, { bg: string; fg: string }> = {
   cold: { bg: "rgba(255,255,255,0.06)", fg: "rgb(156,163,175)" },
