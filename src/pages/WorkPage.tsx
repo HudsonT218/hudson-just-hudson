@@ -51,7 +51,7 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
 
 const WorkPage = () => {
   return (
-    <div className="min-h-screen relative z-10">
+    <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
         <title>Work — Hudson Turansky</title>
         <meta name="description" content="Web development, AI solutions, and custom software. A look at what I build and what I've shipped." />

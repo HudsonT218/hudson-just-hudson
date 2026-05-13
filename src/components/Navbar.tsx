@@ -76,6 +76,7 @@ const Navbar = () => {
         <a
           href={logoHref}
           onClick={(e) => handleNav(e, logoHref)}
+          aria-label="Hudson Turansky — Home"
           className="text-xl font-extrabold text-white tracking-tight"
           style={{ letterSpacing: "-0.03em" }}
         >
@@ -84,16 +85,23 @@ const Navbar = () => {
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={resolveHref(link.href)}
-              onClick={(e) => handleNav(e, link.href)}
-              className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const resolved = resolveHref(link.href);
+            const isCurrent =
+              location.pathname === resolved ||
+              (link.href.startsWith("#") && isHome && location.hash === link.href);
+            return (
+              <a
+                key={link.label}
+                href={resolved}
+                onClick={(e) => handleNav(e, link.href)}
+                aria-current={isCurrent ? "page" : undefined}
+                className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </div>
 
         {/* Mobile toggle */}
@@ -102,6 +110,8 @@ const Navbar = () => {
           style={{ border: "1px solid rgba(255,255,255,0.1)" }}
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
+          aria-expanded={open}
+          aria-controls="mobile-nav"
         >
           {open ? (
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -120,6 +130,8 @@ const Navbar = () => {
 
       {/* Mobile dropdown */}
       <div
+        id="mobile-nav"
+        role="menu"
         className={`md:hidden overflow-hidden transition-all duration-300 ${
           open ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
@@ -131,19 +143,26 @@ const Navbar = () => {
             borderBottom: "1px solid rgba(255,255,255,0.06)",
           }}
         >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={resolveHref(link.href)}
-              onClick={(e) => {
-                handleNav(e, link.href);
-                setOpen(false);
-              }}
-              className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const resolved = resolveHref(link.href);
+            const isCurrent =
+              location.pathname === resolved ||
+              (link.href.startsWith("#") && isHome && location.hash === link.href);
+            return (
+              <a
+                key={link.label}
+                href={resolved}
+                onClick={(e) => {
+                  handleNav(e, link.href);
+                  setOpen(false);
+                }}
+                aria-current={isCurrent ? "page" : undefined}
+                className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </div>
       </div>
     </nav>
