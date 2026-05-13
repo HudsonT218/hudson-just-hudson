@@ -97,6 +97,20 @@ public/
 
 ---
 
+## Hidden / parked for later
+
+Code is in the repo and routes respond, but these are **not linked from the public site** and are intentionally kept out of the nav/sitemap:
+
+- **Configurator** (`/configure`, `/configure/:draftId`) + Stripe checkout flow — fully built, parked until launch.
+- **Customer dashboard / preview** (`/dashboard`, `/dashboard/order/:orderId`, `/preview/:orderId`) — paired with the configurator.
+- **Auth pages** (`/login`, `/signup`, `/forgot-password`, `/reset-password`) — only used by the configurator.
+- **Lead Management OS** (`/admin`, `/admin/leads`, `/admin/projects`) — private CRM, admin role required.
+- **`/packages`** — legacy URL, redirects to `/work`.
+
+Anything URL-reachable is still crawlable unless explicitly disallowed in `public/robots.txt`. Do **not** delete this code — it's saved for later.
+
+---
+
 ## The three products
 
 ### 1. Marketing site
