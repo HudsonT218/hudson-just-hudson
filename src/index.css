@@ -1,12 +1,6 @@
-/* Component-library themes (only active inside [data-theme="..."] elements). */
-@import './component-library/themes/clean-modern.css';
-@import './component-library/themes/bold-dark.css';
-@import './component-library/themes/warm-minimal.css';
-@import './component-library/themes/corporate-sharp.css';
-@import './component-library/themes/vibrant-startup.css';
-@import './component-library/themes/elegant-luxury.css';
-@import './component-library/themes/nature-organic.css';
-@import './component-library/themes/tech-developer.css';
+/* Component-library themes are imported lazily by the configurator
+   (see src/pages/configurator/ConfiguratorPage.tsx) so they don't
+   ship in the public marketing bundle. */
 
 @tailwind base;
 @tailwind components;

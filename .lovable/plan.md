@@ -1,12 +1,22 @@
-## Cleanup, 404 fix, social-proof slot
+Skipping Part A (Lovable hosting won't serve per-route static HTML). Implementing B/C/D.
 
-1. **Delete** `src/components/NavLink.tsx` (verified: zero imports in src/).
-2. **`src/components/Navbar.tsx`** — update stale comment from `/packages` → `/work`.
-3. **`src/pages/NotFound.tsx`** — rewrite to match marketing pages: dark bg, Navbar, Helmet noindex, big "404" gradient heading, "Page not found" subhead, return-home button styled like the hero CTA. Keeps the `console.error` effect.
-4. **NEW `src/components/SocialProof.tsx`** — placeholder "Collaborators & References" row with TODO comment at top, eyebrow "Trust", H3, and 4–6 uppercase gray-500 placeholder labels in a flex-wrap row.
-5. **`src/pages/WorkPage.tsx`** — import and mount `<SocialProof />` between the divider after Portfolio and the divider before the AI meeting assistant demo.
+### Part B — DottedSurface mobile perf
+`src/components/DottedSurface.tsx`:
+- Detect mobile + reduced-motion at the top of `useEffect`
+- Use a local `GRID_LOCAL` (30 on mobile, 50 desktop) everywhere `GRID` is referenced inside the effect
+- If reduced-motion: render one frame, skip `requestAnimationFrame` loop
+- Wrap mousemove/click listeners in `if (interactive)` so non-home routes don't attach them
+
+### Part C — Theme CSS bloat
+- Remove the 8 `@import` theme lines from `src/index.css`
+- Add them as side-effect imports inside `src/pages/configurator/ConfiguratorPage.tsx`
+
+### Part D — Lazy MeetingAssistantDemo
+`src/pages/WorkPage.tsx`:
+- Convert import to `React.lazy` + `Suspense` with a 24rem placeholder skeleton
 
 ### Files modified
-- deleted: `src/components/NavLink.tsx`
-- edited: `src/components/Navbar.tsx`, `src/pages/NotFound.tsx`, `src/pages/WorkPage.tsx`
-- created: `src/components/SocialProof.tsx`
+- `src/components/DottedSurface.tsx`
+- `src/index.css`
+- `src/pages/configurator/ConfiguratorPage.tsx`
+- `src/pages/WorkPage.tsx`

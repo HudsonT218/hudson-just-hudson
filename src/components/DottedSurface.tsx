@@ -59,6 +59,10 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     const container = containerRef.current;
     if (!container) return;
 
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const GRID_LOCAL = isMobile ? 30 : 50;
+
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x09090b, 0.00025);
 
@@ -78,14 +82,14 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     container.appendChild(renderer.domElement);
 
     // Geometry
-    const count = GRID * GRID;
+    const count = GRID_LOCAL * GRID_LOCAL;
     const positions = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
-    const half = ((GRID - 1) * SEP) / 2;
+    const half = ((GRID_LOCAL - 1) * SEP) / 2;
 
-    for (let ix = 0; ix < GRID; ix++) {
-      for (let iy = 0; iy < GRID; iy++) {
-        const idx = ix * GRID + iy;
+    for (let ix = 0; ix < GRID_LOCAL; ix++) {
+      for (let iy = 0; iy < GRID_LOCAL; iy++) {
+        const idx = ix * GRID_LOCAL + iy;
         positions[idx * 3] = ix * SEP - half;
         positions[idx * 3 + 1] = 0;
         positions[idx * 3 + 2] = iy * SEP - half;
@@ -116,7 +120,6 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     let hasMousePos = false;
     const pulses: Pulse[] = [];
 
-    // Always listen — the animation loop checks interactiveRef at render time
     const onMouseMove = (e: MouseEvent) => {
       if (!interactiveRef.current) return;
       mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -147,9 +150,11 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
       }
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseleave", onMouseLeave);
-    window.addEventListener("click", onClick);
+    if (interactive) {
+      window.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseleave", onMouseLeave);
+      window.addEventListener("click", onClick);
+    }
 
     // Animation
     const clock = new THREE.Clock();
@@ -166,19 +171,17 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
         if (now - pulses[p].time > 4) pulses.splice(p, 1);
       }
 
-      for (let ix = 0; ix < GRID; ix++) {
-        for (let iy = 0; iy < GRID; iy++) {
-          const idx = ix * GRID + iy;
+      for (let ix = 0; ix < GRID_LOCAL; ix++) {
+        for (let iy = 0; iy < GRID_LOCAL; iy++) {
+          const idx = ix * GRID_LOCAL + iy;
           const px = positions[idx * 3];
           const pz = positions[idx * 3 + 2];
 
-          // Base wave
           let y =
             Math.sin((ix + elapsed * 1.5) * 0.3) * 30 +
             Math.sin((iy + elapsed * 2) * 0.4) * 25;
           let s = 8;
 
-          // Mouse hover
           if (interactiveRef.current && hasMousePos) {
             const dx = px - mouseWorld.x;
             const dz = pz - mouseWorld.y;
@@ -191,7 +194,6 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
             }
           }
 
-          // Pulse waves
           for (let p = 0; p < pulses.length; p++) {
             const pulse = pulses[p];
             const age = now - pulse.time;
@@ -220,7 +222,12 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
       renderer.render(scene, camera);
     };
 
-    animate();
+    if (reduceMotion) {
+      // Render base grid once, no animation loop
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
 
     const handleResize = () => {
       if (!container) return;
@@ -232,11 +239,13 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     window.addEventListener("resize", handleResize);
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseleave", onMouseLeave);
-      window.removeEventListener("click", onClick);
+      if (interactive) {
+        window.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseleave", onMouseLeave);
+        window.removeEventListener("click", onClick);
+      }
       renderer.dispose();
       geometry.dispose();
       material.dispose();
