@@ -63,6 +63,14 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const GRID_LOCAL = isMobile ? 30 : 50;
 
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch (err) {
+      console.warn("DottedSurface: WebGL unavailable, skipping background.", err);
+      return;
+    }
+
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x09090b, 0.00025);
 
@@ -75,7 +83,6 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     camera.position.set(0, 500, 1200);
     camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
