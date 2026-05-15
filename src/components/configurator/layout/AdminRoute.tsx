@@ -4,8 +4,8 @@ import type { ReactNode } from 'react';
 
 export function AdminRoute({ children }: { children: ReactNode }) {
   const { user, profile, loading } = useAuth();
-  // Only block on the very first auth load (no user known yet).
-  // Once we have a user cached in context, navigations are instant.
+
+  // Wait for initial auth load.
   if (loading && !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
@@ -14,6 +14,18 @@ export function AdminRoute({ children }: { children: ReactNode }) {
     );
   }
   if (!user) return <Navigate to="/login" replace />;
-  if (!profile?.isAdmin) return <Navigate to="/dashboard" replace />;
+
+  // Profile is fetched asynchronously after the session resolves. Don't make
+  // an admin-vs-not decision until we actually have it, otherwise we redirect
+  // legit admins to /dashboard on every nav.
+  if (!profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
+        Loading…
+      </div>
+    );
+  }
+
+  if (!profile.isAdmin) return <Navigate to="/dashboard" replace />;
   return <>{children}</>;
 }
