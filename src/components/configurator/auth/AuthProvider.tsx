@@ -57,14 +57,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Then check existing session
     supabase.auth
       .getSession()
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (cancelled) return;
         setSession(data.session);
         setUser(data.session?.user ?? null);
         if (data.session?.user) {
-          getCurrentProfile().then((p) => {
-            if (!cancelled) setProfile(p);
-          });
+          const p = await getCurrentProfile();
+          if (cancelled) return;
+          setProfile(p);
         }
         setLoading(false);
       })
