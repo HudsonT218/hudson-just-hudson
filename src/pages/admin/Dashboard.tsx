@@ -11,17 +11,32 @@ import {
   LEAD_STATUS_LABEL,
   PROJECT_STATUS_LABEL,
 } from "@/lib/lead-os-types";
+import { getWarmLeadStats, listWarmLeads } from "@/lib/warm-leads-db";
 import { LeadStatusBadge, ProjectStatusBadge } from "./_components/StatusBadge";
+import {
+  WarmLeadScorePill,
+  WarmLeadStatusBadge,
+} from "./_components/WarmLeadStatusBadge";
 import { formatCurrency, formatDate } from "./_components/format";
 
 const Dashboard = () => {
   const statsQ = useQuery({ queryKey: ["admin", "dashboard-stats"], queryFn: getDashboardStats });
   const naQ = useQuery({ queryKey: ["admin", "next-actions"], queryFn: listNextActions });
   const apQ = useQuery({ queryKey: ["admin", "active-projects"], queryFn: listActiveDashboardProjects });
+  const wlStatsQ = useQuery({
+    queryKey: ["admin", "warm-leads", "stats"],
+    queryFn: getWarmLeadStats,
+  });
+  const wlNewQ = useQuery({
+    queryKey: ["admin", "warm-leads", "list", "new-preview"],
+    queryFn: () => listWarmLeads({ status: "new", limit: 5 }),
+  });
 
   const stats = statsQ.data;
   const nextActions = naQ.data ?? [];
   const activeProjects = apQ.data ?? [];
+  const warmStats = wlStatsQ.data;
+  const newWarmLeads = wlNewQ.data ?? [];
   const loading = (statsQ.isLoading || naQ.isLoading || apQ.isLoading) && !stats;
   const error = ((statsQ.error ?? naQ.error ?? apQ.error) as Error | null)?.message ?? null;
 
@@ -51,13 +66,19 @@ const Dashboard = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <StatCard label="Cold leads" value={stats?.cold_count ?? "—"} loading={loading} />
           <StatCard label="Warm leads" value={stats?.warm_count ?? "—"} loading={loading} />
           <StatCard
             label="Active projects"
             value={stats?.active_project_count ?? "—"}
             loading={loading}
+          />
+          <StatCard
+            label="New (automation)"
+            value={warmStats?.total_new ?? "—"}
+            loading={wlStatsQ.isLoading && !warmStats}
+            to="/admin/warm-leads"
           />
         </div>
 
@@ -129,6 +150,60 @@ const Dashboard = () => {
           </Panel>
         </div>
 
+        <div className="mt-6">
+          <Panel
+            title={`Warm Lead Inbox${
+              warmStats ? ` · ${warmStats.total_new} new` : ""
+            }`}
+          >
+            {wlNewQ.isLoading && newWarmLeads.length === 0 ? (
+              <EmptyHint>Loading…</EmptyHint>
+            ) : newWarmLeads.length === 0 ? (
+              <EmptyHint>
+                No new warm leads. Open{" "}
+                <Link
+                  to="/admin/warm-leads"
+                  className="text-blue-400 hover:text-blue-300"
+                >
+                  Warm Leads
+                </Link>{" "}
+                to run the scraper or adjust settings.
+              </EmptyHint>
+            ) : (
+              <ul>
+                {newWarmLeads.map((wl) => (
+                  <li key={wl.id}>
+                    <Link
+                      to={`/admin/warm-leads/${wl.id}`}
+                      className="block px-5 py-4 hover:bg-white/[0.02] transition-colors"
+                      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                    >
+                      <div className="flex items-center justify-between gap-4 mb-1">
+                        <span className="text-sm font-medium text-white truncate">
+                          {wl.raw_title?.trim() || wl.raw_excerpt.slice(0, 80)}
+                        </span>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <WarmLeadScorePill score={wl.score} />
+                          <WarmLeadStatusBadge status={wl.status} />
+                        </div>
+                      </div>
+                      <div className="text-xs text-gray-500 flex gap-3 truncate">
+                        <span className="font-mono uppercase tracking-widest text-[10px]">
+                          {wl.source_label}
+                        </span>
+                        {wl.author_handle && <span>@{wl.author_handle}</span>}
+                        <span className="text-gray-600 truncate">
+                          {wl.score_reasoning ?? wl.raw_excerpt.slice(0, 100)}
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
+        </div>
+
         <p className="text-xs text-gray-700 mt-12">
           Status reference: lead {Object.values(LEAD_STATUS_LABEL).join(" · ")} · project{" "}
           {Object.values(PROJECT_STATUS_LABEL).join(" · ")}
@@ -142,29 +217,41 @@ const StatCard = ({
   label,
   value,
   loading,
+  to,
 }: {
   label: string;
   value: number | string;
   loading: boolean;
-}) => (
-  <div
-    className="rounded-2xl p-6"
-    style={{
-      backgroundColor: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.05)",
-    }}
-  >
-    <p className="text-xs uppercase tracking-widest text-gray-500 font-medium mb-3">
-      {label}
-    </p>
-    <p
-      className="text-4xl font-extrabold text-white"
-      style={{ letterSpacing: "-0.03em" }}
+  to?: string;
+}) => {
+  const inner = (
+    <div
+      className="rounded-2xl p-6 h-full transition-colors"
+      style={{
+        backgroundColor: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.05)",
+      }}
     >
-      {loading ? "…" : value}
-    </p>
-  </div>
-);
+      <p className="text-xs uppercase tracking-widest text-gray-500 font-medium mb-3">
+        {label}
+      </p>
+      <p
+        className="text-4xl font-extrabold text-white"
+        style={{ letterSpacing: "-0.03em" }}
+      >
+        {loading ? "…" : value}
+      </p>
+    </div>
+  );
+  if (to) {
+    return (
+      <Link to={to} className="block hover:opacity-90">
+        {inner}
+      </Link>
+    );
+  }
+  return inner;
+};
 
 const Panel = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div

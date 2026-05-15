@@ -10,10 +10,13 @@ const preloadAdminChunks = () => {
   void import("@/pages/admin/Projects");
   void import("@/pages/admin/ProjectDetail");
   void import("@/pages/admin/References");
+  void import("@/pages/admin/WarmLeads");
+  void import("@/pages/admin/WarmLeadDetail");
 };
 
 const NAV = [
   { label: "Dashboard", to: "/admin" },
+  { label: "Warm Leads", to: "/admin/warm-leads" },
   { label: "Leads", to: "/admin/leads" },
   { label: "Projects", to: "/admin/projects" },
   { label: "References", to: "/admin/references" },

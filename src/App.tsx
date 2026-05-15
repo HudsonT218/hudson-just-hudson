@@ -41,6 +41,8 @@ const AdminLeadDetail = lazy(() => import("./pages/admin/LeadDetail.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/Projects.tsx"));
 const AdminProjectDetail = lazy(() => import("./pages/admin/ProjectDetail.tsx"));
 const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
+const AdminWarmLeads = lazy(() => import("./pages/admin/WarmLeads.tsx"));
+const AdminWarmLeadDetail = lazy(() => import("./pages/admin/WarmLeadDetail.tsx"));
 
 const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
 
@@ -163,6 +165,8 @@ const AppRoutes = () => {
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/admin/leads/:id" element={<AdminRoute><AdminLeadDetail /></AdminRoute>} />
+          <Route path="/admin/warm-leads" element={<AdminRoute><AdminWarmLeads /></AdminRoute>} />
+          <Route path="/admin/warm-leads/:id" element={<AdminRoute><AdminWarmLeadDetail /></AdminRoute>} />
           <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
           <Route path="/admin/projects/:id" element={<AdminRoute><AdminProjectDetail /></AdminRoute>} />
           <Route path="/admin/references" element={<AdminRoute><AdminReferences /></AdminRoute>} />
