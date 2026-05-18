@@ -1,0 +1,14 @@
+# Hudson Turansky
+
+> Independent builder offering custom websites, AI tools, and software for businesses and individuals. Hourly rates, transparent pricing, built with AI-assisted workflows.
+
+Hudson Turansky builds custom websites, AI solutions, and software. Services include landing pages, business sites, internal tools and operations software, personal AI assistants, company AI agents, integrations, and automations. Pricing is hourly and transparent.
+
+## Pages
+
+- [Home](/): Overview of services, philosophy, and how to get in touch.
+- [Work](/work): Selected projects and case studies.
+
+## Contact
+
+- Email: hudsonturansky@gmail.com
