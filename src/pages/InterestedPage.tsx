@@ -35,6 +35,9 @@ const InterestedPage = () => {
         <meta name="description" content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises." />
         <link rel="canonical" href="https://hudsonturansky.com/interested" />
         <meta name="robots" content="noindex" />
+        <meta property="og:title" content="Pricing — Hudson Turansky" />
+        <meta property="og:description" content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises." />
+        <meta property="og:url" content="https://hudsonturansky.com/interested" />
       </Helmet>
       <Navbar />
 
