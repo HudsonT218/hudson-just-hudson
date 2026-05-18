@@ -125,7 +125,12 @@ const ReferencePage = () => {
     >
       <Helmet>
         <title>Write a reference for Hudson Turansky</title>
+        <meta name="description" content="Private reference form — share a short recommendation for Hudson Turansky's web development and AI work." />
         <meta name="robots" content="noindex" />
+        <link rel="canonical" href={`https://hudsonturansky.com/reference/${token ?? ""}`} />
+        <meta property="og:title" content="Write a reference for Hudson Turansky" />
+        <meta property="og:description" content="Private reference form for Hudson Turansky." />
+        <meta property="og:url" content={`https://hudsonturansky.com/reference/${token ?? ""}`} />
       </Helmet>
 
       {/* Hero */}
