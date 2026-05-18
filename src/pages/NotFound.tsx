@@ -15,6 +15,7 @@ const NotFound = () => {
       <Helmet>
         <title>404 — Hudson Turansky</title>
         <meta name="robots" content="noindex" />
+        <link rel="canonical" href={`https://hudsonturansky.com${location.pathname}`} />
       </Helmet>
       <Navbar />
 
