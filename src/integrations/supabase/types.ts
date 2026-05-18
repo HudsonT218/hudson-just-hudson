@@ -147,6 +147,57 @@ export type Database = {
           },
         ]
       }
+      leads: {
+        Row: {
+          company: string | null
+          created_at: string | null
+          email: string | null
+          how_i_know_them: string | null
+          id: string
+          last_contact_date: string | null
+          name: string
+          next_action: string | null
+          next_action_date: string | null
+          notes: string | null
+          phone: string | null
+          status: string
+          updated_at: string | null
+          what_they_might_need: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string | null
+          email?: string | null
+          how_i_know_them?: string | null
+          id?: string
+          last_contact_date?: string | null
+          name: string
+          next_action?: string | null
+          next_action_date?: string | null
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string | null
+          what_they_might_need?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string | null
+          email?: string | null
+          how_i_know_them?: string | null
+          id?: string
+          last_contact_date?: string | null
+          name?: string
+          next_action?: string | null
+          next_action_date?: string | null
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string | null
+          what_they_might_need?: string | null
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           amount_paid: number | null
@@ -265,6 +316,62 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          estimated_hours: number | null
+          hourly_rate: number
+          id: string
+          lead_id: string | null
+          name: string
+          notes: string | null
+          project_type: string
+          start_date: string | null
+          status: string
+          target_date: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          estimated_hours?: number | null
+          hourly_rate?: number
+          id?: string
+          lead_id?: string | null
+          name: string
+          notes?: string | null
+          project_type?: string
+          start_date?: string | null
+          status?: string
+          target_date?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          estimated_hours?: number | null
+          hourly_rate?: number
+          id?: string
+          lead_id?: string | null
+          name?: string
+          notes?: string | null
+          project_type?: string
+          start_date?: string | null
+          status?: string
+          target_date?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reference_requests: {
         Row: {
           created_at: string
@@ -351,6 +458,41 @@ export type Database = {
           },
         ]
       }
+      time_entries: {
+        Row: {
+          created_at: string | null
+          date: string
+          description: string
+          hours: number
+          id: string
+          project_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          description: string
+          hours: number
+          id?: string
+          project_id: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          description?: string
+          hours?: number
+          id?: string
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_entries_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -371,6 +513,162 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      warm_lead_settings: {
+        Row: {
+          created_at: string
+          id: string
+          last_run_at: string | null
+          mode: string
+          outreach_voice: string
+          target_per_week: number
+          this_week_count: number
+          threshold: number
+          updated_at: string
+          week_started_on: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_run_at?: string | null
+          mode?: string
+          outreach_voice?: string
+          target_per_week?: number
+          this_week_count?: number
+          threshold?: number
+          updated_at?: string
+          week_started_on?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_run_at?: string | null
+          mode?: string
+          outreach_voice?: string
+          target_per_week?: number
+          this_week_count?: number
+          threshold?: number
+          updated_at?: string
+          week_started_on?: string
+        }
+        Relationships: []
+      }
+      warm_lead_sources: {
+        Row: {
+          config: Json
+          created_at: string
+          enabled: boolean
+          id: string
+          label: string
+          last_error: string | null
+          last_run_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id: string
+          label: string
+          last_error?: string | null
+          last_run_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          label?: string
+          last_error?: string | null
+          last_run_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      warm_leads: {
+        Row: {
+          author_display_name: string | null
+          author_handle: string | null
+          created_at: string
+          draft_generated_at: string | null
+          drafted_message: string | null
+          external_id: string
+          id: string
+          matched_keywords: string[]
+          posted_at: string | null
+          promoted_lead_id: string | null
+          raw_excerpt: string
+          raw_title: string | null
+          reviewed_at: string | null
+          reviewer_notes: string | null
+          score: number
+          score_reasoning: string | null
+          source_id: string
+          status: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          author_display_name?: string | null
+          author_handle?: string | null
+          created_at?: string
+          draft_generated_at?: string | null
+          drafted_message?: string | null
+          external_id: string
+          id?: string
+          matched_keywords?: string[]
+          posted_at?: string | null
+          promoted_lead_id?: string | null
+          raw_excerpt: string
+          raw_title?: string | null
+          reviewed_at?: string | null
+          reviewer_notes?: string | null
+          score?: number
+          score_reasoning?: string | null
+          source_id: string
+          status?: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          author_display_name?: string | null
+          author_handle?: string | null
+          created_at?: string
+          draft_generated_at?: string | null
+          drafted_message?: string | null
+          external_id?: string
+          id?: string
+          matched_keywords?: string[]
+          posted_at?: string | null
+          promoted_lead_id?: string | null
+          raw_excerpt?: string
+          raw_title?: string | null
+          reviewed_at?: string | null
+          reviewer_notes?: string | null
+          score?: number
+          score_reasoning?: string | null
+          source_id?: string
+          status?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warm_leads_promoted_lead_id_fkey"
+            columns: ["promoted_lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "warm_leads_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "warm_lead_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -403,6 +701,47 @@ export type Database = {
           role_title?: string | null
         }
         Relationships: []
+      }
+      warm_leads_with_source: {
+        Row: {
+          author_display_name: string | null
+          author_handle: string | null
+          created_at: string | null
+          draft_generated_at: string | null
+          drafted_message: string | null
+          external_id: string | null
+          id: string | null
+          matched_keywords: string[] | null
+          posted_at: string | null
+          promoted_lead_id: string | null
+          raw_excerpt: string | null
+          raw_title: string | null
+          reviewed_at: string | null
+          reviewer_notes: string | null
+          score: number | null
+          score_reasoning: string | null
+          source_id: string | null
+          source_label: string | null
+          status: string | null
+          updated_at: string | null
+          url: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warm_leads_promoted_lead_id_fkey"
+            columns: ["promoted_lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "warm_leads_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "warm_lead_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Functions: {
