@@ -64,14 +64,14 @@ export function AdminPageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center justify-between gap-4", className)}>
+    <div className={cn("flex items-center justify-between gap-4 flex-wrap", className)}>
       <h1
         className="text-2xl font-semibold tracking-tight"
         style={{ color: admin.text, letterSpacing: "-0.02em" }}
       >
         {title}
       </h1>
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && <div className="flex items-center gap-2 flex-wrap">{actions}</div>}
     </div>
   );
 }

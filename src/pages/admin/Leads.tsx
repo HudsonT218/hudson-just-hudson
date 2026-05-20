@@ -22,7 +22,7 @@ import {
   type Lead,
   type LeadStatus,
 } from "@/lib/lead-os-types";
-import { AdminPageHeader, SegmentedToggle } from "./_components/ui";
+import { AdminPageHeader, SegmentedToggle, ErrorBanner } from "./_components/ui";
 import { admin } from "./_components/theme";
 import { LeadBoard } from "./_components/LeadBoard";
 import { LeadListView } from "./_components/LeadListView";
@@ -89,7 +89,7 @@ const Leads = () => {
         <title>Leads — Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
-      <div className="px-10 py-10">
+      <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
         <AdminPageHeader
           title="Leads"
           actions={
@@ -101,15 +101,17 @@ const Leads = () => {
                 ]}
                 value={view}
                 onChange={setView}
+                ariaLabel="Leads view mode"
               />
               <Button onClick={() => setDrawerOpen(true)}>+ Add Lead</Button>
             </>
           }
         />
 
-        <div className="mt-6 mb-6 max-w-sm">
+        <div className="mt-6 mb-6 w-full max-w-sm">
           <Input
             placeholder="Search by name or company…"
+            aria-label="Search leads by name or company"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{
@@ -120,24 +122,12 @@ const Leads = () => {
           />
         </div>
 
-        {errMsg && (
-          <div
-            className="mb-6 rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {errMsg}
-          </div>
-        )}
+        {errMsg && <div className="mb-6"><ErrorBanner>{errMsg}</ErrorBanner></div>}
 
-        {loading ? (
-          <p className="text-sm" style={{ color: admin.textDim }}>Loading…</p>
-        ) : view === "board" ? (
-          <LeadBoard leads={filtered} onMove={handleStatusChange} />
+        {view === "board" ? (
+          <LeadBoard leads={filtered} onMove={handleStatusChange} loading={loading} />
         ) : (
-          <LeadListView leads={filtered} />
+          <LeadListView leads={filtered} loading={loading} />
         )}
       </div>
 

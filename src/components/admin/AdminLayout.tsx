@@ -189,7 +189,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="flex-1 ml-[220px] min-h-screen">{children}</main>
+      <main className="flex-1 ml-[220px] min-h-screen overflow-x-hidden">{children}</main>
     </div>
   );
 }
