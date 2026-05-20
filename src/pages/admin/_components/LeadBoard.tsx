@@ -177,7 +177,7 @@ export function LeadBoard({
       <div
         role="region"
         aria-label="Leads board. Use Tab to focus a card, Space to pick up, arrow keys to move, Space to drop."
-        className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2"
+        className="admin-scroll-x flex gap-4 overflow-x-auto pb-2 -mx-2 px-2"
       >
         {LEAD_STATUSES.map((s) => (
           <Column key={s} status={s} leads={grouped[s]} loading={loading} />
