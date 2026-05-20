@@ -12,13 +12,7 @@ import {
   type ReferenceRequestStatus,
   type ReferenceStatus,
 } from "@/lib/references-types";
-
-const LEAD_COLORS: Record<LeadStatus, { bg: string; fg: string }> = {
-  cold: { bg: "rgba(255,255,255,0.06)", fg: "rgb(156,163,175)" },
-  warm: { bg: "rgba(59,130,246,0.15)", fg: "#60a5fa" },
-  client: { bg: "rgba(16,185,129,0.15)", fg: "#34d399" },
-  dead: { bg: "rgba(127,29,29,0.25)", fg: "rgb(252,165,165)" },
-};
+import { LEAD_STATUS_COLORS } from "./theme";
 
 const PROJECT_COLORS: Record<ProjectStatus, { bg: string; fg: string }> = {
   discovery: { bg: "rgba(255,255,255,0.06)", fg: "rgb(156,163,175)" },
