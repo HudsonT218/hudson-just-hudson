@@ -537,15 +537,15 @@ const LiveOnSiteSection = ({
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Live on Site
       </h2>
       {loading ? (
-        <p className="text-sm text-gray-500">Loading…</p>
+        <EmptyState>Loading…</EmptyState>
       ) : order.length === 0 ? (
-        <p className="text-sm text-gray-500">No approved references yet.</p>
+        <EmptyState>No approved references yet.</EmptyState>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={order.map((r) => r.id)} strategy={verticalListSortingStrategy}>
@@ -575,7 +575,8 @@ const SortableRow = ({
     <div
       ref={setNodeRef}
       style={{
-        ...sectionCard,
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
@@ -585,23 +586,30 @@ const SortableRow = ({
       <button
         {...attributes}
         {...listeners}
-        className="text-gray-500 hover:text-white cursor-grab active:cursor-grabbing"
+        className="cursor-grab active:cursor-grabbing hover:text-white"
+        style={{ color: admin.textDim }}
         aria-label="Drag to reorder"
       >
         <GripVertical className="h-4 w-4" />
       </button>
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
-          <span className="text-sm font-semibold text-white">{reference.name}</span>
-          <span className="text-xs text-gray-500">· {reference.role_title}</span>
+          <span className="text-sm font-semibold" style={{ color: admin.text }}>
+            {reference.name}
+          </span>
+          <span className="text-xs" style={{ color: admin.textDim }}>
+            · {reference.role_title}
+          </span>
         </div>
-        <p className="text-xs text-gray-400 truncate">{reference.headline}</p>
+        <p className="text-xs truncate" style={{ color: admin.textMuted }}>
+          {reference.headline}
+        </p>
       </div>
       <Button
         size="sm"
         variant="ghost"
         onClick={() => onHide(reference.id)}
-        className="text-gray-400"
+        style={{ color: admin.textMuted }}
       >
         Hide
       </Button>
