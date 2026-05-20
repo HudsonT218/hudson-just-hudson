@@ -1,49 +1,66 @@
-## Why the site is black
+# Admin design-token layer
 
-The published JS throws `supabaseUrl is required.` at the very top of the module graph, so React never mounts and the page stays on the black `bg-background`. The throw comes from `src/integrations/supabase/client.ts`:
+Scope is limited to three files under `src/pages/admin/_components/`. No restyling of pages, no dependency changes, no edits to data layer.
 
-```ts
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;          // undefined in the published bundle
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY; // undefined
-export const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { ... });
-```
+## 1. New: `src/pages/admin/_components/theme.ts`
 
-Preview works (dev server has `.env`), but the published build at `hudsonturansky.com` was produced without those vars inlined, so every page load crashes.
-
-## Fix (two parts)
-
-### 1. Make the client resilient (one-line-of-defense)
-
-Add hardcoded fallbacks for the **publishable** URL and anon key in `src/integrations/supabase/client.ts`. These are public values (already shipped in the bundle when env works), so hardcoding them is safe and matches what Lovable Cloud expects.
+Exports a typed `admin` token object and a `LEAD_STATUS_COLORS` map.
 
 ```ts
-const SUPABASE_URL =
-  import.meta.env.VITE_SUPABASE_URL ?? "https://kiqdnhckkbydgmcuqack.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY =
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...xfuxzlSeDk3Qh0Zv47KKmBSQ_VAHuIiq4hFeQooqgRI";
+import type { LeadStatus } from "@/lib/lead-os-types";
+
+export const admin = {
+  bg: "#09090b",
+  surface: "rgba(255,255,255,0.02)",
+  surface2: "rgba(255,255,255,0.04)",
+  border: "rgba(255,255,255,0.06)",
+  borderStrong: "rgba(255,255,255,0.12)",
+  text: "#ffffff",
+  textMuted: "rgb(156,163,175)",
+  textDim: "rgb(107,114,128)",
+  accent: "#3b82f6",
+  accentSoft: "rgba(59,130,246,0.15)",
+} as const;
+
+export type AdminTheme = typeof admin;
+
+export const LEAD_STATUS_COLORS: Record<LeadStatus, { dot: string; soft: string }> = {
+  cold:   { dot: "rgb(156,163,175)", soft: "rgba(255,255,255,0.06)" },
+  warm:   { dot: "#60a5fa",          soft: "rgba(59,130,246,0.15)" },
+  client: { dot: "#34d399",          soft: "rgba(16,185,129,0.15)" },
+  dead:   { dot: "rgb(252,165,165)", soft: "rgba(127,29,29,0.25)" },
+};
 ```
 
-This guarantees `createClient` never throws, so even a future broken build still renders the app.
+Values for `LEAD_STATUS_COLORS` are sourced from the current `LEAD_COLORS` block in `StatusBadge.tsx` (bg → `soft`, fg → `dot`).
 
-### 2. Republish
+## 2. New: `src/pages/admin/_components/ui.tsx`
 
-After the fix lands, click **Publish → Update** so `hudsonturansky.com` picks up the new bundle. The current live hash `index-3_4WlMVc.js` is the crashing one and needs replacing.
+Reusable primitives, all built from `theme.ts`. No new deps; uses existing `cn` from `@/lib/utils` and any already-installed `lucide-react` icon types only via the optional `icon` prop typed as `ReactNode`.
 
-## Files touched
+Components:
+- **SectionLabel** — `<div>` with `text-[10px] uppercase font-medium tracking-[0.14em]`, color `admin.textDim`. Props: `children`, optional `icon?: ReactNode` (leading), optional `count?: number` (trailing, dimmer).
+- **AdminCard** — `<div>` with `rounded-2xl p-5` (configurable `className`), background `admin.surface`, `1px solid admin.border`.
+- **AdminPageHeader** — flex row, title left (large white text), `actions?: ReactNode` slot right.
+- **SegmentedToggle<T extends string>** — controlled pill segmented control. Props: `options: { value: T; label: string }[]`, `value: T`, `onChange(v: T)`. Active pill uses `admin.surface2` + white text; inactive uses `admin.textMuted`.
+- **StatusDot** — 8px round dot. Props: `status: LeadStatus`, looks up `LEAD_STATUS_COLORS[status].dot`.
+- **GhostButton** — `<button>` transparent, hover background `admin.surface2`, text `admin.text`. Forwards all standard button props.
+- **EmptyState** — centered `<div>` with muted text (`admin.textMuted`), accepts `children` (and optional `icon`).
 
-- `src/integrations/supabase/client.ts` — add fallbacks (the "do not edit" note is about regenerating types, not about defensive constants for public values; this change is low-risk and reversible).
+All visual values resolved via inline `style` referencing `admin.*` tokens (matches the existing inline-style pattern in `AdminLayout.tsx`).
+
+## 3. Edit: `src/pages/admin/_components/StatusBadge.tsx`
+
+- Remove the local `LEAD_COLORS` constant.
+- Import `LEAD_STATUS_COLORS` from `./theme`.
+- Update `LeadStatusBadge` to read `LEAD_STATUS_COLORS[status].soft` / `.dot` in place of the previous `bg`/`fg`.
+- Leave `PROJECT_COLORS`, `PROJECT_TYPE_COLORS`, reference colors, and all other badges untouched.
+
+Net visual diff: zero.
 
 ## Verification
 
-After publish:
-1. Hard-refresh `https://hudsonturansky.com/`.
-2. Confirm the homepage renders (dotted surface + hero).
-3. Confirm console no longer shows `supabaseUrl is required`.
-4. Sign in and load `/admin` to confirm auth still works end-to-end.
-
-## Out of scope
-
-- No DB / RLS / auth changes.
-- No design changes.
-- No edge-function changes.
+- No other files modified.
+- No new dependencies.
+- Token values produce identical pixel output to current `LEAD_COLORS` (verified value-by-value).
+- TypeScript: `LEAD_STATUS_COLORS` typed via `Record<LeadStatus, …>` so any future status addition is a compile error; `SegmentedToggle` is generic over the value type.
