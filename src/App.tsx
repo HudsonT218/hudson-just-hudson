@@ -37,7 +37,6 @@ const PreviewPage = lazy(() => import("./pages/configurator/PreviewPage.tsx"));
 // Lead Management OS — Hudson's personal CRM
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard.tsx"));
 const AdminLeads = lazy(() => import("./pages/admin/Leads.tsx"));
-const AdminLeadDetail = lazy(() => import("./pages/admin/LeadDetail.tsx"));
 const AdminProjects = lazy(() => import("./pages/admin/Projects.tsx"));
 const AdminProjectDetail = lazy(() => import("./pages/admin/ProjectDetail.tsx"));
 const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
@@ -164,7 +163,7 @@ const AppRoutes = () => {
           {/* Lead Management OS */}
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
-          <Route path="/admin/leads/:id" element={<AdminRoute><AdminLeadDetail /></AdminRoute>} />
+          <Route path="/admin/leads/:id" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/admin/warm-leads" element={<AdminRoute><AdminWarmLeads /></AdminRoute>} />
           <Route path="/admin/warm-leads/:id" element={<AdminRoute><AdminWarmLeadDetail /></AdminRoute>} />
           <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />

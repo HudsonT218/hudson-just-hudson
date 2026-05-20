@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
@@ -24,6 +25,7 @@ import {
 import { AdminPageHeader, SegmentedToggle, EmptyState } from "./_components/ui";
 import { admin } from "./_components/theme";
 import { LeadBoard } from "./_components/LeadBoard";
+import { LeadDetailModal } from "./_components/LeadDetailModal";
 
 type ViewMode = "board" | "list";
 const VIEW_KEY = "admin.leads.view";
@@ -31,6 +33,8 @@ const LEADS_KEY = ["admin", "leads"] as const;
 
 const Leads = () => {
   const qc = useQueryClient();
+  const navigate = useNavigate();
+  const { id: detailId } = useParams<{ id: string }>();
   const { data: leads = [], isLoading, error } = useQuery({
     queryKey: LEADS_KEY,
     queryFn: () => listLeads(),
@@ -144,6 +148,17 @@ const Leads = () => {
           qc.invalidateQueries({ queryKey: LEADS_KEY });
         }}
       />
+
+      {detailId && (
+        <LeadDetailModal
+          leadId={detailId}
+          open
+          onClose={() => {
+            qc.invalidateQueries({ queryKey: LEADS_KEY });
+            navigate("/admin/leads");
+          }}
+        />
+      )}
     </AdminLayout>
   );
 };

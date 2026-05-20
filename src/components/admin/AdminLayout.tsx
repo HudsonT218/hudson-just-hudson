@@ -18,7 +18,6 @@ import { admin } from "@/pages/admin/_components/theme";
 const preloadAdminChunks = () => {
   void import("@/pages/admin/Dashboard");
   void import("@/pages/admin/Leads");
-  void import("@/pages/admin/LeadDetail");
   void import("@/pages/admin/Projects");
   void import("@/pages/admin/ProjectDetail");
   void import("@/pages/admin/References");
