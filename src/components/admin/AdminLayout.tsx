@@ -192,35 +192,36 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       <main className="flex-1 ml-[220px] min-h-screen overflow-x-hidden relative">
         <div
           aria-hidden
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 280,
+            background:
+              "radial-gradient(ellipse 75% 100% at 50% 0%, rgba(59,130,246,0.14), transparent 72%)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+        <div
+          aria-hidden
           className="sticky top-0 left-0 right-0 z-10"
           style={{ pointerEvents: "none", height: 0 }}
         >
-          <div className="relative w-full">
-            <div
-              style={{
-                position: "absolute",
-                top: -2,
-                left: 0,
-                right: 0,
-                height: 6,
-                background: `linear-gradient(90deg, transparent, ${admin.accent}40, transparent)`,
-                filter: "blur(4px)",
-                opacity: 0.8,
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: 1,
-                background: `linear-gradient(90deg, transparent, ${admin.accent}b3, transparent)`,
-              }}
-            />
-          </div>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 1,
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.65) 50%, transparent 100%)",
+            }}
+          />
         </div>
-        {children}
+        <div className="relative z-[1]">{children}</div>
       </main>
     </div>
   );

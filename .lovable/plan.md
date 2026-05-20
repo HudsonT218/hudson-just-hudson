@@ -1,10 +1,11 @@
-Add a decorative blue light-bar accent to the top of the `<main>` content area in `src/components/admin/AdminLayout.tsx` so it appears on every admin page.
+Update the decorative light bar in `src/components/admin/AdminLayout.tsx`:
 
-Changes:
-1. Add `relative` to the `<main>` element.
-2. Insert a decorative wrapper as the first child of `<main>` containing two layers:
-   - **Crisp line:** 1px tall, full width, `linear-gradient(90deg, transparent, ${admin.accent} 0.7 opacity, transparent)`, sticky to top, z-index above content background.
-   - **Glow:** 4px tall, same gradient at 0.2 opacity, `blur(4px)`, positioned behind the crisp line.
-3. Both elements get `pointer-events: none` and `aria-hidden` to remain purely decorative and non-interactive.
+1. **Crisp hairline:** Keep 1px tall, sticky to top. Update gradient to broad/centered: `linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.65) 50%, transparent 100%)`.
 
-No other layout, routing, or sidebar behavior changes.
+2. **Ambient bloom (new):** Add a separate decorative div anchored to top of `<main>`:
+   - Absolute, top: 0, left/right: 0, height ~280px.
+   - Background: `radial-gradient(ellipse 75% 100% at 50% 0%, rgba(59,130,246,0.14), transparent 72%)`.
+   - `pointer-events: none`, `aria-hidden`, z-index above bg but below content (z-0; main children get implicit stacking).
+   - Remove the previous blurred glow div.
+
+No other changes to layout, routing, or sidebar.
