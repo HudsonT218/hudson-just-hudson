@@ -68,11 +68,8 @@ import {
   ReferenceStatusBadge,
 } from "./_components/StatusBadge";
 import { formatDate } from "./_components/format";
-
-const sectionCard: React.CSSProperties = {
-  backgroundColor: "rgba(255,255,255,0.02)",
-  border: "1px solid rgba(255,255,255,0.05)",
-};
+import { admin } from "./_components/theme";
+import { AdminPageHeader, AdminCard, ErrorBanner, EmptyState } from "./_components/ui";
 
 const REFS_KEY = ["admin", "references"] as const;
 
@@ -106,24 +103,9 @@ const References = () => {
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10 space-y-12 max-w-6xl">
-        <h1
-          className="text-2xl font-extrabold text-white"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          References
-        </h1>
+        <AdminPageHeader title="References" />
 
-        {errorMsg && (
-          <div
-            className="rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {errorMsg}
-          </div>
-        )}
+        {errorMsg && <ErrorBanner>{errorMsg}</ErrorBanner>}
 
         <InviteSection onSent={refresh} />
         <InvitesTable
@@ -176,35 +158,36 @@ const InviteSection = ({ onSent }: { onSent: () => void }) => {
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Request a Reference
       </h2>
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-2xl p-5 flex flex-col sm:flex-row gap-3"
-        style={sectionCard}
-      >
-        <Input
-          type="email"
-          placeholder="email@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="flex-1"
-        />
-        <Input
-          type="text"
-          placeholder="Name (optional)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="flex-1"
-        />
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Sending…" : "Send Invite"}
-        </Button>
-      </form>
+      <AdminCard>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row gap-3"
+        >
+          <Input
+            type="email"
+            placeholder="email@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="flex-1"
+          />
+          <Input
+            type="text"
+            placeholder="Name (optional)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="flex-1"
+          />
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Sending…" : "Send Invite"}
+          </Button>
+        </form>
+      </AdminCard>
     </section>
   );
 };
@@ -261,22 +244,23 @@ const InvitesTable = ({
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Invites Sent
       </h2>
-      <div className="rounded-2xl overflow-hidden" style={sectionCard}>
+      <AdminCard className="p-0 overflow-hidden">
         {loading ? (
-          <p className="text-sm text-gray-500 p-5">Loading…</p>
+          <EmptyState>Loading…</EmptyState>
         ) : requests.length === 0 ? (
-          <p className="text-sm text-gray-500 p-5">
-            No invites yet. Send your first one above.
-          </p>
+          <EmptyState>No invites yet. Send your first one above.</EmptyState>
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-white/5">
+              <TableRow
+                className="hover:bg-transparent"
+                style={{ borderColor: admin.border }}
+              >
                 <TableHead>Email</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Status</TableHead>
@@ -288,19 +272,25 @@ const InvitesTable = ({
             </TableHeader>
             <TableBody>
               {requests.map((req) => (
-                <TableRow key={req.id} className="border-white/5 hover:bg-white/[0.02]">
-                  <TableCell className="text-white">{req.invited_email}</TableCell>
-                  <TableCell className="text-gray-400">{req.invited_name ?? "—"}</TableCell>
+                <TableRow
+                  key={req.id}
+                  className="hover:[background-color:rgba(255,255,255,0.04)]"
+                  style={{ borderColor: admin.border }}
+                >
+                  <TableCell style={{ color: admin.text }}>{req.invited_email}</TableCell>
+                  <TableCell style={{ color: admin.textMuted }}>
+                    {req.invited_name ?? "—"}
+                  </TableCell>
                   <TableCell>
                     <ReferenceRequestStatusBadge status={req.status} />
                   </TableCell>
-                  <TableCell className="text-gray-500 text-xs">
+                  <TableCell className="text-xs" style={{ color: admin.textDim }}>
                     {formatDate(req.created_at)}
                   </TableCell>
-                  <TableCell className="text-gray-500 text-xs">
+                  <TableCell className="text-xs" style={{ color: admin.textDim }}>
                     {formatDate(req.expires_at)}
                   </TableCell>
-                  <TableCell className="text-gray-500 text-xs">
+                  <TableCell className="text-xs" style={{ color: admin.textDim }}>
                     {formatDate(req.submitted_at)}
                   </TableCell>
                   <TableCell className="text-right">
@@ -325,7 +315,7 @@ const InvitesTable = ({
                         </Button>
                       </div>
                     ) : (
-                      <span className="text-gray-600 text-xs">—</span>
+                      <span className="text-xs" style={{ color: admin.textDim }}>—</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -333,7 +323,7 @@ const InvitesTable = ({
             </TableBody>
           </Table>
         )}
-      </div>
+      </AdminCard>
     </section>
   );
 };
@@ -385,34 +375,45 @@ const PendingReviewSection = ({
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Pending Review
       </h2>
       {loading ? (
-        <p className="text-sm text-gray-500">Loading…</p>
+        <EmptyState>Loading…</EmptyState>
       ) : items.length === 0 ? (
-        <p className="text-sm text-gray-500">No pending references.</p>
+        <EmptyState>No pending references.</EmptyState>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {items.map((ref) => (
-            <div key={ref.id} className="rounded-2xl p-5" style={sectionCard}>
+            <AdminCard key={ref.id}>
               <div className="mb-2">
-                <div className="text-base font-semibold text-white">{ref.name}</div>
-                <div className="text-sm text-gray-400">{ref.role_title}</div>
+                <div className="text-base font-semibold" style={{ color: admin.text }}>
+                  {ref.name}
+                </div>
+                <div className="text-sm" style={{ color: admin.textMuted }}>
+                  {ref.role_title}
+                </div>
               </div>
-              <p className="text-lg italic text-white/90 mb-3" style={{ letterSpacing: "-0.01em" }}>
+              <p
+                className="text-lg italic mb-3"
+                style={{ color: admin.text, opacity: 0.9, letterSpacing: "-0.01em" }}
+              >
                 "{ref.headline}"
               </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mb-4">
+              <div
+                className="flex flex-wrap gap-x-4 gap-y-1 text-xs mb-4"
+                style={{ color: admin.textDim }}
+              >
                 <span>Submitted {formatDate(ref.created_at)}</span>
                 {ref.linkedin_url ? (
                   <a
                     href={ref.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 inline-flex items-center gap-1"
+                    className="inline-flex items-center gap-1"
+                    style={{ color: admin.accent }}
                   >
                     LinkedIn <ExternalLink className="h-3 w-3" />
                   </a>
@@ -421,7 +422,6 @@ const PendingReviewSection = ({
               <div className="flex flex-wrap items-center gap-2">
                 <Button
                   size="sm"
-                  className="bg-white text-black hover:bg-gray-200"
                   disabled={busyId === ref.id}
                   onClick={() => handleApprove(ref.id)}
                 >
@@ -440,17 +440,20 @@ const PendingReviewSection = ({
                   size="sm"
                   variant="ghost"
                   onClick={() => setRawId(rawId === ref.id ? null : ref.id)}
-                  className="text-gray-400"
+                  style={{ color: admin.textMuted }}
                 >
                   {rawId === ref.id ? "Hide Raw" : "View Raw"}
                 </Button>
               </div>
               {rawId === ref.id ? (
-                <pre className="mt-4 text-[11px] text-gray-400 bg-black/30 rounded p-3 overflow-x-auto">
+                <pre
+                  className="mt-4 text-[11px] rounded p-3 overflow-x-auto"
+                  style={{ backgroundColor: admin.surface2, color: admin.textMuted }}
+                >
                   {JSON.stringify(ref, null, 2)}
                 </pre>
               ) : null}
-            </div>
+            </AdminCard>
           ))}
         </div>
       )}
@@ -534,15 +537,15 @@ const LiveOnSiteSection = ({
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Live on Site
       </h2>
       {loading ? (
-        <p className="text-sm text-gray-500">Loading…</p>
+        <EmptyState>Loading…</EmptyState>
       ) : order.length === 0 ? (
-        <p className="text-sm text-gray-500">No approved references yet.</p>
+        <EmptyState>No approved references yet.</EmptyState>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={order.map((r) => r.id)} strategy={verticalListSortingStrategy}>
@@ -572,7 +575,8 @@ const SortableRow = ({
     <div
       ref={setNodeRef}
       style={{
-        ...sectionCard,
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
@@ -582,23 +586,30 @@ const SortableRow = ({
       <button
         {...attributes}
         {...listeners}
-        className="text-gray-500 hover:text-white cursor-grab active:cursor-grabbing"
+        className="cursor-grab active:cursor-grabbing hover:text-white"
+        style={{ color: admin.textDim }}
         aria-label="Drag to reorder"
       >
         <GripVertical className="h-4 w-4" />
       </button>
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
-          <span className="text-sm font-semibold text-white">{reference.name}</span>
-          <span className="text-xs text-gray-500">· {reference.role_title}</span>
+          <span className="text-sm font-semibold" style={{ color: admin.text }}>
+            {reference.name}
+          </span>
+          <span className="text-xs" style={{ color: admin.textDim }}>
+            · {reference.role_title}
+          </span>
         </div>
-        <p className="text-xs text-gray-400 truncate">{reference.headline}</p>
+        <p className="text-xs truncate" style={{ color: admin.textMuted }}>
+          {reference.headline}
+        </p>
       </div>
       <Button
         size="sm"
         variant="ghost"
         onClick={() => onHide(reference.id)}
-        className="text-gray-400"
+        style={{ color: admin.textMuted }}
       >
         Hide
       </Button>
@@ -630,25 +641,35 @@ const ArchiveSection = ({
   return (
     <section>
       <Accordion type="single" collapsible>
-        <AccordionItem value="archive" className="border-white/5">
-          <AccordionTrigger className="text-lg font-bold text-white hover:no-underline">
+        <AccordionItem value="archive" style={{ borderColor: admin.border }}>
+          <AccordionTrigger
+            className="text-lg font-semibold hover:no-underline"
+            style={{ color: admin.text }}
+          >
             Archive ({items.length})
           </AccordionTrigger>
           <AccordionContent>
             {items.length === 0 ? (
-              <p className="text-sm text-gray-500">Nothing archived.</p>
+              <EmptyState>Nothing archived.</EmptyState>
             ) : (
               <div className="space-y-2 pt-2">
                 {items.map((ref) => (
                   <div
                     key={ref.id}
                     className="rounded-xl px-3 py-3 flex items-center gap-3"
-                    style={sectionCard}
+                    style={{
+                      backgroundColor: admin.surface,
+                      border: `1px solid ${admin.border}`,
+                    }}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="text-sm font-semibold text-white">{ref.name}</span>
-                        <span className="text-xs text-gray-500">· {ref.role_title}</span>
+                        <span className="text-sm font-semibold" style={{ color: admin.text }}>
+                          {ref.name}
+                        </span>
+                        <span className="text-xs" style={{ color: admin.textDim }}>
+                          · {ref.role_title}
+                        </span>
                         <ReferenceStatusBadge status={ref.status} />
                       </div>
                     </div>
@@ -656,7 +677,7 @@ const ArchiveSection = ({
                       size="sm"
                       variant="ghost"
                       onClick={() => handleUnarchive(ref.id)}
-                      className="text-gray-400"
+                      style={{ color: admin.textMuted }}
                     >
                       Un-archive
                     </Button>
