@@ -22,9 +22,10 @@ import {
   type Lead,
   type LeadStatus,
 } from "@/lib/lead-os-types";
-import { AdminPageHeader, SegmentedToggle, EmptyState } from "./_components/ui";
+import { AdminPageHeader, SegmentedToggle } from "./_components/ui";
 import { admin } from "./_components/theme";
 import { LeadBoard } from "./_components/LeadBoard";
+import { LeadListView } from "./_components/LeadListView";
 import { LeadDetailModal } from "./_components/LeadDetailModal";
 
 type ViewMode = "board" | "list";
@@ -136,7 +137,7 @@ const Leads = () => {
         ) : view === "board" ? (
           <LeadBoard leads={filtered} onMove={handleStatusChange} />
         ) : (
-          <EmptyState>List view coming soon.</EmptyState>
+          <LeadListView leads={filtered} />
         )}
       </div>
 
