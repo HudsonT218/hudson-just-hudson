@@ -641,25 +641,35 @@ const ArchiveSection = ({
   return (
     <section>
       <Accordion type="single" collapsible>
-        <AccordionItem value="archive" className="border-white/5">
-          <AccordionTrigger className="text-lg font-bold text-white hover:no-underline">
+        <AccordionItem value="archive" style={{ borderColor: admin.border }}>
+          <AccordionTrigger
+            className="text-lg font-semibold hover:no-underline"
+            style={{ color: admin.text }}
+          >
             Archive ({items.length})
           </AccordionTrigger>
           <AccordionContent>
             {items.length === 0 ? (
-              <p className="text-sm text-gray-500">Nothing archived.</p>
+              <EmptyState>Nothing archived.</EmptyState>
             ) : (
               <div className="space-y-2 pt-2">
                 {items.map((ref) => (
                   <div
                     key={ref.id}
                     className="rounded-xl px-3 py-3 flex items-center gap-3"
-                    style={sectionCard}
+                    style={{
+                      backgroundColor: admin.surface,
+                      border: `1px solid ${admin.border}`,
+                    }}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="text-sm font-semibold text-white">{ref.name}</span>
-                        <span className="text-xs text-gray-500">· {ref.role_title}</span>
+                        <span className="text-sm font-semibold" style={{ color: admin.text }}>
+                          {ref.name}
+                        </span>
+                        <span className="text-xs" style={{ color: admin.textDim }}>
+                          · {ref.role_title}
+                        </span>
                         <ReferenceStatusBadge status={ref.status} />
                       </div>
                     </div>
@@ -667,7 +677,7 @@ const ArchiveSection = ({
                       size="sm"
                       variant="ghost"
                       onClick={() => handleUnarchive(ref.id)}
-                      className="text-gray-400"
+                      style={{ color: admin.textMuted }}
                     >
                       Un-archive
                     </Button>
