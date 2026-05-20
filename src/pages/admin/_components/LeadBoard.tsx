@@ -20,17 +20,29 @@ import {
   type LeadStatus,
 } from "@/lib/lead-os-types";
 import { admin, LEAD_STATUS_COLORS } from "./theme";
-import { StatusDot } from "./ui";
+import { StatusDot, SkeletonBlock, EmptyState } from "./ui";
 import { LeadCard } from "./LeadCard";
 
 const COLUMN_PREFIX = "column:";
 
+function ColumnSkeleton() {
+  return (
+    <div className="flex flex-col gap-2 px-3 pb-3">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <SkeletonBlock key={i} className="rounded-xl" style={{ height: 88 }} />
+      ))}
+    </div>
+  );
+}
+
 function Column({
   status,
   leads,
+  loading,
 }: {
   status: LeadStatus;
   leads: Lead[];
+  loading?: boolean;
 }) {
   const { setNodeRef, isOver } = useDroppable({
     id: `${COLUMN_PREFIX}${status}`,
@@ -39,9 +51,12 @@ function Column({
 
   const tint = LEAD_STATUS_COLORS[status].soft;
   const dead = status === "dead";
+  const label = LEAD_STATUS_LABEL[status];
 
   return (
     <div
+      role="list"
+      aria-label={`${label} column, ${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}
       className="flex flex-col rounded-2xl shrink-0"
       style={{
         width: 300,
@@ -63,13 +78,10 @@ function Column({
               fontWeight: 600,
             }}
           >
-            {LEAD_STATUS_LABEL[status]}
+            {label}
           </span>
         </div>
-        <span
-          className="font-mono"
-          style={{ fontSize: 11, color: admin.textDim }}
-        >
+        <span className="font-mono" style={{ fontSize: 11, color: admin.textDim }}>
           {leads.length.toString().padStart(2, "0")}
         </span>
       </div>
@@ -79,13 +91,19 @@ function Column({
         items={leads.map((l) => l.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div
-          ref={setNodeRef}
-          className="flex flex-col gap-2 px-3 pb-3 min-h-[120px]"
-        >
-          {leads.map((lead) => (
-            <LeadCard key={lead.id} lead={lead} />
-          ))}
+        <div ref={setNodeRef} className="flex flex-col gap-2 px-3 pb-3 min-h-[120px]">
+          {loading ? (
+            <ColumnSkeleton />
+          ) : leads.length === 0 ? (
+            <p
+              className="text-xs px-1 py-2"
+              style={{ color: admin.textDim, fontStyle: "italic" }}
+            >
+              No leads
+            </p>
+          ) : (
+            leads.map((lead) => <LeadCard key={lead.id} lead={lead} />)
+          )}
         </div>
       </SortableContext>
     </div>
@@ -95,9 +113,11 @@ function Column({
 export function LeadBoard({
   leads,
   onMove,
+  loading,
 }: {
   leads: Lead[];
   onMove: (id: string, status: LeadStatus) => void;
+  loading?: boolean;
 }) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -144,11 +164,22 @@ export function LeadBoard({
     }
   };
 
+  const isEmpty = !loading && leads.length === 0;
+
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2">
+      {isEmpty && (
+        <EmptyState className="mb-4">
+          No leads yet. Add your first lead to get started.
+        </EmptyState>
+      )}
+      <div
+        role="region"
+        aria-label="Leads board. Use Tab to focus a card, Space to pick up, arrow keys to move, Space to drop."
+        className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2"
+      >
         {LEAD_STATUSES.map((s) => (
-          <Column key={s} status={s} leads={grouped[s]} />
+          <Column key={s} status={s} leads={grouped[s]} loading={loading} />
         ))}
       </div>
     </DndContext>

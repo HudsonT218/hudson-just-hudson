@@ -24,7 +24,7 @@ import {
 import { LeadStatusBadge } from "./StatusBadge";
 import { formatDate } from "./format";
 import { admin } from "./theme";
-import { EmptyState } from "./ui";
+import { EmptyState, SkeletonBlock } from "./ui";
 
 function isOverdue(dateStr: string | null): boolean {
   if (!dateStr) return false;
@@ -40,7 +40,7 @@ const headStyle: React.CSSProperties = {
   letterSpacing: "0.08em",
 };
 
-export function LeadListView({ leads }: { leads: Lead[] }) {
+export function LeadListView({ leads, loading }: { leads: Lead[]; loading?: boolean }) {
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
 
@@ -85,7 +85,13 @@ export function LeadListView({ leads }: { leads: Lead[] }) {
         </Select>
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <SkeletonBlock key={i} style={{ height: 52 }} />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
         <EmptyState>No leads match the current filters.</EmptyState>
       ) : (
         <div
