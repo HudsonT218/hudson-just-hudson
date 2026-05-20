@@ -68,11 +68,8 @@ import {
   ReferenceStatusBadge,
 } from "./_components/StatusBadge";
 import { formatDate } from "./_components/format";
-
-const sectionCard: React.CSSProperties = {
-  backgroundColor: "rgba(255,255,255,0.02)",
-  border: "1px solid rgba(255,255,255,0.05)",
-};
+import { admin } from "./_components/theme";
+import { AdminPageHeader, AdminCard, ErrorBanner, EmptyState } from "./_components/ui";
 
 const REFS_KEY = ["admin", "references"] as const;
 

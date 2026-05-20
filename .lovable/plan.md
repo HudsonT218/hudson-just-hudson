@@ -1,74 +1,53 @@
-Restyle `src/pages/admin/ProjectDetail.tsx` to match the admin design system. Visual-only — keep every handler, `saveField`, `useEffect` queries, time-entry form, and delete actions identical.
+Restyle `src/pages/admin/References.tsx` to match the admin design system. Visual-only — keep every Supabase call, dnd-kit logic, toast call, query, and handler unchanged.
 
 ### What to change
 
-1. **Imports**
-   - Add `admin` from `./_components/theme`.
-   - Add `AdminCard`, `SectionLabel`, `SkeletonBlock`, `ErrorBanner`, `EmptyState` from `./_components/ui`.
+1. **Imports** — add `admin` from `./_components/theme` and `AdminPageHeader, AdminCard, ErrorBanner, EmptyState` from `./_components/ui`. Remove the `sectionCard` style constant.
 
-2. **Loading state**
-   - Replace `<div className="px-10 py-10 text-sm text-gray-500">Loading…</div>` with a `px-10 py-10 max-w-3xl` shell containing a `SkeletonBlock` stack (e.g., one `h-8 w-1/2` title + 3 `h-32 w-full rounded-2xl` cards) using `admin` tokens.
+2. **Page shell**
+   - Replace `<h1>References</h1>` with `<AdminPageHeader title="References" />`.
+   - Replace inline red error `<div>` with `<ErrorBanner>{errorMsg}</ErrorBanner>`.
 
-3. **Not-found state**
-   - Use `<EmptyState>Project not found.</EmptyState>` and restyle the back link to use `admin.textMuted` → `admin.text` on hover (`hover:text-white`).
+3. **Reusable section heading style** — all five section `<h2>` headings use:
+   ```tsx
+   <h2 className="text-lg font-semibold mb-4" style={{ color: admin.text, letterSpacing: "-0.01em" }}>
+   ```
 
-4. **Back link ("← Projects")**
-   - Color: `admin.textMuted`, hover `admin.text` via inline style + Tailwind hover class. Keep behavior.
+4. **InviteSection (Section 1)**
+   - Replace `<form ... style={sectionCard}>` wrapper with `<AdminCard>` and put the form inside (form keeps its flex layout & inputs unchanged).
 
-5. **Error banner**
-   - Replace inline red `<div>` with `<div className="mb-6"><ErrorBanner>{error}</ErrorBanner></div>`.
+5. **InvitesTable (Section 2)**
+   - Wrap the table area in `<AdminCard className="p-0 overflow-hidden">`.
+   - Loading/empty → `<EmptyState>` (wrap inside an `AdminCard` for consistent surface, or render directly inside the card).
+   - `TableRow` header: `hover:bg-transparent` with `borderColor: admin.border` via Tailwind arbitrary `[border-color:rgba(255,255,255,0.06)]` or inline style. Same for body rows. Hover: `hover:[background-color:rgba(255,255,255,0.04)]`.
+   - Cell text colors: email = `admin.text`, name = `admin.textMuted`, date cells = `admin.textDim`, "—" placeholder = `admin.textDim`.
+   - Keep Resend / Revoke buttons; restyle Revoke text via `text-destructive`-style classes — but spec says keep functions — so use `style={{ color: "#fca5a5" }}` (still red) → simpler: leave existing `text-red-400 hover:text-red-300` for Revoke (semantic red is OK).
 
-6. **Header row (name input + status select)**
-   - Keep inline-editable `<input>` and the `<Select>` exactly. Just set `style={{ color: admin.text }}` on the input and change `text-gray-500` → use `admin.textMuted` inline. Keep `letterSpacing: "-0.02em"`. Blue link to lead → keep color `#60a5fa` (admin doesn't have a link token; safe to leave). Actually use `admin.accent` for the lead link to align with tokens.
+6. **PendingReviewSection (Section 3)**
+   - Loading/empty → `<EmptyState>`.
+   - Each card: replace `<div ... style={sectionCard}>` with `<AdminCard>`.
+   - Card heading name → `style={{ color: admin.text }}`; role → `admin.textMuted`; headline → `admin.text` with `opacity 0.9`; meta line → `admin.textDim`; LinkedIn link → `admin.accent`.
+   - "Approve" button: replace `bg-white text-black hover:bg-gray-200` with default primary (`<Button size="sm">`), aligning to shared accent.
+   - "Reject" outline button: keep red palette (semantic).
+   - "View Raw" toggle button: color = `admin.textMuted`.
+   - Raw JSON `<pre>`: bg `admin.surface2`, color `admin.textMuted`.
 
-7. **`Section` helper rebuild**
-   - Render the title as `<SectionLabel className="mb-3">{title}</SectionLabel>`.
-   - Wrap children in `<AdminCard>{children}</AdminCard>`.
-   - Keep `<section className="mb-8">` wrapper.
-   - All inputs/Selects/Textareas inside stay untouched.
-   - Labels inside sections: change `text-xs text-gray-500` → inline `style={{ color: admin.textMuted }}` with `text-xs mb-1 block`.
+7. **LiveOnSiteSection (Section 4) & SortableRow**
+   - Loading/empty → `<EmptyState>`.
+   - SortableRow: render as a div with `backgroundColor: admin.surface`, `border: 1px solid ${admin.border}`, `rounded-xl px-3 py-3 flex items-center gap-3`. (Skip AdminCard since it has fixed `p-5`; replicate token styles inline.)
+   - Drag handle button: color `admin.textDim` → hover `admin.text`.
+   - Name: `admin.text`; role/headline: `admin.textMuted` / `admin.textDim`.
+   - Hide button: color `admin.textMuted`.
 
-8. **Time-entries table**
-   - Wrapper: `rounded-md overflow-hidden` with `backgroundColor: admin.surface`, `border: 1px solid ${admin.border}`.
-   - `thead` row border: `1px solid ${admin.border}`.
-   - `th` cells: `text-[10px] uppercase tracking-[0.14em] font-medium` with `color: admin.textDim`.
-   - `tbody tr` top border (non-first): `1px solid ${admin.border}`.
-   - `td` colors:
-     - Date: `admin.textMuted`
-     - Hours: `admin.text` font-mono
-     - Description: `admin.text` font-light (or `admin.textMuted`-ish; use `admin.text` for readability)
-     - Delete button: `admin.textDim` → hover `text-red-400` (keep red)
-   - `tfoot tr` top border: `1px solid ${admin.borderStrong}`.
-   - Total label cell: `admin.textDim` small caps; total hours `admin.text` mono; billed cell `admin.textMuted`.
-   - Empty entries text: replace with `<EmptyState>No time logged yet.</EmptyState>`.
-
-9. **Time-entry form**
-   - Keep markup/layout. No color overrides needed beyond shadcn defaults.
-
-10. **Notes section**
-   - No change beyond Section helper wrap.
-
-11. **Dashed Phase 2/3 placeholders**
-   - Keep dashed style. Update to:
-     ```
-     style={{
-       backgroundColor: admin.surface,
-       border: `1px dashed ${admin.border}`,
-       color: admin.textDim,
-     }}
-     ```
-   - Use existing `rounded-2xl p-6 mt-8 text-sm` / `mt-3` classes.
-
-12. **All color swaps**
-   - `text-gray-500/600/400/300` → token equivalents (`textMuted`, `textDim`, `text`).
-   - `text-white` → `admin.text`.
-   - `text-blue-400 hover:text-blue-300` for lead link → `admin.accent` inline color.
-   - Any `rgba(...)` → admin token equivalent.
+8. **ArchiveSection (Section 5)**
+   - `AccordionItem` border → `[border-color:rgba(255,255,255,0.06)]` (`admin.border`).
+   - `AccordionTrigger`: color `admin.text`, font-semibold.
+   - Empty → `<EmptyState>`.
+   - Each row: same inline-styled rounded surface (matching SortableRow) using `admin.surface` + `admin.border`. Name → `admin.text`; role → `admin.textMuted`; Un-archive button color `admin.textMuted`.
 
 ### Out of scope
-- No changes to `saveField`, `refresh`, `useEffect`, `handleLogTime`, `handleDeleteEntry`, routing, types, or any other file.
-- No new dependencies; no `theme.ts`/`ui.tsx` changes.
+- No changes to queries, dnd-kit logic, toast calls, handlers, AlertDialog markup, or routing.
+- No new dependencies; no changes to `theme.ts`, `ui.tsx`, or other files.
 
 ### Verification
-- Visual match to Leads/Projects.
-- TypeScript compiles cleanly.
+- TypeScript compiles clean. Visual parity with Leads/Projects pages.
