@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead } from "@/lib/lead-os-types";
-import { admin } from "./theme";
+import { admin, LEAD_STATUS_COLORS } from "./theme";
 import { formatDate } from "./format";
 
 function isOverdue(dateStr: string | null): boolean {
@@ -73,8 +73,20 @@ export function LeadCard({ lead }: { lead: Lead }) {
       aria-label={`Lead ${lead.name}${lead.company ? `, ${lead.company}` : ""}, status ${lead.status}. Press space to pick up and drag.`}
       onPointerDownCapture={onPointerDown}
       onPointerUpCapture={onPointerUp}
-      className="rounded-xl p-3 flex flex-col gap-2 select-none transition-colors hover:[border-color:rgba(255,255,255,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
+      className="relative overflow-hidden rounded-xl p-3 pl-4 flex flex-col gap-2 select-none transition-colors hover:[border-color:rgba(255,255,255,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
     >
+      <span
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 6,
+          bottom: 6,
+          width: 3,
+          borderRadius: 9999,
+          backgroundColor: LEAD_STATUS_COLORS[lead.status].strong,
+        }}
+      />
       <div className="text-sm font-semibold leading-snug" style={{ color: admin.text }}>
         {lead.name}
         {lead.company ? (

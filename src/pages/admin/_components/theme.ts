@@ -15,9 +15,9 @@ export const admin = {
 
 export type AdminTheme = typeof admin;
 
-export const LEAD_STATUS_COLORS: Record<LeadStatus, { dot: string; soft: string }> = {
-  cold: { dot: "rgb(156,163,175)", soft: "rgba(255,255,255,0.06)" },
-  warm: { dot: "#60a5fa", soft: "rgba(59,130,246,0.15)" },
-  client: { dot: "#34d399", soft: "rgba(16,185,129,0.15)" },
-  dead: { dot: "rgb(252,165,165)", soft: "rgba(127,29,29,0.25)" },
+export const LEAD_STATUS_COLORS: Record<LeadStatus, { dot: string; soft: string; strong: string }> = {
+  cold: { dot: "rgb(156,163,175)", soft: "rgba(255,255,255,0.06)", strong: "rgb(156,163,175)" },
+  warm: { dot: "#60a5fa", soft: "rgba(59,130,246,0.15)", strong: "#3b82f6" },
+  client: { dot: "#34d399", soft: "rgba(16,185,129,0.15)", strong: "#10b981" },
+  dead: { dot: "rgb(252,165,165)", soft: "rgba(127,29,29,0.25)", strong: "#ef4444" },
 };
