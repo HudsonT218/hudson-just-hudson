@@ -41,9 +41,9 @@ const Pill = ({ bg, fg, children }: { bg: string; fg: string; children: React.Re
 );
 
 export const LeadStatusBadge = ({ status }: { status: LeadStatus }) => {
-  const c = LEAD_COLORS[status];
+  const c = LEAD_STATUS_COLORS[status];
   return (
-    <Pill bg={c.bg} fg={c.fg}>
+    <Pill bg={c.soft} fg={c.dot}>
       {LEAD_STATUS_LABEL[status].toUpperCase()}
     </Pill>
   );
