@@ -18,6 +18,15 @@ import {
   WarmLeadStatusBadge,
 } from "./_components/WarmLeadStatusBadge";
 import { formatCurrency, formatDate } from "./_components/format";
+import { admin } from "./_components/theme";
+import {
+  AdminPageHeader,
+  AdminCard,
+  SectionLabel,
+  SkeletonBlock,
+  ErrorBanner,
+  EmptyState,
+} from "./_components/ui";
 
 const Dashboard = () => {
   const statsQ = useQuery({ queryKey: ["admin", "dashboard-stats"], queryFn: getDashboardStats });
@@ -47,22 +56,11 @@ const Dashboard = () => {
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10">
-        <h1
-          className="text-2xl font-extrabold text-white mb-8"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          Dashboard
-        </h1>
+        <AdminPageHeader title="Dashboard" className="mb-8" />
 
         {error && (
-          <div
-            className="mb-6 rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {error}
+          <div className="mb-6">
+            <ErrorBanner>{error}</ErrorBanner>
           </div>
         )}
 
@@ -84,26 +82,30 @@ const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Panel title="Next Actions">
-            {loading ? (
-              <EmptyHint>Loading…</EmptyHint>
+            {naQ.isLoading && nextActions.length === 0 ? (
+              <PanelSkeleton />
             ) : nextActions.length === 0 ? (
-              <EmptyHint>Nothing due. Add a next-action date on a lead to populate this list.</EmptyHint>
+              <PanelEmpty>
+                Nothing due. Add a next-action date on a lead to populate this list.
+              </PanelEmpty>
             ) : (
               <ul>
                 {nextActions.map((lead) => (
                   <li key={lead.id}>
                     <Link
                       to={`/admin/leads/${lead.id}`}
-                      className="block px-5 py-4 hover:bg-white/[0.02] transition-colors"
-                      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                      className="block px-5 py-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)]"
+                      style={{ borderTop: `1px solid ${admin.border}` }}
                     >
                       <div className="flex items-center justify-between gap-4 mb-1">
-                        <span className="text-sm font-medium text-white">{lead.name}</span>
+                        <span className="text-sm font-medium" style={{ color: admin.text }}>
+                          {lead.name}
+                        </span>
                         <LeadStatusBadge status={lead.status} />
                       </div>
-                      <div className="text-xs text-gray-500 flex gap-3">
+                      <div className="text-xs flex gap-3" style={{ color: admin.textDim }}>
                         <span>{formatDate(lead.next_action_date)}</span>
-                        <span className="text-gray-400 truncate">
+                        <span className="truncate" style={{ color: admin.textMuted }}>
                           {lead.next_action ?? "—"}
                         </span>
                       </div>
@@ -115,32 +117,39 @@ const Dashboard = () => {
           </Panel>
 
           <Panel title="Active Projects">
-            {loading ? (
-              <EmptyHint>Loading…</EmptyHint>
+            {apQ.isLoading && activeProjects.length === 0 ? (
+              <PanelSkeleton />
             ) : activeProjects.length === 0 ? (
-              <EmptyHint>No active or proposal-sent projects.</EmptyHint>
+              <PanelEmpty>No active or proposal-sent projects.</PanelEmpty>
             ) : (
               <ul>
                 {activeProjects.map((p) => (
                   <li key={p.id}>
                     <Link
                       to={`/admin/projects/${p.id}`}
-                      className="block px-5 py-4 hover:bg-white/[0.02] transition-colors"
-                      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                      className="block px-5 py-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)]"
+                      style={{ borderTop: `1px solid ${admin.border}` }}
                     >
                       <div className="flex items-center justify-between gap-4 mb-1">
-                        <span className="text-sm font-medium text-white truncate">
+                        <span
+                          className="text-sm font-medium truncate"
+                          style={{ color: admin.text }}
+                        >
                           {p.name}
                           {p.lead_name ? (
-                            <span className="text-gray-500 font-normal ml-2">
+                            <span
+                              className="font-normal ml-2"
+                              style={{ color: admin.textDim }}
+                            >
                               · {p.lead_name}
                             </span>
                           ) : null}
                         </span>
                         <ProjectStatusBadge status={p.status} />
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {p.hours_logged.toFixed(1)} hrs logged · {formatCurrency(p.amount_billed)} billed
+                      <div className="text-xs" style={{ color: admin.textDim }}>
+                        {p.hours_logged.toFixed(1)} hrs logged ·{" "}
+                        {formatCurrency(p.amount_billed)} billed
                       </div>
                     </Link>
                   </li>
@@ -157,29 +166,33 @@ const Dashboard = () => {
             }`}
           >
             {wlNewQ.isLoading && newWarmLeads.length === 0 ? (
-              <EmptyHint>Loading…</EmptyHint>
+              <PanelSkeleton />
             ) : newWarmLeads.length === 0 ? (
-              <EmptyHint>
+              <PanelEmpty>
                 No new warm leads. Open{" "}
                 <Link
                   to="/admin/warm-leads"
-                  className="text-blue-400 hover:text-blue-300"
+                  style={{ color: admin.accent }}
+                  className="hover:opacity-80"
                 >
                   Warm Leads
                 </Link>{" "}
                 to run the scraper or adjust settings.
-              </EmptyHint>
+              </PanelEmpty>
             ) : (
               <ul>
                 {newWarmLeads.map((wl) => (
                   <li key={wl.id}>
                     <Link
                       to={`/admin/warm-leads/${wl.id}`}
-                      className="block px-5 py-4 hover:bg-white/[0.02] transition-colors"
-                      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                      className="block px-5 py-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)]"
+                      style={{ borderTop: `1px solid ${admin.border}` }}
                     >
                       <div className="flex items-center justify-between gap-4 mb-1">
-                        <span className="text-sm font-medium text-white truncate">
+                        <span
+                          className="text-sm font-medium truncate"
+                          style={{ color: admin.text }}
+                        >
                           {wl.raw_title?.trim() || wl.raw_excerpt.slice(0, 80)}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
@@ -187,12 +200,15 @@ const Dashboard = () => {
                           <WarmLeadStatusBadge status={wl.status} />
                         </div>
                       </div>
-                      <div className="text-xs text-gray-500 flex gap-3 truncate">
+                      <div
+                        className="text-xs flex gap-3 truncate"
+                        style={{ color: admin.textDim }}
+                      >
                         <span className="font-mono uppercase tracking-widest text-[10px]">
                           {wl.source_label}
                         </span>
                         {wl.author_handle && <span>@{wl.author_handle}</span>}
-                        <span className="text-gray-600 truncate">
+                        <span className="truncate" style={{ color: admin.textMuted }}>
                           {wl.score_reasoning ?? wl.raw_excerpt.slice(0, 100)}
                         </span>
                       </div>
@@ -204,7 +220,10 @@ const Dashboard = () => {
           </Panel>
         </div>
 
-        <p className="text-xs text-gray-700 mt-12">
+        <p
+          className="text-xs mt-12"
+          style={{ color: admin.textDim, opacity: 0.7 }}
+        >
           Status reference: lead {Object.values(LEAD_STATUS_LABEL).join(" · ")} · project{" "}
           {Object.values(PROJECT_STATUS_LABEL).join(" · ")}
         </p>
@@ -228,19 +247,26 @@ const StatCard = ({
     <div
       className="rounded-2xl p-6 h-full transition-colors"
       style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.05)",
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
       }}
     >
-      <p className="text-xs uppercase tracking-widest text-gray-500 font-medium mb-3">
+      <p
+        className="text-[10px] uppercase tracking-[0.14em] font-medium mb-3"
+        style={{ color: admin.textDim }}
+      >
         {label}
       </p>
-      <p
-        className="text-4xl font-extrabold text-white"
-        style={{ letterSpacing: "-0.03em" }}
-      >
-        {loading ? "…" : value}
-      </p>
+      {loading ? (
+        <SkeletonBlock className="h-9 w-20" />
+      ) : (
+        <p
+          className="text-4xl font-extrabold"
+          style={{ color: admin.text, letterSpacing: "-0.03em" }}
+        >
+          {value}
+        </p>
+      )}
     </div>
   );
   if (to) {
@@ -254,25 +280,33 @@ const StatCard = ({
 };
 
 const Panel = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div
-    className="rounded-2xl overflow-hidden"
-    style={{
-      backgroundColor: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.05)",
-    }}
-  >
-    <h2 className="px-5 py-4 text-sm font-semibold text-white">{title}</h2>
+  <AdminCard className="p-0 overflow-hidden">
+    <div className="px-5 py-4">
+      <SectionLabel>{title}</SectionLabel>
+    </div>
     {children}
+  </AdminCard>
+);
+
+const PanelSkeleton = () => (
+  <div>
+    {[0, 1, 2].map((i) => (
+      <div
+        key={i}
+        className="px-5 py-4"
+        style={{ borderTop: `1px solid ${admin.border}` }}
+      >
+        <SkeletonBlock className="h-4 w-2/3 mb-2" />
+        <SkeletonBlock className="h-3 w-1/3" />
+      </div>
+    ))}
   </div>
 );
 
-const EmptyHint = ({ children }: { children: React.ReactNode }) => (
-  <p
-    className="px-5 py-8 text-sm text-gray-500 font-light"
-    style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
-  >
-    {children}
-  </p>
+const PanelEmpty = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ borderTop: `1px solid ${admin.border}` }}>
+    <EmptyState>{children}</EmptyState>
+  </div>
 );
 
 export default Dashboard;

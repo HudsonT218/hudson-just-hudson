@@ -1,18 +1,46 @@
-## Theme the leads board horizontal scrollbar
+# Restyle Admin Dashboard to match Leads page
 
-The horizontal scrollbar under the board renders with the OS default (bright white track + thumb), which clashes with the dark admin theme.
+Visual-only refactor of `src/pages/admin/Dashboard.tsx`. No changes to queries, data, routes, or behavior. No new files, no new deps.
 
-### Change
+## Changes (single file: `src/pages/admin/Dashboard.tsx`)
 
-In `src/index.css`, add a scoped utility class `.admin-scroll-x` that themes both WebKit and Firefox scrollbars to match the admin tokens:
+### Imports
+Add: `AdminPageHeader, AdminCard, SectionLabel, SkeletonBlock, ErrorBanner, EmptyState` from `./_components/ui` and `admin` from `./_components/theme`.
 
-- Track: transparent
-- Thumb: `rgba(255,255,255,0.08)` with `rgba(255,255,255,0.16)` on hover
-- Height: 8px, rounded
-- Firefox: `scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent;`
+### Page shell
+- Replace the `<h1>Dashboard</h1>` with `<AdminPageHeader title="Dashboard" className="mb-8" />`.
+- Keep the existing `<div className="px-10 py-10">` wrapper and `<Helmet>`.
 
-### Apply
+### Error state
+- Replace the inline red error `<div>` with `{error && <ErrorBanner>{error}</ErrorBanner>}` wrapped in a `mb-6` container.
 
-In `src/pages/admin/_components/LeadBoard.tsx`, add `admin-scroll-x` to the existing `flex gap-4 overflow-x-auto pb-2 -mx-2 px-2` row.
+### StatCard helper (rewritten, same props/signature)
+- Card: `rounded-2xl p-6 h-full` with inline style `{ backgroundColor: admin.surface, border: 1px solid ${admin.border} }`.
+- Label: small uppercase, `tracking-[0.14em]`, `text-[10px]`, color `admin.textDim` (reusing the same look as `SectionLabel`).
+- Value: large number, `text-4xl font-extrabold`, color `admin.text`, `letterSpacing: -0.03em`.
+- Loading: render a `SkeletonBlock` sized like the number (`h-9 w-20`) instead of `…`.
+- Keep optional `to` → `<Link>` wrap unchanged.
 
-No other changes. No data or dependency changes.
+### Panel helper (rewritten)
+- Outer: `AdminCard` with `className="p-0 overflow-hidden"` (override default padding so list rows stretch edge-to-edge).
+- Header: a `px-5 py-4` row containing `<SectionLabel>{title}</SectionLabel>`.
+- Children render below, unchanged in structure.
+- List row dividers: replace `borderTop: 1px solid rgba(255,255,255,0.05)` with `borderTop: 1px solid ${admin.border}`.
+- Row hover: replace `hover:bg-white/[0.02]` with an inline hover via Tailwind arbitrary value using the token, e.g. `hover:[background-color:rgba(255,255,255,0.04)]` (matches `surface2`).
+- Inner text colors: replace `text-white` → `style={{ color: admin.text }}`; `text-gray-500/600` → `admin.textDim`; `text-gray-400` → `admin.textMuted`. The blue link inside the warm-leads empty hint stays themed via `admin.accent`.
+
+### Empty + loading states
+- Replace the `EmptyHint` helper with the `EmptyState` primitive (drop the local helper).
+- Replace the bare `"Loading…"` placeholders inside each Panel with a small stack of `SkeletonBlock`s (e.g. 3 rows of `h-12 w-full` with `border-top` dividers using `admin.border`) so the panels show structured shimmer instead of text.
+
+### Footer reference line
+- Keep the existing `<p>` text; change `text-gray-700` to inline `style={{ color: admin.textDim, opacity: 0.7 }}` (or just `admin.textDim`).
+
+## Out of scope
+- No changes to `useQuery` calls, query keys, fetched fields, routes, or status badge components.
+- No new tokens added to `theme.ts`; existing tokens are sufficient.
+- No edits to `ui.tsx` or any other file.
+
+## Verification
+- TypeScript compiles (helper signatures preserved).
+- Visual parity with Leads page: same surface, border, radius, header label treatment, skeletons, empty/error styling.
