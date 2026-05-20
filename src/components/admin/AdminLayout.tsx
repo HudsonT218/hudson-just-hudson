@@ -197,9 +197,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             top: 0,
             left: 0,
             right: 0,
-            height: 280,
+            height: 140,
             background:
-              "radial-gradient(ellipse 75% 100% at 50% 0%, rgba(59,130,246,0.14), transparent 72%)",
+              "radial-gradient(ellipse 75% 100% at 50% 0%, rgba(59,130,246,0.07), transparent 72%)",
             pointerEvents: "none",
             zIndex: 0,
           }}
