@@ -68,9 +68,12 @@ export function LeadCard({ lead }: { lead: Lead }) {
       style={style}
       {...attributes}
       {...listeners}
+      role="button"
+      tabIndex={0}
+      aria-label={`Lead ${lead.name}${lead.company ? `, ${lead.company}` : ""}, status ${lead.status}. Press space to pick up and drag.`}
       onPointerDownCapture={onPointerDown}
       onPointerUpCapture={onPointerUp}
-      className="rounded-xl p-3 flex flex-col gap-2 select-none transition-colors hover:[border-color:rgba(255,255,255,0.12)]"
+      className="rounded-xl p-3 flex flex-col gap-2 select-none transition-colors hover:[border-color:rgba(255,255,255,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
     >
       <div className="text-sm font-semibold leading-snug" style={{ color: admin.text }}>
         {lead.name}

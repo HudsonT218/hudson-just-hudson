@@ -81,14 +81,18 @@ export function SegmentedToggle<T extends string>({
   value,
   onChange,
   className,
+  ariaLabel = "View mode",
 }: {
   options: { value: T; label: string }[];
   value: T;
   onChange: (v: T) => void;
   className?: string;
+  ariaLabel?: string;
 }) {
   return (
     <div
+      role="group"
+      aria-label={ariaLabel}
       className={cn("inline-flex items-center gap-1 rounded-full p-1", className)}
       style={{
         backgroundColor: admin.surface,
@@ -101,6 +105,8 @@ export function SegmentedToggle<T extends string>({
           <button
             key={opt.value}
             type="button"
+            aria-pressed={active}
+            aria-label={opt.label}
             onClick={() => onChange(opt.value)}
             className="px-3 py-1 rounded-full text-xs font-medium transition-colors"
             style={{
@@ -112,6 +118,40 @@ export function SegmentedToggle<T extends string>({
           </button>
         );
       })}
+    </div>
+  );
+}
+
+export function SkeletonBlock({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <div
+      aria-hidden
+      className={cn("rounded-md animate-pulse", className)}
+      style={{
+        backgroundColor: admin.surface2,
+        ...style,
+      }}
+    />
+  );
+}
+
+export function ErrorBanner({ children }: { children: ReactNode }) {
+  return (
+    <div
+      role="alert"
+      className="rounded-md p-4 text-sm text-red-300"
+      style={{
+        backgroundColor: "rgba(239,68,68,0.06)",
+        border: "1px solid rgba(239,68,68,0.2)",
+      }}
+    >
+      {children}
     </div>
   );
 }
