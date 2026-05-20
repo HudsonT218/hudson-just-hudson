@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
@@ -22,16 +21,12 @@ import {
   type Lead,
   type LeadStatus,
 } from "@/lib/lead-os-types";
-import { LeadStatusBadge } from "./_components/StatusBadge";
-import { formatDate } from "./_components/format";
+import { AdminPageHeader, SegmentedToggle, EmptyState } from "./_components/ui";
+import { admin } from "./_components/theme";
+import { LeadBoard } from "./_components/LeadBoard";
 
-type Filter = "all" | LeadStatus;
-
-const FILTERS: { value: Filter; label: string }[] = [
-  { value: "all", label: "All" },
-  ...LEAD_STATUSES.map((s) => ({ value: s as Filter, label: LEAD_STATUS_LABEL[s] })),
-];
-
+type ViewMode = "board" | "list";
+const VIEW_KEY = "admin.leads.view";
 const LEADS_KEY = ["admin", "leads"] as const;
 
 const Leads = () => {
@@ -40,23 +35,35 @@ const Leads = () => {
     queryKey: LEADS_KEY,
     queryFn: () => listLeads(),
   });
-  const [filter, setFilter] = useState<Filter>("all");
+  const [view, setView] = useState<ViewMode>(() => {
+    if (typeof window === "undefined") return "board";
+    const stored = window.localStorage.getItem(VIEW_KEY);
+    return stored === "list" ? "list" : "board";
+  });
+  const [search, setSearch] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [mutationError, setMutationError] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(VIEW_KEY, view);
+    } catch {
+      /* ignore */
+    }
+  }, [view]);
 
   const loading = isLoading && leads.length === 0;
   const errMsg = mutationError ?? (error instanceof Error ? error.message : null);
 
-  const counts = useMemo(() => {
-    const acc: Record<string, number> = {};
-    for (const l of leads) acc[l.status] = (acc[l.status] ?? 0) + 1;
-    return acc;
-  }, [leads]);
-
-  const visible = useMemo(
-    () => (filter === "all" ? leads : leads.filter((l) => l.status === filter)),
-    [filter, leads],
-  );
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return leads;
+    return leads.filter((l) => {
+      const name = l.name?.toLowerCase() ?? "";
+      const company = l.company?.toLowerCase() ?? "";
+      return name.includes(q) || company.includes(q);
+    });
+  }, [search, leads]);
 
   const handleStatusChange = async (id: string, status: LeadStatus) => {
     qc.setQueryData<Lead[]>(LEADS_KEY, (prev) =>
@@ -78,41 +85,34 @@ const Leads = () => {
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10">
-        <div className="flex items-center justify-between mb-8">
-          <h1
-            className="text-2xl font-extrabold text-white"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            Leads
-          </h1>
-          <Button onClick={() => setDrawerOpen(true)}>+ Add Lead</Button>
-        </div>
+        <AdminPageHeader
+          title="Leads"
+          actions={
+            <>
+              <SegmentedToggle<ViewMode>
+                options={[
+                  { value: "board", label: "Board" },
+                  { value: "list", label: "List" },
+                ]}
+                value={view}
+                onChange={setView}
+              />
+              <Button onClick={() => setDrawerOpen(true)}>+ Add Lead</Button>
+            </>
+          }
+        />
 
-        <div
-          className="inline-flex rounded-md p-1 mb-6"
-          style={{
-            backgroundColor: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.05)",
-          }}
-        >
-          {FILTERS.map((f) => {
-            const active = filter === f.value;
-            const count = f.value === "all" ? leads.length : counts[f.value] ?? 0;
-            return (
-              <button
-                key={f.value}
-                onClick={() => setFilter(f.value)}
-                className="px-3 py-1.5 rounded text-sm transition-colors"
-                style={{
-                  backgroundColor: active ? "rgba(255,255,255,0.08)" : "transparent",
-                  color: active ? "#fff" : "rgb(156,163,175)",
-                }}
-              >
-                {f.label}
-                <span className="ml-2 text-gray-500 font-mono text-[11px]">{count}</span>
-              </button>
-            );
-          })}
+        <div className="mt-6 mb-6 max-w-sm">
+          <Input
+            placeholder="Search by name or company…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              backgroundColor: admin.surface,
+              border: `1px solid ${admin.border}`,
+              color: admin.text,
+            }}
+          />
         </div>
 
         {errMsg && (
@@ -128,19 +128,11 @@ const Leads = () => {
         )}
 
         {loading ? (
-          <p className="text-sm text-gray-500">Loading…</p>
-        ) : visible.length === 0 ? (
-          <p className="text-sm text-gray-500">
-            {filter === "all"
-              ? "No leads yet. Click + Add Lead to create one."
-              : `No leads in '${LEAD_STATUS_LABEL[filter]}' yet.`}
-          </p>
+          <p className="text-sm" style={{ color: admin.textDim }}>Loading…</p>
+        ) : view === "board" ? (
+          <LeadBoard leads={filtered} onMove={handleStatusChange} />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {visible.map((lead) => (
-              <LeadCard key={lead.id} lead={lead} onStatusChange={handleStatusChange} />
-            ))}
-          </div>
+          <EmptyState>List view coming soon.</EmptyState>
         )}
       </div>
 
@@ -153,70 +145,6 @@ const Leads = () => {
         }}
       />
     </AdminLayout>
-  );
-};
-
-const LeadCard = ({
-  lead,
-  onStatusChange,
-}: {
-  lead: Lead;
-  onStatusChange: (id: string, status: LeadStatus) => void;
-}) => {
-  return (
-    <div
-      className="rounded-2xl p-5"
-      style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.05)",
-      }}
-    >
-      <div className="flex items-start justify-between gap-4 mb-3">
-        <Link
-          to={`/admin/leads/${lead.id}`}
-          className="text-base font-semibold text-white hover:text-blue-400 transition-colors"
-          style={{ letterSpacing: "-0.01em" }}
-        >
-          {lead.name}
-          {lead.company ? (
-            <span className="text-gray-500 font-normal ml-2">· {lead.company}</span>
-          ) : null}
-        </Link>
-        <Select value={lead.status} onValueChange={(v) => onStatusChange(lead.id, v as LeadStatus)}>
-          <SelectTrigger className="h-7 w-[110px] text-xs">
-            <SelectValue>
-              <LeadStatusBadge status={lead.status} />
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {LEAD_STATUSES.map((s) => (
-              <SelectItem key={s} value={s}>
-                {LEAD_STATUS_LABEL[s]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {lead.how_i_know_them ? (
-        <p className="text-xs text-gray-500 mb-2">
-          <span className="text-gray-600">How I know them: </span>
-          {lead.how_i_know_them}
-        </p>
-      ) : null}
-
-      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-500">
-        <span>
-          <span className="text-gray-600">Last contact:</span> {formatDate(lead.last_contact_date)}
-        </span>
-        {lead.next_action_date ? (
-          <span>
-            <span className="text-gray-600">Next:</span> {formatDate(lead.next_action_date)}
-            {lead.next_action ? ` · ${lead.next_action}` : ""}
-          </span>
-        ) : null}
-      </div>
-    </div>
   );
 };
 
