@@ -49,7 +49,6 @@ function Column({
     data: { status },
   });
 
-  const tint = LEAD_STATUS_COLORS[status].soft;
   const dead = status === "dead";
   const label = LEAD_STATUS_LABEL[status];
 
@@ -57,41 +56,43 @@ function Column({
     <div
       role="list"
       aria-label={`${label} column, ${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}
-      className="flex flex-col rounded-2xl shrink-0"
+      className="flex flex-col shrink-0"
       style={{
         width: 300,
-        backgroundColor: tint,
-        border: `1px solid ${isOver ? admin.borderStrong : admin.border}`,
         opacity: dead ? 0.65 : 1,
-        transition: "border-color 120ms ease",
       }}
     >
-      <div className="flex items-center justify-between px-4 pt-4 pb-3">
-        <div className="flex items-center gap-2">
-          <StatusDot status={status} />
-          <span
-            style={{
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: admin.textDim,
-              fontWeight: 600,
-            }}
-          >
-            {label}
-          </span>
-        </div>
+      <div className="flex items-center justify-between px-1 pb-2">
+        <span
+          style={{
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.14em",
+            color: admin.textDim,
+            fontWeight: 600,
+          }}
+        >
+          {label}
+        </span>
         <span className="font-mono" style={{ fontSize: 11, color: admin.textDim }}>
           {leads.length.toString().padStart(2, "0")}
         </span>
       </div>
+      <div style={{ borderTop: `1px solid ${admin.border}` }} />
 
       <SortableContext
         id={`${COLUMN_PREFIX}${status}`}
         items={leads.map((l) => l.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div ref={setNodeRef} className="flex flex-col gap-2 px-3 pb-3 min-h-[120px]">
+        <div
+          ref={setNodeRef}
+          className="flex flex-col gap-2 p-2 mt-2 min-h-[120px] rounded-xl"
+          style={{
+            backgroundColor: isOver ? admin.surface2 : "transparent",
+            transition: "background-color 120ms ease",
+          }}
+        >
           {loading ? (
             <ColumnSkeleton />
           ) : leads.length === 0 ? (
