@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminLayout } from "@/components/admin/AdminLayout";
@@ -24,6 +25,7 @@ import {
 import { AdminPageHeader, SegmentedToggle, EmptyState } from "./_components/ui";
 import { admin } from "./_components/theme";
 import { LeadBoard } from "./_components/LeadBoard";
+import { LeadDetailModal } from "./_components/LeadDetailModal";
 
 type ViewMode = "board" | "list";
 const VIEW_KEY = "admin.leads.view";
