@@ -1,53 +1,131 @@
-Restyle `src/pages/admin/References.tsx` to match the admin design system. Visual-only — keep every Supabase call, dnd-kit logic, toast call, query, and handler unchanged.
+## Plan: InfoBanner primitive + restyle WarmLeads page (visual only)
 
-### What to change
+### 1. `src/pages/admin/_components/ui.tsx` — add `InfoBanner`
 
-1. **Imports** — add `admin` from `./_components/theme` and `AdminPageHeader, AdminCard, ErrorBanner, EmptyState` from `./_components/ui`. Remove the `sectionCard` style constant.
+Add a new component below `ErrorBanner`, mirroring its API:
 
-2. **Page shell**
-   - Replace `<h1>References</h1>` with `<AdminPageHeader title="References" />`.
-   - Replace inline red error `<div>` with `<ErrorBanner>{errorMsg}</ErrorBanner>`.
+```tsx
+export function InfoBanner({ children }: { children: ReactNode }) {
+  return (
+    <div
+      role="status"
+      className="rounded-md p-4 text-sm text-blue-200"
+      style={{
+        backgroundColor: "rgba(59,130,246,0.08)",
+        border: "1px solid rgba(59,130,246,0.2)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+```
 
-3. **Reusable section heading style** — all five section `<h2>` headings use:
-   ```tsx
-   <h2 className="text-lg font-semibold mb-4" style={{ color: admin.text, letterSpacing: "-0.01em" }}>
-   ```
+Reused on the Warm Lead detail page later.
 
-4. **InviteSection (Section 1)**
-   - Replace `<form ... style={sectionCard}>` wrapper with `<AdminCard>` and put the form inside (form keeps its flex layout & inputs unchanged).
+### 2. `src/pages/admin/WarmLeads.tsx` — visual restyle
 
-5. **InvitesTable (Section 2)**
-   - Wrap the table area in `<AdminCard className="p-0 overflow-hidden">`.
-   - Loading/empty → `<EmptyState>` (wrap inside an `AdminCard` for consistent surface, or render directly inside the card).
-   - `TableRow` header: `hover:bg-transparent` with `borderColor: admin.border` via Tailwind arbitrary `[border-color:rgba(255,255,255,0.06)]` or inline style. Same for body rows. Hover: `hover:[background-color:rgba(255,255,255,0.04)]`.
-   - Cell text colors: email = `admin.text`, name = `admin.textMuted`, date cells = `admin.textDim`, "—" placeholder = `admin.textDim`.
-   - Keep Resend / Revoke buttons; restyle Revoke text via `text-destructive`-style classes — but spec says keep functions — so use `style={{ color: "#fca5a5" }}` (still red) → simpler: leave existing `text-red-400 hover:text-red-300` for Revoke (semantic red is OK).
+Imports — add:
+```ts
+import { AdminPageHeader, AdminCard, ErrorBanner, InfoBanner } from "./_components/ui";
+import { admin } from "./_components/theme";
+```
 
-6. **PendingReviewSection (Section 3)**
-   - Loading/empty → `<EmptyState>`.
-   - Each card: replace `<div ... style={sectionCard}>` with `<AdminCard>`.
-   - Card heading name → `style={{ color: admin.text }}`; role → `admin.textMuted`; headline → `admin.text` with `opacity 0.9`; meta line → `admin.textDim`; LinkedIn link → `admin.accent`.
-   - "Approve" button: replace `bg-white text-black hover:bg-gray-200` with default primary (`<Button size="sm">`), aligning to shared accent.
-   - "Reject" outline button: keep red palette (semantic).
-   - "View Raw" toggle button: color = `admin.textMuted`.
-   - Raw JSON `<pre>`: bg `admin.surface2`, color `admin.textMuted`.
+**Page shell (~lines 134–159)**
+- Outer wrapper: change to `px-4 sm:px-6 lg:px-10 py-6 lg:py-10` to match Leads.
+- Replace the manual header row with:
+  ```tsx
+  <AdminPageHeader
+    title="Warm Leads"
+    actions={
+      <>
+        <Button variant="ghost" onClick={() => setConfigOpen(true)}
+          style={{ color: admin.textMuted }}>⚙ Configure</Button>
+        <Button onClick={handleRunNow} disabled={scrapeRunning}>
+          {scrapeRunning ? "Scraping…" : "Run now"}
+        </Button>
+      </>
+    }
+  />
+  ```
+- Keep the descriptive paragraph; restyle: `text-xs mt-2 mb-8` with `color: admin.textDim`.
 
-7. **LiveOnSiteSection (Section 4) & SortableRow**
-   - Loading/empty → `<EmptyState>`.
-   - SortableRow: render as a div with `backgroundColor: admin.surface`, `border: 1px solid ${admin.border}`, `rounded-xl px-3 py-3 flex items-center gap-3`. (Skip AdminCard since it has fixed `p-5`; replicate token styles inline.)
-   - Drag handle button: color `admin.textDim` → hover `admin.text`.
-   - Name: `admin.text`; role/headline: `admin.textMuted` / `admin.textDim`.
-   - Hide button: color `admin.textMuted`.
+**StatCard helper**
+Rebuild on `admin` tokens:
+```tsx
+const StatCard = ({ label, value }) => (
+  <div className="rounded-2xl p-5"
+    style={{ backgroundColor: admin.surface, border: `1px solid ${admin.border}` }}>
+    <p className="text-[10px] uppercase tracking-[0.14em] font-medium mb-2"
+       style={{ color: admin.textDim }}>{label}</p>
+    <p className="text-3xl font-semibold" style={{ color: admin.text, letterSpacing: "-0.03em" }}>
+      {value}
+    </p>
+  </div>
+);
+```
 
-8. **ArchiveSection (Section 5)**
-   - `AccordionItem` border → `[border-color:rgba(255,255,255,0.06)]` (`admin.border`).
-   - `AccordionTrigger`: color `admin.text`, font-semibold.
-   - Empty → `<EmptyState>`.
-   - Each row: same inline-styled rounded surface (matching SortableRow) using `admin.surface` + `admin.border`. Name → `admin.text`; role → `admin.textMuted`; Un-archive button color `admin.textMuted`.
+**ModeBanner**
+- Keep the per-mode `colors` map (capped/always_on/paused) for the accent label tint.
+- Container: `rounded-2xl p-5 mb-6`, `backgroundColor: admin.surface`, `border: 1px solid ${admin.border}`.
+- Mode label uses `c.fg` color; progress line uses `admin.text`; meta line uses `admin.textDim`.
+- Right side labels: `admin.textDim` for label, `admin.text` for value.
+
+**Scrape result + error**
+- Replace blue `<div>` block with `<div className="mb-6"><InfoBanner>{scrapeMsg}</InfoBanner></div>`.
+- Replace red `<div>` block with `<div className="mb-6"><ErrorBanner>{errMsg}</ErrorBanner></div>`.
+
+**Status filter tabs**
+Rounded-full pill row using the same tokens as `SegmentedToggle`, but keep the local map because each pill includes a count:
+```tsx
+<div role="tablist" className="inline-flex items-center gap-1 rounded-full p-1 mb-6"
+  style={{ backgroundColor: admin.surface, border: `1px solid ${admin.border}` }}>
+  {FILTERS.map(f => {
+    const active = filter === f.value;
+    const count = f.value === "all" ? leads.length : counts[f.value] ?? 0;
+    return (
+      <button key={f.value} onClick={() => setFilter(f.value)}
+        aria-pressed={active}
+        className="px-3 py-1 rounded-full text-xs font-medium transition-colors"
+        style={{
+          backgroundColor: active ? admin.surface2 : "transparent",
+          color: active ? admin.text : admin.textMuted,
+        }}>
+        {f.label}
+        <span className="ml-2 font-mono text-[11px]"
+          style={{ color: admin.textDim }}>{count}</span>
+      </button>
+    );
+  })}
+</div>
+```
+
+**Loading state**
+- `<p style={{ color: admin.textDim }} className="text-sm">Loading…</p>`.
+
+**Local EmptyState (keep name — do NOT import shared one)**
+- Filter-specific branch: `<p className="text-sm" style={{ color: admin.textDim }}>…</p>`.
+- Default branch: wrap in a token-styled card with dashed border:
+  ```tsx
+  <div className="rounded-2xl p-8 text-center"
+    style={{ backgroundColor: admin.surface, border: `1px dashed ${admin.border}` }}>
+    <p className="text-sm mb-2" style={{ color: admin.textMuted }}>No warm leads yet.</p>
+    <p className="text-xs max-w-md mx-auto" style={{ color: admin.textDim }}>
+      Click <span style={{ color: admin.text }}>Run now</span> to scrape…
+    </p>
+  </div>
+  ```
+
+**WarmLeadCard**
+Convert the `<Link>` to use admin tokens (kept as a Link, all data unchanged):
+- `backgroundColor: admin.surface`, `border: 1px solid ${admin.border}`, `rounded-2xl p-4`.
+- Hover: `hover:[background-color:${admin.surface2}]` via Tailwind arbitrary; raise to `borderStrong` via inline `onMouseEnter` not needed — use Tailwind `transition-colors` + `hover:[border-color:rgba(255,255,255,0.12)]`.
+- Source label / meta: `admin.textDim`; handle: `admin.textMuted`; headline: `admin.text`; excerpt: `admin.textMuted`; bottom meta row: `admin.textDim`.
+
+**ConfigDrawer**
+- Source-row container in the Sources list: swap to `admin.surface` + `admin.border`, keep `rounded-md px-3 py-2`. Wrap the entire Sources `<div className="space-y-2">` in nothing extra; only individual rows are restyled. The row text: name → `admin.text`, meta → `admin.textDim`.
+- All helper `<p className="text-xs text-gray-500 mt-2">` blocks → use `style={{ color: admin.textDim }}`.
+- The form-level container doesn't need an AdminCard wrapper (it lives inside a Sheet); only the source rows + helper texts get restyled.
 
 ### Out of scope
-- No changes to queries, dnd-kit logic, toast calls, handlers, AlertDialog markup, or routing.
-- No new dependencies; no changes to `theme.ts`, `ui.tsx`, or other files.
-
-### Verification
-- TypeScript compiles clean. Visual parity with Leads/Projects pages.
+No changes to queries, `triggerScrapeNow`, `updateWarmLeadSettings`, `updateWarmLeadSource`, filter state, drawer open/close logic, or any handler. No new dependencies. TypeScript must compile clean.
