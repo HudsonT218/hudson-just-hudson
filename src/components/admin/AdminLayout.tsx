@@ -189,7 +189,39 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="flex-1 ml-[220px] min-h-screen overflow-x-hidden">{children}</main>
+      <main className="flex-1 ml-[220px] min-h-screen overflow-x-hidden relative">
+        <div
+          aria-hidden
+          className="sticky top-0 left-0 right-0 z-10"
+          style={{ pointerEvents: "none", height: 0 }}
+        >
+          <div className="relative w-full">
+            <div
+              style={{
+                position: "absolute",
+                top: -2,
+                left: 0,
+                right: 0,
+                height: 6,
+                background: `linear-gradient(90deg, transparent, ${admin.accent}40, transparent)`,
+                filter: "blur(4px)",
+                opacity: 0.8,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 1,
+                background: `linear-gradient(90deg, transparent, ${admin.accent}b3, transparent)`,
+              }}
+            />
+          </div>
+        </div>
+        {children}
+      </main>
     </div>
   );
 }
