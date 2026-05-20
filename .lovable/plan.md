@@ -1,43 +1,56 @@
-Polish pass — leads page + admin shell. Presentation-only; no data, route, or dependency changes.
+## Open-surface leads board
 
-**1. Loading / empty / error states**
+Refactor the leads board from four bordered, tinted panels into a single open surface separated by whitespace, with status color moved onto each card as a left accent stripe.
 
-- `LeadBoard.tsx`: accept optional `loading?: boolean`. When loading, render 3 skeleton cards per column (animated `bg` with `admin.surface2`, `animate-pulse`). Per-column empty: small "No leads" line styled in `admin.textDim`. Whole-board empty (all columns empty, not loading): centered `EmptyState` above the columns row.
-- `LeadListView.tsx`: skeleton rows when `loading`; empty state when no rows (already present) — restyle to use theme tokens; preserve status filter.
-- `Leads.tsx`: replace the bare "Loading…" text with the board/list rendering passing `loading`. Promote inline error block to a small `ErrorBanner` helper using `admin.*` tokens (red tinted bg/border, already-themed). Apply same banner inside `LeadDetailModal` (already styled — keep).
+### 1. `theme.ts` — add a `strong` status color
 
-**2. Responsive**
+Extend `LEAD_STATUS_COLORS` with a `strong` field per status (used for the card accent stripe). Keep `dot` and `soft` for backward compatibility (not used by board anymore, but `dot` is still used by `StatusDot` elsewhere, e.g. `LeadDetailModal`/`StatusBadge`).
 
-- Board already scrolls horizontally (`overflow-x-auto`); confirm columns keep `shrink-0` and `width: 300`.
-- `Leads.tsx` page padding: change `px-10 py-10` → `px-4 sm:px-6 lg:px-10 py-6 lg:py-10` so the header doesn't crowd on narrow widths.
-- `AdminPageHeader`: allow actions to wrap (`flex-wrap`) so SegmentedToggle + Add Lead don't overflow.
-- Search input: keep `max-w-sm`, but width `w-full` on small.
-- `AdminLayout.tsx`: sidebar stays 220px fixed (per project rule). Add `overflow-x-hidden` on main to prevent horizontal page bleed.
+```ts
+export const LEAD_STATUS_COLORS: Record<LeadStatus, { dot: string; soft: string; strong: string }> = {
+  cold:   { dot: "rgb(156,163,175)", soft: "rgba(255,255,255,0.06)",  strong: "rgb(156,163,175)" },
+  warm:   { dot: "#60a5fa",          soft: "rgba(59,130,246,0.15)",   strong: "#3b82f6" },
+  client: { dot: "#34d399",          soft: "rgba(16,185,129,0.15)",   strong: "#10b981" },
+  dead:   { dot: "rgb(252,165,165)", soft: "rgba(127,29,29,0.25)",    strong: "#ef4444" },
+};
+```
 
-**3. Accessibility**
+### 2. `LeadBoard.tsx` — open surface
 
-- `LeadBoard.tsx`: keyboard drag already wired via `KeyboardSensor`. Add `aria-label` on `DndContext` wrapper container ("Leads board, drag with space then arrow keys"). Each column gets `role="list"` + `aria-label="{Status} column, {n} leads"`.
-- `LeadCard.tsx`: add `aria-label="Drag {lead.name}, status {status}"` on the draggable element, and `role="button"` already implicit via listeners; add `tabIndex={0}` already from dnd-kit attributes.
-- `Leads.tsx`: `aria-label="Search leads by name or company"` on the search input; SegmentedToggle buttons get `aria-pressed={active}` and a wrapping `role="group" aria-label="View mode"` — update `SegmentedToggle` primitive in `ui.tsx`.
-- `LeadDetailModal.tsx`: shadcn Dialog already traps focus and restores; add a visible accessible name (replace `VisuallyHidden` title with the lead name as the actual heading inside the header instead of the bare `<input>` — keep the input editable but mark with `aria-label`). Already has aria-label, good.
-- **prefers-reduced-motion**: in `index.css` add a global rule that disables `transition` and `animation` and dnd-kit transform animations when `(prefers-reduced-motion: reduce)`. Also gate the `transition` prop on `LeadCard`'s sortable style to `undefined` when reduced motion is preferred (small `useReducedMotion`-style hook reading `matchMedia`).
+- Remove the `tint`, `border`, and rounded panel styling from `Column`. The column becomes a plain vertical stack:
+  - Header row: status label (existing micro-uppercase style in `admin.textDim`) on the left, count in mono on the right.
+  - Remove `<StatusDot>` from the header.
+  - Below the header row, a 1px hairline (`borderBottom: 1px solid ${admin.border}`) sits directly under the title — small bottom margin before the cards.
+- Keep column width `300`, keep `shrink-0`, keep `opacity: 0.65` on Dead.
+- Drag feedback: when `isOver` from `useDroppable`, set the cards container's background to `admin.surface2` with a subtle `rounded-xl` and a short transition. No permanent panel background otherwise (transparent).
+- Keep `SortableContext`, the `min-h-[120px]` droppable area, skeletons, the "No leads" empty text, and the outer `flex gap-4 overflow-x-auto` row exactly as today.
+- Keep `aria-label`/`role="list"` on the column for accessibility (label still uses the status name + count).
 
-**4. Dead column**
+### 3. `LeadCard.tsx` — left accent stripe
 
-- Confirm `opacity: 0.65` reads well; keep as-is. Add `aria-label` including the count so SR users get the same emphasis cue verbally.
+- Wrap the card content in a `relative` container with `overflow-hidden` so the inner stripe respects the rounded corners (no `border-left`, no clipped corners).
+- Add an absolutely positioned inner bar:
+  ```tsx
+  <span aria-hidden style={{
+    position: "absolute", left: 0, top: 6, bottom: 6, width: 3,
+    borderRadius: 9999,
+    backgroundColor: LEAD_STATUS_COLORS[lead.status].strong,
+  }} />
+  ```
+  (Small top/bottom inset so the pill reads as an inner accent rather than touching the card edge.)
+- Add `paddingLeft` ~`12px` (so text doesn't collide with the stripe) while keeping current `p-3` for the other sides.
+- Everything else — drag/sortable wiring, click-vs-drag pointer logic, name + company, last contact, next-action overdue amber, hover/focus ring, `opacity 0.5` while dragging — stays unchanged.
 
-**5. Verification**
+### 4. Out of scope
 
-- After edits: read updated files, then visually verify the preview at `/admin/leads` (board renders, list toggles, drag works, modal opens/closes via row click and ESC). Look for TS errors via build output.
+- No changes to data layer, dnd-kit setup, optimistic updates, modal, list view, or `Leads.tsx`.
+- No new dependencies.
+- `StatusDot` itself is not removed (still used elsewhere) — just no longer rendered in the column header.
 
-**Files touched**
+### Verification
 
-- edit `src/pages/admin/Leads.tsx`
-- edit `src/pages/admin/_components/LeadBoard.tsx`
-- edit `src/pages/admin/_components/LeadCard.tsx`
-- edit `src/pages/admin/_components/LeadListView.tsx`
-- edit `src/pages/admin/_components/ui.tsx` (SegmentedToggle a11y; add `SkeletonCard` helper)
-- edit `src/components/admin/AdminLayout.tsx` (main overflow guard)
-- edit `src/index.css` (reduced-motion global)
-
-No new dependencies. No data-layer changes.
+- Board renders as one continuous dark surface with four labeled columns separated only by gap whitespace.
+- Each card shows a thin colored stripe matching its status; corners remain fully rounded.
+- Dragging a card highlights the hovered column with a faint `surface2` background.
+- Drag-and-drop between columns still updates status; clicking a card still opens the modal at `/admin/leads/:id`.
+- No TypeScript or build errors.
