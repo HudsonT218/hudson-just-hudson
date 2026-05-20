@@ -371,33 +371,36 @@ const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
   return (
     <Link
       to={`/admin/warm-leads/${lead.id}`}
-      className="block rounded-xl p-4 transition-colors hover:bg-white/[0.03]"
+      className="block rounded-2xl p-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)] hover:[border-color:rgba(255,255,255,0.12)]"
       style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.05)",
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
       }}
     >
       <div className="flex items-start justify-between gap-4 mb-2">
         <div className="flex items-center gap-2 flex-wrap">
           <WarmLeadScorePill score={lead.score} />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-gray-500">
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.14em]"
+            style={{ color: admin.textDim }}
+          >
             {lead.source_label}
           </span>
           {lead.author_handle && (
-            <span className="font-mono text-[11px] text-gray-400">
+            <span className="font-mono text-[11px]" style={{ color: admin.textMuted }}>
               @{lead.author_handle}
             </span>
           )}
         </div>
         <WarmLeadStatusBadge status={lead.status} />
       </div>
-      <p className="text-sm text-white font-medium mb-1 line-clamp-1">
+      <p className="text-sm font-medium mb-1 line-clamp-1" style={{ color: admin.text }}>
         {headline}
       </p>
-      <p className="text-xs text-gray-500 line-clamp-2 mb-2">
+      <p className="text-xs line-clamp-2 mb-2" style={{ color: admin.textMuted }}>
         {lead.raw_excerpt}
       </p>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-600">
+      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]" style={{ color: admin.textDim }}>
         {lead.matched_keywords.length > 0 && (
           <span>matched: {lead.matched_keywords.join(", ")}</span>
         )}
