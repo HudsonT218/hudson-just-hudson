@@ -244,22 +244,23 @@ const InvitesTable = ({
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Invites Sent
       </h2>
-      <div className="rounded-2xl overflow-hidden" style={sectionCard}>
+      <AdminCard className="p-0 overflow-hidden">
         {loading ? (
-          <p className="text-sm text-gray-500 p-5">Loading…</p>
+          <EmptyState>Loading…</EmptyState>
         ) : requests.length === 0 ? (
-          <p className="text-sm text-gray-500 p-5">
-            No invites yet. Send your first one above.
-          </p>
+          <EmptyState>No invites yet. Send your first one above.</EmptyState>
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-white/5">
+              <TableRow
+                className="hover:bg-transparent"
+                style={{ borderColor: admin.border }}
+              >
                 <TableHead>Email</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Status</TableHead>
@@ -271,19 +272,25 @@ const InvitesTable = ({
             </TableHeader>
             <TableBody>
               {requests.map((req) => (
-                <TableRow key={req.id} className="border-white/5 hover:bg-white/[0.02]">
-                  <TableCell className="text-white">{req.invited_email}</TableCell>
-                  <TableCell className="text-gray-400">{req.invited_name ?? "—"}</TableCell>
+                <TableRow
+                  key={req.id}
+                  className="hover:[background-color:rgba(255,255,255,0.04)]"
+                  style={{ borderColor: admin.border }}
+                >
+                  <TableCell style={{ color: admin.text }}>{req.invited_email}</TableCell>
+                  <TableCell style={{ color: admin.textMuted }}>
+                    {req.invited_name ?? "—"}
+                  </TableCell>
                   <TableCell>
                     <ReferenceRequestStatusBadge status={req.status} />
                   </TableCell>
-                  <TableCell className="text-gray-500 text-xs">
+                  <TableCell className="text-xs" style={{ color: admin.textDim }}>
                     {formatDate(req.created_at)}
                   </TableCell>
-                  <TableCell className="text-gray-500 text-xs">
+                  <TableCell className="text-xs" style={{ color: admin.textDim }}>
                     {formatDate(req.expires_at)}
                   </TableCell>
-                  <TableCell className="text-gray-500 text-xs">
+                  <TableCell className="text-xs" style={{ color: admin.textDim }}>
                     {formatDate(req.submitted_at)}
                   </TableCell>
                   <TableCell className="text-right">
@@ -308,7 +315,7 @@ const InvitesTable = ({
                         </Button>
                       </div>
                     ) : (
-                      <span className="text-gray-600 text-xs">—</span>
+                      <span className="text-xs" style={{ color: admin.textDim }}>—</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -316,7 +323,7 @@ const InvitesTable = ({
             </TableBody>
           </Table>
         )}
-      </div>
+      </AdminCard>
     </section>
   );
 };
