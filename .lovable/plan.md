@@ -1,37 +1,52 @@
-Redesign the admin sidebar in `src/components/admin/AdminLayout.tsx` into a polished dashboard shell, consuming the shared tokens in `src/pages/admin/_components/theme.ts` and the primitives in `ui.tsx`.
+Rebuild `src/pages/admin/Leads.tsx` as a Board/List page (Board view this step). Presentation + drag-and-drop only — no backend, types, or dependency changes.
 
-Scope: presentation-only. All routes, `isActive()`, `preloadAdminChunks()`, and `handleSignOut()` stay exactly the same. No data-layer changes. Only edit `AdminLayout.tsx`.
+## Files
 
-Changes:
+### New: `src/pages/admin/_components/LeadCard.tsx`
+Sortable card consumed by the board.
+- Props: `lead: Lead`.
+- Uses `useSortable({ id: lead.id, data: { status: lead.status } })`.
+- Spread `attributes`, `listeners`, `setNodeRef`; apply `CSS.Transform.toString(transform)` + `transition`.
+- Wrapper styled with `admin.surface`, 1px `admin.border`, rounded-xl, padding ~12px. Hover state raises border to `admin.borderStrong`.
+- Distinguish click vs drag: track pointerdown coords; if pointerup moves < 5px and not dragging, call `navigate(`/admin/leads/${lead.id}`)`. (Drag listeners stay attached so dnd-kit owns motion.) Simpler: render a small `View` affordance — but spec wants whole-card click. Implement using `onClick` on the wrapper that bails out if `isDragging` is true.
+- Content:
+  - Top: name in semibold white, company muted inline (`· {company}`).
+  - `SectionLabel`-style "LAST CONTACT" micro-row with `formatDate(lead.last_contact_date)`.
+  - `SectionLabel`-style "NEXT" micro-row with `next_action` + `next_action_date`; if `next_action_date < today`, color the date in amber (`#f59e0b`).
 
-1. **Imports**
-   - Add `useAuth` from `src/components/configurator/auth/AuthProvider.tsx`.
-   - Add `admin` token object from `src/pages/admin/_components/theme.ts`.
-   - Import lucide-react icons: `LayoutDashboard`, `Flame`, `Users`, `FolderKanban`, `BookOpen`, `Target`, `Settings`, `LogOut`.
+### New: `src/pages/admin/_components/LeadBoard.tsx`
+- Props: `leads: Lead[]`, `onMove: (id: string, status: LeadStatus) => void`.
+- Set up `DndContext` with `PointerSensor` (activationConstraint `{ distance: 5 }`) and `KeyboardSensor` (sortableKeyboardCoordinates).
+- Group leads by status into 4 buckets: cold, warm, client, dead.
+- Render 4 columns in a horizontally-scrolling flex row (`overflow-x-auto`), each column min-width ~280px.
+- Each column:
+  - Panel: 1px `admin.border`, rounded-2xl, background = column's `LEAD_STATUS_COLORS[status].soft` (already a faint tint).
+  - Header row: `StatusDot` + uppercase letter-spaced label (reuse SectionLabel) + count on right in mono font (`font-mono text-xs`, `admin.textDim`).
+  - Body: `SortableContext` (items = lead ids in that column, strategy `verticalListSortingStrategy`) wrapping a column drop target (a div registered via `useDroppable({ id: `column:${status}` })`) containing the LeadCards.
+  - Dead column wrapper gets `opacity: 0.65`.
+- `onDragEnd`:
+  - Determine destination status: if `over.data.current?.sortable?.containerId` exists use that; else if `over.id` starts with `column:` use the suffix; else look up the over-id in the lead map and use its current status.
+  - If destination differs from active lead's current status → call `onMove(activeId, newStatus)`.
 
-2. **Brand block (top)**
-   - Replace the existing "HT admin" header with a stacked brand block.
-   - Rounded-square icon (roughly 36×36) with a blue gradient background (`linear-gradient(135deg, #3b82f6, #1d4ed8)`) and a white `Target` lucide icon centered inside.
-   - Wordmark "Lead OS" in `admin.text` (white), semibold, ~16px, tracking-tight.
-   - Underneath: "v1 · admin" label in `admin.textDim`, ~11px.
+### Rewrite: `src/pages/admin/Leads.tsx`
+- Drop `FILTERS`, the filter tab strip, the existing inline `LeadCard`, and the `Link`/Select-based row layout.
+- Keep `AddLeadDrawer` exactly as-is (move it below or leave inline — no behavior change).
+- Header via `AdminPageHeader`:
+  - title: "Leads"
+  - actions: `SegmentedToggle<"board"|"list">` (options Board / List) + existing `Button` "+ Add Lead".
+- View state persisted in `localStorage` key `admin.leads.view` (default `"board"`). Read in initial state via lazy initializer; write in a `useEffect` on change.
+- Search input below header (full-width, max-width ~360px), styled with `admin.surface` + `admin.border`. Filters by `name` and `company` (case-insensitive substring). Applied to both views.
+- Filtered leads passed to `<LeadBoard leads={filtered} onMove={handleStatusChange} />` when view === "board".
+- When view === "list": render a temporary placeholder `<EmptyState>List view coming soon.</EmptyState>` (built next step).
+- Keep `handleStatusChange` with the exact same optimistic React Query cache update + invalidation pattern; pass it to LeadBoard as `onMove`.
+- Keep `LEADS_KEY`, query, error banner, loading state.
 
-3. **Navigation**
-   - Extend `NAV` array so each item carries an icon component reference.
-   - Render each nav item as a horizontal row: icon (16px) + label.
-   - Active state: left accent bar (3px rounded-full `admin.accent`) OR `admin.accentSoft` fill + `admin.text` color. Use a visible left-bar treatment for the polished look.
-   - Inactive state: `admin.textMuted` color, transparent background.
-   - Keep the existing `isActive()` logic intact.
+## Technical notes
+- Cards & columns share the `admin.*` tokens — no new hardcoded rgba.
+- Drag-vs-click: PointerSensor `{ distance: 5 }` ensures a real click never triggers a drag; the card's `onClick` runs only when no drag occurred.
+- Overdue check: `new Date(lead.next_action_date) < startOfToday()` (compute startOfToday manually, no date-fns import needed).
+- No dependency changes; `@dnd-kit/core` + `@dnd-kit/sortable` + `@dnd-kit/utilities` already in package.json.
+- Lead detail modal route is built in the next step; navigation target `/admin/leads/:id` stays the same.
 
-4. **Account block (bottom)**
-   - Wrap the existing sign-out area into an account card.
-   - Circular avatar (28px) showing the signed-in user's initials derived from `profile?.fullName` or `user?.email`.
-   - Next to the avatar: the user's email truncated with ellipsis, and a "settings" label in `admin.textDim`.
-   - Keep the Sign out action button below or beside, styled with `LogOut` icon + `admin.textMuted`.
-   - `handleSignOut()` remains unchanged.
-
-5. **Structural constraints**
-   - Keep the `220px` fixed sidebar width and the `ml-[220px]` main content offset.
-   - Use the `admin.*` tokens for all colors — no new hardcoded rgba values outside of the gradient definition.
-   - No new dependencies.
-
-Verification: run the TypeScript build after the edit to confirm zero errors and confirm the admin preview still renders.
+## Verification
+TS build passes; `/admin/leads` renders 4 kanban columns; dragging across columns updates status optimistically and survives a refresh; click on a card navigates to detail route.
