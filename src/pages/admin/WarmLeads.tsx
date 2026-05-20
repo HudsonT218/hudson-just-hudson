@@ -133,29 +133,27 @@ const WarmLeads = () => {
         <title>Warm Leads — Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
-      <div className="px-10 py-10">
-        <div className="flex items-center justify-between mb-2">
-          <h1
-            className="text-2xl font-extrabold text-white"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            Warm Leads
-          </h1>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => setConfigOpen(true)}
-              className="text-sm text-gray-400 hover:text-white"
-            >
-              ⚙ Configure
-            </Button>
-            <Button onClick={handleRunNow} disabled={scrapeRunning}>
-              {scrapeRunning ? "Scraping…" : "Run now"}
-            </Button>
-          </div>
-        </div>
+      <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+        <AdminPageHeader
+          title="Warm Leads"
+          actions={
+            <>
+              <Button
+                variant="ghost"
+                onClick={() => setConfigOpen(true)}
+                className="text-sm"
+                style={{ color: admin.textMuted }}
+              >
+                ⚙ Configure
+              </Button>
+              <Button onClick={handleRunNow} disabled={scrapeRunning}>
+                {scrapeRunning ? "Scraping…" : "Run now"}
+              </Button>
+            </>
+          }
+        />
 
-        <p className="text-xs text-gray-500 mb-8">
+        <p className="text-xs mt-2 mb-8" style={{ color: admin.textDim }}>
           Automation surfaces public posts that look like "I need someone to build me X".
           Review the drafted reply, then promote, edit, or skip.
         </p>
@@ -173,22 +171,17 @@ const WarmLeads = () => {
         <ModeBanner settings={settings} sources={sources} />
 
         {scrapeMsg && (
-          <div
-            className="mb-6 rounded-md p-3 text-sm text-blue-200"
-            style={{
-              backgroundColor: "rgba(59,130,246,0.08)",
-              border: "1px solid rgba(59,130,246,0.2)",
-            }}
-          >
-            {scrapeMsg}
+          <div className="mb-6">
+            <InfoBanner>{scrapeMsg}</InfoBanner>
           </div>
         )}
 
         <div
-          className="inline-flex rounded-md p-1 mb-6"
+          role="tablist"
+          className="inline-flex items-center gap-1 rounded-full p-1 mb-6"
           style={{
-            backgroundColor: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.05)",
+            backgroundColor: admin.surface,
+            border: `1px solid ${admin.border}`,
           }}
         >
           {FILTERS.map((f) => {
@@ -198,16 +191,18 @@ const WarmLeads = () => {
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
-                className="px-3 py-1.5 rounded text-sm transition-colors"
+                aria-pressed={active}
+                className="px-3 py-1 rounded-full text-xs font-medium transition-colors"
                 style={{
-                  backgroundColor: active
-                    ? "rgba(255,255,255,0.08)"
-                    : "transparent",
-                  color: active ? "#fff" : "rgb(156,163,175)",
+                  backgroundColor: active ? admin.surface2 : "transparent",
+                  color: active ? admin.text : admin.textMuted,
                 }}
               >
                 {f.label}
-                <span className="ml-2 text-gray-500 font-mono text-[11px]">
+                <span
+                  className="ml-2 font-mono text-[11px]"
+                  style={{ color: admin.textDim }}
+                >
                   {count}
                 </span>
               </button>
@@ -216,19 +211,13 @@ const WarmLeads = () => {
         </div>
 
         {errMsg && (
-          <div
-            className="mb-6 rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {errMsg}
+          <div className="mb-6">
+            <ErrorBanner>{errMsg}</ErrorBanner>
           </div>
         )}
 
         {loading ? (
-          <p className="text-sm text-gray-500">Loading…</p>
+          <p className="text-sm" style={{ color: admin.textDim }}>Loading…</p>
         ) : visible.length === 0 ? (
           <EmptyState filter={filter} settings={settings} />
         ) : (
