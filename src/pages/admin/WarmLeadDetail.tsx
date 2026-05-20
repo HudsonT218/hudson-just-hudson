@@ -28,6 +28,14 @@ import {
   WarmLeadStatusBadge,
 } from "./_components/WarmLeadStatusBadge";
 import { formatDate } from "./_components/format";
+import { admin } from "./_components/theme";
+import {
+  AdminCard,
+  SectionLabel,
+  ErrorBanner,
+  InfoBanner,
+  EmptyState,
+} from "./_components/ui";
 
 const WarmLeadDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,7 +72,9 @@ const WarmLeadDetail = () => {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="px-10 py-10 text-sm text-gray-500">Loading…</div>
+        <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+          <EmptyState>Loading…</EmptyState>
+        </div>
       </AdminLayout>
     );
   }
@@ -72,14 +82,17 @@ const WarmLeadDetail = () => {
   if (!lead) {
     return (
       <AdminLayout>
-        <div className="px-10 py-10">
-          <p className="text-sm text-gray-500 mb-4">Warm lead not found.</p>
-          <Link
-            to="/admin/warm-leads"
-            className="text-sm text-blue-400 hover:text-blue-300"
-          >
-            ← Back to inbox
-          </Link>
+        <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+          <EmptyState>Warm lead not found.</EmptyState>
+          <div className="text-center mt-4">
+            <Link
+              to="/admin/warm-leads"
+              className="text-xs inline-block transition-colors hover:[color:#ffffff]"
+              style={{ color: admin.textDim }}
+            >
+              ← Back to inbox
+            </Link>
+          </div>
         </div>
       </AdminLayout>
     );
@@ -149,34 +162,23 @@ const WarmLeadDetail = () => {
         </title>
         <meta name="robots" content="noindex" />
       </Helmet>
-      <div className="px-10 py-10 max-w-3xl">
+      <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10 max-w-3xl">
         <Link
           to="/admin/warm-leads"
-          className="text-xs text-gray-500 hover:text-white transition-colors mb-6 inline-block"
+          className="text-xs inline-block mb-6 transition-colors hover:[color:#ffffff]"
+          style={{ color: admin.textDim }}
         >
           ← Warm leads
         </Link>
 
         {error && (
-          <div
-            className="mb-6 rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {error}
+          <div className="mb-6">
+            <ErrorBanner>{error}</ErrorBanner>
           </div>
         )}
         {info && (
-          <div
-            className="mb-6 rounded-md p-3 text-sm text-blue-200"
-            style={{
-              backgroundColor: "rgba(59,130,246,0.08)",
-              border: "1px solid rgba(59,130,246,0.2)",
-            }}
-          >
-            {info}
+          <div className="mb-6">
+            <InfoBanner>{info}</InfoBanner>
           </div>
         )}
 
@@ -185,7 +187,10 @@ const WarmLeadDetail = () => {
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               <WarmLeadScorePill score={lead.score} />
-              <span className="font-mono text-[10px] uppercase tracking-widest text-gray-500">
+              <span
+                className="font-mono text-[10px] uppercase tracking-[0.14em]"
+                style={{ color: admin.textDim }}
+              >
                 {lead.source_label}
               </span>
               {lead.author_handle && (
@@ -193,18 +198,21 @@ const WarmLeadDetail = () => {
                   href={lead.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-mono text-[11px] text-gray-400 hover:text-blue-400"
+                  className="font-mono text-[11px] transition-colors"
+                  style={{ color: admin.textMuted }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = admin.accent)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = admin.textMuted)}
                 >
                   @{lead.author_handle}
                 </a>
               )}
-              <span className="text-[11px] text-gray-600">
+              <span className="text-[11px]" style={{ color: admin.textDim }}>
                 {formatDate(lead.posted_at ?? lead.created_at)}
               </span>
             </div>
             <h1
-              className="text-2xl font-extrabold text-white"
-              style={{ letterSpacing: "-0.02em" }}
+              className="text-2xl font-semibold"
+              style={{ color: admin.text, letterSpacing: "-0.02em" }}
             >
               {lead.raw_title?.trim() || "(no title)"}
             </h1>
@@ -244,12 +252,12 @@ const WarmLeadDetail = () => {
             variant="ghost"
             onClick={copyDraft}
             disabled={!draft}
-            className="text-gray-300"
+            style={{ color: admin.textMuted }}
           >
             📋 Copy draft
           </Button>
           <a href={lead.url} target="_blank" rel="noreferrer">
-            <Button variant="ghost" className="text-gray-300">
+            <Button variant="ghost" style={{ color: admin.textMuted }}>
               ↗ Open source post
             </Button>
           </a>
@@ -257,7 +265,7 @@ const WarmLeadDetail = () => {
             variant="ghost"
             onClick={() => setStatus("sent")}
             disabled={!!busy}
-            className="text-gray-300"
+            style={{ color: admin.textMuted }}
           >
             Mark sent
           </Button>
@@ -265,7 +273,7 @@ const WarmLeadDetail = () => {
             variant="ghost"
             onClick={() => setStatus("dismissed")}
             disabled={!!busy}
-            className="text-gray-500"
+            style={{ color: admin.textDim }}
           >
             Skip
           </Button>
@@ -273,7 +281,10 @@ const WarmLeadDetail = () => {
 
         {/* Original post */}
         <Section title="Original post">
-          <p className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">
+          <p
+            className="text-sm whitespace-pre-wrap leading-relaxed"
+            style={{ color: admin.text }}
+          >
             {lead.raw_excerpt}
           </p>
           {lead.matched_keywords.length > 0 && (
@@ -283,8 +294,9 @@ const WarmLeadDetail = () => {
                   key={kw}
                   className="text-[10px] font-mono px-2 py-0.5 rounded-full"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.04)",
-                    color: "rgb(156,163,175)",
+                    backgroundColor: admin.surface2,
+                    border: `1px solid ${admin.border}`,
+                    color: admin.textMuted,
                   }}
                 >
                   {kw}
@@ -297,13 +309,19 @@ const WarmLeadDetail = () => {
         {/* LLM reasoning */}
         {lead.score_reasoning && (
           <Section title={`Why this scored ${lead.score}`}>
-            <p className="text-sm text-gray-400 italic">{lead.score_reasoning}</p>
+            <p className="text-sm italic" style={{ color: admin.textMuted }}>
+              {lead.score_reasoning}
+            </p>
           </Section>
         )}
 
         {/* Drafted reply editor */}
         <Section title="Drafted outreach">
-          <Label htmlFor="wl-draft" className="text-xs text-gray-500 mb-2 block">
+          <Label
+            htmlFor="wl-draft"
+            className="text-xs mb-2 block"
+            style={{ color: admin.textDim }}
+          >
             Edit before sending. Aim for 2–3 sentences and one specific question.
           </Label>
           <Textarea
@@ -314,7 +332,10 @@ const WarmLeadDetail = () => {
             placeholder="(no draft generated — write your own)"
           />
           {lead.draft_generated_at && (
-            <p className="text-[10px] text-gray-600 mt-2 font-mono">
+            <p
+              className="text-[10px] mt-2 font-mono"
+              style={{ color: admin.textDim }}
+            >
               ai-drafted {formatDate(lead.draft_generated_at)}
             </p>
           )}
@@ -339,11 +360,12 @@ const WarmLeadDetail = () => {
 
         {/* Linked CRM record */}
         {lead.promoted_lead_id && (
-          <p className="text-xs text-gray-500">
+          <p className="text-xs" style={{ color: admin.textDim }}>
             Linked to CRM lead{" "}
             <Link
               to={`/admin/leads/${lead.promoted_lead_id}`}
-              className="text-blue-400 hover:text-blue-300 font-mono"
+              className="font-mono hover:underline"
+              style={{ color: admin.accent }}
             >
               {lead.promoted_lead_id.slice(0, 8)}
             </Link>
@@ -362,18 +384,8 @@ const Section = ({
   children: React.ReactNode;
 }) => (
   <section className="mb-8">
-    <h2 className="text-xs uppercase tracking-widest text-gray-500 font-medium mb-3">
-      {title}
-    </h2>
-    <div
-      className="rounded-2xl p-5"
-      style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.05)",
-      }}
-    >
-      {children}
-    </div>
+    <SectionLabel className="mb-3">{title}</SectionLabel>
+    <AdminCard>{children}</AdminCard>
   </section>
 );
 
