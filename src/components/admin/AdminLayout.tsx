@@ -1,6 +1,18 @@
 import { useEffect, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Flame,
+  Users,
+  FolderKanban,
+  BookOpen,
+  Target,
+  LogOut,
+  type LucideIcon,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/configurator/auth/AuthProvider";
+import { admin } from "@/pages/admin/_components/theme";
 
 // Warm sibling admin chunks so tab switching never hits the suspense fallback.
 const preloadAdminChunks = () => {
@@ -14,12 +26,12 @@ const preloadAdminChunks = () => {
   void import("@/pages/admin/WarmLeadDetail");
 };
 
-const NAV = [
-  { label: "Dashboard", to: "/admin" },
-  { label: "Warm Leads", to: "/admin/warm-leads" },
-  { label: "Leads", to: "/admin/leads" },
-  { label: "Projects", to: "/admin/projects" },
-  { label: "References", to: "/admin/references" },
+const NAV: { label: string; to: string; icon: LucideIcon }[] = [
+  { label: "Dashboard", to: "/admin", icon: LayoutDashboard },
+  { label: "Warm Leads", to: "/admin/warm-leads", icon: Flame },
+  { label: "Leads", to: "/admin/leads", icon: Users },
+  { label: "Projects", to: "/admin/projects", icon: FolderKanban },
+  { label: "References", to: "/admin/references", icon: BookOpen },
 ];
 
 function isActive(currentPath: string, target: string): boolean {
@@ -27,9 +39,19 @@ function isActive(currentPath: string, target: string): boolean {
   return currentPath === target || currentPath.startsWith(`${target}/`);
 }
 
+function getInitials(name: string | null | undefined, email: string | null | undefined): string {
+  const source = (name && name.trim()) || email || "";
+  if (!source) return "?";
+  const parts = source.split(/[\s@._-]+/).filter(Boolean);
+  if (parts.length === 0) return source.slice(0, 2).toUpperCase();
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
 export function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
 
   useEffect(() => {
     preloadAdminChunks();
@@ -40,51 +62,131 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     navigate("/login", { replace: true });
   };
 
+  const initials = getInitials(profile?.fullName, user?.email);
+  const emailDisplay = user?.email ?? "Not signed in";
+
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: "#09090b" }}>
+    <div className="min-h-screen flex" style={{ backgroundColor: admin.bg }}>
       <aside
         className="w-[220px] shrink-0 flex flex-col fixed inset-y-0 left-0"
         style={{
-          backgroundColor: "rgba(255,255,255,0.02)",
-          borderRight: "1px solid rgba(255,255,255,0.06)",
+          backgroundColor: admin.surface,
+          borderRight: `1px solid ${admin.border}`,
         }}
       >
-        <div className="px-6 pt-6 pb-8">
-          <Link
-            to="/admin"
-            className="text-xl font-extrabold text-white tracking-tight"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            HT <span className="text-gray-500 font-normal text-xs ml-1">admin</span>
+        {/* Brand block */}
+        <div className="px-5 pt-5 pb-6">
+          <Link to="/admin" className="flex items-center gap-3 group">
+            <div
+              className="flex items-center justify-center shrink-0"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                boxShadow: "0 4px 12px rgba(59,130,246,0.25)",
+              }}
+            >
+              <Target size={18} color="#fff" strokeWidth={2.5} />
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span
+                className="font-semibold"
+                style={{
+                  color: admin.text,
+                  fontSize: 16,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Lead OS
+              </span>
+              <span
+                style={{
+                  color: admin.textDim,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                v1 · admin
+              </span>
+            </div>
           </Link>
         </div>
 
-        <nav className="flex-1 px-3">
+        {/* Nav */}
+        <nav className="flex-1 px-3 flex flex-col gap-0.5">
           {NAV.map((item) => {
             const active = isActive(location.pathname, item.to);
+            const Icon = item.icon;
             return (
               <Link
                 key={item.to}
                 to={item.to}
-                className="block px-3 py-2 rounded-md text-sm transition-colors"
+                className="relative flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors"
                 style={{
-                  backgroundColor: active ? "rgba(255,255,255,0.06)" : "transparent",
-                  color: active ? "#fff" : "rgb(156,163,175)",
+                  backgroundColor: active ? admin.accentSoft : "transparent",
+                  color: active ? admin.text : admin.textMuted,
+                  fontWeight: active ? 500 : 400,
                 }}
               >
-                {item.label}
+                {active && (
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-1.5 bottom-1.5 rounded-full"
+                    style={{ width: 3, backgroundColor: admin.accent }}
+                  />
+                )}
+                <Icon size={16} strokeWidth={2} />
+                <span>{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
+        {/* Account block */}
         <div className="p-3">
-          <button
-            onClick={handleSignOut}
-            className="w-full text-left px-3 py-2 rounded-md text-sm text-gray-500 hover:text-white hover:bg-white/5 transition-colors"
+          <div
+            className="rounded-xl p-3 flex flex-col gap-2"
+            style={{
+              backgroundColor: admin.surface2,
+              border: `1px solid ${admin.border}`,
+            }}
           >
-            Sign out
-          </button>
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div
+                className="flex items-center justify-center shrink-0 rounded-full"
+                style={{
+                  width: 28,
+                  height: 28,
+                  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
+                  color: "#fff",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {initials}
+              </div>
+              <div className="flex flex-col min-w-0 leading-tight">
+                <span
+                  className="truncate"
+                  style={{ color: admin.text, fontSize: 12, fontWeight: 500 }}
+                  title={emailDisplay}
+                >
+                  {emailDisplay}
+                </span>
+                <span style={{ color: admin.textDim, fontSize: 10 }}>settings</span>
+              </div>
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-colors hover:[background-color:rgba(255,255,255,0.04)]"
+              style={{ color: admin.textMuted }}
+            >
+              <LogOut size={13} strokeWidth={2} />
+              <span>Sign out</span>
+            </button>
+          </div>
         </div>
       </aside>
 
