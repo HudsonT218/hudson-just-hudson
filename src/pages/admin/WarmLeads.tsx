@@ -499,7 +499,7 @@ const ConfigDrawer = ({
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               {WARM_LEAD_MODE_HELP[mode]}
             </p>
           </div>
@@ -515,7 +515,7 @@ const ConfigDrawer = ({
                 value={target}
                 onChange={(e) => setTarget(parseInt(e.target.value, 10) || 0)}
               />
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs mt-2" style={{ color: admin.textDim }}>
                 Scraper stops adding to the inbox once {target} leads have been
                 surfaced this week.
               </p>
@@ -534,7 +534,7 @@ const ConfigDrawer = ({
               value={threshold}
               onChange={(e) => setThreshold(parseInt(e.target.value, 10) || 0)}
             />
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Minimum classifier score to surface in the inbox. 60+ is a good
               starting point.
             </p>
@@ -548,7 +548,7 @@ const ConfigDrawer = ({
               value={voice}
               onChange={(e) => setVoice(e.target.value)}
             />
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Used by the drafting LLM to write replies in your voice. Mention
               what you build, your tone, and what NOT to say.
             </p>
@@ -562,13 +562,13 @@ const ConfigDrawer = ({
                   key={s.id}
                   className="flex items-center justify-between rounded-md px-3 py-2"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.05)",
+                    backgroundColor: admin.surface,
+                    border: `1px solid ${admin.border}`,
                   }}
                 >
                   <div>
-                    <p className="text-sm text-white">{s.label}</p>
-                    <p className="text-[10px] text-gray-500 font-mono">
+                    <p className="text-sm" style={{ color: admin.text }}>{s.label}</p>
+                    <p className="text-[10px] font-mono" style={{ color: admin.textDim }}>
                       {s.last_run_at
                         ? `last run ${formatDate(s.last_run_at)}`
                         : "not yet run"}
@@ -582,7 +582,7 @@ const ConfigDrawer = ({
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Keywords and subreddits for each source live in the DB
               (warm_lead_sources.config) — edit via SQL for now.
             </p>
