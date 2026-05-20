@@ -148,6 +148,17 @@ const Leads = () => {
           qc.invalidateQueries({ queryKey: LEADS_KEY });
         }}
       />
+
+      {detailId && (
+        <LeadDetailModal
+          leadId={detailId}
+          open
+          onClose={() => {
+            qc.invalidateQueries({ queryKey: LEADS_KEY });
+            navigate("/admin/leads");
+          }}
+        />
+      )}
     </AdminLayout>
   );
 };
