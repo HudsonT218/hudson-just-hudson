@@ -257,16 +257,19 @@ const StatCard = ({
   <div
     className="rounded-2xl p-5"
     style={{
-      backgroundColor: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.05)",
+      backgroundColor: admin.surface,
+      border: `1px solid ${admin.border}`,
     }}
   >
-    <p className="text-[10px] uppercase tracking-widest text-gray-500 font-medium mb-2">
+    <p
+      className="text-[10px] uppercase tracking-[0.14em] font-medium mb-2"
+      style={{ color: admin.textDim }}
+    >
       {label}
     </p>
     <p
-      className="text-3xl font-extrabold text-white"
-      style={{ letterSpacing: "-0.03em" }}
+      className="text-3xl font-semibold"
+      style={{ color: admin.text, letterSpacing: "-0.03em" }}
     >
       {value}
     </p>
@@ -282,10 +285,10 @@ const ModeBanner = ({
 }) => {
   if (!settings) return null;
   const enabledSources = sources.filter((s) => s.enabled);
-  const colors: Record<WarmLeadMode, { bg: string; fg: string }> = {
-    capped: { bg: "rgba(59,130,246,0.10)", fg: "#93c5fd" },
-    always_on: { bg: "rgba(16,185,129,0.12)", fg: "#6ee7b7" },
-    paused: { bg: "rgba(255,255,255,0.05)", fg: "rgb(156,163,175)" },
+  const colors: Record<WarmLeadMode, { fg: string }> = {
+    capped: { fg: "#93c5fd" },
+    always_on: { fg: "#6ee7b7" },
+    paused: { fg: admin.textMuted },
   };
   const c = colors[settings.mode];
   const progress =
@@ -296,25 +299,28 @@ const ModeBanner = ({
         : "Paused";
   return (
     <div
-      className="mb-6 rounded-2xl p-4 flex items-center justify-between gap-4 flex-wrap"
-      style={{ backgroundColor: c.bg, border: `1px solid ${c.fg}33` }}
+      className="mb-6 rounded-2xl p-5 flex items-center justify-between gap-4 flex-wrap"
+      style={{
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
+      }}
     >
       <div>
         <span
-          className="font-mono text-[10px] uppercase tracking-widest font-medium"
+          className="font-mono text-[10px] uppercase tracking-[0.14em] font-medium"
           style={{ color: c.fg }}
         >
           {WARM_LEAD_MODE_LABEL[settings.mode]}
         </span>
-        <p className="text-sm text-white mt-1">{progress}</p>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <p className="text-sm mt-1" style={{ color: admin.text }}>{progress}</p>
+        <p className="text-xs mt-0.5" style={{ color: admin.textDim }}>
           Threshold ≥ {settings.threshold} · Last run{" "}
           {settings.last_run_at ? formatDate(settings.last_run_at) : "never"}
         </p>
       </div>
       <div className="text-right">
-        <p className="text-xs text-gray-500 mb-1">Enabled sources</p>
-        <p className="text-sm text-white font-mono">
+        <p className="text-xs mb-1" style={{ color: admin.textDim }}>Enabled sources</p>
+        <p className="text-sm font-mono" style={{ color: admin.text }}>
           {enabledSources.length === 0
             ? "none"
             : enabledSources.map((s) => s.label).join(" · ")}
@@ -333,7 +339,7 @@ const EmptyState = ({
 }) => {
   if (filter !== "all" && filter !== "new") {
     return (
-      <p className="text-sm text-gray-500">
+      <p className="text-sm" style={{ color: admin.textDim }}>
         No leads in '{WARM_LEAD_STATUS_LABEL[filter]}' yet.
       </p>
     );
@@ -342,13 +348,13 @@ const EmptyState = ({
     <div
       className="rounded-2xl p-8 text-center"
       style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px dashed rgba(255,255,255,0.08)",
+        backgroundColor: admin.surface,
+        border: `1px dashed ${admin.border}`,
       }}
     >
-      <p className="text-sm text-gray-400 mb-2">No warm leads yet.</p>
-      <p className="text-xs text-gray-600 max-w-md mx-auto">
-        Click <span className="text-white">Run now</span> to scrape the enabled
+      <p className="text-sm mb-2" style={{ color: admin.textMuted }}>No warm leads yet.</p>
+      <p className="text-xs max-w-md mx-auto" style={{ color: admin.textDim }}>
+        Click <span style={{ color: admin.text }}>Run now</span> to scrape the enabled
         sources. The classifier will surface posts that score{" "}
         {settings ? `≥ ${settings.threshold}` : "high"} as
         "actively-asking-for-help" candidates.
