@@ -34,6 +34,14 @@ import {
   type TimeEntry,
 } from "@/lib/lead-os-types";
 import { formatCurrency, formatDate, todayISO } from "./_components/format";
+import { admin } from "./_components/theme";
+import {
+  AdminCard,
+  SectionLabel,
+  SkeletonBlock,
+  ErrorBanner,
+  EmptyState,
+} from "./_components/ui";
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -164,7 +172,12 @@ const ProjectDetail = () => {
   if (loading) {
     return (
       <AdminLayout>
-        <div className="px-10 py-10 text-sm text-gray-500">Loading…</div>
+        <div className="px-10 py-10 max-w-3xl space-y-4">
+          <SkeletonBlock className="h-8 w-1/2" />
+          <SkeletonBlock className="h-32 w-full rounded-2xl" />
+          <SkeletonBlock className="h-32 w-full rounded-2xl" />
+          <SkeletonBlock className="h-32 w-full rounded-2xl" />
+        </div>
       </AdminLayout>
     );
   }
@@ -173,10 +186,14 @@ const ProjectDetail = () => {
     return (
       <AdminLayout>
         <div className="px-10 py-10">
-          <p className="text-sm text-gray-500 mb-4">Project not found.</p>
-          <Link to="/admin/projects" className="text-sm text-blue-400 hover:text-blue-300">
-            ← Back to projects
+          <Link
+            to="/admin/projects"
+            className="text-xs transition-colors mb-6 inline-block hover:text-white"
+            style={{ color: admin.textMuted }}
+          >
+            ← Projects
           </Link>
+          <EmptyState>Project not found.</EmptyState>
         </div>
       </AdminLayout>
     );
@@ -191,20 +208,15 @@ const ProjectDetail = () => {
       <div className="px-10 py-10 max-w-3xl" key={project.id}>
         <Link
           to="/admin/projects"
-          className="text-xs text-gray-500 hover:text-white transition-colors mb-6 inline-block"
+          className="text-xs transition-colors mb-6 inline-block hover:text-white"
+          style={{ color: admin.textMuted }}
         >
           ← Projects
         </Link>
 
         {error && (
-          <div
-            className="mb-6 rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {error}
+          <div className="mb-6">
+            <ErrorBanner>{error}</ErrorBanner>
           </div>
         )}
 
@@ -214,16 +226,17 @@ const ProjectDetail = () => {
               aria-label="Project name"
               defaultValue={project.name}
               onBlur={(e) => saveField("name", e.target.value.trim() || project.name)}
-              className="text-3xl font-extrabold text-white bg-transparent border-none outline-none w-full mb-1"
-              style={{ letterSpacing: "-0.02em" }}
+              className="text-3xl font-extrabold bg-transparent border-none outline-none w-full mb-1"
+              style={{ color: admin.text, letterSpacing: "-0.02em" }}
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs" style={{ color: admin.textMuted }}>
               {lead ? (
                 <>
                   Client:{" "}
                   <Link
                     to={`/admin/leads/${lead.id}`}
-                    className="text-blue-400 hover:text-blue-300"
+                    className="transition-colors"
+                    style={{ color: admin.accent }}
                   >
                     {lead.name}
                   </Link>
@@ -254,7 +267,7 @@ const ProjectDetail = () => {
         <Section title="Info">
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <Label className="text-xs text-gray-500 mb-1 block">Type</Label>
+              <Label className="text-xs mb-1 block" style={{ color: admin.textMuted }}>Type</Label>
               <Select
                 value={project.project_type}
                 onValueChange={(v) => saveField("project_type", v as ProjectType)}
@@ -272,7 +285,7 @@ const ProjectDetail = () => {
               </Select>
             </div>
             <div>
-              <Label className="text-xs text-gray-500 mb-1 block">Hourly rate</Label>
+              <Label className="text-xs mb-1 block" style={{ color: admin.textMuted }}>Hourly rate</Label>
               <Input
                 type="number"
                 inputMode="decimal"
@@ -284,7 +297,7 @@ const ProjectDetail = () => {
               />
             </div>
             <div>
-              <Label className="text-xs text-gray-500 mb-1 block">Estimated hours</Label>
+              <Label className="text-xs mb-1 block" style={{ color: admin.textMuted }}>Estimated hours</Label>
               <Input
                 type="number"
                 inputMode="decimal"
@@ -298,7 +311,7 @@ const ProjectDetail = () => {
           </div>
           <div className="grid grid-cols-2 gap-3 mt-3">
             <div>
-              <Label className="text-xs text-gray-500 mb-1 block">Start date</Label>
+              <Label className="text-xs mb-1 block" style={{ color: admin.textMuted }}>Start date</Label>
               <Input
                 type="date"
                 defaultValue={project.start_date ?? ""}
@@ -306,7 +319,7 @@ const ProjectDetail = () => {
               />
             </div>
             <div>
-              <Label className="text-xs text-gray-500 mb-1 block">Target date</Label>
+              <Label className="text-xs mb-1 block" style={{ color: admin.textMuted }}>Target date</Label>
               <Input
                 type="date"
                 defaultValue={project.target_date ?? ""}
@@ -315,7 +328,7 @@ const ProjectDetail = () => {
             </div>
           </div>
           <div className="mt-3">
-            <Label className="text-xs text-gray-500 mb-1 block">Description</Label>
+            <Label className="text-xs mb-1 block" style={{ color: admin.textMuted }}>Description</Label>
             <Textarea
               rows={2}
               defaultValue={project.description ?? ""}
@@ -362,25 +375,34 @@ const ProjectDetail = () => {
           </form>
 
           {entries.length === 0 ? (
-            <p className="text-sm text-gray-500">No time logged yet.</p>
+            <EmptyState>No time logged yet.</EmptyState>
           ) : (
             <div
               className="rounded-md overflow-hidden"
               style={{
-                backgroundColor: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
+                backgroundColor: admin.surface,
+                border: `1px solid ${admin.border}`,
               }}
             >
               <table className="w-full text-sm">
                 <thead>
-                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                    <th className="text-left text-xs uppercase tracking-widest text-gray-500 font-medium px-4 py-3">
+                  <tr style={{ borderBottom: `1px solid ${admin.border}` }}>
+                    <th
+                      className="text-left text-[10px] uppercase tracking-[0.14em] font-medium px-4 py-3"
+                      style={{ color: admin.textDim }}
+                    >
                       Date
                     </th>
-                    <th className="text-left text-xs uppercase tracking-widest text-gray-500 font-medium px-4 py-3">
+                    <th
+                      className="text-left text-[10px] uppercase tracking-[0.14em] font-medium px-4 py-3"
+                      style={{ color: admin.textDim }}
+                    >
                       Hrs
                     </th>
-                    <th className="text-left text-xs uppercase tracking-widest text-gray-500 font-medium px-4 py-3">
+                    <th
+                      className="text-left text-[10px] uppercase tracking-[0.14em] font-medium px-4 py-3"
+                      style={{ color: admin.textDim }}
+                    >
                       Description
                     </th>
                     <th className="px-4 py-3" />
@@ -391,20 +413,26 @@ const ProjectDetail = () => {
                     <tr
                       key={e.id}
                       style={{
-                        borderTop: i === 0 ? "none" : "1px solid rgba(255,255,255,0.04)",
+                        borderTop: i === 0 ? "none" : `1px solid ${admin.border}`,
                       }}
                     >
-                      <td className="px-4 py-3 text-gray-400 font-light whitespace-nowrap">
+                      <td
+                        className="px-4 py-3 font-light whitespace-nowrap"
+                        style={{ color: admin.textMuted }}
+                      >
                         {formatDate(e.date)}
                       </td>
-                      <td className="px-4 py-3 text-white font-mono">
+                      <td className="px-4 py-3 font-mono" style={{ color: admin.text }}>
                         {Number(e.hours).toFixed(2)}
                       </td>
-                      <td className="px-4 py-3 text-gray-300 font-light">{e.description}</td>
+                      <td className="px-4 py-3 font-light" style={{ color: admin.text }}>
+                        {e.description}
+                      </td>
                       <td className="px-4 py-3 text-right">
                         <button
                           onClick={() => handleDeleteEntry(e.id)}
-                          className="text-xs text-gray-600 hover:text-red-400 transition-colors"
+                          className="text-xs hover:text-red-400 transition-colors"
+                          style={{ color: admin.textDim }}
                           aria-label="Delete entry"
                         >
                           ✕
@@ -414,12 +442,17 @@ const ProjectDetail = () => {
                   ))}
                 </tbody>
                 <tfoot>
-                  <tr style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                    <td className="px-4 py-3 text-xs uppercase tracking-widest text-gray-500 font-medium">
+                  <tr style={{ borderTop: `1px solid ${admin.borderStrong}` }}>
+                    <td
+                      className="px-4 py-3 text-[10px] uppercase tracking-[0.14em] font-medium"
+                      style={{ color: admin.textDim }}
+                    >
                       Total
                     </td>
-                    <td className="px-4 py-3 text-white font-mono">{totalHours.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-gray-400 font-light">
+                    <td className="px-4 py-3 font-mono" style={{ color: admin.text }}>
+                      {totalHours.toFixed(2)}
+                    </td>
+                    <td className="px-4 py-3 font-light" style={{ color: admin.textMuted }}>
                       {formatCurrency(totalBilled)} billed
                     </td>
                     <td />
@@ -440,20 +473,22 @@ const ProjectDetail = () => {
         </Section>
 
         <div
-          className="rounded-2xl p-6 mt-8 text-sm text-gray-600"
+          className="rounded-2xl p-6 mt-8 text-sm"
           style={{
-            backgroundColor: "rgba(255,255,255,0.01)",
-            border: "1px dashed rgba(255,255,255,0.06)",
+            backgroundColor: admin.surface,
+            border: `1px dashed ${admin.border}`,
+            color: admin.textDim,
           }}
         >
           Proposal — coming in Phase 2.
         </div>
 
         <div
-          className="rounded-2xl p-6 mt-3 text-sm text-gray-600"
+          className="rounded-2xl p-6 mt-3 text-sm"
           style={{
-            backgroundColor: "rgba(255,255,255,0.01)",
-            border: "1px dashed rgba(255,255,255,0.06)",
+            backgroundColor: admin.surface,
+            border: `1px dashed ${admin.border}`,
+            color: admin.textDim,
           }}
         >
           Contract & Payment — coming in Phase 3.
@@ -471,10 +506,8 @@ const Section = ({
   children: React.ReactNode;
 }) => (
   <section className="mb-8">
-    <h2 className="text-xs uppercase tracking-widest text-gray-500 font-medium mb-3">
-      {title}
-    </h2>
-    {children}
+    <SectionLabel className="mb-3">{title}</SectionLabel>
+    <AdminCard>{children}</AdminCard>
   </section>
 );
 
