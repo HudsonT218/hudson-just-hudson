@@ -158,35 +158,36 @@ const InviteSection = ({ onSent }: { onSent: () => void }) => {
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Request a Reference
       </h2>
-      <form
-        onSubmit={handleSubmit}
-        className="rounded-2xl p-5 flex flex-col sm:flex-row gap-3"
-        style={sectionCard}
-      >
-        <Input
-          type="email"
-          placeholder="email@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="flex-1"
-        />
-        <Input
-          type="text"
-          placeholder="Name (optional)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="flex-1"
-        />
-        <Button type="submit" disabled={submitting}>
-          {submitting ? "Sending…" : "Send Invite"}
-        </Button>
-      </form>
+      <AdminCard>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row gap-3"
+        >
+          <Input
+            type="email"
+            placeholder="email@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="flex-1"
+          />
+          <Input
+            type="text"
+            placeholder="Name (optional)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="flex-1"
+          />
+          <Button type="submit" disabled={submitting}>
+            {submitting ? "Sending…" : "Send Invite"}
+          </Button>
+        </form>
+      </AdminCard>
     </section>
   );
 };
