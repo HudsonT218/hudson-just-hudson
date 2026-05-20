@@ -48,6 +48,8 @@ import {
   WarmLeadStatusBadge,
 } from "./_components/WarmLeadStatusBadge";
 import { formatDate } from "./_components/format";
+import { AdminPageHeader, ErrorBanner, InfoBanner } from "./_components/ui";
+import { admin } from "./_components/theme";
 
 type Filter = "all" | WarmLeadStatus;
 
@@ -131,29 +133,27 @@ const WarmLeads = () => {
         <title>Warm Leads — Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
-      <div className="px-10 py-10">
-        <div className="flex items-center justify-between mb-2">
-          <h1
-            className="text-2xl font-extrabold text-white"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            Warm Leads
-          </h1>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => setConfigOpen(true)}
-              className="text-sm text-gray-400 hover:text-white"
-            >
-              ⚙ Configure
-            </Button>
-            <Button onClick={handleRunNow} disabled={scrapeRunning}>
-              {scrapeRunning ? "Scraping…" : "Run now"}
-            </Button>
-          </div>
-        </div>
+      <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+        <AdminPageHeader
+          title="Warm Leads"
+          actions={
+            <>
+              <Button
+                variant="ghost"
+                onClick={() => setConfigOpen(true)}
+                className="text-sm"
+                style={{ color: admin.textMuted }}
+              >
+                ⚙ Configure
+              </Button>
+              <Button onClick={handleRunNow} disabled={scrapeRunning}>
+                {scrapeRunning ? "Scraping…" : "Run now"}
+              </Button>
+            </>
+          }
+        />
 
-        <p className="text-xs text-gray-500 mb-8">
+        <p className="text-xs mt-2 mb-8" style={{ color: admin.textDim }}>
           Automation surfaces public posts that look like "I need someone to build me X".
           Review the drafted reply, then promote, edit, or skip.
         </p>
@@ -171,22 +171,17 @@ const WarmLeads = () => {
         <ModeBanner settings={settings} sources={sources} />
 
         {scrapeMsg && (
-          <div
-            className="mb-6 rounded-md p-3 text-sm text-blue-200"
-            style={{
-              backgroundColor: "rgba(59,130,246,0.08)",
-              border: "1px solid rgba(59,130,246,0.2)",
-            }}
-          >
-            {scrapeMsg}
+          <div className="mb-6">
+            <InfoBanner>{scrapeMsg}</InfoBanner>
           </div>
         )}
 
         <div
-          className="inline-flex rounded-md p-1 mb-6"
+          role="tablist"
+          className="inline-flex items-center gap-1 rounded-full p-1 mb-6"
           style={{
-            backgroundColor: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.05)",
+            backgroundColor: admin.surface,
+            border: `1px solid ${admin.border}`,
           }}
         >
           {FILTERS.map((f) => {
@@ -196,16 +191,18 @@ const WarmLeads = () => {
               <button
                 key={f.value}
                 onClick={() => setFilter(f.value)}
-                className="px-3 py-1.5 rounded text-sm transition-colors"
+                aria-pressed={active}
+                className="px-3 py-1 rounded-full text-xs font-medium transition-colors"
                 style={{
-                  backgroundColor: active
-                    ? "rgba(255,255,255,0.08)"
-                    : "transparent",
-                  color: active ? "#fff" : "rgb(156,163,175)",
+                  backgroundColor: active ? admin.surface2 : "transparent",
+                  color: active ? admin.text : admin.textMuted,
                 }}
               >
                 {f.label}
-                <span className="ml-2 text-gray-500 font-mono text-[11px]">
+                <span
+                  className="ml-2 font-mono text-[11px]"
+                  style={{ color: admin.textDim }}
+                >
                   {count}
                 </span>
               </button>
@@ -214,19 +211,13 @@ const WarmLeads = () => {
         </div>
 
         {errMsg && (
-          <div
-            className="mb-6 rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {errMsg}
+          <div className="mb-6">
+            <ErrorBanner>{errMsg}</ErrorBanner>
           </div>
         )}
 
         {loading ? (
-          <p className="text-sm text-gray-500">Loading…</p>
+          <p className="text-sm" style={{ color: admin.textDim }}>Loading…</p>
         ) : visible.length === 0 ? (
           <EmptyState filter={filter} settings={settings} />
         ) : (
@@ -266,16 +257,19 @@ const StatCard = ({
   <div
     className="rounded-2xl p-5"
     style={{
-      backgroundColor: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.05)",
+      backgroundColor: admin.surface,
+      border: `1px solid ${admin.border}`,
     }}
   >
-    <p className="text-[10px] uppercase tracking-widest text-gray-500 font-medium mb-2">
+    <p
+      className="text-[10px] uppercase tracking-[0.14em] font-medium mb-2"
+      style={{ color: admin.textDim }}
+    >
       {label}
     </p>
     <p
-      className="text-3xl font-extrabold text-white"
-      style={{ letterSpacing: "-0.03em" }}
+      className="text-3xl font-semibold"
+      style={{ color: admin.text, letterSpacing: "-0.03em" }}
     >
       {value}
     </p>
@@ -291,10 +285,10 @@ const ModeBanner = ({
 }) => {
   if (!settings) return null;
   const enabledSources = sources.filter((s) => s.enabled);
-  const colors: Record<WarmLeadMode, { bg: string; fg: string }> = {
-    capped: { bg: "rgba(59,130,246,0.10)", fg: "#93c5fd" },
-    always_on: { bg: "rgba(16,185,129,0.12)", fg: "#6ee7b7" },
-    paused: { bg: "rgba(255,255,255,0.05)", fg: "rgb(156,163,175)" },
+  const colors: Record<WarmLeadMode, { fg: string }> = {
+    capped: { fg: "#93c5fd" },
+    always_on: { fg: "#6ee7b7" },
+    paused: { fg: admin.textMuted },
   };
   const c = colors[settings.mode];
   const progress =
@@ -305,25 +299,28 @@ const ModeBanner = ({
         : "Paused";
   return (
     <div
-      className="mb-6 rounded-2xl p-4 flex items-center justify-between gap-4 flex-wrap"
-      style={{ backgroundColor: c.bg, border: `1px solid ${c.fg}33` }}
+      className="mb-6 rounded-2xl p-5 flex items-center justify-between gap-4 flex-wrap"
+      style={{
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
+      }}
     >
       <div>
         <span
-          className="font-mono text-[10px] uppercase tracking-widest font-medium"
+          className="font-mono text-[10px] uppercase tracking-[0.14em] font-medium"
           style={{ color: c.fg }}
         >
           {WARM_LEAD_MODE_LABEL[settings.mode]}
         </span>
-        <p className="text-sm text-white mt-1">{progress}</p>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <p className="text-sm mt-1" style={{ color: admin.text }}>{progress}</p>
+        <p className="text-xs mt-0.5" style={{ color: admin.textDim }}>
           Threshold ≥ {settings.threshold} · Last run{" "}
           {settings.last_run_at ? formatDate(settings.last_run_at) : "never"}
         </p>
       </div>
       <div className="text-right">
-        <p className="text-xs text-gray-500 mb-1">Enabled sources</p>
-        <p className="text-sm text-white font-mono">
+        <p className="text-xs mb-1" style={{ color: admin.textDim }}>Enabled sources</p>
+        <p className="text-sm font-mono" style={{ color: admin.text }}>
           {enabledSources.length === 0
             ? "none"
             : enabledSources.map((s) => s.label).join(" · ")}
@@ -342,7 +339,7 @@ const EmptyState = ({
 }) => {
   if (filter !== "all" && filter !== "new") {
     return (
-      <p className="text-sm text-gray-500">
+      <p className="text-sm" style={{ color: admin.textDim }}>
         No leads in '{WARM_LEAD_STATUS_LABEL[filter]}' yet.
       </p>
     );
@@ -351,13 +348,13 @@ const EmptyState = ({
     <div
       className="rounded-2xl p-8 text-center"
       style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px dashed rgba(255,255,255,0.08)",
+        backgroundColor: admin.surface,
+        border: `1px dashed ${admin.border}`,
       }}
     >
-      <p className="text-sm text-gray-400 mb-2">No warm leads yet.</p>
-      <p className="text-xs text-gray-600 max-w-md mx-auto">
-        Click <span className="text-white">Run now</span> to scrape the enabled
+      <p className="text-sm mb-2" style={{ color: admin.textMuted }}>No warm leads yet.</p>
+      <p className="text-xs max-w-md mx-auto" style={{ color: admin.textDim }}>
+        Click <span style={{ color: admin.text }}>Run now</span> to scrape the enabled
         sources. The classifier will surface posts that score{" "}
         {settings ? `≥ ${settings.threshold}` : "high"} as
         "actively-asking-for-help" candidates.
@@ -374,33 +371,36 @@ const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
   return (
     <Link
       to={`/admin/warm-leads/${lead.id}`}
-      className="block rounded-xl p-4 transition-colors hover:bg-white/[0.03]"
+      className="block rounded-2xl p-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)] hover:[border-color:rgba(255,255,255,0.12)]"
       style={{
-        backgroundColor: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.05)",
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
       }}
     >
       <div className="flex items-start justify-between gap-4 mb-2">
         <div className="flex items-center gap-2 flex-wrap">
           <WarmLeadScorePill score={lead.score} />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-gray-500">
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.14em]"
+            style={{ color: admin.textDim }}
+          >
             {lead.source_label}
           </span>
           {lead.author_handle && (
-            <span className="font-mono text-[11px] text-gray-400">
+            <span className="font-mono text-[11px]" style={{ color: admin.textMuted }}>
               @{lead.author_handle}
             </span>
           )}
         </div>
         <WarmLeadStatusBadge status={lead.status} />
       </div>
-      <p className="text-sm text-white font-medium mb-1 line-clamp-1">
+      <p className="text-sm font-medium mb-1 line-clamp-1" style={{ color: admin.text }}>
         {headline}
       </p>
-      <p className="text-xs text-gray-500 line-clamp-2 mb-2">
+      <p className="text-xs line-clamp-2 mb-2" style={{ color: admin.textMuted }}>
         {lead.raw_excerpt}
       </p>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-gray-600">
+      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]" style={{ color: admin.textDim }}>
         {lead.matched_keywords.length > 0 && (
           <span>matched: {lead.matched_keywords.join(", ")}</span>
         )}
@@ -499,7 +499,7 @@ const ConfigDrawer = ({
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               {WARM_LEAD_MODE_HELP[mode]}
             </p>
           </div>
@@ -515,7 +515,7 @@ const ConfigDrawer = ({
                 value={target}
                 onChange={(e) => setTarget(parseInt(e.target.value, 10) || 0)}
               />
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs mt-2" style={{ color: admin.textDim }}>
                 Scraper stops adding to the inbox once {target} leads have been
                 surfaced this week.
               </p>
@@ -534,7 +534,7 @@ const ConfigDrawer = ({
               value={threshold}
               onChange={(e) => setThreshold(parseInt(e.target.value, 10) || 0)}
             />
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Minimum classifier score to surface in the inbox. 60+ is a good
               starting point.
             </p>
@@ -548,7 +548,7 @@ const ConfigDrawer = ({
               value={voice}
               onChange={(e) => setVoice(e.target.value)}
             />
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Used by the drafting LLM to write replies in your voice. Mention
               what you build, your tone, and what NOT to say.
             </p>
@@ -562,13 +562,13 @@ const ConfigDrawer = ({
                   key={s.id}
                   className="flex items-center justify-between rounded-md px-3 py-2"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.05)",
+                    backgroundColor: admin.surface,
+                    border: `1px solid ${admin.border}`,
                   }}
                 >
                   <div>
-                    <p className="text-sm text-white">{s.label}</p>
-                    <p className="text-[10px] text-gray-500 font-mono">
+                    <p className="text-sm" style={{ color: admin.text }}>{s.label}</p>
+                    <p className="text-[10px] font-mono" style={{ color: admin.textDim }}>
                       {s.last_run_at
                         ? `last run ${formatDate(s.last_run_at)}`
                         : "not yet run"}
@@ -582,7 +582,7 @@ const ConfigDrawer = ({
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Keywords and subreddits for each source live in the DB
               (warm_lead_sources.config) — edit via SQL for now.
             </p>

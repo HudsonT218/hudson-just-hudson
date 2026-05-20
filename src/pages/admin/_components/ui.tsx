@@ -156,6 +156,21 @@ export function ErrorBanner({ children }: { children: ReactNode }) {
   );
 }
 
+export function InfoBanner({ children }: { children: ReactNode }) {
+  return (
+    <div
+      role="status"
+      className="rounded-md p-4 text-sm text-blue-200"
+      style={{
+        backgroundColor: "rgba(59,130,246,0.08)",
+        border: "1px solid rgba(59,130,246,0.2)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function StatusDot({ status, className }: { status: LeadStatus; className?: string }) {
   return (
     <span
