@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead } from "@/lib/lead-os-types";
-import { admin } from "./theme";
+import { admin, LEAD_STATUS_COLORS } from "./theme";
 import { formatDate } from "./format";
 
 function isOverdue(dateStr: string | null): boolean {
