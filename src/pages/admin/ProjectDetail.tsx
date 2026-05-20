@@ -34,6 +34,14 @@ import {
   type TimeEntry,
 } from "@/lib/lead-os-types";
 import { formatCurrency, formatDate, todayISO } from "./_components/format";
+import { admin } from "./_components/theme";
+import {
+  AdminCard,
+  SectionLabel,
+  SkeletonBlock,
+  ErrorBanner,
+  EmptyState,
+} from "./_components/ui";
 
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
