@@ -33,6 +33,8 @@ const LEADS_KEY = ["admin", "leads"] as const;
 
 const Leads = () => {
   const qc = useQueryClient();
+  const navigate = useNavigate();
+  const { id: detailId } = useParams<{ id: string }>();
   const { data: leads = [], isLoading, error } = useQuery({
     queryKey: LEADS_KEY,
     queryFn: () => listLeads(),
