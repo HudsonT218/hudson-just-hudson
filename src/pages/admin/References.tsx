@@ -103,24 +103,9 @@ const References = () => {
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10 space-y-12 max-w-6xl">
-        <h1
-          className="text-2xl font-extrabold text-white"
-          style={{ letterSpacing: "-0.02em" }}
-        >
-          References
-        </h1>
+        <AdminPageHeader title="References" />
 
-        {errorMsg && (
-          <div
-            className="rounded-md p-4 text-sm text-red-300"
-            style={{
-              backgroundColor: "rgba(239,68,68,0.06)",
-              border: "1px solid rgba(239,68,68,0.2)",
-            }}
-          >
-            {errorMsg}
-          </div>
-        )}
+        {errorMsg && <ErrorBanner>{errorMsg}</ErrorBanner>}
 
         <InviteSection onSent={refresh} />
         <InvitesTable
