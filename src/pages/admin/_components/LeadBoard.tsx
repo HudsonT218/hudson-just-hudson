@@ -19,8 +19,8 @@ import {
   type Lead,
   type LeadStatus,
 } from "@/lib/lead-os-types";
-import { admin, LEAD_STATUS_COLORS } from "./theme";
-import { StatusDot, SkeletonBlock, EmptyState } from "./ui";
+import { admin } from "./theme";
+import { SkeletonBlock, EmptyState } from "./ui";
 import { LeadCard } from "./LeadCard";
 
 const COLUMN_PREFIX = "column:";
