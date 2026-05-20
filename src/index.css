@@ -78,3 +78,21 @@
     }
   }
 }
+
+.admin-scroll-x {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+.admin-scroll-x::-webkit-scrollbar {
+  height: 8px;
+}
+.admin-scroll-x::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-scroll-x::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+.admin-scroll-x::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
