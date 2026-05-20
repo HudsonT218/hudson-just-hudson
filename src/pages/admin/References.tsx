@@ -375,34 +375,45 @@ const PendingReviewSection = ({
   return (
     <section>
       <h2
-        className="text-lg font-bold text-white mb-4"
-        style={{ letterSpacing: "-0.01em" }}
+        className="text-lg font-semibold mb-4"
+        style={{ color: admin.text, letterSpacing: "-0.01em" }}
       >
         Pending Review
       </h2>
       {loading ? (
-        <p className="text-sm text-gray-500">Loading…</p>
+        <EmptyState>Loading…</EmptyState>
       ) : items.length === 0 ? (
-        <p className="text-sm text-gray-500">No pending references.</p>
+        <EmptyState>No pending references.</EmptyState>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {items.map((ref) => (
-            <div key={ref.id} className="rounded-2xl p-5" style={sectionCard}>
+            <AdminCard key={ref.id}>
               <div className="mb-2">
-                <div className="text-base font-semibold text-white">{ref.name}</div>
-                <div className="text-sm text-gray-400">{ref.role_title}</div>
+                <div className="text-base font-semibold" style={{ color: admin.text }}>
+                  {ref.name}
+                </div>
+                <div className="text-sm" style={{ color: admin.textMuted }}>
+                  {ref.role_title}
+                </div>
               </div>
-              <p className="text-lg italic text-white/90 mb-3" style={{ letterSpacing: "-0.01em" }}>
+              <p
+                className="text-lg italic mb-3"
+                style={{ color: admin.text, opacity: 0.9, letterSpacing: "-0.01em" }}
+              >
                 "{ref.headline}"
               </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mb-4">
+              <div
+                className="flex flex-wrap gap-x-4 gap-y-1 text-xs mb-4"
+                style={{ color: admin.textDim }}
+              >
                 <span>Submitted {formatDate(ref.created_at)}</span>
                 {ref.linkedin_url ? (
                   <a
                     href={ref.linkedin_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 inline-flex items-center gap-1"
+                    className="inline-flex items-center gap-1"
+                    style={{ color: admin.accent }}
                   >
                     LinkedIn <ExternalLink className="h-3 w-3" />
                   </a>
@@ -411,7 +422,6 @@ const PendingReviewSection = ({
               <div className="flex flex-wrap items-center gap-2">
                 <Button
                   size="sm"
-                  className="bg-white text-black hover:bg-gray-200"
                   disabled={busyId === ref.id}
                   onClick={() => handleApprove(ref.id)}
                 >
@@ -430,17 +440,20 @@ const PendingReviewSection = ({
                   size="sm"
                   variant="ghost"
                   onClick={() => setRawId(rawId === ref.id ? null : ref.id)}
-                  className="text-gray-400"
+                  style={{ color: admin.textMuted }}
                 >
                   {rawId === ref.id ? "Hide Raw" : "View Raw"}
                 </Button>
               </div>
               {rawId === ref.id ? (
-                <pre className="mt-4 text-[11px] text-gray-400 bg-black/30 rounded p-3 overflow-x-auto">
+                <pre
+                  className="mt-4 text-[11px] rounded p-3 overflow-x-auto"
+                  style={{ backgroundColor: admin.surface2, color: admin.textMuted }}
+                >
                   {JSON.stringify(ref, null, 2)}
                 </pre>
               ) : null}
-            </div>
+            </AdminCard>
           ))}
         </div>
       )}
