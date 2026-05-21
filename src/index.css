@@ -117,30 +117,36 @@
 
     /* App-level */
     --app-page-bg: #f5f5f5;
-    --app-card-bg: rgba(0, 0, 0, 0.025);
-    --app-card-bg-strong: rgba(0, 0, 0, 0.04);
-    --app-card-bg-hover: rgba(0, 0, 0, 0.06);
-    --app-card-bg-bright: rgba(0, 0, 0, 0.08);
-    --app-border-soft: rgba(0, 0, 0, 0.06);
-    --app-border-med: rgba(0, 0, 0, 0.08);
-    --app-border-strong: rgba(0, 0, 0, 0.12);
-    --app-border-stronger: rgba(0, 0, 0, 0.18);
-    --app-blue-tint: rgba(59, 130, 246, 0.06);
-    --app-blue-tint-strong: rgba(59, 130, 246, 0.08);
-    --app-blue-tint-border: rgba(59, 130, 246, 0.22);
-    --app-blue-tint-border-strong: rgba(59, 130, 246, 0.3);
-    --app-blue-soft: rgba(59, 130, 246, 0.08);
+    /* Cards in light mode use white-with-alpha so they read as glass over the
+       gradient body bg below; combined with the backdrop-filter rule near
+       the end of @layer base, that gives them a frosted look instead of
+       reading as flat boxes on a flat bg. */
+    --app-card-bg: rgba(255, 255, 255, 0.55);
+    --app-card-bg-strong: rgba(255, 255, 255, 0.68);
+    --app-card-bg-hover: rgba(255, 255, 255, 0.8);
+    --app-card-bg-bright: rgba(255, 255, 255, 0.9);
+    --app-border-soft: rgba(0, 0, 0, 0.08);
+    --app-border-med: rgba(0, 0, 0, 0.1);
+    --app-border-strong: rgba(0, 0, 0, 0.15);
+    --app-border-stronger: rgba(0, 0, 0, 0.2);
+    --app-blue-tint: rgba(59, 130, 246, 0.08);
+    --app-blue-tint-strong: rgba(59, 130, 246, 0.12);
+    --app-blue-tint-border: rgba(59, 130, 246, 0.25);
+    --app-blue-tint-border-strong: rgba(59, 130, 246, 0.35);
+    --app-blue-soft: rgba(59, 130, 246, 0.1);
     --app-button-bg: #0a0a0a;
     --app-button-bg-hover: rgba(10, 10, 10, 0.85);
     --app-button-fg: #f5f5f5;
-    --app-radial-tint: rgba(59, 130, 246, 0.08);
+    --app-radial-tint: rgba(59, 130, 246, 0.12);
 
-    --dotted-neutral-r: 0.45;
-    --dotted-neutral-g: 0.48;
-    --dotted-neutral-b: 0.55;
-    --dotted-blue-r: 0.2;
-    --dotted-blue-g: 0.4;
-    --dotted-blue-b: 0.85;
+    /* Darker dot palette so the DottedSurface reads against the light
+       gradient bg rather than disappearing. */
+    --dotted-neutral-r: 0.35;
+    --dotted-neutral-g: 0.38;
+    --dotted-neutral-b: 0.45;
+    --dotted-blue-r: 0.15;
+    --dotted-blue-g: 0.32;
+    --dotted-blue-b: 0.78;
     --dotted-fog-hex: 0xf5f5f5;
   }
 
@@ -229,6 +235,33 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Light-mode page background gets a soft radial vignette so the page
+     has depth instead of reading as a flat sheet of grey. Two overlapping
+     ellipses (slightly cooler at top, slightly warmer at bottom) over the
+     base #f5f5f5, fixed-attached so it doesn't scroll. */
+  html.light body {
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%, rgba(220, 222, 230, 0.6) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 50% at 50% 100%, rgba(225, 220, 215, 0.5) 0%, transparent 55%),
+      #f5f5f5;
+    background-attachment: fixed;
+  }
+
+  /* Frosted glass on cards in light mode. Combined with the
+     rgba-white card backgrounds above, this gives them the
+     "transparent grey glass" feel — see-through against the gradient
+     body bg, with content remaining readable. Excludes .dark-region so
+     admin cards stay solid. Excludes <details> so the FAQ accordion
+     keeps its open/closed behavior crisp. */
+  html.light .rounded-2xl:not(.dark-region .rounded-2xl):not(details) {
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+  html.light details.rounded-2xl {
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
 
   html {

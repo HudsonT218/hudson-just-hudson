@@ -47,7 +47,7 @@ const InterestedPage = () => {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 30%, rgba(59,130,246,0.06) 0%, transparent 60%)",
+              "radial-gradient(ellipse at 50% 30%, var(--app-radial-tint) 0%, transparent 60%)",
           }}
         />
         <div className="relative max-w-2xl mx-auto">
@@ -238,7 +238,7 @@ const InterestedPage = () => {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.06) 0%, transparent 60%)",
+              "radial-gradient(ellipse at 50% 50%, var(--app-radial-tint) 0%, transparent 60%)",
           }}
         />
         <div className="relative max-w-2xl mx-auto text-center">
