@@ -7,6 +7,7 @@ import {
   FolderKanban,
   BookOpen,
   Target,
+  Activity,
   LogOut,
   type LucideIcon,
 } from "lucide-react";
@@ -23,6 +24,7 @@ const preloadAdminChunks = () => {
   void import("@/pages/admin/References");
   void import("@/pages/admin/WarmLeads");
   void import("@/pages/admin/WarmLeadDetail");
+  void import("@/pages/admin/AiVisibility");
 };
 
 const NAV: { label: string; to: string; icon: LucideIcon }[] = [
@@ -31,6 +33,7 @@ const NAV: { label: string; to: string; icon: LucideIcon }[] = [
   { label: "Leads", to: "/admin/leads", icon: Users },
   { label: "Projects", to: "/admin/projects", icon: FolderKanban },
   { label: "References", to: "/admin/references", icon: BookOpen },
+  { label: "AI Visibility", to: "/admin/ai-visibility", icon: Activity },
 ];
 
 function isActive(currentPath: string, target: string): boolean {

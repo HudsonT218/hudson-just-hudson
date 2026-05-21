@@ -73,7 +73,7 @@ serve(async (req) => {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   try {
-    const body = (await req.json()) as { email?: string; answers?: Record<string, any> };
+    const body = (await req.json()) as { email?: string; source?: string; answers?: Record<string, any> };
 
     // 1. Email validation
     const email = (body.email ?? '').trim().toLowerCase();
@@ -92,6 +92,13 @@ serve(async (req) => {
     if (Object.keys(cleanedAnswers).length === 0) {
       return json({ error: 'invalid_answers', message: 'No answers received.' }, 400);
     }
+
+    // Self-reported attribution (optional). Length-limited to avoid storage
+    // bloat from copy-paste payloads.
+    const source =
+      typeof body.source === 'string' && body.source.trim()
+        ? body.source.trim().slice(0, 120)
+        : null;
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
@@ -240,6 +247,7 @@ serve(async (req) => {
           name: leadName.slice(0, 100),
           email,
           status: 'cold',
+          source,
           how_i_know_them: 'AI use-case test',
           what_they_might_need: topIdea ?? 'See AI test results',
           notes: `Took the free AI use-case test on ${new Date().toISOString().slice(0, 10)}.`,

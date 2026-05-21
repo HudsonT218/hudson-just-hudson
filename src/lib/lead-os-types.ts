@@ -68,6 +68,9 @@ export interface Lead {
   next_action: string | null;
   next_action_date: string | null;
   notes: string | null;
+  // Self-reported attribution from the AI test (and future lead-capture
+  // forms). One of SOURCE_OPTIONS in lib/tracking.ts. NULL for older leads.
+  source: string | null;
 }
 
 export type LeadInsert = Omit<Lead, "id" | "created_at" | "updated_at">;
