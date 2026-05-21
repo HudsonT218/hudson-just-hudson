@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "About",     href: "#about" },
   { label: "Work",      href: "/work" },
-  { label: "AI Test",   href: "/ai-test" },
   { label: "Resources", href: "/resources" },
   { label: "Contact",   href: "#contact" },
 ];

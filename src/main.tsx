@@ -12,7 +12,7 @@ import "./index.css";
 const PRERENDERED_ROUTES = new Set([
   "/",
   "/work",
-  "/ai-test",
+  "/ai-brief",
   "/resources",
   "/resources/ai-for-small-business",
 ]);

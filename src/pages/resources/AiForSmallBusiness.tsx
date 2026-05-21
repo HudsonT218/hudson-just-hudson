@@ -316,10 +316,10 @@ const AiForSmallBusiness = () => {
               , who builds custom websites, AI tools, and software for small businesses. If you
               have a specific scenario you'd like to think through, the{" "}
               <Link
-                to="/ai-test"
+                to="/ai-brief"
                 className="text-blue-400 hover:text-blue-300 transition-colors underline"
               >
-                free AI use-case test
+                free personalized AI brief
               </Link>{" "}
               produces a personalized version of this same sorting exercise in about 5 minutes.
             </p>
