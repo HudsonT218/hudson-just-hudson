@@ -1,4 +1,4 @@
-// /resources/ai-for-small-business — first long-form guide.
+// /resources/ai-for-small-business, first long-form guide.
 // SPA route. Prerendered via prerenderPlugin so crawlers see the full
 // article HTML on the first fetch. Visual language matches the home page
 // (Navbar, DottedSurface background, gradient text, dark theme cards).
@@ -10,7 +10,7 @@ import Navbar from "@/components/Navbar";
 const CANONICAL = "https://hudsonturansky.com/resources/ai-for-small-business";
 const PUBLISHED = "2026-05-21";
 
-// FAQ — single source of truth. Visible answers must match JSON-LD answers
+// FAQ, single source of truth. Visible answers must match JSON-LD answers
 // character-for-character (Google penalizes FAQ schema where the marked-up
 // answer differs from the on-page answer).
 const FAQ: Array<{ q: string; a: string }> = [
@@ -24,11 +24,11 @@ const FAQ: Array<{ q: string; a: string }> = [
   },
   {
     q: "What's a common first AI project for a service business?",
-    a: "Customer intake automation is one common option — a chat-style assistant that asks the qualifying questions you'd otherwise ask manually, captures the details, and writes the result back to your CRM. It's visible (you can tell if it's working), repeatable (every lead goes through it), and bounded in scope. Email triage and document processing are two other common entry points; pick whichever of the three eats the most time in your week.",
+    a: "Customer intake automation is one common option, a chat-style assistant that asks the qualifying questions you'd otherwise ask manually, captures the details, and writes the result back to your CRM. It's visible (you can tell if it's working), repeatable (every lead goes through it), and bounded in scope. Email triage and document processing are two other common entry points; pick whichever of the three eats the most time in your week.",
   },
   {
     q: "Do I need to be technical to add AI to my business?",
-    a: "No. The audit step (list your 3 most repetitive weekly tasks) is non-technical, and any project worth doing can be scoped in plain language before any code is written. The honest test for whether you need a developer at all is whether a $20/month ChatGPT subscription solves your problem first — if it does, you don't need a custom build.",
+    a: "No. The audit step (list your 3 most repetitive weekly tasks) is non-technical, and any project worth doing can be scoped in plain language before any code is written. The honest test for whether you need a developer at all is whether a $20/month ChatGPT subscription solves your problem first, if it does, you don't need a custom build.",
   },
 ];
 
@@ -63,7 +63,7 @@ const AiForSmallBusiness = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>How to add AI to your small business in 2026 — Hudson Turansky</title>
+        <title>How to add AI to your small business in 2026 · Hudson Turansky</title>
         <meta
           name="description"
           content="A 4-step framework for small-business owners: audit your week, match each task to the right investment ($20 / $50–200/mo / $1,500–$15,000 custom), and decide build vs. subscribe."
@@ -73,7 +73,7 @@ const AiForSmallBusiness = () => {
         <meta property="og:url" content={CANONICAL} />
         <meta
           property="og:title"
-          content="How to add AI to your small business in 2026 — Hudson Turansky"
+          content="How to add AI to your small business in 2026 · Hudson Turansky"
         />
         <meta
           property="og:description"
@@ -154,14 +154,14 @@ const AiForSmallBusiness = () => {
               narrow, well-defined workflows like legal intake or scheduling;{" "}
               <strong className="text-gray-100">a custom build</strong> is only worth it when the
               AI needs to read your specific data, sit inside your existing tools, or face
-              customers — typically $1,500–$15,000 in 2026 depending on scope. Most small
+              customers, typically $1,500–$15,000 in 2026 depending on scope. Most small
               businesses don't need all three; many don't need anything beyond the $20/month tier.
               The rest of this article walks through the sorting framework step by step.
             </p>
           </div>
 
           {/* Step 1 */}
-          <Section heading="Step 1 — Audit your week">
+          <Section heading="Step 1, Audit your week">
             <p>
               Block 30 minutes and write down the 3 most repetitive tasks you do every week. For
               each, estimate the hours per week and the dollar value of an hour of your time. This
@@ -170,34 +170,34 @@ const AiForSmallBusiness = () => {
             <p>The patterns we see most often, by industry:</p>
             <Bullets>
               <li>
-                <strong>Contractors</strong> — intake forms, scheduling, quote follow-ups, photo +
+                <strong>Contractors</strong>, intake forms, scheduling, quote follow-ups, photo +
                 document organization, weekly invoicing.
               </li>
               <li>
-                <strong>Professional services</strong> (legal, accounting, consulting) — document
+                <strong>Professional services</strong> (legal, accounting, consulting), document
                 review and summarization, client onboarding intake, recurring research, drafting
                 standard documents.
               </li>
               <li>
-                <strong>E-commerce</strong> — customer support email triage, inventory updates,
+                <strong>E-commerce</strong>, customer support email triage, inventory updates,
                 returns/refund decisions, weekly performance reports.
               </li>
               <li>
-                <strong>Agencies</strong> — proposal writing, lead qualification, status updates,
+                <strong>Agencies</strong>, proposal writing, lead qualification, status updates,
                 client weekly summaries.
               </li>
             </Bullets>
           </Section>
 
           {/* Step 2 */}
-          <Section heading="Step 2 — Match each task to the right level of investment">
+          <Section heading="Step 2, Match each task to the right level of investment">
             <p>
               For every task on your list, decide which bucket it belongs in. Most small businesses
               end up with a mix.
             </p>
 
             <h3 className="text-lg font-semibold text-white mt-8 mb-2" style={{ letterSpacing: "-0.01em" }}>
-              $20/month — ChatGPT Plus or Claude Pro
+              $20/month, ChatGPT Plus or Claude Pro
             </h3>
             <p>
               Solo use. Drafting emails, summarizing documents, basic research, one-off writing
@@ -207,19 +207,19 @@ const AiForSmallBusiness = () => {
             </p>
 
             <h3 className="text-lg font-semibold text-white mt-8 mb-2" style={{ letterSpacing: "-0.01em" }}>
-              $50–200/month — Off-the-shelf vertical AI tool
+              $50–200/month, Off-the-shelf vertical AI tool
             </h3>
             <p>
               Niche tools built for specific industries: legal intake (e.g. Clio Duo), AI scheduling
               assistants, customer-support copilots, AI bookkeeping. Subscribe when the product
               already does 80%+ of what you want and the monthly cost is less than what your saved
-              time is worth. This category is moving fast — switching tools is often easy, but
+              time is worth. This category is moving fast, switching tools is often easy, but
               expect most off-the-shelf options to integrate at the surface level rather than
               deeply with your specific stack.
             </p>
 
             <h3 className="text-lg font-semibold text-white mt-8 mb-2" style={{ letterSpacing: "-0.01em" }}>
-              $1,500–$15,000+ one-time — Custom build
+              $1,500–$15,000+ one-time, Custom build
             </h3>
             <p>
               Worth it when (a) the AI needs to read <em className="text-gray-300">your</em>{" "}
@@ -234,7 +234,7 @@ const AiForSmallBusiness = () => {
           </Section>
 
           {/* Step 3 */}
-          <Section heading="Step 3 — Pick your first project">
+          <Section heading="Step 3, Pick your first project">
             <p>
               The right first project is the one that's <strong>visible</strong> (you can tell
               whether it's working),{" "}
@@ -245,38 +245,38 @@ const AiForSmallBusiness = () => {
             <Bullets>
               <li>
                 <strong>Service businesses</strong> (contractors, agencies, professional services)
-                — customer intake automation. A chat-style assistant that asks the qualifying
+               , customer intake automation. A chat-style assistant that asks the qualifying
                 questions you'd otherwise ask by phone or email, captures the details, and writes
                 the result back to your CRM.
               </li>
               <li>
-                <strong>Knowledge-work businesses</strong> — a research assistant tied to your own
+                <strong>Knowledge-work businesses</strong>, a research assistant tied to your own
                 document library. Reduces the "I know we wrote that down somewhere" tax.
               </li>
               <li>
-                <strong>E-commerce</strong> — a customer-support assistant that drafts first-pass
+                <strong>E-commerce</strong>, a customer-support assistant that drafts first-pass
                 replies. Cuts the standard-question queue without removing the human review step.
               </li>
             </Bullets>
             <p>Other first-project options worth considering across categories:</p>
             <Bullets>
               <li>
-                <strong>Email triage assistant</strong> — categorizes incoming email and drafts
+                <strong>Email triage assistant</strong>, categorizes incoming email and drafts
                 replies in your voice.
               </li>
               <li>
-                <strong>Document intake processor</strong> (legal, accounting, contractors) —
+                <strong>Document intake processor</strong> (legal, accounting, contractors):
                 extracts structured fields from PDFs and writes them to your system.
               </li>
               <li>
-                <strong>Internal knowledge-base assistant</strong> — answers FAQs your team would
+                <strong>Internal knowledge-base assistant</strong>, answers FAQs your team would
                 otherwise interrupt each other to answer.
               </li>
             </Bullets>
           </Section>
 
           {/* Step 4 */}
-          <Section heading="Step 4 — Avoid the 3 most common mistakes">
+          <Section heading="Step 4, Avoid the 3 most common mistakes">
             <ol className="list-decimal pl-5 space-y-3 text-gray-400 font-light leading-relaxed">
               <li>
                 <strong>Skipping the $20/month ChatGPT test first.</strong> If a 2-week ChatGPT
@@ -287,20 +287,20 @@ const AiForSmallBusiness = () => {
               <li>
                 <strong>Reaching for AI when automation alone would work.</strong> A lot of "AI"
                 projects are really just better scripts or workflows in tools you already pay for.
-                If your task is rule-based — same input, same correct output every time — you
+                If your task is rule-based, same input, same correct output every time, you
                 don't need an LLM in the middle.
               </li>
               <li>
                 <strong>Skipping the "where AI doesn't belong" conversation.</strong> Anything
-                where wrong answers cost real money — regulated industries, customer-facing
-                decisions, financial calculations — needs careful scoping with a human review
+                where wrong answers cost real money, regulated industries, customer-facing
+                decisions, financial calculations, needs careful scoping with a human review
                 step. Don't put a generative model in a place where its first wrong answer creates
                 a liability.
               </li>
             </ol>
           </Section>
 
-          {/* Soft attribution footer for the article — replaces the old hard-CTA card. */}
+          {/* Soft attribution footer for the article, replaces the old hard-CTA card. */}
           <div
             className="mt-12 rounded-2xl p-6"
             style={{
@@ -402,7 +402,7 @@ const AiForSmallBusiness = () => {
 export default AiForSmallBusiness;
 
 // ---------------------------------------------------------------------------
-// Tiny inline helpers — keep body styles consistent across sections.
+// Tiny inline helpers, keep body styles consistent across sections.
 // ---------------------------------------------------------------------------
 
 const Section = ({ heading, children }: { heading: string; children: React.ReactNode }) => (
