@@ -151,23 +151,23 @@ serve(async (req) => {
       );
     }
 
-    // 5. LLM call
-    const openaiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openaiKey) {
-      console.error('OPENAI_API_KEY not set');
+    // 5. LLM call — via Lovable AI Gateway (no OpenAI key needed)
+    const lovableKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableKey) {
+      console.error('LOVABLE_API_KEY not set');
       return json(
         { error: 'server_misconfigured', message: 'AI test temporarily unavailable.' },
         503,
       );
     }
-    const model = Deno.env.get('OPENAI_MODEL') ?? 'gpt-4o-mini';
+    const model = Deno.env.get('AI_TEST_MODEL') ?? 'google/gemini-3-flash-preview';
 
     const userMessage = JSON.stringify({ questionnaire_answers: cleanedAnswers });
 
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const openaiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${openaiKey}`,
+        Authorization: `Bearer ${lovableKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -177,14 +177,24 @@ serve(async (req) => {
           { role: 'user', content: userMessage },
         ],
         response_format: { type: 'json_object' },
-        temperature: 0.7,
-        max_tokens: 2000,
       }),
     });
 
     if (!openaiResponse.ok) {
       const text = await openaiResponse.text();
-      console.error('OpenAI error', openaiResponse.status, text);
+      console.error('Lovable AI gateway error', openaiResponse.status, text);
+      if (openaiResponse.status === 429) {
+        return json(
+          { error: 'rate_limited', message: 'Too many requests right now. Please try again in a minute.' },
+          429,
+        );
+      }
+      if (openaiResponse.status === 402) {
+        return json(
+          { error: 'credits_exhausted', message: 'AI test temporarily unavailable. Please try again later.' },
+          503,
+        );
+      }
       return json(
         {
           error: 'llm_error',
