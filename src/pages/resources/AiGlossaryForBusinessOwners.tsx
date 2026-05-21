@@ -363,8 +363,8 @@ const AiGlossaryForBusinessOwners = () => {
           <div
             className="rounded-2xl p-6 mb-12"
             style={{
-              backgroundColor: "rgba(59,130,246,0.04)",
-              border: "1px solid rgba(59,130,246,0.2)",
+              backgroundColor: "var(--app-blue-tint)",
+              border: "1px solid var(--app-blue-tint-border-strong)",
               borderLeft: "3px solid #3b82f6",
             }}
           >
@@ -399,8 +399,8 @@ const AiGlossaryForBusinessOwners = () => {
                     key={t.term}
                     className="rounded-2xl p-6"
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.02)",
-                      border: "1px solid rgba(255,255,255,0.05)",
+                      backgroundColor: "var(--app-card-bg)",
+                      border: "1px solid var(--app-border-soft)",
                     }}
                   >
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2 mb-3">
@@ -413,7 +413,7 @@ const AiGlossaryForBusinessOwners = () => {
                       <span
                         className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0"
                         style={{
-                          backgroundColor: "rgba(255,255,255,0.04)",
+                          backgroundColor: "var(--app-card-bg-strong)",
                           color: badge.color,
                           border: `1px solid ${badge.border}`,
                           letterSpacing: "0.05em",
@@ -467,8 +467,8 @@ const AiGlossaryForBusinessOwners = () => {
                   key={q}
                   className="group rounded-2xl"
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.05)",
+                    backgroundColor: "var(--app-card-bg)",
+                    border: "1px solid var(--app-border-soft)",
                   }}
                 >
                   <summary
@@ -549,8 +549,8 @@ const AiGlossaryForBusinessOwners = () => {
       <footer
         className="py-8 px-6 text-center"
         style={{
-          backgroundColor: "#09090b",
-          borderTop: "1px solid rgba(255,255,255,0.05)",
+          backgroundColor: "var(--app-page-bg)",
+          borderTop: "1px solid var(--app-border-soft)",
         }}
       >
         <p className="text-xs text-gray-600">

@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import * as THREE from "three";
+import { onThemeChange, readCssVarFloat } from "@/lib/useTheme";
 
 const GRID = 50;
 const SEP = 100;
@@ -27,20 +28,41 @@ const vertexShader = `
   }
 `;
 
+// `uNeutral` and `uBlue` are uniforms driven by CSS variables on
+// :root / html.light (see src/index.css). They get updated whenever
+// the theme class on <html> changes.
 const fragmentShader = `
+  uniform vec3 uNeutral;
+  uniform vec3 uBlue;
   varying float vHeight;
   void main() {
     float dist = length(gl_PointCoord - vec2(0.5));
     if (dist > 0.5) discard;
     float edge = smoothstep(0.5, 0.25, dist);
     float hf = clamp(vHeight / 120.0, 0.0, 1.0);
-    vec3 neutral = vec3(0.55, 0.58, 0.68);
-    vec3 blue = vec3(0.35, 0.55, 1.0);
-    vec3 color = mix(neutral, blue, hf);
+    vec3 color = mix(uNeutral, uBlue, hf);
     float alpha = mix(0.5, 1.0, hf) * edge;
     gl_FragColor = vec4(color, alpha);
   }
 `;
+
+function readDottedColors() {
+  return {
+    neutral: new THREE.Vector3(
+      readCssVarFloat("--dotted-neutral-r", 0.55),
+      readCssVarFloat("--dotted-neutral-g", 0.58),
+      readCssVarFloat("--dotted-neutral-b", 0.68),
+    ),
+    blue: new THREE.Vector3(
+      readCssVarFloat("--dotted-blue-r", 0.35),
+      readCssVarFloat("--dotted-blue-g", 0.55),
+      readCssVarFloat("--dotted-blue-b", 1.0),
+    ),
+    fog: new THREE.Color(
+      readCssVarFloat("--dotted-fog-hex", 0x09090b),
+    ),
+  };
+}
 
 interface DottedSurfaceProps {
   interactive?: boolean;
@@ -72,7 +94,8 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
     }
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x09090b, 0.00025);
+    const initialColors = readDottedColors();
+    scene.fog = new THREE.FogExp2(initialColors.fog.getHex(), 0.00025);
 
     const camera = new THREE.PerspectiveCamera(
       55,
@@ -113,6 +136,21 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
       fragmentShader,
       transparent: true,
       depthWrite: false,
+      uniforms: {
+        uNeutral: { value: initialColors.neutral },
+        uBlue: { value: initialColors.blue },
+      },
+    });
+
+    // Re-read CSS vars + update uniforms when the theme class flips.
+    const offThemeChange = onThemeChange(() => {
+      const colors = readDottedColors();
+      material.uniforms.uNeutral.value = colors.neutral;
+      material.uniforms.uBlue.value = colors.blue;
+      if (scene.fog instanceof THREE.FogExp2) {
+        scene.fog.color.setHex(colors.fog.getHex());
+      }
+      material.needsUpdate = true;
     });
 
     const points = new THREE.Points(geometry, material);
@@ -253,6 +291,7 @@ const DottedSurface = ({ interactive = false }: DottedSurfaceProps) => {
         document.removeEventListener("mouseleave", onMouseLeave);
         window.removeEventListener("click", onClick);
       }
+      offThemeChange();
       renderer.dispose();
       geometry.dispose();
       material.dispose();

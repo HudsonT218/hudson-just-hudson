@@ -171,8 +171,8 @@ const ResourcesIndexPage = () => {
       <footer
         className="py-8 px-6 text-center"
         style={{
-          backgroundColor: "#09090b",
-          borderTop: "1px solid rgba(255,255,255,0.05)",
+          backgroundColor: "var(--app-page-bg)",
+          borderTop: "1px solid var(--app-border-soft)",
         }}
       >
         <p className="text-xs text-gray-600">
@@ -200,8 +200,8 @@ const ResourceCardLink = ({ to, label, title, description, accentColor }: Resour
     to={to}
     className="block rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
     style={{
-      backgroundColor: "rgba(255,255,255,0.03)",
-      border: "1px solid rgba(255,255,255,0.1)",
+      backgroundColor: "var(--app-card-bg-strong)",
+      border: "1px solid var(--app-border-strong)",
     }}
   >
     <p

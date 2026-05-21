@@ -113,7 +113,7 @@ const WorkPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Capabilities */}
@@ -137,8 +137,8 @@ const WorkPage = () => {
                 key={c.label}
                 className="rounded-2xl p-8"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  backgroundColor: "var(--app-card-bg)",
+                  border: "1px solid var(--app-border-soft)",
                 }}
               >
                 <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-4">
@@ -156,7 +156,7 @@ const WorkPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Portfolio */}
@@ -193,11 +193,11 @@ const WorkPage = () => {
                   }`}
                   style={{
                     backgroundColor: isLive
-                      ? "rgba(255,255,255,0.03)"
-                      : "rgba(255,255,255,0.01)",
+                      ? "var(--app-card-bg-strong)"
+                      : "var(--app-card-bg)",
                     border: isLive
-                      ? "1px solid rgba(255,255,255,0.1)"
-                      : "1px dashed rgba(255,255,255,0.08)",
+                      ? "1px solid var(--app-border-strong)"
+                      : "1px dashed var(--app-border-med)",
                   }}
                 >
                   {p.image && (
@@ -261,7 +261,7 @@ const WorkPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       <Collaborators />
@@ -269,7 +269,7 @@ const WorkPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* AI meeting assistant demo */}
@@ -308,7 +308,7 @@ const WorkPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Interested CTA */}
@@ -327,8 +327,8 @@ const WorkPage = () => {
             to="/interested"
             className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
             style={{
-              backgroundColor: "#ffffff",
-              color: "#09090b",
+              backgroundColor: "var(--app-button-bg)",
+              color: "var(--app-button-fg)",
             }}
           >
             See Pricing →
@@ -340,8 +340,8 @@ const WorkPage = () => {
       <footer
         className="py-8 px-6 text-center"
         style={{
-          backgroundColor: "#09090b",
-          borderTop: "1px solid rgba(255,255,255,0.05)",
+          backgroundColor: "var(--app-page-bg)",
+          borderTop: "1px solid var(--app-border-soft)",
         }}
       >
         <p className="text-xs text-gray-600">

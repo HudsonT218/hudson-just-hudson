@@ -68,7 +68,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const emailDisplay = user?.email ?? "Not signed in";
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: admin.bg }}>
+    // `dark-region` keeps the admin surface dark even when the public site
+    // is in light mode. See the .dark-region rule in src/index.css.
+    <div className="dark-region min-h-screen flex" style={{ backgroundColor: admin.bg }}>
       <aside
         className="w-[220px] shrink-0 flex flex-col fixed inset-y-0 left-0"
         style={{
