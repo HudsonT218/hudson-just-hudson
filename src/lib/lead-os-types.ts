@@ -73,7 +73,9 @@ export interface Lead {
   source: string | null;
 }
 
-export type LeadInsert = Omit<Lead, "id" | "created_at" | "updated_at">;
+export type LeadInsert = Omit<Lead, "id" | "created_at" | "updated_at" | "source"> & {
+  source?: string | null;
+};
 export type LeadUpdate = Partial<LeadInsert>;
 
 export interface Project {
