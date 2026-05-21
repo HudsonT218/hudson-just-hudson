@@ -5,13 +5,13 @@ import Navbar from "@/components/Navbar";
 import WhatIBuild from "@/components/WhatIBuild";
 import Contact from "@/components/Contact";
 
-// Visible FAQ answers + JSON-LD FAQPage entries — single source of truth so
+// Visible FAQ answers + JSON-LD FAQPage entries, single source of truth so
 // the structured data matches the rendered text exactly. (Google penalizes
 // FAQ schema where the marked-up answer differs from the on-page answer.)
 const FAQ_ITEMS: Array<{ q: string; a: string }> = [
   {
     q: "How do I add AI to my small business?",
-    a: "Start by listing the 3 most repetitive things in your week — intake forms, scheduling, email triage, document processing, customer FAQs. Then decide whether a $20 ChatGPT subscription, an off-the-shelf AI tool ($50–200/mo), or a custom build is the right level of investment. Most small businesses get the biggest first win from automating customer intake or email triage with a custom assistant tied to their own knowledge base.",
+    a: "Start by listing the 3 most repetitive things in your week, intake forms, scheduling, email triage, document processing, customer FAQs. Then decide whether a $20 ChatGPT subscription, an off-the-shelf AI tool ($50–200/mo), or a custom build is the right level of investment. Most small businesses get the biggest first win from automating customer intake or email triage with a custom assistant tied to their own knowledge base.",
   },
   {
     q: "How much does custom AI cost?",
@@ -23,11 +23,11 @@ const FAQ_ITEMS: Array<{ q: string; a: string }> = [
   },
   {
     q: "Should I hire a consultant or use ChatGPT myself?",
-    a: "Use ChatGPT yourself first for everything you can — it is the cheapest test. Hire a builder when you need something embedded in your existing tools, tuned to your specific data, reliable enough to put in front of customers, or automating work across multiple steps that ChatGPT alone cannot reach. If a $20 ChatGPT subscription solves your problem, I will tell you that on the discovery call.",
+    a: "Use ChatGPT yourself first for everything you can, it is the cheapest test. Hire a builder when you need something embedded in your existing tools, tuned to your specific data, reliable enough to put in front of customers, or automating work across multiple steps that ChatGPT alone cannot reach. If a $20 ChatGPT subscription solves your problem, I will tell you that on the discovery call.",
   },
   {
     q: "Do you work with contractors, professional services, or e-commerce businesses?",
-    a: "Yes — those are the three buckets where I see the highest ROI for small businesses. Contractors typically need scheduling and intake automation plus document handling. Professional services (legal, accounting, consulting) need document processing and client-facing assistants. E-commerce needs custom inventory tools, customer support agents, and analytics dashboards. Different industries, similar building blocks.",
+    a: "Yes, those are the three buckets where I see the highest ROI for small businesses. Contractors typically need scheduling and intake automation plus document handling. Professional services (legal, accounting, consulting) need document processing and client-facing assistants. E-commerce needs custom inventory tools, customer support agents, and analytics dashboards. Different industries, similar building blocks.",
   },
   {
     q: "How do we get started?",
@@ -62,18 +62,18 @@ const Index = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Hudson Turansky — AI Solutions & Web Development</title>
+        <title>Hudson Turansky · AI Solutions & Web Development</title>
         <meta name="description" content="I build custom websites, AI tools, and software for businesses and individuals. Book a free call to talk through your project." />
         <link rel="canonical" href="https://hudsonturansky.com/" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hudsonturansky.com/" />
-        <meta property="og:title" content="Hudson Turansky — AI Solutions & Web Development" />
+        <meta property="og:title" content="Hudson Turansky · AI Solutions & Web Development" />
         <meta property="og:description" content="Custom websites, AI tools, and software. Hourly, transparent, built with AI." />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Hudson Turansky — AI Solutions & Web Development" />
+        <meta name="twitter:title" content="Hudson Turansky · AI Solutions & Web Development" />
         <meta name="twitter:description" content="Custom websites, AI tools, and software. Hourly, transparent, built with AI." />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
         <script type="application/ld+json">{JSON.stringify(FAQ_JSONLD)}</script>
@@ -143,10 +143,10 @@ const Index = () => {
           </h1>
 
           <p className="text-lg text-gray-400 font-light max-w-lg mx-auto mb-10">
-            I build custom websites, AI tools, and software for small
-            businesses. Hourly, transparent pricing. Most projects ship in
-            2–6 weeks. You bring the idea; I lead it end‑to‑end, no agency
-            markup, no freelancer hand‑off chains.
+            Custom websites, AI tools, and software, built end to end for
+            businesses and individuals who have an idea and need someone to
+            actually ship it. I'm early in client work, and my pricing reflects
+            that.
           </p>
 
           <div className="flex justify-center mb-8">
@@ -225,15 +225,11 @@ const Index = () => {
           </h2>
           <div className="space-y-5 text-gray-400 font-light leading-relaxed">
             <p>
-              I build custom websites, AI tools, and software for small
-              businesses and solo founders — the kind of work most agencies
-              overcharge for and most freelancers can't deliver end‑to‑end.
-              Hourly, transparent rates. Most projects ship in 2–6 weeks;
-              custom AI agents and operations software run longer depending on
-              scope. I've gone deep on AI in particular — not just using it,
-              but understanding what it can really do and where it doesn't
-              belong yet — and I'll tell you honestly which bucket your idea
-              falls in before we start building.
+              I build custom websites, AI tools, and software. I've spent
+              serious time going deep on AI in particular: not just using it,
+              but understanding what it can really do and how to build solid
+              things with it. I care about making things that actually work,
+              and I don't cut corners to get there.
             </p>
             <p>
               You don't have to be technical to work with me. Maybe you know AI
@@ -283,7 +279,7 @@ const Index = () => {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
-      {/* Resources callout — short hook that funnels users into /resources,
+      {/* Resources callout, short hook that funnels users into /resources,
           which is the single doorway to the guides + the AI Brief tool. */}
       <section id="resources-callout" className="py-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
@@ -294,7 +290,7 @@ const Index = () => {
             className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-5"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Plain-English guides and a{" "}
+            Figure out where AI{" "}
             <span
               style={{
                 background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
@@ -302,14 +298,12 @@ const Index = () => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              free AI brief
-            </span>{" "}
-            for small businesses.
+              actually fits.
+            </span>
           </h2>
           <p className="text-gray-400 font-light leading-relaxed max-w-2xl mx-auto mb-10">
-            A small library of resources on adding AI to a small business — what's worth building,
-            what's worth subscribing to, what's worth ignoring. Includes a personalized AI brief that
-            generates 6–10 specific use-case ideas based on your work and life in about 5 minutes.
+            Take the free 5-minute brief and get a personalized list of 6–10 specific use-cases for
+            your work and life. Or read the guides for the longer thinking behind it.
           </p>
           <div className="flex justify-center">
             <Link
@@ -328,7 +322,7 @@ const Index = () => {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
-      {/* FAQ — visible content paired with FAQPage JSON-LD in <Helmet>. */}
+      {/* FAQ, visible content paired with FAQPage JSON-LD in <Helmet>. */}
       <section id="faq" className="py-28 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="mb-12">

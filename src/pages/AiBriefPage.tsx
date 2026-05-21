@@ -1,4 +1,4 @@
-// Free Personalized AI Brief — single-file page covering:
+// Free Personalized AI Brief, single-file page covering:
 //   - prerendered landing intro (this is what crawlers see)
 //   - 5-step quiz (React Hook Form + Zod)
 //   - email gate
@@ -7,7 +7,7 @@
 //   - already-received and error states
 //
 // Backend: supabase/functions/ai-test-generate. (Kept the internal function
-// name to avoid orphaning the deployed edge function on Lovable Cloud — the
+// name to avoid orphaning the deployed edge function on Lovable Cloud, the
 // public-facing label was the only thing that needed to change.) Edge
 // function validates + length-limits everything we send, so the client-side
 // validation here is for UX, not security.
@@ -35,7 +35,7 @@ import { SOURCE_OPTIONS } from "@/lib/tracking";
 
 const quizSchema = z.object({
   name: z.string().max(100).optional(),
-  role: z.string().min(2, "Tell me what you do — even one word helps.").max(200),
+  role: z.string().min(2, "Tell me what you do, even one word helps.").max(200),
   industry: z.string().min(1, "Pick the closest match.").max(80),
   team_size: z.string().min(1, "Pick one."),
   time_drains: z.array(z.string()).min(1, "Pick at least one.").max(8),
@@ -54,7 +54,7 @@ type QuizForm = z.infer<typeof quizSchema>;
 
 const emailSchema = z.object({
   email: z.string().email("That doesn't look like an email."),
-  source: z.string().min(1, "Pick one — even \"Other\" helps."),
+  source: z.string().min(1, "Pick one, even \"Other\" helps."),
   consent: z.literal(true, { errorMap: () => ({ message: "Tick the box to continue." }) }),
 });
 
@@ -149,7 +149,7 @@ const TECH_COMFORT = [
 ];
 
 // ---------------------------------------------------------------------------
-// Step config — defines which fields belong to which step + step labels
+// Step config, defines which fields belong to which step + step labels
 // ---------------------------------------------------------------------------
 
 const STEPS: Array<{ title: string; fields: FieldPath<QuizForm>[] }> = [
@@ -179,10 +179,10 @@ const AiBriefPage = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Personalized AI Brief for Small Businesses — Hudson Turansky</title>
+        <title>Personalized AI Brief for Small Businesses · Hudson Turansky</title>
         <meta
           name="description"
-          content="A free 5-minute personalized brief. Answer a few questions about your work and life and get 6–10 specific AI ideas you could actually use — tagged by effort, with the build-worthy ones flagged."
+          content="A free 5-minute personalized brief. Answer a few questions about your work and life and get 6–10 specific AI ideas you could actually use, tagged by effort, with the build-worthy ones flagged."
         />
         <link rel="canonical" href="https://hudsonturansky.com/ai-brief" />
         <meta property="og:type" content="website" />
@@ -190,7 +190,7 @@ const AiBriefPage = () => {
         <meta property="og:title" content="Personalized AI Brief for Small Businesses" />
         <meta
           property="og:description"
-          content="A free 5-minute personalized brief. Get 6–10 specific AI ideas you could actually use — tagged by effort."
+          content="A free 5-minute personalized brief. Get 6–10 specific AI ideas you could actually use, tagged by effort."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="og:image:width" content="1200" />
@@ -199,7 +199,7 @@ const AiBriefPage = () => {
         <meta name="twitter:title" content="Personalized AI Brief for Small Businesses" />
         <meta
           name="twitter:description"
-          content="A free 5-minute personalized brief. Get 6–10 specific AI ideas — tagged by effort."
+          content="A free 5-minute personalized brief. Get 6–10 specific AI ideas, tagged by effort."
         />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
         <script type="application/ld+json">{JSON.stringify(LANDING_JSONLD)}</script>
@@ -343,8 +343,8 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
         </span>
       </h1>
       <p className="text-lg text-gray-400 font-light max-w-2xl mb-8 leading-relaxed">
-        A free 5-minute personalized brief. Answer a few questions about your work and life — your role, the
-        tasks that eat your time, what tools you live in, what you'd hand to an AI tomorrow — and a
+        A free 5-minute personalized brief. Answer a few questions about your work and life, your role, the
+        tasks that eat your time, what tools you live in, what you'd hand to an AI tomorrow, and a
         purpose-built assistant generates a brief with{" "}
         <strong className="text-gray-200">6–10 specific AI use-case ideas</strong> based on your answers,
         grouped <em>At Work</em> and <em>In Your Life</em>, and tagged by effort.
@@ -367,7 +367,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
         >
           Get my brief →
         </button>
-        <p className="mt-3 text-xs text-gray-600">No pitch on the way in. Your results are yours — and the build-worthy ones get flagged.</p>
+        <p className="mt-3 text-xs text-gray-600">No pitch on the way in. Your results are yours, and the build-worthy ones get flagged.</p>
       </div>
 
       <div className="border-t border-white/[0.06]" />
@@ -378,10 +378,10 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           What you get
         </h2>
         <ul className="space-y-3 text-gray-400 font-light leading-relaxed">
-          <li>· <strong className="text-gray-200">6–10 ideas</strong> — most briefs end up with a mix of low-effort wins and a few ambitious "needs building" projects.</li>
+          <li>· <strong className="text-gray-200">6–10 ideas</strong>, most briefs end up with a mix of low-effort wins and a few ambitious "needs building" projects.</li>
           <li>· Each idea has a <strong className="text-gray-200">title, one-line description, and a personalized "how this helps you"</strong> that references your actual answers.</li>
           <li>· Effort tag on every idea: <span style={{ color: "rgba(16,185,129,0.9)" }}>Easy</span> (do it yourself with ChatGPT) · <span style={{ color: "rgba(245,158,11,0.9)" }}>Medium</span> (off-the-shelf AI tool) · <span style={{ color: "rgba(96,165,250,1)" }}>Needs building</span> (where I can help).</li>
-          <li>· Honest "this is just ChatGPT" answers when that's the right call — no upsell pressure.</li>
+          <li>· Honest "this is just ChatGPT" answers when that's the right call, no upsell pressure.</li>
         </ul>
       </section>
 
@@ -472,7 +472,7 @@ interface QuizProps {
 }
 
 // Keep the form values outside the Quiz component so EmailGate can read them
-// after the user navigates forward. Module-scoped is fine — only one test
+// after the user navigates forward. Module-scoped is fine, only one test
 // flow runs at a time per browser tab.
 let savedQuizValues: QuizAnswers | null = null;
 
@@ -534,7 +534,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
       </div>
 
       <form onSubmit={(e) => { e.preventDefault(); goNext(); }} className="space-y-6">
-        {/* Step 1 — About you */}
+        {/* Step 1, About you */}
         {step === 0 && (
           <>
             <FieldText name="name" label="Your name (optional)" placeholder="e.g. Maria" control={control} error={errors.name} />
@@ -544,7 +544,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
           </>
         )}
 
-        {/* Step 2 — Your work */}
+        {/* Step 2, Your work */}
         {step === 1 && (
           <>
             <FieldMultiSelect name="time_drains" label="Which tasks eat the most time at work?" options={TIME_DRAINS} control={control} error={errors.time_drains} required hint="Pick all that apply." />
@@ -553,7 +553,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
           </>
         )}
 
-        {/* Step 3 — Your life outside work */}
+        {/* Step 3, Your life outside work */}
         {step === 2 && (
           <>
             <FieldMultiSelect name="life_streamline" label="Personal / household time you'd love to streamline" options={LIFE_STREAMLINE} control={control} error={errors.life_streamline} hint="Optional. Skip if nothing fits." />
@@ -562,7 +562,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
           </>
         )}
 
-        {/* Step 4 — Your AI experience */}
+        {/* Step 4, Your AI experience */}
         {step === 3 && (
           <>
             <FieldSingleSelect name="ai_usage" label="How often do you use AI today?" options={AI_USAGE} control={control} error={errors.ai_usage} required />
@@ -571,7 +571,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
           </>
         )}
 
-        {/* Step 5 — The big one */}
+        {/* Step 5, The big one */}
         {step === 4 && (
           <>
             <FieldTextarea
@@ -624,7 +624,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
 
   const onSubmit = async (data: EmailForm) => {
     if (!savedQuizValues) {
-      onError("Your answers were lost — please start the brief again.");
+      onError("Your answers were lost, please start the brief again.");
       return;
     }
     onSubmitting();
@@ -634,7 +634,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
         { body: { email: data.email, source: data.source, answers: savedQuizValues } },
       );
       if (invokeError) {
-        // Try to read the structured body anyway — supabase-js puts non-2xx
+        // Try to read the structured body anyway, supabase-js puts non-2xx
         // bodies on `error.context` in some versions.
         const ctx = (invokeError as unknown as { context?: { error?: string; message?: string } }).context;
         if (ctx?.error === "already_used") {
@@ -676,7 +676,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
       </h2>
       <p className="text-gray-400 font-light mb-8 leading-relaxed">
         One use per email. You'll see your personalized AI ideas on the next screen. I'll also email you a
-        copy for later. No spam, no list — just this report.
+        copy for later. No spam, no list, just this report.
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -941,7 +941,7 @@ const Footer = () => (
 );
 
 // ===========================================================================
-// Form field components — keep these in this file so the page is one unit.
+// Form field components, keep these in this file so the page is one unit.
 // ===========================================================================
 
 interface FieldBaseProps<T extends FieldPath<QuizForm>> {

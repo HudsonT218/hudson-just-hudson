@@ -1,7 +1,7 @@
-// /resources — single doorway to free tools and guides.
+// /resources, single doorway to free tools and guides.
 // SPA route, prerendered via prerenderPlugin so crawlers see the rendered
-// cards on first fetch. The page is split into two sections — Tools at the
-// top (interactive, higher engagement) and Guides below — both styled with
+// cards on first fetch. The page is split into two sections, Tools at the
+// top (interactive, higher engagement) and Guides below, both styled with
 // the home page's design system.
 
 import { Link } from "react-router-dom";
@@ -21,7 +21,7 @@ const TOOLS: ResourceCard[] = [
     label: "Tool · 5 min",
     title: "Personalized AI Brief",
     description:
-      "Answer a few questions about your work and life. Get a brief with 6–10 specific AI use-case ideas you could actually use — tagged by effort, with the build-worthy ones flagged. Free, one brief per email.",
+      "Answer a few questions about your work and life. Get a brief with 6–10 specific AI use-case ideas you could actually use, tagged by effort, with the build-worthy ones flagged. Free, one brief per email.",
   },
 ];
 
@@ -38,7 +38,7 @@ const GUIDES: ResourceCard[] = [
 const COLLECTION_JSONLD = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "Resources — Hudson Turansky",
+  name: "Resources · Hudson Turansky",
   description:
     "Free tools and plain-English guides for small-business owners on how to add AI, what custom builds cost, when to hire a consultant, and how to scope a project.",
   url: "https://hudsonturansky.com/resources/",
@@ -53,7 +53,7 @@ const ResourcesIndexPage = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Resources — Hudson Turansky</title>
+        <title>Resources · Hudson Turansky</title>
         <meta
           name="description"
           content="Free tools and plain-English guides for small-business owners on how to add AI, what custom AI costs, when to hire a consultant, and how to scope a custom build."
@@ -61,14 +61,14 @@ const ResourcesIndexPage = () => {
         <link rel="canonical" href="https://hudsonturansky.com/resources/" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hudsonturansky.com/resources/" />
-        <meta property="og:title" content="Resources — Hudson Turansky" />
+        <meta property="og:title" content="Resources · Hudson Turansky" />
         <meta
           property="og:description"
           content="Free tools and plain-English guides for small-business owners on adding AI, custom builds, and the right level of investment for each."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Resources — Hudson Turansky" />
+        <meta name="twitter:title" content="Resources · Hudson Turansky" />
         <meta
           name="twitter:description"
           content="Free tools and plain-English guides on adding AI to a small business."
