@@ -5,6 +5,49 @@ import Navbar from "@/components/Navbar";
 import WhatIBuild from "@/components/WhatIBuild";
 import Contact from "@/components/Contact";
 
+// Visible FAQ answers + JSON-LD FAQPage entries — single source of truth so
+// the structured data matches the rendered text exactly. (Google penalizes
+// FAQ schema where the marked-up answer differs from the on-page answer.)
+const FAQ_ITEMS: Array<{ q: string; a: string }> = [
+  {
+    q: "How do I add AI to my small business?",
+    a: "Start by listing the 3 most repetitive things in your week — intake forms, scheduling, email triage, document processing, customer FAQs. Then decide whether a $20 ChatGPT subscription, an off-the-shelf AI tool ($50–200/mo), or a custom build is the right level of investment. Most small businesses get the biggest first win from automating customer intake or email triage with a custom assistant tied to their own knowledge base.",
+  },
+  {
+    q: "How much does custom AI cost?",
+    a: "Hourly, transparent rates. A focused custom AI assistant or automation typically runs $1,500–$5,000 total. A larger custom agent that does multi-step work or operates inside an existing workflow tool usually lands $5,000–$15,000. I scope before quoting, and you see hours as the project progresses.",
+  },
+  {
+    q: "How long does it take to build a custom AI tool?",
+    a: "Most custom AI tools ship in 3–8 weeks from kickoff to deployed. A small focused automation can be done in under 2 weeks; an end-to-end custom AI agent integrated with your existing tools (CRM, Slack, Notion, Google Workspace) typically takes 4–8 weeks. AI-assisted workflows let me build faster than a traditional agency.",
+  },
+  {
+    q: "Should I hire a consultant or use ChatGPT myself?",
+    a: "Use ChatGPT yourself first for everything you can — it is the cheapest test. Hire a builder when you need something embedded in your existing tools, tuned to your specific data, reliable enough to put in front of customers, or automating work across multiple steps that ChatGPT alone cannot reach. If a $20 ChatGPT subscription solves your problem, I will tell you that on the discovery call.",
+  },
+  {
+    q: "Do you work with contractors, professional services, or e-commerce businesses?",
+    a: "Yes — those are the three buckets where I see the highest ROI for small businesses. Contractors typically need scheduling and intake automation plus document handling. Professional services (legal, accounting, consulting) need document processing and client-facing assistants. E-commerce needs custom inventory tools, customer support agents, and analytics dashboards. Different industries, similar building blocks.",
+  },
+  {
+    q: "How do we get started?",
+    a: "Book a free 30-minute discovery call. We talk through what you want to build, I tell you honestly whether it is worth building, scope it out, and send a written estimate with an hourly rate and a rough total. No commitment until we both agree on scope.",
+  },
+];
+
+const FAQ_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map(({ q, a }) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: a,
+    },
+  })),
+};
+
 const Index = () => {
   const [showArrow, setShowArrow] = useState(true);
 
@@ -33,6 +76,7 @@ const Index = () => {
         <meta name="twitter:title" content="Hudson Turansky — AI Solutions & Web Development" />
         <meta name="twitter:description" content="Custom websites, AI tools, and software. Hourly, transparent, built with AI." />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
+        <script type="application/ld+json">{JSON.stringify(FAQ_JSONLD)}</script>
       </Helmet>
       <Navbar />
 
@@ -233,6 +277,66 @@ const Index = () => {
       />
 
       <WhatIBuild />
+
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      />
+
+      {/* FAQ — visible content paired with FAQPage JSON-LD in <Helmet>. */}
+      <section id="faq" className="py-28 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-12">
+            <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
+              FAQ
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold leading-tight"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              <span className="block text-white">Questions buyers ask.</span>
+            </h2>
+          </div>
+          <div className="space-y-3">
+            {FAQ_ITEMS.map(({ q, a }) => (
+              <details
+                key={q}
+                className="group rounded-2xl"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.02)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                }}
+              >
+                <summary
+                  className="px-6 py-5 cursor-pointer flex items-center justify-between gap-4 list-none [&::-webkit-details-marker]:hidden text-base font-medium text-white"
+                  style={{ letterSpacing: "-0.01em" }}
+                >
+                  <span>{q}</span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    className="text-gray-500 transition-transform duration-200 group-open:rotate-180 flex-shrink-0"
+                    aria-hidden
+                  >
+                    <path
+                      d="M3 5L7 9L11 5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </summary>
+                <div className="px-6 pb-5 text-sm font-light text-gray-400 leading-relaxed">
+                  {a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <div
         className="max-w-5xl mx-auto"
