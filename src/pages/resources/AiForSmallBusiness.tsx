@@ -16,19 +16,19 @@ const PUBLISHED = "2026-05-21";
 const FAQ: Array<{ q: string; a: string }> = [
   {
     q: "What is the cheapest way to add AI to a small business?",
-    a: "A $20/month ChatGPT Plus or Claude Pro subscription is the cheapest way to start. It covers solo use for drafting emails, summarizing documents, basic research, and one-off writing tasks. It will not solve workflow problems where the AI needs to see your specific data, integrate with your tools, or run on its own schedule. For those, you need either an off-the-shelf vertical AI tool ($50–200/month) or a custom build ($1,500–$15,000+ one-time).",
+    a: "A $20/month ChatGPT Plus or Claude Pro subscription is the cheapest way to start. It covers solo use for drafting emails, summarizing documents, basic research, and one-off writing tasks. It will not solve workflow problems where the AI needs to see your specific data, integrate with your tools, or run on its own schedule. For those, the next steps up are an off-the-shelf vertical AI tool ($50–200/month) or a custom build ($1,500–$15,000+ one-time, depending on scope).",
   },
   {
     q: "How do I know whether to build custom or subscribe?",
-    a: "Subscribe when (a) an off-the-shelf product already does 80%+ of what you want, (b) you don't need it integrated with your specific data, and (c) the monthly cost is less than ~10 hours of saved time. Build custom when (a) the AI needs to read your specific knowledge base, (b) it needs to act inside your existing tools (CRM, Slack, Notion), (c) you'd put it in front of customers, or (d) you need multi-step automation no consumer tool reaches.",
+    a: "Subscribe when (a) an off-the-shelf product already does 80%+ of what you want, (b) you don't need it integrated with your specific data, and (c) the monthly cost is less than what your saved time is worth. Build custom when (a) the AI needs to read your specific knowledge base, (b) it needs to act inside your existing tools (CRM, Slack, Notion, your industry software), (c) you'd put it in front of customers, or (d) you need multi-step automation no consumer tool reaches.",
   },
   {
-    q: "What's the fastest first AI project for a service business?",
-    a: "Customer intake automation. Replace your contact form with a custom AI assistant that asks the right qualifying questions in conversation, captures the details, and writes the result back to your CRM. Most service businesses (contractors, professional services, agencies) close 20–40% more discovery calls after this. Build cost is typically $2,000–$4,000 and it ships in 2–3 weeks.",
+    q: "What's a common first AI project for a service business?",
+    a: "Customer intake automation is one common option — a chat-style assistant that asks the qualifying questions you'd otherwise ask manually, captures the details, and writes the result back to your CRM. It's visible (you can tell if it's working), repeatable (every lead goes through it), and bounded in scope. Email triage and document processing are two other common entry points; pick whichever of the three eats the most time in your week.",
   },
   {
     q: "Do I need to be technical to add AI to my business?",
-    a: "No. The audit step (list your 3 most repetitive weekly tasks) is non-technical, and a good consultant or builder will scope a project in plain language and tell you honestly which level of investment fits — including telling you when $20/month is the right answer instead of a custom build.",
+    a: "No. The audit step (list your 3 most repetitive weekly tasks) is non-technical, and any project worth doing can be scoped in plain language before any code is written. The honest test for whether you need a developer at all is whether a $20/month ChatGPT subscription solves your problem first — if it does, you don't need a custom build.",
   },
 ];
 
@@ -145,28 +145,18 @@ const AiForSmallBusiness = () => {
             }}
           >
             <p className="text-gray-200 font-light leading-relaxed text-base">
-              <strong className="text-white font-semibold">TL;DR.</strong> The fastest way to add
-              AI to a small business in 2026 is to spend 30 minutes listing your 3 most repetitive
-              weekly tasks, then match each one to the right level of investment: a{" "}
-              <strong className="text-gray-100">$20/month ChatGPT subscription</strong> for solo
-              writing and research, a{" "}
-              <strong className="text-gray-100">$50–200/month vertical AI tool</strong> for niche
-              needs (legal intake, scheduling, customer support), or a{" "}
-              <strong className="text-gray-100">$1,500–$15,000 custom build</strong> when the AI
-              needs to see your specific data or live inside your existing tools. Most service
-              businesses get the biggest first win from{" "}
-              <strong className="text-gray-100">customer intake automation</strong> — ~$2,000–$4,000
-              to build, ships in 2–3 weeks, typically closes 20–40% more discovery calls. Skip the
-              rest of this article and{" "}
-              <a
-                href="https://calendly.com/hudsonturansky/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300 underline"
-              >
-                book a free 30-minute discovery call
-              </a>{" "}
-              if you'd rather have someone scope this for you.
+              <strong className="text-white font-semibold">TL;DR.</strong> Adding AI to a small
+              business in 2026 is mostly a sorting problem. List the 3 tasks that eat the most
+              time in your week, then match each one to the right level of investment:{" "}
+              <strong className="text-gray-100">a $20/month ChatGPT subscription</strong> handles
+              most solo writing, research, and one-off tasks;{" "}
+              <strong className="text-gray-100">a $50–200/month vertical AI tool</strong> handles
+              narrow, well-defined workflows like legal intake or scheduling;{" "}
+              <strong className="text-gray-100">a custom build</strong> is only worth it when the
+              AI needs to read your specific data, sit inside your existing tools, or face
+              customers — typically $1,500–$15,000 in 2026 depending on scope. Most small
+              businesses don't need all three; many don't need anything beyond the $20/month tier.
+              The rest of this article walks through the sorting framework step by step.
             </p>
           </div>
 
@@ -221,50 +211,66 @@ const AiForSmallBusiness = () => {
             </h3>
             <p>
               Niche tools built for specific industries: legal intake (e.g. Clio Duo), AI scheduling
-              assistants, customer support copilots, AI bookkeeping. Subscribe when the product
-              already does 80%+ of what you want and the monthly cost is less than ~10 hours of your
-              saved time. <strong>Caveat:</strong> these are getting commoditized fast, switching is
-              often easy, and most don't integrate as deeply as a custom build.
+              assistants, customer-support copilots, AI bookkeeping. Subscribe when the product
+              already does 80%+ of what you want and the monthly cost is less than what your saved
+              time is worth. This category is moving fast — switching tools is often easy, but
+              expect most off-the-shelf options to integrate at the surface level rather than
+              deeply with your specific stack.
             </p>
 
             <h3 className="text-lg font-semibold text-white mt-8 mb-2" style={{ letterSpacing: "-0.01em" }}>
               $1,500–$15,000+ one-time — Custom build
             </h3>
             <p>
-              Right when (a) the AI needs to read <em className="text-gray-300">your</em> specific
-              knowledge base, (b) it needs to act inside your existing tools (CRM, Slack, Notion,
-              Google Workspace), (c) you'd put it in front of customers, or (d) you need multi-step
-              automation no consumer tool reaches. <strong>Typical ranges:</strong> a focused custom
-              AI assistant or automation runs $1,500–$5,000; a larger custom agent that does
-              multi-step work or operates inside a workflow tool usually lands $5,000–$15,000.
+              Worth it when (a) the AI needs to read <em className="text-gray-300">your</em>{" "}
+              specific knowledge base, (b) it needs to act inside your existing tools (CRM, Slack,
+              Notion, Google Workspace, your industry software), (c) you'd put it in front of
+              customers, or (d) you need multi-step automation no consumer tool reaches.
+              Approximate ranges for one-developer or small-team custom builds in 2026: a focused
+              custom AI assistant or automation runs $1,500–$5,000; a larger custom agent that
+              does multi-step work or operates inside a workflow tool usually lands $5,000–$15,000.
+              Agency engagements typically run 2–3× those numbers.
             </p>
           </Section>
 
           {/* Step 3 */}
           <Section heading="Step 3 — Pick your first project">
             <p>
-              The right first project is the one that's <strong>visible</strong>,{" "}
-              <strong>repeatable</strong>, and <strong>safe to test on a small scope</strong>. For
-              most service businesses, that's <strong>customer intake automation</strong>: replace
-              your contact form with a custom AI assistant that asks the right qualifying questions
-              in conversation, captures the details, and writes the result back to your CRM. Build
-              cost is typically $2,000–$4,000 and it ships in 2–3 weeks. Service businesses that
-              adopt this usually close 20–40% more discovery calls because qualifying happens before
-              a human gets involved.
+              The right first project is the one that's <strong>visible</strong> (you can tell
+              whether it's working),{" "}
+              <strong>repeatable</strong> (the same task many times a week), and{" "}
+              <strong>safe to test on a small scope</strong> (you can roll it back without breaking
+              the business). Common candidates by category:
             </p>
-            <p>Other strong first projects:</p>
+            <Bullets>
+              <li>
+                <strong>Service businesses</strong> (contractors, agencies, professional services)
+                — customer intake automation. A chat-style assistant that asks the qualifying
+                questions you'd otherwise ask by phone or email, captures the details, and writes
+                the result back to your CRM.
+              </li>
+              <li>
+                <strong>Knowledge-work businesses</strong> — a research assistant tied to your own
+                document library. Reduces the "I know we wrote that down somewhere" tax.
+              </li>
+              <li>
+                <strong>E-commerce</strong> — a customer-support assistant that drafts first-pass
+                replies. Cuts the standard-question queue without removing the human review step.
+              </li>
+            </Bullets>
+            <p>Other first-project options worth considering across categories:</p>
             <Bullets>
               <li>
                 <strong>Email triage assistant</strong> — categorizes incoming email and drafts
-                replies in your voice. ~$2,500–$5,000. Ships in 3–4 weeks.
+                replies in your voice.
               </li>
               <li>
                 <strong>Document intake processor</strong> (legal, accounting, contractors) —
-                extracts structured fields from PDFs and writes them to your system. ~$2,000–$6,000.
+                extracts structured fields from PDFs and writes them to your system.
               </li>
               <li>
-                <strong>Internal research assistant</strong> tied to your company knowledge base.
-                ~$3,000–$8,000.
+                <strong>Internal knowledge-base assistant</strong> — answers FAQs your team would
+                otherwise interrupt each other to answer.
               </li>
             </Bullets>
           </Section>
@@ -273,48 +279,50 @@ const AiForSmallBusiness = () => {
           <Section heading="Step 4 — Avoid the 3 most common mistakes">
             <ol className="list-decimal pl-5 space-y-3 text-gray-400 font-light leading-relaxed">
               <li>
-                <strong>Building before testing with $20/month ChatGPT first.</strong> If a 2-week
-                ChatGPT experiment doesn't solve your problem at all, a $5,000 custom build probably
-                won't either. The goal of the audit is to confirm AI is the right tool before you
-                spend on it.
+                <strong>Skipping the $20/month ChatGPT test first.</strong> If a 2-week ChatGPT
+                experiment doesn't solve your problem at all, a $5,000 custom build usually won't
+                either. The audit step exists to confirm AI is the right tool before you spend on
+                it.
               </li>
               <li>
-                <strong>Letting a builder talk you into AI when automation alone would work.</strong>{" "}
-                A lot of "AI" projects are really just better scripts. If your task is rule-based,
-                you don't need an LLM in the middle — and you shouldn't pay for one.
+                <strong>Reaching for AI when automation alone would work.</strong> A lot of "AI"
+                projects are really just better scripts or workflows in tools you already pay for.
+                If your task is rule-based — same input, same correct output every time — you
+                don't need an LLM in the middle.
               </li>
               <li>
-                <strong>Skipping the "where AI doesn't belong" conversation.</strong> Anything where
-                wrong answers cost real money (regulated industries, customer-facing decisions,
-                financial calculations) needs careful scoping. A good builder will flag these.
+                <strong>Skipping the "where AI doesn't belong" conversation.</strong> Anything
+                where wrong answers cost real money — regulated industries, customer-facing
+                decisions, financial calculations — needs careful scoping with a human review
+                step. Don't put a generative model in a place where its first wrong answer creates
+                a liability.
               </li>
             </ol>
           </Section>
 
-          {/* CTA card */}
+          {/* Soft attribution footer for the article — replaces the old hard-CTA card. */}
           <div
-            className="mt-12 rounded-2xl p-8 text-center"
+            className="mt-12 rounded-2xl p-6"
             style={{
-              backgroundColor: "rgba(59,130,246,0.05)",
-              border: "1px solid rgba(59,130,246,0.15)",
+              backgroundColor: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.06)",
             }}
           >
-            <p className="text-white font-semibold mb-2">
-              Want someone to scope your first AI project?
+            <p className="text-sm text-gray-400 font-light leading-relaxed">
+              Written by{" "}
+              <Link to="/" className="text-gray-200 hover:text-white transition-colors underline">
+                Hudson Turansky
+              </Link>
+              , who builds custom websites, AI tools, and software for small businesses. If you
+              have a specific scenario you'd like to think through, the{" "}
+              <Link
+                to="/ai-test"
+                className="text-blue-400 hover:text-blue-300 transition-colors underline"
+              >
+                free AI use-case test
+              </Link>{" "}
+              produces a personalized version of this same sorting exercise in about 5 minutes.
             </p>
-            <p className="text-gray-400 text-sm font-light mb-5 max-w-md mx-auto leading-relaxed">
-              Free 30-minute discovery call. No pitch, no commitment. I'll tell you honestly which
-              bucket your idea falls in.
-            </p>
-            <a
-              href="https://calendly.com/hudsonturansky/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
-              style={{ backgroundColor: "#ffffff", color: "#09090b" }}
-            >
-              Book a call →
-            </a>
           </div>
 
           {/* FAQ */}
