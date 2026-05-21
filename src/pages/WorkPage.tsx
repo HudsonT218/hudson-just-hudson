@@ -25,7 +25,7 @@ const CAPABILITIES = [
   },
   {
     label: "AI Agents & Assistants",
-    body: "Custom AI tools built on top of models like Claude and Gemini, including OpenClaw Agents and Hermes Agents. I work with MCP and CLI agents — chatbots, research assistants, document processors, workflow agents. I scope what's actually feasible before we build anything.",
+    body: "Custom AI tools built on top of models like Claude and Gemini, including OpenClaw Agents and Hermes Agents. I work with MCP and CLI agents, chatbots, research assistants, document processors, workflow agents. I scope what's actually feasible before we build anything.",
   },
   {
     label: "Operations Software",
@@ -41,14 +41,14 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
     label: "Web · 2026",
     title: "Happy Tails Dog Walking",
-    desc: "An example landing page I built — not for an actual client, just a demo of the kind of site I can ship fast.",
+    desc: "An example landing page I built, not for an actual client, just a demo of the kind of site I can ship fast.",
     url: "https://happytailsdogwalking.lovable.app",
     image: happyTailsCover,
   },
   {
     label: "Software · 2026",
     title: "Chesapeake Community Pantry",
-    desc: "An example volunteer tracking OS I built — shift scheduling, hour tracking, leaderboards, and manager reports for a food bank.",
+    desc: "An example volunteer tracking OS I built, shift scheduling, hour tracking, leaderboards, and manager reports for a food bank.",
     url: "https://chesapeake-pantry.lovable.app",
     image: chesapeakePantryCover,
   },
@@ -58,18 +58,18 @@ const WorkPage = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Work — Hudson Turansky</title>
+        <title>Work · Hudson Turansky</title>
         <meta name="description" content="Web development, AI solutions, and custom software. A look at what I build and what I've shipped." />
         <link rel="canonical" href="https://hudsonturansky.com/work" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hudsonturansky.com/work" />
-        <meta property="og:title" content="Work — Hudson Turansky" />
+        <meta property="og:title" content="Work · Hudson Turansky" />
         <meta property="og:description" content="Capabilities and portfolio. Web, AI, software." />
         <meta property="og:image" content="https://hudsonturansky.com/og-work.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Work — Hudson Turansky" />
+        <meta name="twitter:title" content="Work · Hudson Turansky" />
         <meta name="twitter:description" content="Capabilities and portfolio. Web, AI, software." />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-work.png" />
       </Helmet>
@@ -173,7 +173,7 @@ const WorkPage = () => {
               <span className="block text-white">Things I've built.</span>
             </h2>
             <p className="text-sm text-gray-500 font-light mt-4">
-              Including this site — built and designed by me.
+              Including this site, built and designed by me.
             </p>
           </div>
 
@@ -286,7 +286,7 @@ const WorkPage = () => {
               <span className="block text-white">AI meeting assistant I built.</span>
             </h2>
             <p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
-              Before the meeting, the assistant reads in a stack of company documents — reports, dashboards, contracts, market feeds. During the meeting, one model transcribes the conversation in real time while a second model runs silently in the background, cross-referencing what's said against the loaded context. When it catches a misstated number, an unanswered question, or a piece of relevant context no one raised, it drops a note with a citation back to the source. The conversation flows uninterrupted.
+              Before the meeting, the assistant reads in a stack of company documents, reports, dashboards, contracts, market feeds. During the meeting, one model transcribes the conversation in real time while a second model runs silently in the background, cross-referencing what's said against the loaded context. When it catches a misstated number, an unanswered question, or a piece of relevant context no one raised, it drops a note with a citation back to the source. The conversation flows uninterrupted.
             </p>
             <p className="text-lg text-gray-300 font-light mt-4 max-w-2xl">
               This is one example of a custom AI assistant I can build for your team.
@@ -299,7 +299,7 @@ const WorkPage = () => {
 
           <p className="text-sm text-gray-500 font-light mt-8 max-w-2xl leading-relaxed">
             A scripted walkthrough of a Q4 review meeting at a fake SaaS company.
-            The demo isn't connected to a live LLM — it's a faithful recreation of
+            The demo isn't connected to a live LLM, it's a faithful recreation of
             a prototype I built and previously deployed. I'd build a real version for you.
           </p>
         </div>

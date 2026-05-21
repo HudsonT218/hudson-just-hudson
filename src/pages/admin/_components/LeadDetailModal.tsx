@@ -225,7 +225,7 @@ export function LeadDetailModal({
                   <Textarea
                     rows={6}
                     defaultValue={lead.notes ?? ""}
-                    placeholder="Running notes log — auto-saves when you click out."
+                    placeholder="Running notes log, auto-saves when you click out."
                     onBlur={(e) => saveField("notes", e.target.value.trim() || null)}
                   />
                 </Section>
@@ -295,7 +295,7 @@ export function LeadDetailModal({
                     color: admin.textDim,
                   }}
                 >
-                  Outreach drafts — coming in Phase 2 (Claude-powered draft generator).
+                  Outreach drafts, coming in Phase 2 (Claude-powered draft generator).
                 </div>
               </div>
             </>

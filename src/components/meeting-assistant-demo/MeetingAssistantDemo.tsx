@@ -180,7 +180,7 @@ function HeroContextLoader({ pillsLoaded }: { pillsLoaded: number }) {
   const total = scenario.context.length;
   const status =
     pillsLoaded >= total
-      ? "Ready — starting meeting"
+      ? "Ready, starting meeting"
       : pillsLoaded >= 4
         ? "Indexing…"
         : "Reading…";

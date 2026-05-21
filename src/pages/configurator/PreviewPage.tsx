@@ -73,7 +73,7 @@ export default function PreviewPage() {
   return (
     <>
       <Helmet>
-        <title>Preview {order.orderNumber} — Hudson Turansky</title>
+        <title>Preview {order.orderNumber} · Hudson Turansky</title>
       </Helmet>
       <Navbar />
       <div className="min-h-screen pt-16 flex flex-col">
@@ -110,7 +110,7 @@ export default function PreviewPage() {
             />
           ) : (
             <div className="flex items-center justify-center min-h-[calc(100vh-8rem)] text-muted-foreground">
-              No preview URL yet — your build is still in progress.
+              No preview URL yet, your build is still in progress.
             </div>
           )}
         </div>

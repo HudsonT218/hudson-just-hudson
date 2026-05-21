@@ -13,7 +13,7 @@ const NotFound = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>404 — Hudson Turansky</title>
+        <title>404 · Hudson Turansky</title>
         <meta name="robots" content="noindex" />
         <link rel="canonical" href={`https://hudsonturansky.com${location.pathname}`} />
       </Helmet>

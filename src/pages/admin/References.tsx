@@ -99,7 +99,7 @@ const References = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>References — Admin</title>
+        <title>References, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10 space-y-12 max-w-6xl">
@@ -122,7 +122,7 @@ const References = () => {
 };
 
 // ============================================================================
-// Section 1 — Invite form
+// Section 1, Invite form
 // ============================================================================
 
 const InviteSection = ({ onSent }: { onSent: () => void }) => {
@@ -193,7 +193,7 @@ const InviteSection = ({ onSent }: { onSent: () => void }) => {
 };
 
 // ============================================================================
-// Section 2 — Invites Sent
+// Section 2, Invites Sent
 // ============================================================================
 
 const InvitesTable = ({
@@ -279,7 +279,7 @@ const InvitesTable = ({
                 >
                   <TableCell style={{ color: admin.text }}>{req.invited_email}</TableCell>
                   <TableCell style={{ color: admin.textMuted }}>
-                    {req.invited_name ?? "—"}
+                    {req.invited_name ?? "-"}
                   </TableCell>
                   <TableCell>
                     <ReferenceRequestStatusBadge status={req.status} />
@@ -315,7 +315,7 @@ const InvitesTable = ({
                         </Button>
                       </div>
                     ) : (
-                      <span className="text-xs" style={{ color: admin.textDim }}>—</span>
+                      <span className="text-xs" style={{ color: admin.textDim }}>-</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -329,7 +329,7 @@ const InvitesTable = ({
 };
 
 // ============================================================================
-// Section 3 — Pending Review
+// Section 3, Pending Review
 // ============================================================================
 
 const PendingReviewSection = ({
@@ -482,7 +482,7 @@ const PendingReviewSection = ({
 };
 
 // ============================================================================
-// Section 4 — Live on Site (sortable)
+// Section 4, Live on Site (sortable)
 // ============================================================================
 
 const LiveOnSiteSection = ({
@@ -618,7 +618,7 @@ const SortableRow = ({
 };
 
 // ============================================================================
-// Section 5 — Archive
+// Section 5, Archive
 // ============================================================================
 
 const ArchiveSection = ({

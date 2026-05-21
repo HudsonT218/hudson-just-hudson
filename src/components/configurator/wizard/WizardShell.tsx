@@ -6,9 +6,9 @@ import { WizardTopBar } from "./WizardTopBar";
 
 /**
  * Three layout modes:
- *   - "strip"  → Steps 1, 2 — preview fills viewport, ~40px strip of pills at the bottom
- *   - "panel"  → Step 3     — preview ~60% top, ~140px expanded panel below for chips
- *   - "form"   → Steps 4, 5 — left form area + narrow right preview, vertical scroll allowed
+ *   - "strip"  → Steps 1, 2, preview fills viewport, ~40px strip of pills at the bottom
+ *   - "panel"  → Step 3    , preview ~60% top, ~140px expanded panel below for chips
+ *   - "form"   → Steps 4, 5, left form area + narrow right preview, vertical scroll allowed
  */
 export type WizardLayoutMode = "strip" | "panel" | "form";
 
@@ -28,13 +28,13 @@ interface WizardShellProps {
   /** Live preview area (always rendered as the wizard's visual focus, except when togged off). */
   preview: ReactNode;
 
-  /** Content for the bottom strip — used when mode === "strip". */
+  /** Content for the bottom strip, used when mode === "strip". */
   stripContent?: ReactNode;
 
-  /** Content for the bottom panel — used when mode === "panel". */
+  /** Content for the bottom panel, used when mode === "panel". */
   panelContent?: ReactNode;
 
-  /** Content for the form — used when mode === "form".
+  /** Content for the form, used when mode === "form".
    *  Receives the layout helpers (preview shown / hidden + section nav slot). */
   formContent?: ReactNode;
 }
@@ -95,7 +95,7 @@ export function WizardShell({
 
       {mode === "strip" && (
         <>
-          {/* Preview — fills all remaining vertical space */}
+          {/* Preview, fills all remaining vertical space */}
           <div className="hidden md:block flex-1 min-h-0 overflow-hidden">
             {preview}
           </div>
@@ -123,12 +123,12 @@ export function WizardShell({
 
       {mode === "panel" && (
         <>
-          {/* Preview — takes ~60% of remaining height */}
+          {/* Preview, takes ~60% of remaining height */}
           <div className="hidden md:flex flex-[3] min-h-0 overflow-hidden">{preview}</div>
 
           <div className="md:hidden flex-1 overflow-auto" />
 
-          {/* Expanded panel — ~140px tall */}
+          {/* Expanded panel, ~140px tall */}
           <div className="border-t border-white/5 bg-background/95 backdrop-blur-md">
             <div className="px-4 sm:px-6 py-3 max-h-[180px] overflow-auto">
               {panelContent}

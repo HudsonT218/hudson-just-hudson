@@ -32,12 +32,12 @@ export function OrderCard({ order }: { order: Order }) {
             </div>
             <div className="font-semibold text-foreground">{model?.name ?? 'Site'}</div>
             <div className="text-sm text-muted-foreground mt-1">
-              {theme?.name ?? '—'} · {order.spec.sections.length} section
+              {theme?.name ?? '-'} · {order.spec.sections.length} section
               {order.spec.sections.length === 1 ? '' : 's'}
             </div>
             <div className="text-xs text-muted-foreground/70 mt-2">
               Ordered {formatDate(order.createdAt)} ·{' '}
-              {order.amountPaid != null ? formatCurrency(order.amountPaid) : '—'}
+              {order.amountPaid != null ? formatCurrency(order.amountPaid) : '-'}
             </div>
           </div>
           <ArrowRight className="h-5 w-5 text-muted-foreground/70 shrink-0 mt-1" />

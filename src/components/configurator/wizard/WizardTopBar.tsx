@@ -8,13 +8,13 @@ interface WizardTopBarProps {
   saving?: boolean;
   lastSavedAt?: string | null;
   onSave?: () => void;
-  /** Optional: button rendered to the LEFT of "Save" — used for the preview toggle on Mode 3. */
+  /** Optional: button rendered to the LEFT of "Save", used for the preview toggle on Mode 3. */
   rightSlot?: React.ReactNode;
   onJumpToStep?: (n: number) => void;
 }
 
 /**
- * Slim 30px wizard top bar — replaces the global Navbar inside the wizard.
+ * Slim 30px wizard top bar, replaces the global Navbar inside the wizard.
  * Just an HT mark, the 5-step dot rail, and Save.
  */
 export function WizardTopBar({

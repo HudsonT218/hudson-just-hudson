@@ -11,7 +11,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title>Log in — Hudson Turansky</title>
+        <title>Log in · Hudson Turansky</title>
       </Helmet>
       <Navbar />
       <main className="min-h-screen pt-16 flex flex-col">

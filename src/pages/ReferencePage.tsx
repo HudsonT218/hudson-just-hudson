@@ -24,7 +24,7 @@ const INVALID_COPY: Record<InvalidReason, string> = {
   invalid:
     "This reference link isn't valid. If you think this is a mistake, reach out to Hudson at hudsonturansky@gmail.com.",
   expired: "This reference link expired. Ask Hudson to send a new one.",
-  already_submitted: "Thanks — this reference was already submitted.",
+  already_submitted: "Thanks, this reference was already submitted.",
   revoked: "This link is no longer active.",
 };
 
@@ -125,7 +125,7 @@ const ReferencePage = () => {
     >
       <Helmet>
         <title>Write a reference for Hudson Turansky</title>
-        <meta name="description" content="Private reference form — share a short recommendation for Hudson Turansky's web development and AI work." />
+        <meta name="description" content="Private reference form, share a short recommendation for Hudson Turansky's web development and AI work." />
         <meta name="robots" content="noindex" />
         <link rel="canonical" href={`https://hudsonturansky.com/reference/${token ?? ""}`} />
         <meta property="og:title" content="Write a reference for Hudson Turansky" />
@@ -283,7 +283,7 @@ const ReferencePage = () => {
 
                 <Field
                   label="LinkedIn URL"
-                  helper="Optional — adds a small icon to your card on the site."
+                  helper="Optional, adds a small icon to your card on the site."
                 >
                   <Input
                     type="url"

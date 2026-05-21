@@ -110,7 +110,7 @@ const AiVisibility = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>AI Visibility — Admin</title>
+        <title>AI Visibility, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10">
@@ -125,20 +125,20 @@ const AiVisibility = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           <StatTile
             label="Leads (90d)"
-            value={sourcesQ.isLoading ? "—" : totalLeads}
+            value={sourcesQ.isLoading ? "-" : totalLeads}
           />
           <StatTile
             label="AI-sourced leads (90d)"
-            value={sourcesQ.isLoading ? "—" : aiLeads}
+            value={sourcesQ.isLoading ? "-" : aiLeads}
             sub={sourcesQ.isLoading ? undefined : `${aiSharePct}% of total`}
           />
           <StatTile
             label="AI-referrer visits (30d)"
-            value={aiTrafficQ.isLoading ? "—" : aiTrafficTotal}
+            value={aiTrafficQ.isLoading ? "-" : aiTrafficTotal}
           />
           <StatTile
             label="AI Brief signups (30d)"
-            value={signupsQ.isLoading ? "—" : signupsTotal}
+            value={signupsQ.isLoading ? "-" : signupsTotal}
           />
         </div>
 
@@ -161,7 +161,7 @@ const AiVisibility = () => {
               <tbody>
                 {sources.map((row) => {
                   const ai = isAiSource(row.source);
-                  const sourceLabel = row.source ?? "(not set — older lead)";
+                  const sourceLabel = row.source ?? "(not set, older lead)";
                   const pct = totalLeads ? Math.round((row.count / totalLeads) * 100) : 0;
                   return (
                     <tr key={sourceLabel} style={{ borderTop: `1px solid ${admin.border}` }}>
@@ -184,7 +184,7 @@ const AiVisibility = () => {
           <SectionLabel className="mb-2">AI-referrer visits (last 30 days)</SectionLabel>
           <p className="text-xs text-gray-500 mb-4">
             Includes referrer matches for {AI_REFERRER_HOSTS.join(", ")}. Most AI referral traffic strips the
-            referrer header, so this undercounts — cross-check against "AI-sourced leads" above.
+            referrer header, so this undercounts, cross-check against "AI-sourced leads" above.
           </p>
           {aiTrafficQ.isLoading ? <SkeletonBlock style={{ height: 140 }} /> : <Sparkbars data={aiTraffic} />}
         </AdminCard>
@@ -202,7 +202,7 @@ const AiVisibility = () => {
 export default AiVisibility;
 
 // ---------------------------------------------------------------------------
-// Tiny inline UI helpers — kept here to avoid adding to /admin/_components.
+// Tiny inline UI helpers, kept here to avoid adding to /admin/_components.
 // ---------------------------------------------------------------------------
 
 const StatTile = ({ label, value, sub }: { label: string; value: number | string; sub?: string }) => (
@@ -213,7 +213,7 @@ const StatTile = ({ label, value, sub }: { label: string; value: number | string
   </AdminCard>
 );
 
-// Lightweight bar chart — no chart library, just inline bars. Good enough
+// Lightweight bar chart, no chart library, just inline bars. Good enough
 // for a 30-day daily count.
 const Sparkbars = ({ data }: { data: DayBucket[] }) => {
   const max = Math.max(1, ...data.map((d) => d.count));

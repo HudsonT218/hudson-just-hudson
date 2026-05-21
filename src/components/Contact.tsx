@@ -78,7 +78,7 @@ const Contact = () => {
             className="text-gray-500 text-sm sm:text-lg font-light mb-10"
             style={{ letterSpacing: "0.02em" }}
           >
-            Book a free 30-minute call. No pitch, no pressure — just a
+            Book a free 30-minute call. No pitch, no pressure, just a
             conversation about what you're working on and whether I can help.
           </p>
 

@@ -135,7 +135,7 @@ const WarmLeadDetail = () => {
       await navigator.clipboard.writeText(draft);
       setInfo("Copied to clipboard.");
     } catch {
-      setError("Could not access clipboard — copy manually.");
+      setError("Could not access clipboard, copy manually.");
     }
   };
 
@@ -158,7 +158,7 @@ const WarmLeadDetail = () => {
     <AdminLayout>
       <Helmet>
         <title>
-          {lead.raw_title?.slice(0, 60) ?? "Warm lead"} — Admin
+          {lead.raw_title?.slice(0, 60) ?? "Warm lead"}, Admin
         </title>
         <meta name="robots" content="noindex" />
       </Helmet>
@@ -329,7 +329,7 @@ const WarmLeadDetail = () => {
             rows={6}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder="(no draft generated — write your own)"
+            placeholder="(no draft generated, write your own)"
           />
           {lead.draft_generated_at && (
             <p

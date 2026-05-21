@@ -58,7 +58,7 @@ const Projects = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>Projects — Admin</title>
+        <title>Projects, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10">
@@ -153,7 +153,7 @@ const Projects = () => {
                   >
                     <span>
                       {p.hours_logged.toFixed(1)} /{" "}
-                      {p.estimated_hours != null ? Number(p.estimated_hours).toFixed(1) : "—"} hrs
+                      {p.estimated_hours != null ? Number(p.estimated_hours).toFixed(1) : "-"} hrs
                     </span>
                     <span>{formatCurrency(p.amount_billed)} billed</span>
                     <span>${Number(p.hourly_rate).toFixed(0)}/hr</span>

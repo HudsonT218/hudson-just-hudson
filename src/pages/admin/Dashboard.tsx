@@ -52,7 +52,7 @@ const Dashboard = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>Dashboard — Admin</title>
+        <title>Dashboard, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10">
@@ -65,16 +65,16 @@ const Dashboard = () => {
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <StatCard label="Cold leads" value={stats?.cold_count ?? "—"} loading={loading} />
-          <StatCard label="Warm leads" value={stats?.warm_count ?? "—"} loading={loading} />
+          <StatCard label="Cold leads" value={stats?.cold_count ?? "-"} loading={loading} />
+          <StatCard label="Warm leads" value={stats?.warm_count ?? "-"} loading={loading} />
           <StatCard
             label="Active projects"
-            value={stats?.active_project_count ?? "—"}
+            value={stats?.active_project_count ?? "-"}
             loading={loading}
           />
           <StatCard
             label="New (automation)"
-            value={warmStats?.total_new ?? "—"}
+            value={warmStats?.total_new ?? "-"}
             loading={wlStatsQ.isLoading && !warmStats}
             to="/admin/warm-leads"
           />
@@ -106,7 +106,7 @@ const Dashboard = () => {
                       <div className="text-xs flex gap-3" style={{ color: admin.textDim }}>
                         <span>{formatDate(lead.next_action_date)}</span>
                         <span className="truncate" style={{ color: admin.textMuted }}>
-                          {lead.next_action ?? "—"}
+                          {lead.next_action ?? "-"}
                         </span>
                       </div>
                     </Link>

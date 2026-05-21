@@ -86,7 +86,7 @@ const Leads = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>Leads — Admin</title>
+        <title>Leads, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">

@@ -190,7 +190,7 @@ export default function ConfiguratorPage() {
   return (
     <>
       <Helmet>
-        <title>Build Your Site — Hudson Turansky</title>
+        <title>Build Your Site · Hudson Turansky</title>
         <meta
           name="description"
           content="Configure your custom landing page in minutes. Pick a theme, choose sections, and our AI builds it."

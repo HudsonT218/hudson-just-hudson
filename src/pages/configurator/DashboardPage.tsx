@@ -40,7 +40,7 @@ export default function DashboardPage() {
   return (
     <>
       <Helmet>
-        <title>Dashboard — Hudson Turansky</title>
+        <title>Dashboard · Hudson Turansky</title>
       </Helmet>
       <Navbar />
       <main className="min-h-screen pt-20">
