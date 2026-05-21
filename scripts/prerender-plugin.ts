@@ -21,6 +21,8 @@ const ROUTES: RouteEntry[] = [
   { url: "/work", outFile: "work/index.html" },
   { url: "/interested", outFile: "interested/index.html" },
   { url: "/ai-test", outFile: "ai-test/index.html" },
+  { url: "/resources", outFile: "resources/index.html" },
+  { url: "/resources/ai-for-small-business", outFile: "resources/ai-for-small-business/index.html" },
 ];
 
 // Minimal browser polyfills so libs that gate on localStorage still load.

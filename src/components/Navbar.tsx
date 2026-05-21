@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "About",     href: "#about" },
   { label: "Work",      href: "/work" },
-  { label: "Resources", href: "/resources/" },
+  { label: "Resources", href: "/resources" },
   { label: "Contact",   href: "#contact" },
 ];
 
@@ -28,10 +28,6 @@ const Navbar = () => {
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const resolved = resolveHref(href);
-
-    // /resources/* pages are plain static HTML, not React Router routes —
-    // let the browser do a full-page load.
-    if (resolved.startsWith("/resources")) return;
 
     // Hash-only link on the current page — let the browser scroll natively
     if (resolved.startsWith("#")) return;
