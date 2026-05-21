@@ -99,10 +99,10 @@ const Index = () => {
           </h1>
 
           <p className="text-lg text-gray-400 font-light max-w-lg mx-auto mb-10">
-            Custom websites, AI tools, and software, built end to end for
-            businesses and individuals who have an idea and need someone to
-            actually ship it. I'm early in client work, and my pricing reflects
-            that.
+            I build custom websites, AI tools, and software for small
+            businesses. Hourly, transparent pricing. Most projects ship in
+            2–6 weeks. You bring the idea; I lead it end‑to‑end, no agency
+            markup, no freelancer hand‑off chains.
           </p>
 
           <div className="flex justify-center mb-8">
@@ -181,11 +181,15 @@ const Index = () => {
           </h2>
           <div className="space-y-5 text-gray-400 font-light leading-relaxed">
             <p>
-              I build custom websites, AI tools, and software. I've spent
-              serious time going deep on AI in particular: not just using it,
-              but understanding what it can really do and how to build solid
-              things with it. I care about making things that actually work,
-              and I don't cut corners to get there.
+              I build custom websites, AI tools, and software for small
+              businesses and solo founders — the kind of work most agencies
+              overcharge for and most freelancers can't deliver end‑to‑end.
+              Hourly, transparent rates. Most projects ship in 2–6 weeks;
+              custom AI agents and operations software run longer depending on
+              scope. I've gone deep on AI in particular — not just using it,
+              but understanding what it can really do and where it doesn't
+              belong yet — and I'll tell you honestly which bucket your idea
+              falls in before we start building.
             </p>
             <p>
               You don't have to be technical to work with me. Maybe you know AI
