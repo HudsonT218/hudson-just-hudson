@@ -23,6 +23,19 @@ const ROUTES: RouteEntry[] = [
   { url: "/ai-brief", outFile: "ai-brief/index.html" },
   { url: "/resources", outFile: "resources/index.html" },
   { url: "/resources/ai-for-small-business", outFile: "resources/ai-for-small-business/index.html" },
+  { url: "/resources/what-custom-ai-costs", outFile: "resources/what-custom-ai-costs/index.html" },
+  {
+    url: "/resources/hire-ai-help-or-do-it-yourself",
+    outFile: "resources/hire-ai-help-or-do-it-yourself/index.html",
+  },
+  {
+    url: "/resources/what-small-businesses-use-ai-for",
+    outFile: "resources/what-small-businesses-use-ai-for/index.html",
+  },
+  {
+    url: "/resources/ai-glossary-for-business-owners",
+    outFile: "resources/ai-glossary-for-business-owners/index.html",
+  },
 ];
 
 // Minimal browser polyfills so libs that gate on localStorage still load.

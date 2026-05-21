@@ -33,6 +33,34 @@ const GUIDES: ResourceCard[] = [
     description:
       "A 4-step framework: audit your week, match each task to the right level of investment ($20 / $50–200/mo / $1,500–$15,000 custom), pick a first project, and avoid the most common mistakes.",
   },
+  {
+    to: "/resources/what-custom-ai-costs",
+    label: "Guide · 2026",
+    title: "What custom AI actually costs for a small business",
+    description:
+      "An honest breakdown of the three AI cost tiers, $20/mo tools, $50–200/mo software, and $1,500–$15,000 custom builds, and how to tell which one your problem belongs in.",
+  },
+  {
+    to: "/resources/hire-ai-help-or-do-it-yourself",
+    label: "Guide · 2026",
+    title: "Should you hire someone to build AI, or use ChatGPT yourself?",
+    description:
+      "An honest decision guide, when DIY ChatGPT is genuinely enough, the signs you've outgrown it, and a simple test for which side of the line your problem is on.",
+  },
+  {
+    to: "/resources/what-small-businesses-use-ai-for",
+    label: "Guide · 2026",
+    title: "12 things small businesses are actually using AI for in 2026",
+    description:
+      "Twelve concrete, real-world uses, customer inquiries, scheduling, quotes, document data, and more, each with rough effort, cost, and whether to DIY it or have it built.",
+  },
+  {
+    to: "/resources/ai-glossary-for-business-owners",
+    label: "Guide · 2026",
+    title: "A plain-English AI glossary for business owners",
+    description:
+      "The dozen-or-so AI terms that actually matter to a business owner, each with a plain definition, why you'd care, and whether it affects a real decision.",
+  },
 ];
 
 const COLLECTION_JSONLD = {

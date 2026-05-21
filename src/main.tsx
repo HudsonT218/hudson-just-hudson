@@ -15,6 +15,10 @@ const PRERENDERED_ROUTES = new Set([
   "/ai-brief",
   "/resources",
   "/resources/ai-for-small-business",
+  "/resources/what-custom-ai-costs",
+  "/resources/hire-ai-help-or-do-it-yourself",
+  "/resources/what-small-businesses-use-ai-for",
+  "/resources/ai-glossary-for-business-owners",
 ]);
 
 const rootElement = document.getElementById("root")!;
