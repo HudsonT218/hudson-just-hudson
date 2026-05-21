@@ -99,8 +99,10 @@ const Index = () => {
           </h1>
 
           <p className="text-lg text-gray-400 font-light max-w-lg mx-auto mb-10">
-            I build custom websites, AI tools, and software for businesses and
-            individuals. I'm early in client work — my pricing reflects that.
+            Custom websites, AI tools, and software, built end to end for
+            businesses and individuals who have an idea and need someone to
+            actually ship it. I'm early in client work, and my pricing reflects
+            that.
           </p>
 
           <div className="flex justify-center mb-8">

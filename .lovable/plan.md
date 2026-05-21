@@ -1,11 +1,5 @@
-Update the decorative light bar in `src/components/admin/AdminLayout.tsx`:
+Replace the hero subtitle paragraph in `src/pages/Index.tsx` (currently "I build custom websites, AI tools, and software for businesses and individuals. I'm early in client work — my pricing reflects that.") with:
 
-1. **Crisp hairline:** Keep 1px tall, sticky to top. Update gradient to broad/centered: `linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.65) 50%, transparent 100%)`.
+"Custom websites, AI tools, and software, built end to end for businesses and individuals who have an idea and need someone to actually ship it. I'm early in client work, and my pricing reflects that."
 
-2. **Ambient bloom (new):** Add a separate decorative div anchored to top of `<main>`:
-   - Absolute, top: 0, left/right: 0, height ~280px.
-   - Background: `radial-gradient(ellipse 75% 100% at 50% 0%, rgba(59,130,246,0.14), transparent 72%)`.
-   - `pointer-events: none`, `aria-hidden`, z-index above bg but below content (z-0; main children get implicit stacking).
-   - Remove the previous blurred glow div.
-
-No other changes to layout, routing, or sidebar.
+No other changes.
