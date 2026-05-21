@@ -712,7 +712,16 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
                 />
                 <span className="text-sm text-gray-400 font-light leading-relaxed">
                   I agree to receive my AI use-case results by email. I understand my answers are stored to
-                  generate the results and may be reviewed by Hudson.
+                  generate the results and may be reviewed by Hudson. See the{" "}
+                  <a
+                    href="/privacy.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 underline"
+                  >
+                    privacy note
+                  </a>
+                  .
                 </span>
               </label>
               {errors.consent && <p className="mt-2 text-xs text-red-400">{errors.consent.message}</p>}
