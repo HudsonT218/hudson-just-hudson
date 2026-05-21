@@ -90,13 +90,15 @@ const Contact = () => {
               className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
               style={{
                 border: "1px solid var(--app-border-stronger)",
-                backgroundColor: "transparent",
+                backgroundColor: "var(--app-card-bg)",
+                backdropFilter: "blur(20px) saturate(180%)",
+                WebkitBackdropFilter: "blur(20px) saturate(180%)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "var(--app-card-bg-bright)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.backgroundColor = "var(--app-card-bg)";
               }}
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
