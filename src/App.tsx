@@ -43,6 +43,7 @@ const AdminProjectDetail = lazy(() => import("./pages/admin/ProjectDetail.tsx"))
 const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
 const AdminWarmLeads = lazy(() => import("./pages/admin/WarmLeads.tsx"));
 const AdminWarmLeadDetail = lazy(() => import("./pages/admin/WarmLeadDetail.tsx"));
+const AdminAiVisibility = lazy(() => import("./pages/admin/AiVisibility.tsx"));
 
 const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
 
@@ -104,6 +105,18 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Fire-and-forget visit logger — writes one row to `traffic_events` per
+// public page load. Excludes admin/configurator/auth surfaces.
+const VisitLogger = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    // Import lazily so this work never blocks initial paint, and only the
+    // client bundle ever evaluates `supabase.from(...)`.
+    void import("@/lib/tracking").then(({ logVisit }) => logVisit(pathname));
+  }, [pathname]);
+  return null;
+};
+
 // Toaster/Sonner use portals (createPortal → document.body) which crash during
 // SSR/prerender. Mount them only after the client hydrates.
 const ClientOnly = ({ children }: { children: ReactNode }) => {
@@ -120,6 +133,7 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollToTop />
+      <VisitLogger />
       {!inConfigurator && <DottedSurface interactive={isHome} />}
       <Suspense fallback={<PageFallback />}>
         <Routes>
@@ -179,6 +193,7 @@ const AppRoutes = () => {
           <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
           <Route path="/admin/projects/:id" element={<AdminRoute><AdminProjectDetail /></AdminRoute>} />
           <Route path="/admin/references" element={<AdminRoute><AdminReferences /></AdminRoute>} />
+          <Route path="/admin/ai-visibility" element={<AdminRoute><AdminAiVisibility /></AdminRoute>} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

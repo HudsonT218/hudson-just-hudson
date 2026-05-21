@@ -25,6 +25,7 @@ import {
   type GenerateResponse,
   type QuizAnswers,
 } from "@/lib/ai-test-types";
+import { SOURCE_OPTIONS } from "@/lib/tracking";
 
 // ---------------------------------------------------------------------------
 // Quiz schema
@@ -51,6 +52,7 @@ type QuizForm = z.infer<typeof quizSchema>;
 
 const emailSchema = z.object({
   email: z.string().email("That doesn't look like an email."),
+  source: z.string().min(1, "Pick one — even \"Other\" helps."),
   consent: z.literal(true, { errorMap: () => ({ message: "Tick the box to continue." }) }),
 });
 
@@ -614,7 +616,7 @@ interface EmailGateProps {
 const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGateProps) => {
   const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm<EmailForm>({
     resolver: zodResolver(emailSchema),
-    defaultValues: { email: "", consent: false as unknown as true },
+    defaultValues: { email: "", source: "", consent: false as unknown as true },
   });
 
   const onSubmit = async (data: EmailForm) => {
@@ -626,7 +628,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
     try {
       const { data: resp, error: invokeError } = await supabase.functions.invoke<GenerateResponse>(
         "ai-test-generate",
-        { body: { email: data.email, answers: savedQuizValues } },
+        { body: { email: data.email, source: data.source, answers: savedQuizValues } },
       );
       if (invokeError) {
         // Try to read the structured body anyway — supabase-js puts non-2xx
@@ -694,6 +696,37 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
                 }}
               />
               {errors.email && <p className="mt-2 text-xs text-red-400">{errors.email.message}</p>}
+            </div>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="source"
+          render={({ field }) => (
+            <div>
+              <label className="block text-sm text-gray-400 mb-3">How did you hear about this test?</label>
+              <div className="flex flex-wrap gap-2">
+                {SOURCE_OPTIONS.map((opt) => {
+                  const selected = field.value === opt;
+                  return (
+                    <button
+                      type="button"
+                      key={opt}
+                      onClick={() => field.onChange(opt)}
+                      className="text-sm font-light px-3 py-2 rounded-full transition-colors"
+                      style={{
+                        backgroundColor: selected ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "rgba(255,255,255,0.08)"}`,
+                        color: selected ? "#fff" : "#9ca3af",
+                      }}
+                    >
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+              {errors.source && <p className="mt-2 text-xs text-red-400">{errors.source.message}</p>}
             </div>
           )}
         />
