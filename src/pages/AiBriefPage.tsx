@@ -165,7 +165,7 @@ type Phase =
   | { kind: "quiz" }
   | { kind: "email" }
   | { kind: "submitting" }
-  | { kind: "results"; results: AiTestResults }
+  | { kind: "results"; results: AiTestResults; emailed: boolean; email: string }
   | { kind: "already_used"; message: string }
   | { kind: "error"; message: string };
 
@@ -221,13 +221,17 @@ const AiBriefPage = () => {
           {phase.kind === "email" && (
             <EmailGate
               onSubmitting={() => setPhase({ kind: "submitting" })}
-              onSuccess={(results) => setPhase({ kind: "results", results })}
+              onSuccess={(results, emailed, email) =>
+                setPhase({ kind: "results", results, emailed, email })
+              }
               onAlreadyUsed={(message) => setPhase({ kind: "already_used", message })}
               onError={(message) => setPhase({ kind: "error", message })}
             />
           )}
           {phase.kind === "submitting" && <Submitting />}
-          {phase.kind === "results" && <Results results={phase.results} />}
+          {phase.kind === "results" && (
+            <Results results={phase.results} emailed={phase.emailed} email={phase.email} />
+          )}
           {phase.kind === "already_used" && <AlreadyUsed message={phase.message} />}
           {phase.kind === "error" && (
             <ErrorState
@@ -611,7 +615,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
 
 interface EmailGateProps {
   onSubmitting: () => void;
-  onSuccess: (results: AiTestResults) => void;
+  onSuccess: (results: AiTestResults, emailed: boolean, email: string) => void;
   onAlreadyUsed: (message: string) => void;
   onError: (message: string) => void;
 }
@@ -653,7 +657,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
         return;
       }
       if (resp.ok && "results" in resp) {
-        onSuccess(resp.results);
+        onSuccess(resp.results, !!resp.emailed, data.email);
         return;
       }
       const err = resp as { error?: string; message?: string };
@@ -795,7 +799,15 @@ const Submitting = () => (
 
 // ---- Results -------------------------------------------------------------
 
-const Results = ({ results }: { results: AiTestResults }) => {
+const Results = ({
+  results,
+  emailed,
+  email,
+}: {
+  results: AiTestResults;
+  emailed: boolean;
+  email: string;
+}) => {
   const atWork = results.at_work ?? [];
   const inLife = results.in_your_life ?? [];
 
@@ -803,7 +815,7 @@ const Results = ({ results }: { results: AiTestResults }) => {
     <div>
       <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-4">Your results</p>
       <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ letterSpacing: "-0.02em" }}>
-        Your personalized AI use-case map.
+        Your personalized AI brief.
       </h2>
       {results.summary && (
         <p className="text-lg text-gray-400 font-light leading-relaxed mb-10">{results.summary}</p>
@@ -838,6 +850,36 @@ const Results = ({ results }: { results: AiTestResults }) => {
           Book a discovery call →
         </a>
       </div>
+
+      {emailed && (
+        <div className="mt-8 flex items-center justify-center gap-2 text-sm text-gray-500 font-light">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            className="text-gray-600 flex-shrink-0"
+            aria-hidden
+          >
+            <path
+              d="M2 3.5C2 2.95 2.45 2.5 3 2.5H11C11.55 2.5 12 2.95 12 3.5V10.5C12 11.05 11.55 11.5 11 11.5H3C2.45 11.5 2 11.05 2 10.5V3.5Z"
+              stroke="currentColor"
+              strokeWidth="1.2"
+            />
+            <path
+              d="M2 4L7 7.5L12 4"
+              stroke="currentColor"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span>
+            A copy of your brief was sent to{" "}
+            <span className="text-gray-300">{email}</span>.
+          </span>
+        </div>
+      )}
     </div>
   );
 };
