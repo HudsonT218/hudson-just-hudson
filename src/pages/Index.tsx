@@ -181,16 +181,30 @@ const Index = () => {
           </h2>
           <div className="space-y-5 text-gray-400 font-light leading-relaxed">
             <p>
-              I write code and build software. I've gone deep into AI — not just
-              using it, but understanding how it works, what it can actually do,
-              and how to build real things on top of it.
+              I build custom websites, AI tools, and software. I've spent
+              serious time going deep on AI in particular: not just using it,
+              but understanding what it can really do and how to build solid
+              things with it. I care about making things that actually work,
+              and I don't cut corners to get there.
             </p>
             <p>
-              I started this to help people I know — businesses, friends,
-              anyone who wants to figure out how AI fits into what they're
-              doing. I charge by the hour, I'm transparent about what I'm
-              building, and I'll tell you honestly if something isn't worth
-              doing.
+              You don't have to be technical to work with me. Maybe you know AI
+              could help your business but the whole space just feels like
+              noise. Maybe you've had an idea for months with no real path to
+              building it. Maybe you need a proper website and the agency route
+              felt overpriced and overcomplicated. Those are the people I do
+              this for: you've got something worth building, and you need
+              someone who can actually build it.
+            </p>
+            <p>
+              My role is to be the person who takes it all the way. I lead the
+              project end to end, so you're not managing a developer or
+              juggling freelancers. You bring the goal, I handle getting there.
+              Working with AI lets me build faster and leaner than a
+              traditional shop, which keeps your cost down, and I'd rather talk
+              you out of a weak idea than bill you for one. I'm early in client
+              work and price honestly because of it, which means real attention
+              and a fair rate while I build my track record.
             </p>
           </div>
           <div className="mt-10">
