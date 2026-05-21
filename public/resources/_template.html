@@ -1,0 +1,225 @@
+<!--
+  Template for a /resources/<slug>.html page.
+  Copy this file to public/resources/<your-slug>.html, then:
+
+  1. Replace TITLE placeholders with the actual page title.
+  2. Replace DESCRIPTION placeholders with a 150-character meta description
+     that answers the page's target query in plain language.
+  3. Replace SLUG with the URL slug (e.g. `ai-for-small-business`). It must
+     appear in canonical, og:url, and twitter URL.
+  4. Replace the H1, lede paragraph (150-200 words, must directly answer
+     the target query), and the body content sections.
+  5. Replace the FAQ block (3-5 Q&As specific to the topic). Match the
+     visible answers to the FAQPage JSON-LD answers exactly.
+  6. Add the page to public/sitemap.xml and public/llms.txt.
+
+  Style note: keep <style> inline. These pages are intentionally NOT part of
+  the React SPA — they are plain HTML served directly so they index fast on
+  the first crawl pass without any JS execution.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>TITLE — Hudson Turansky</title>
+    <meta name="description" content="DESCRIPTION (150 chars max, answers the page's target query)." />
+    <meta name="author" content="Hudson Turansky" />
+
+    <link rel="canonical" href="https://hudsonturansky.com/resources/SLUG.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hudsonturansky.com/resources/SLUG.html" />
+    <meta property="og:title" content="TITLE — Hudson Turansky" />
+    <meta property="og:description" content="DESCRIPTION." />
+    <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
+    <meta property="og:site_name" content="Hudson Turansky" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TITLE — Hudson Turansky" />
+    <meta name="twitter:description" content="DESCRIPTION." />
+    <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Article schema. Update headline, datePublished, dateModified. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "TITLE",
+        "description": "DESCRIPTION",
+        "url": "https://hudsonturansky.com/resources/SLUG.html",
+        "datePublished": "2026-01-01",
+        "dateModified": "2026-01-01",
+        "author": {
+          "@type": "Person",
+          "name": "Hudson Turansky",
+          "url": "https://hudsonturansky.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Hudson Turansky",
+          "url": "https://hudsonturansky.com"
+        }
+      }
+    </script>
+
+    <!-- Single FAQPage block. Multiple FAQPage blocks on one page are a
+         Google violation; never split. Answer text MUST match the visible
+         <dl> answers below word-for-word. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Q1 (matches visible question 1)",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A1 (matches visible answer 1 exactly)."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0; padding: 0;
+        background: #09090b;
+        color: #d1d5db;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-weight: 300;
+        line-height: 1.7;
+        font-size: 16px;
+      }
+      a { color: #60a5fa; text-decoration: none; }
+      a:hover { color: #93c5fd; text-decoration: underline; }
+      .container { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; }
+      header {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(9, 9, 11, 0.85);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      header .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+      header .brand { color: #fff; font-weight: 800; letter-spacing: -0.03em; font-size: 1.25rem; text-decoration: none; }
+      header nav a { color: #6b7280; font-size: 0.875rem; margin-left: 2rem; }
+      header nav a:hover { color: #fff; text-decoration: none; }
+      .breadcrumb { padding-top: 2rem; font-size: 0.875rem; color: #6b7280; }
+      h1 {
+        color: #fff; font-weight: 800; letter-spacing: -0.04em;
+        font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1;
+        margin: 1.5rem 0 1.5rem 0;
+      }
+      h2 {
+        color: #fff; font-weight: 700; letter-spacing: -0.02em;
+        font-size: 1.5rem; margin: 3rem 0 1rem 0;
+      }
+      h3 {
+        color: #fff; font-weight: 600;
+        font-size: 1.1rem; margin: 2rem 0 0.5rem 0;
+      }
+      p { color: #9ca3af; margin: 0 0 1rem 0; }
+      ul, ol { color: #9ca3af; padding-left: 1.25rem; }
+      li { margin-bottom: 0.5rem; }
+      strong { color: #d1d5db; font-weight: 600; }
+      .lede {
+        font-size: 1.0625rem; color: #d1d5db;
+        padding: 1.25rem 1.5rem; margin: 1.5rem 0 2.5rem 0;
+        background: rgba(59, 130, 246, 0.05);
+        border-left: 3px solid #3b82f6; border-radius: 0.5rem;
+      }
+      .lede strong { color: #fff; }
+      .faq { margin-top: 3rem; }
+      .faq dt {
+        color: #fff; font-weight: 600; font-size: 1rem;
+        margin-top: 1.5rem; padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .faq dt:first-child { border-top: none; padding-top: 0; }
+      .faq dd { margin: 0.5rem 0 0 0; color: #9ca3af; }
+      .cta {
+        margin: 3rem 0;
+        padding: 2rem 1.5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 1rem;
+        text-align: center;
+      }
+      .cta a {
+        display: inline-block; margin-top: 0.75rem;
+        background: #fff; color: #09090b;
+        padding: 0.625rem 1.25rem; border-radius: 0.5rem;
+        font-weight: 500; font-size: 0.875rem; text-decoration: none;
+      }
+      .cta a:hover { background: rgba(255, 255, 255, 0.9); text-decoration: none; }
+      footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 2rem 0; margin-top: 4rem;
+        color: #6b7280; font-size: 0.75rem; text-align: center;
+      }
+      footer a { color: #9ca3af; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a class="brand" href="/">HT</a>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/work">Work</a>
+          <a href="/resources/">Resources</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <p class="breadcrumb"><a href="/resources/">Resources</a> &nbsp;/&nbsp; <span style="color:#9ca3af">TITLE</span></p>
+
+      <h1>H1 (the headline buyers would actually type)</h1>
+
+      <div class="lede">
+        <strong>TL;DR.</strong> 150–200 words that DIRECTLY answer the page's target
+        query. AI extractors read this part first. Use specific numbers
+        (dollars, weeks, percentages, counts) wherever possible. End with a
+        soft CTA.
+      </div>
+
+      <h2>Section heading</h2>
+      <p>Body paragraph. Use specific examples and quantifiable details.</p>
+
+      <h2>Another section</h2>
+      <ol>
+        <li>Step or point one</li>
+        <li>Step or point two</li>
+      </ol>
+
+      <div class="cta">
+        <p><strong>Want someone to scope this for you?</strong></p>
+        <p>Free 30-minute discovery call — no pitch, no commitment.</p>
+        <a href="https://calendly.com/hudsonturansky/30min">Book a call</a>
+      </div>
+
+      <h2 id="faq">FAQ</h2>
+      <dl class="faq">
+        <dt>Question 1</dt>
+        <dd>Answer 1 (matches FAQPage JSON-LD answer above exactly).</dd>
+      </dl>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Hudson Turansky &middot; <a href="mailto:hudsonturansky@gmail.com">hudsonturansky@gmail.com</a></p>
+    </footer>
+  </body>
+</html>

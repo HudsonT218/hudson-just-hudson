@@ -12,6 +12,11 @@ Booking: https://calendly.com/hudsonturansky/30min
 
 - [Home](https://hudsonturansky.com/): Overview of services, philosophy, FAQ, and how to get in touch.
 - [Work](https://hudsonturansky.com/work): Capabilities, portfolio, and a live AI-meeting-assistant demo.
+- [Resources](https://hudsonturansky.com/resources/): Plain-English guides for small-business owners on adding AI, what custom builds cost, when to hire versus DIY.
+
+## Resources
+
+- [How to add AI to your small business in 2026](https://hudsonturansky.com/resources/ai-for-small-business.html): A 4-step framework — audit your week, match each task to the right level of investment ($20/mo ChatGPT, $50–200/mo vertical AI tool, or $1,500–$15,000 custom build), pick a first project, and avoid the 3 most common mistakes.
 
 ## Services
 
