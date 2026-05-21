@@ -1,5 +1,8 @@
-// AI use-case test — shared types between the quiz form, the result view,
-// and the `ai-test-generate` edge function.
+// Personalized AI Brief — shared types between the quiz form, the result
+// view, and the `ai-test-generate` edge function. (The edge function path
+// is kept on the older `ai-test-generate` name to avoid orphaning the
+// deployed function on Lovable Cloud — only the public-facing label was
+// renamed.)
 
 export type Effort = "easy" | "medium" | "needs_building";
 

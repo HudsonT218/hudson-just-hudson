@@ -1,14 +1,16 @@
-// Free AI use-case test — single-file page covering:
+// Free Personalized AI Brief — single-file page covering:
 //   - prerendered landing intro (this is what crawlers see)
 //   - 5-step quiz (React Hook Form + Zod)
 //   - email gate
 //   - submission loading
-//   - results view
-//   - already-used and error states
+//   - results view (the "brief")
+//   - already-received and error states
 //
-// Backend: supabase/functions/ai-test-generate. Edge function validates +
-// length-limits everything we send, so the client-side validation here is
-// for UX, not security.
+// Backend: supabase/functions/ai-test-generate. (Kept the internal function
+// name to avoid orphaning the deployed edge function on Lovable Cloud — the
+// public-facing label was the only thing that needed to change.) Edge
+// function validates + length-limits everything we send, so the client-side
+// validation here is for UX, not security.
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -24,7 +26,7 @@ import {
   type AiTestResults,
   type GenerateResponse,
   type QuizAnswers,
-} from "@/lib/ai-test-types";
+} from "@/lib/ai-brief-types";
 import { SOURCE_OPTIONS } from "@/lib/tracking";
 
 // ---------------------------------------------------------------------------
@@ -171,33 +173,33 @@ type Phase =
 // Component
 // ===========================================================================
 
-const AiTestPage = () => {
+const AiBriefPage = () => {
   const [phase, setPhase] = useState<Phase>({ kind: "intro" });
 
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Free AI Use-Case Test for Small Businesses — Hudson Turansky</title>
+        <title>Personalized AI Brief for Small Businesses — Hudson Turansky</title>
         <meta
           name="description"
-          content="A 5-minute personalized test. Answer a few questions about your work and life and get 6–10 specific AI ideas you could actually use — tagged by effort, with the build-worthy ones flagged."
+          content="A free 5-minute personalized brief. Answer a few questions about your work and life and get 6–10 specific AI ideas you could actually use — tagged by effort, with the build-worthy ones flagged."
         />
-        <link rel="canonical" href="https://hudsonturansky.com/ai-test" />
+        <link rel="canonical" href="https://hudsonturansky.com/ai-brief" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hudsonturansky.com/ai-test" />
-        <meta property="og:title" content="Free AI Use-Case Test for Small Businesses" />
+        <meta property="og:url" content="https://hudsonturansky.com/ai-brief" />
+        <meta property="og:title" content="Personalized AI Brief for Small Businesses" />
         <meta
           property="og:description"
-          content="A 5-minute personalized test. Get 6–10 specific AI ideas you could actually use — tagged by effort."
+          content="A free 5-minute personalized brief. Get 6–10 specific AI ideas you could actually use — tagged by effort."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Free AI Use-Case Test for Small Businesses" />
+        <meta name="twitter:title" content="Personalized AI Brief for Small Businesses" />
         <meta
           name="twitter:description"
-          content="A 5-minute personalized test. Get 6–10 specific AI ideas — tagged by effort."
+          content="A free 5-minute personalized brief. Get 6–10 specific AI ideas — tagged by effort."
         />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
         <script type="application/ld+json">{JSON.stringify(LANDING_JSONLD)}</script>
@@ -241,7 +243,7 @@ const AiTestPage = () => {
   );
 };
 
-export default AiTestPage;
+export default AiBriefPage;
 
 // ===========================================================================
 // Pieces
@@ -250,10 +252,10 @@ export default AiTestPage;
 const LANDING_JSONLD = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "AI Use-Case Test",
+  name: "Personalized AI Brief",
   description:
-    "Free 5-minute personalized test that generates 6–10 specific AI use-case ideas based on the taker's work and life.",
-  url: "https://hudsonturansky.com/ai-test",
+    "Free 5-minute personalized brief that generates 6–10 specific AI use-case ideas based on the taker's work and life.",
+  url: "https://hudsonturansky.com/ai-brief",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -323,7 +325,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
   return (
     <div>
       <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
-        Free AI Use-Case Test
+        Free Personalized AI Brief
       </p>
       <h1
         className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6"
@@ -341,10 +343,11 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
         </span>
       </h1>
       <p className="text-lg text-gray-400 font-light max-w-2xl mb-8 leading-relaxed">
-        A 5-minute personalized test. Answer a few questions about your work and life — your role, the tasks
-        that eat your time, what tools you live in, what you'd hand to an AI tomorrow — and a purpose-built
-        assistant generates <strong className="text-gray-200">6–10 specific AI use-case ideas</strong> based
-        on your answers, grouped <em>At Work</em> and <em>In Your Life</em>, and tagged by effort.
+        A free 5-minute personalized brief. Answer a few questions about your work and life — your role, the
+        tasks that eat your time, what tools you live in, what you'd hand to an AI tomorrow — and a
+        purpose-built assistant generates a brief with{" "}
+        <strong className="text-gray-200">6–10 specific AI use-case ideas</strong> based on your answers,
+        grouped <em>At Work</em> and <em>In Your Life</em>, and tagged by effort.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
@@ -362,7 +365,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.9)"; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
         >
-          Start the test →
+          Get my brief →
         </button>
         <p className="mt-3 text-xs text-gray-600">No pitch on the way in. Your results are yours — and the build-worthy ones get flagged.</p>
       </div>
@@ -375,7 +378,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           What you get
         </h2>
         <ul className="space-y-3 text-gray-400 font-light leading-relaxed">
-          <li>· <strong className="text-gray-200">6–10 ideas</strong> — most testers get a mix of low-effort wins and ambitious "needs building" projects.</li>
+          <li>· <strong className="text-gray-200">6–10 ideas</strong> — most briefs end up with a mix of low-effort wins and a few ambitious "needs building" projects.</li>
           <li>· Each idea has a <strong className="text-gray-200">title, one-line description, and a personalized "how this helps you"</strong> that references your actual answers.</li>
           <li>· Effort tag on every idea: <span style={{ color: "rgba(16,185,129,0.9)" }}>Easy</span> (do it yourself with ChatGPT) · <span style={{ color: "rgba(245,158,11,0.9)" }}>Medium</span> (off-the-shelf AI tool) · <span style={{ color: "rgba(96,165,250,1)" }}>Needs building</span> (where I can help).</li>
           <li>· Honest "this is just ChatGPT" answers when that's the right call — no upsell pressure.</li>
@@ -443,7 +446,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           className="inline-flex items-center gap-2 text-sm font-medium px-5 py-3 rounded-md transition-colors duration-200"
           style={{ backgroundColor: "#ffffff", color: "#09090b" }}
         >
-          Start the test →
+          Get my brief →
         </button>
       </section>
     </div>
@@ -621,7 +624,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
 
   const onSubmit = async (data: EmailForm) => {
     if (!savedQuizValues) {
-      onError("Your answers were lost — please start the test again.");
+      onError("Your answers were lost — please start the brief again.");
       return;
     }
     onSubmitting();
@@ -705,7 +708,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
           name="source"
           render={({ field }) => (
             <div>
-              <label className="block text-sm text-gray-400 mb-3">How did you hear about this test?</label>
+              <label className="block text-sm text-gray-400 mb-3">How did you hear about this?</label>
               <div className="flex flex-wrap gap-2">
                 {SOURCE_OPTIONS.map((opt) => {
                   const selected = field.value === opt;
@@ -776,7 +779,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
 };
 
 const alreadyUsedFallback =
-  "This email has already used the free AI use-case test. Book a discovery call to talk through your results in more detail.";
+  "This email has already received a free personalized AI brief. Book a discovery call to talk through your results in more detail.";
 
 // ---- Submitting ----------------------------------------------------------
 
@@ -889,7 +892,7 @@ const AlreadyUsed = ({ message }: { message: string }) => (
   <div className="text-center py-12">
     <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-4">Already used</p>
     <h2 className="text-3xl font-bold text-white mb-4" style={{ letterSpacing: "-0.02em" }}>
-      You've already used the free test.
+      You've already received your brief.
     </h2>
     <p className="text-gray-400 font-light max-w-xl mx-auto mb-8 leading-relaxed">{message}</p>
     <a

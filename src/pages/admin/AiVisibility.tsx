@@ -3,7 +3,7 @@
 // LLM-SEO/measurement-and-tracking-plan.md:
 //   - leads grouped by self-reported source (with AI sources highlighted)
 //   - traffic_events from known AI assistant domains (time series)
-//   - AI use-case test signups over time
+//   - AI Brief signups over time
 
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
@@ -116,7 +116,7 @@ const AiVisibility = () => {
       <div className="px-10 py-10">
         <AdminPageHeader title="AI Visibility" className="mb-2" />
         <p className="text-sm text-gray-500 mb-8">
-          Self-reported attribution + AI-referrer visits + AI test signups. Last 30 days unless noted.
+          Self-reported attribution + AI-referrer visits + AI Brief signups. Last 30 days unless noted.
         </p>
 
         {error && <div className="mb-6"><ErrorBanner>{error.message}</ErrorBanner></div>}
@@ -137,7 +137,7 @@ const AiVisibility = () => {
             value={aiTrafficQ.isLoading ? "—" : aiTrafficTotal}
           />
           <StatTile
-            label="AI test signups (30d)"
+            label="AI Brief signups (30d)"
             value={signupsQ.isLoading ? "—" : signupsTotal}
           />
         </div>
@@ -189,9 +189,9 @@ const AiVisibility = () => {
           {aiTrafficQ.isLoading ? <SkeletonBlock style={{ height: 140 }} /> : <Sparkbars data={aiTraffic} />}
         </AdminCard>
 
-        {/* AI test signups time series */}
+        {/* AI Brief signups time series */}
         <AdminCard>
-          <SectionLabel className="mb-4">AI test signups (last 30 days)</SectionLabel>
+          <SectionLabel className="mb-4">AI Brief signups (last 30 days)</SectionLabel>
           {signupsQ.isLoading ? <SkeletonBlock style={{ height: 140 }} /> : <Sparkbars data={signups} />}
         </AdminCard>
       </div>
