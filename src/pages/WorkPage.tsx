@@ -345,7 +345,7 @@ const WorkPage = () => {
         }}
       >
         <p className="text-xs text-gray-600">
-          &copy; {new Date().getFullYear()} Hudson Turansky &middot;{' '}
+          &copy; {__BUILD_YEAR__} Hudson Turansky &middot;{' '}
           <a href="mailto:hudsonturansky@gmail.com" className="hover:text-gray-400 transition-colors">
             hudsonturansky@gmail.com
           </a>

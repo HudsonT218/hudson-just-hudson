@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Component, lazy, Suspense, useEffect, type ErrorInfo, type ReactNode } from "react";
+import { Component, lazy, Suspense, useEffect, useState, type ErrorInfo, type ReactNode } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -103,6 +103,14 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Toaster/Sonner use portals (createPortal → document.body) which crash during
+// SSR/prerender. Mount them only after the client hydrates.
+const ClientOnly = ({ children }: { children: ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted ? <>{children}</> : null;
+};
+
 const AppRoutes = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -178,28 +186,53 @@ const AppRoutes = () => {
   );
 };
 
-const App = () => (
-  <HelmetProvider>
+// Everything inside the router. Reusable by both the client (BrowserRouter)
+// and the server prerender (StaticRouter) entry points.
+export const AppContent = () => (
+  <>
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-md focus:font-medium focus:shadow-lg"
+    >
+      Skip to main content
+    </a>
+    <AppErrorBoundary>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </AppErrorBoundary>
+  </>
+);
+
+// All non-router providers. Shared between client and server entries.
+// `helmetContext` is required server-side so the prerender script can pull
+// out the rendered head tags; on the client it can be omitted.
+export const AppProviders = ({
+  children,
+  helmetContext,
+}: {
+  children: ReactNode;
+  helmetContext?: Record<string, unknown>;
+}) => (
+  <HelmetProvider context={helmetContext}>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-md focus:font-medium focus:shadow-lg"
-          >
-            Skip to main content
-          </a>
-          <AppErrorBoundary>
-            <AuthProvider>
-              <AppRoutes />
-            </AuthProvider>
-          </AppErrorBoundary>
-        </BrowserRouter>
+        <ClientOnly>
+          <Toaster />
+          <Sonner />
+        </ClientOnly>
+        {children}
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>
+);
+
+const App = () => (
+  <AppProviders>
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  </AppProviders>
 );
 
 export default App;
