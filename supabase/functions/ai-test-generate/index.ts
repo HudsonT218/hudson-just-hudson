@@ -13,8 +13,8 @@
 // Required env vars (Lovable Cloud → Edge Functions → Secrets):
 //   SUPABASE_URL                  (auto-injected)
 //   SUPABASE_SERVICE_ROLE_KEY     (auto-injected)
-//   OPENAI_API_KEY                — required
-//   OPENAI_MODEL                  — optional, default `gpt-4o-mini`
+//   LOVABLE_API_KEY               — auto-provisioned. Used to call the Lovable AI Gateway.
+//   AI_TEST_MODEL                 — optional, default `google/gemini-3-flash-preview`
 //   AI_TEST_DAILY_CAP             — optional, default 200
 //   RESEND_API_KEY                — optional. Without it, the function skips the
 //                                    email step but still returns results to the
