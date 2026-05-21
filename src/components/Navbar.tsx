@@ -69,14 +69,19 @@ const Navbar = () => {
       style={{
         backgroundColor: scrolled
           ? theme === "light"
-            ? "rgba(245,245,245,0.85)"
+            ? "rgba(255,255,255,0.6)"
             : "rgba(9,9,11,0.85)"
-          : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled
-          ? "1px solid var(--app-border-med)"
-          : "1px solid transparent",
+          : theme === "light"
+            ? "rgba(255,255,255,0.35)"
+            : "transparent",
+        backdropFilter:
+          scrolled || theme === "light" ? "blur(24px) saturate(180%)" : "none",
+        WebkitBackdropFilter:
+          scrolled || theme === "light" ? "blur(24px) saturate(180%)" : "none",
+        borderBottom:
+          scrolled || theme === "light"
+            ? "1px solid var(--app-border-med)"
+            : "1px solid transparent",
       }}
     >
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">

@@ -208,7 +208,7 @@ const AiBriefPage = () => {
 
       <section className="relative pt-32 pb-12 px-6">
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 50% 30%, rgba(59,130,246,0.06) 0%, transparent 60%)" }} />
+          style={{ background: "radial-gradient(ellipse at 50% 30%, var(--app-radial-tint) 0%, transparent 60%)" }} />
         <div className="relative max-w-3xl mx-auto">
           {phase.kind === "intro" && <Intro onStart={() => setPhase({ kind: "quiz" })} />}
           {phase.kind === "quiz" && (
