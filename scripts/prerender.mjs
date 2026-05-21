@@ -33,6 +33,8 @@ const ROUTE_LIST = [
   { url: "/", outFile: "index.html" },
   { url: "/work", outFile: "work/index.html" },
   { url: "/ai-test", outFile: "ai-test/index.html" },
+  { url: "/resources", outFile: "resources/index.html" },
+  { url: "/resources/ai-for-small-business", outFile: "resources/ai-for-small-business/index.html" },
 ];
 
 // --- Browser-global polyfills (minimal) -----------------------------------

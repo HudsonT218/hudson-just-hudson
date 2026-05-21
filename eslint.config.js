@@ -7,8 +7,9 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   // Deno edge functions are not part of the Node/browser TS app; they use
   // `@ts-nocheck` and Deno globals on purpose. Lint them with `deno lint`,
-  // not ESLint.
-  { ignores: ["dist", "supabase/functions/**"] },
+  // not ESLint. The `scripts/` folder is build-time Node tooling and uses
+  // dynamic-import + JSON shapes that don't benefit from strict typing.
+  { ignores: ["dist", "supabase/functions/**", "scripts/**"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],

@@ -10,6 +10,8 @@ import Index from "./pages/Index.tsx";
 import WorkPage from "./pages/WorkPage.tsx";
 import InterestedPage from "./pages/InterestedPage.tsx";
 import AiTestPage from "./pages/AiTestPage.tsx";
+import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
+import AiForSmallBusiness from "./pages/resources/AiForSmallBusiness.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
 import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
@@ -141,6 +143,15 @@ const AppRoutes = () => {
           <Route path="/work" element={<WorkPage />} />
           <Route path="/interested" element={<InterestedPage />} />
           <Route path="/ai-test" element={<AiTestPage />} />
+          <Route path="/resources" element={<ResourcesIndexPage />} />
+          <Route path="/resources/ai-for-small-business" element={<AiForSmallBusiness />} />
+          {/* 301-style redirects for the older static .html URLs in case anyone
+              shared them (the static files used to live in public/resources/). */}
+          <Route path="/resources/index.html" element={<Navigate to="/resources" replace />} />
+          <Route
+            path="/resources/ai-for-small-business.html"
+            element={<Navigate to="/resources/ai-for-small-business" replace />}
+          />
           <Route path="/packages" element={<Navigate to="/work" replace />} />
           <Route path="/reference/:token" element={<ReferencePage />} />
 
