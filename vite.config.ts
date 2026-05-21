@@ -19,4 +19,16 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
+  // Replaced at build time. Footer copyright uses this instead of
+  // `new Date().getFullYear()` so prerendered HTML and the hydrated client
+  // render identical text (avoids React hydration warnings).
+  define: {
+    __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
+  },
+  // SSR-build config used by `vite build --ssr src/entry-server.tsx`.
+  // `react-helmet-async` ships ESM with a HelmetProvider export shape that
+  // breaks when Vite externalizes it for SSR — force it through the bundler.
+  ssr: {
+    noExternal: ["react-helmet-async"],
+  },
 }));
