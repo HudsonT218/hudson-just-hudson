@@ -7,7 +7,6 @@ let stripePromise: Promise<Stripe | null> | null = null;
 export function getStripe(): Promise<Stripe | null> {
   if (!stripePromise) {
     if (!stripePk) {
-      // eslint-disable-next-line no-console
       console.warn('[stripe] VITE_STRIPE_PK is not set — checkout will be unavailable.');
       return Promise.resolve(null);
     }
