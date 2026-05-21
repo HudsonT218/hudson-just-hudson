@@ -18,6 +18,22 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     // Prerender runs after the client build only (skipped for SSR builds and dev).
     mode !== "development" && prerenderPlugin(),
+    // Dev-server: serve static directory index.html files before SPA fallback.
+    {
+      name: "static-dir-index",
+      configureServer(server: { middlewares: { use: (fn: (req: any, res: any, next: () => void) => void) => void } }) {
+        server.middlewares.use((req: any, _res: any, next: () => void) => {
+          const url = req.url ?? "";
+          // Rewrite trailing-slash requests for directories that have an
+          // index.html in public/ so Vite serves the static file instead of
+          // falling through to the SPA fallback.
+          if (url === "/resources/" || url === "/resources") {
+            req.url = "/resources/index.html";
+          }
+          next();
+        });
+      },
+    },
   ].filter(Boolean),
 
   resolve: {
