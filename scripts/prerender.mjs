@@ -32,6 +32,7 @@ const TEMPLATE_PATH = path.join(DIST, "index.html");
 const ROUTE_LIST = [
   { url: "/", outFile: "index.html" },
   { url: "/work", outFile: "work/index.html" },
+  { url: "/ai-test", outFile: "ai-test/index.html" },
 ];
 
 // --- Browser-global polyfills (minimal) -----------------------------------

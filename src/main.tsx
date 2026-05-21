@@ -9,7 +9,7 @@ import "./index.css";
 // React would try to hydrate as the homepage — that mismatches the actual
 // route and causes a hydration warning + a flash. Detecting the mismatch
 // here and switching to createRoot avoids the warning.
-const PRERENDERED_ROUTES = new Set(["/", "/work"]);
+const PRERENDERED_ROUTES = new Set(["/", "/work", "/ai-test"]);
 
 const rootElement = document.getElementById("root")!;
 const path = window.location.pathname.replace(/\/$/, "") || "/";
