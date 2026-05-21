@@ -12,6 +12,10 @@ import InterestedPage from "./pages/InterestedPage.tsx";
 import AiBriefPage from "./pages/AiBriefPage.tsx";
 import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
 import AiForSmallBusiness from "./pages/resources/AiForSmallBusiness.tsx";
+import WhatCustomAiCosts from "./pages/resources/WhatCustomAiCosts.tsx";
+import HireAiHelpOrDoItYourself from "./pages/resources/HireAiHelpOrDoItYourself.tsx";
+import WhatSmallBusinessesUseAiFor from "./pages/resources/WhatSmallBusinessesUseAiFor.tsx";
+import AiGlossaryForBusinessOwners from "./pages/resources/AiGlossaryForBusinessOwners.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
 import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
@@ -147,6 +151,19 @@ const AppRoutes = () => {
           <Route path="/ai-test" element={<Navigate to="/ai-brief" replace />} />
           <Route path="/resources" element={<ResourcesIndexPage />} />
           <Route path="/resources/ai-for-small-business" element={<AiForSmallBusiness />} />
+          <Route path="/resources/what-custom-ai-costs" element={<WhatCustomAiCosts />} />
+          <Route
+            path="/resources/hire-ai-help-or-do-it-yourself"
+            element={<HireAiHelpOrDoItYourself />}
+          />
+          <Route
+            path="/resources/what-small-businesses-use-ai-for"
+            element={<WhatSmallBusinessesUseAiFor />}
+          />
+          <Route
+            path="/resources/ai-glossary-for-business-owners"
+            element={<AiGlossaryForBusinessOwners />}
+          />
           {/* 301-style redirects for the older static .html URLs in case anyone
               shared them (the static files used to live in public/resources/). */}
           <Route path="/resources/index.html" element={<Navigate to="/resources" replace />} />
