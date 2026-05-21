@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_test_submissions: {
+        Row: {
+          answers: Json
+          created_at: string
+          email: string
+          id: string
+          results: Json
+          status: string
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          email: string
+          id?: string
+          results?: Json
+          status?: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          email?: string
+          id?: string
+          results?: Json
+          status?: string
+        }
+        Relationships: []
+      }
       build_logs: {
         Row: {
           created_at: string | null
@@ -160,6 +187,7 @@ export type Database = {
           next_action_date: string | null
           notes: string | null
           phone: string | null
+          source: string | null
           status: string
           updated_at: string | null
           what_they_might_need: string | null
@@ -176,6 +204,7 @@ export type Database = {
           next_action_date?: string | null
           notes?: string | null
           phone?: string | null
+          source?: string | null
           status?: string
           updated_at?: string | null
           what_they_might_need?: string | null
@@ -192,6 +221,7 @@ export type Database = {
           next_action_date?: string | null
           notes?: string | null
           phone?: string | null
+          source?: string | null
           status?: string
           updated_at?: string | null
           what_they_might_need?: string | null
@@ -492,6 +522,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      traffic_events: {
+        Row: {
+          created_at: string
+          device_type: string | null
+          id: string
+          landing_path: string | null
+          referrer: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          landing_path?: string | null
+          referrer?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          landing_path?: string | null
+          referrer?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
