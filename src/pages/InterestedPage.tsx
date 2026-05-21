@@ -75,7 +75,7 @@ const InterestedPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Rates */}
@@ -87,8 +87,8 @@ const InterestedPage = () => {
                 key={r.label}
                 className="rounded-2xl p-8 flex flex-col"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  backgroundColor: "var(--app-card-bg)",
+                  border: "1px solid var(--app-border-soft)",
                 }}
               >
                 <div className="mb-6 flex items-baseline gap-2">
@@ -118,7 +118,7 @@ const InterestedPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Typical projects */}
@@ -139,13 +139,13 @@ const InterestedPage = () => {
           <div
             className="rounded-2xl overflow-hidden"
             style={{
-              backgroundColor: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.05)",
+              backgroundColor: "var(--app-card-bg)",
+              border: "1px solid var(--app-border-soft)",
             }}
           >
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <tr style={{ borderBottom: "1px solid var(--app-border-med)" }}>
                   <th className="text-left text-xs uppercase tracking-widest text-gray-500 font-medium px-6 py-4">
                     Project Type
                   </th>
@@ -163,7 +163,7 @@ const InterestedPage = () => {
                     key={e.type}
                     style={{
                       borderTop:
-                        i === 0 ? "none" : "1px solid rgba(255,255,255,0.04)",
+                        i === 0 ? "none" : "1px solid var(--app-border-soft)",
                     }}
                   >
                     <td className="px-6 py-4 text-gray-300 font-light">
@@ -191,7 +191,7 @@ const InterestedPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Honest notes */}
@@ -226,13 +226,13 @@ const InterestedPage = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* CTA */}
       <section
         className="relative py-28 px-6 overflow-hidden"
-        style={{ backgroundColor: "#09090b" }}
+        style={{ backgroundColor: "var(--app-page-bg)" }}
       >
         <div
           className="absolute inset-0 pointer-events-none"
@@ -260,8 +260,8 @@ const InterestedPage = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
             style={{
-              backgroundColor: "#ffffff",
-              color: "#09090b",
+              backgroundColor: "var(--app-button-bg)",
+              color: "var(--app-button-fg)",
             }}
           >
             Schedule a Call →
@@ -273,8 +273,8 @@ const InterestedPage = () => {
       <footer
         className="py-8 px-6 text-center"
         style={{
-          backgroundColor: "#09090b",
-          borderTop: "1px solid rgba(255,255,255,0.05)",
+          backgroundColor: "var(--app-page-bg)",
+          borderTop: "1px solid var(--app-border-soft)",
         }}
       >
         <p className="text-xs text-gray-600">

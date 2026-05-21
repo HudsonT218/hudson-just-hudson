@@ -8,6 +8,9 @@
 
 @layer base {
   :root {
+    /* ===========================================================
+     * shadcn HSL tokens, dark default
+     * =========================================================== */
     --background: 240 6% 4%;
     --foreground: 0 0% 100%;
 
@@ -46,7 +49,170 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 240 4% 12%;
     --sidebar-ring: 217 91% 60%;
+
+    /* ===========================================================
+     * App-level color tokens, referenced by inline styles across
+     * the public pages. Dark mode is the default; html.light below
+     * overrides each one.
+     * =========================================================== */
+    --app-page-bg: #09090b;
+    --app-card-bg: rgba(255, 255, 255, 0.02);
+    --app-card-bg-strong: rgba(255, 255, 255, 0.04);
+    --app-card-bg-hover: rgba(255, 255, 255, 0.05);
+    --app-card-bg-bright: rgba(255, 255, 255, 0.06);
+    --app-border-soft: rgba(255, 255, 255, 0.05);
+    --app-border-med: rgba(255, 255, 255, 0.06);
+    --app-border-strong: rgba(255, 255, 255, 0.1);
+    --app-border-stronger: rgba(255, 255, 255, 0.15);
+    --app-blue-tint: rgba(59, 130, 246, 0.04);
+    --app-blue-tint-strong: rgba(59, 130, 246, 0.05);
+    --app-blue-tint-border: rgba(59, 130, 246, 0.15);
+    --app-blue-tint-border-strong: rgba(59, 130, 246, 0.2);
+    --app-blue-soft: rgba(59, 130, 246, 0.06);
+    --app-button-bg: #ffffff;
+    --app-button-bg-hover: rgba(255, 255, 255, 0.9);
+    --app-button-fg: #09090b;
+    --app-radial-tint: rgba(59, 130, 246, 0.06);
+
+    /* DottedSurface shader uniforms, read at theme switch time. */
+    --dotted-neutral-r: 0.55;
+    --dotted-neutral-g: 0.58;
+    --dotted-neutral-b: 0.68;
+    --dotted-blue-r: 0.35;
+    --dotted-blue-g: 0.55;
+    --dotted-blue-b: 1;
+    --dotted-fog-hex: 0x09090b;
   }
+
+  /* ============================================================
+   * Light mode overrides, applied to html.light by useTheme.
+   * Picked #f5f5f5 (neutral 100) for the page bg, "clean light
+   * grey" per Hudson. Card / border / button colors invert.
+   * ============================================================ */
+  html.light {
+    /* shadcn HSL */
+    --background: 0 0% 96%;
+    --foreground: 240 6% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 10%;
+
+    --primary: 217 91% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 4% 92%;
+    --secondary-foreground: 240 6% 10%;
+
+    --muted: 240 4% 92%;
+    --muted-foreground: 240 4% 40%;
+
+    --accent: 240 4% 92%;
+    --accent-foreground: 240 6% 10%;
+
+    --border: 240 6% 88%;
+    --input: 240 6% 88%;
+
+    /* App-level */
+    --app-page-bg: #f5f5f5;
+    --app-card-bg: rgba(0, 0, 0, 0.025);
+    --app-card-bg-strong: rgba(0, 0, 0, 0.04);
+    --app-card-bg-hover: rgba(0, 0, 0, 0.06);
+    --app-card-bg-bright: rgba(0, 0, 0, 0.08);
+    --app-border-soft: rgba(0, 0, 0, 0.06);
+    --app-border-med: rgba(0, 0, 0, 0.08);
+    --app-border-strong: rgba(0, 0, 0, 0.12);
+    --app-border-stronger: rgba(0, 0, 0, 0.18);
+    --app-blue-tint: rgba(59, 130, 246, 0.06);
+    --app-blue-tint-strong: rgba(59, 130, 246, 0.08);
+    --app-blue-tint-border: rgba(59, 130, 246, 0.22);
+    --app-blue-tint-border-strong: rgba(59, 130, 246, 0.3);
+    --app-blue-soft: rgba(59, 130, 246, 0.08);
+    --app-button-bg: #0a0a0a;
+    --app-button-bg-hover: rgba(10, 10, 10, 0.85);
+    --app-button-fg: #f5f5f5;
+    --app-radial-tint: rgba(59, 130, 246, 0.08);
+
+    --dotted-neutral-r: 0.45;
+    --dotted-neutral-g: 0.48;
+    --dotted-neutral-b: 0.55;
+    --dotted-blue-r: 0.2;
+    --dotted-blue-g: 0.4;
+    --dotted-blue-b: 0.85;
+    --dotted-fog-hex: 0xf5f5f5;
+  }
+
+  /* ============================================================
+   * Light-mode overrides for Tailwind text utility classes that
+   * pages currently hardcode. Specificity (0,2,1) beats Tailwind's
+   * (0,1,0) so these win without !important.
+   * ============================================================ */
+  html.light .text-white { color: #0a0a0a; }
+  html.light .text-gray-200 { color: #1f2937; }
+  html.light .text-gray-300 { color: #374151; }
+  html.light .text-gray-400 { color: #4b5563; }
+  html.light .text-gray-500 { color: #6b7280; }
+  html.light .text-gray-600 { color: #9ca3af; }
+  html.light .text-gray-700 { color: #b3b8c1; }
+  html.light .text-blue-400 { color: #2563eb; }
+  html.light .text-blue-300 { color: #1d4ed8; }
+
+  /* ============================================================
+   * .dark-region: opt-out of light mode (admin / configurator).
+   * Anything inside this wrapper renders dark even when html.light
+   * is set. Mirrors :root values + restores the Tailwind text
+   * colors that would otherwise have been flipped.
+   * ============================================================ */
+  .dark-region,
+  html.light .dark-region {
+    --background: 240 6% 4%;
+    --foreground: 0 0% 100%;
+    --card: 240 6% 4%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 6% 6%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 4% 10%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 240 4% 10%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 4% 12%;
+    --input: 240 4% 12%;
+
+    --app-page-bg: #09090b;
+    --app-card-bg: rgba(255, 255, 255, 0.02);
+    --app-card-bg-strong: rgba(255, 255, 255, 0.04);
+    --app-card-bg-hover: rgba(255, 255, 255, 0.05);
+    --app-card-bg-bright: rgba(255, 255, 255, 0.06);
+    --app-border-soft: rgba(255, 255, 255, 0.05);
+    --app-border-med: rgba(255, 255, 255, 0.06);
+    --app-border-strong: rgba(255, 255, 255, 0.1);
+    --app-border-stronger: rgba(255, 255, 255, 0.15);
+    --app-blue-tint: rgba(59, 130, 246, 0.04);
+    --app-blue-tint-strong: rgba(59, 130, 246, 0.05);
+    --app-blue-tint-border: rgba(59, 130, 246, 0.15);
+    --app-blue-tint-border-strong: rgba(59, 130, 246, 0.2);
+    --app-blue-soft: rgba(59, 130, 246, 0.06);
+    --app-button-bg: #ffffff;
+    --app-button-bg-hover: rgba(255, 255, 255, 0.9);
+    --app-button-fg: #09090b;
+
+    color-scheme: dark;
+  }
+  html.light .dark-region .text-white { color: #ffffff; }
+  html.light .dark-region .text-gray-200 { color: #e5e7eb; }
+  html.light .dark-region .text-gray-300 { color: #d1d5db; }
+  html.light .dark-region .text-gray-400 { color: #9ca3af; }
+  html.light .dark-region .text-gray-500 { color: #6b7280; }
+  html.light .dark-region .text-gray-600 { color: #4b5563; }
+  html.light .dark-region .text-gray-700 { color: #374151; }
+  html.light .dark-region .text-blue-400 { color: #60a5fa; }
+  html.light .dark-region .text-blue-300 { color: #93c5fd; }
 }
 
 @layer base {

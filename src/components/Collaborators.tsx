@@ -4,8 +4,8 @@ import { listApprovedReferencesPublic } from "@/lib/references-db";
 import type { PublicApprovedReference } from "@/lib/references-types";
 
 const CARD_STYLE: React.CSSProperties = {
-  backgroundColor: "rgba(255,255,255,0.02)",
-  border: "1px solid rgba(255,255,255,0.05)",
+  backgroundColor: "var(--app-card-bg)",
+  border: "1px solid var(--app-border-soft)",
 };
 
 const ReferenceCard = ({ reference }: { reference: PublicApprovedReference }) => (
@@ -15,7 +15,7 @@ const ReferenceCard = ({ reference }: { reference: PublicApprovedReference }) =>
     </blockquote>
     <div
       className="mt-6 pt-4 flex items-center justify-between"
-      style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ borderTop: "1px solid var(--app-border-soft)" }}
     >
       <div className="min-w-0">
         <div className="text-sm font-semibold text-white truncate">

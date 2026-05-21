@@ -100,8 +100,8 @@ const Index = () => {
             <div
               className="inline-flex items-center gap-3"
               style={{
-                border: "1px solid rgba(255,255,255,0.1)",
-                backgroundColor: "rgba(255,255,255,0.05)",
+                border: "1px solid var(--app-border-strong)",
+                backgroundColor: "var(--app-card-bg-hover)",
                 backdropFilter: "blur(12px)",
                 borderRadius: "9999px",
                 padding: "4px 14px 4px 4px",
@@ -154,14 +154,14 @@ const Index = () => {
               href="#contact"
               className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
               style={{
-                backgroundColor: "#ffffff",
-                color: "#09090b",
+                backgroundColor: "var(--app-button-bg)",
+                color: "var(--app-button-fg)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.9)";
+                e.currentTarget.style.backgroundColor = "var(--app-button-bg-hover)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#ffffff";
+                e.currentTarget.style.backgroundColor = "var(--app-button-bg)";
               }}
             >
               Book a Call
@@ -207,7 +207,7 @@ const Index = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* About */}
@@ -256,8 +256,8 @@ const Index = () => {
               to="/work"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white transition-colors"
               style={{
-                backgroundColor: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.1)",
+                backgroundColor: "var(--app-card-bg-strong)",
+                border: "1px solid var(--app-border-strong)",
               }}
             >
               See my work <span aria-hidden>→</span>
@@ -269,14 +269,14 @@ const Index = () => {
       {/* Divider */}
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       <WhatIBuild />
 
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* Resources callout, short hook that funnels users into /resources,
@@ -309,7 +309,7 @@ const Index = () => {
             <Link
               to="/resources"
               className="inline-flex items-center gap-2 text-sm font-medium px-5 py-3 rounded-md transition-colors duration-200"
-              style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+              style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
             >
               See resources →
             </Link>
@@ -319,7 +319,7 @@ const Index = () => {
 
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       {/* FAQ, visible content paired with FAQPage JSON-LD in <Helmet>. */}
@@ -342,8 +342,8 @@ const Index = () => {
                 key={q}
                 className="group rounded-2xl"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  backgroundColor: "var(--app-card-bg)",
+                  border: "1px solid var(--app-border-soft)",
                 }}
               >
                 <summary
@@ -379,7 +379,7 @@ const Index = () => {
 
       <div
         className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
       <Contact />
@@ -388,8 +388,8 @@ const Index = () => {
       <footer
         className="py-8 px-6 text-center"
         style={{
-          backgroundColor: "#09090b",
-          borderTop: "1px solid rgba(255,255,255,0.05)",
+          backgroundColor: "var(--app-page-bg)",
+          borderTop: "1px solid var(--app-border-soft)",
         }}
       >
         <p className="text-xs text-gray-600">

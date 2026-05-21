@@ -59,7 +59,7 @@ const WhatIBuild = () => {
                     : "rgba(255,255,255,0.02)",
                   border: isActive
                     ? `1px solid rgba(${c.rgb},0.15)`
-                    : "1px solid rgba(255,255,255,0.05)",
+                    : "1px solid var(--app-border-soft)",
                   transform: isActive ? "translateY(-2px)" : "none",
                   outline: isFocused ? "2px solid rgba(96,165,250,0.5)" : "none",
                   outlineOffset: isFocused ? "2px" : undefined,

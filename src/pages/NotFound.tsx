@@ -51,7 +51,7 @@ const NotFound = () => {
           <a
             href="/"
             className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
-            style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+            style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
           >
             Return home →
           </a>

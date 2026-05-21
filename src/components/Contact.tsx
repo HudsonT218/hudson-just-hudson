@@ -3,7 +3,7 @@ const Contact = () => {
     <section
       id="contact"
       className="relative py-28 px-6 overflow-hidden"
-      style={{ backgroundColor: "#09090b" }}
+      style={{ backgroundColor: "var(--app-page-bg)" }}
     >
       {/* Radial overlays */}
       <div
@@ -30,8 +30,8 @@ const Contact = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 mb-8 group"
             style={{
-              border: "1px solid rgba(255,255,255,0.1)",
-              backgroundColor: "rgba(255,255,255,0.05)",
+              border: "1px solid var(--app-border-strong)",
+              backgroundColor: "var(--app-card-bg-hover)",
               borderRadius: "9999px",
               padding: "4px 14px 4px 4px",
               backdropFilter: "blur(12px)",
@@ -89,11 +89,11 @@ const Contact = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
               style={{
-                border: "1px solid rgba(255,255,255,0.15)",
+                border: "1px solid var(--app-border-stronger)",
                 backgroundColor: "transparent",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
+                e.currentTarget.style.backgroundColor = "var(--app-card-bg-bright)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";

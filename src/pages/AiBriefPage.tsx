@@ -361,9 +361,9 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           type="button"
           onClick={onStart}
           className="inline-flex items-center gap-2 text-sm font-medium px-5 py-3 rounded-md transition-colors duration-200"
-          style={{ backgroundColor: "#ffffff", color: "#09090b" }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.9)"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+          style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--app-button-bg-hover)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "var(--app-button-bg)"; }}
         >
           Get my brief →
         </button>
@@ -398,7 +398,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
             <div
               key={s.persona}
               className="rounded-2xl p-6"
-              style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+              style={{ backgroundColor: "var(--app-card-bg)", border: "1px solid var(--app-border-med)" }}
             >
               <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-3">Persona</p>
               <p className="text-white font-medium mb-5">{s.persona}</p>
@@ -411,7 +411,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
                         <span
                           className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-full mt-0.5 flex-shrink-0"
                           style={{
-                            backgroundColor: "rgba(255,255,255,0.05)",
+                            backgroundColor: "var(--app-card-bg-hover)",
                             color: EFFORT_COLOR[idea.effort],
                             border: `1px solid ${EFFORT_COLOR[idea.effort]}`,
                           }}
@@ -444,7 +444,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
           type="button"
           onClick={onStart}
           className="inline-flex items-center gap-2 text-sm font-medium px-5 py-3 rounded-md transition-colors duration-200"
-          style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+          style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
         >
           Get my brief →
         </button>
@@ -456,7 +456,7 @@ const Intro = ({ onStart }: { onStart: () => void }) => {
 const BadgeCard = ({ label, sub }: { label: string; sub: string }) => (
   <div
     className="rounded-2xl p-5"
-    style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+    style={{ backgroundColor: "var(--app-card-bg)", border: "1px solid var(--app-border-soft)" }}
   >
     <p className="text-white font-semibold mb-1 text-sm">{label}</p>
     <p className="text-gray-500 text-xs font-light leading-relaxed">{sub}</p>
@@ -597,7 +597,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
           <button
             type="submit"
             className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
-            style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+            style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
           >
             {step === STEPS.length - 1 ? "Get my results →" : "Next →"}
           </button>
@@ -694,8 +694,8 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
                 placeholder="you@example.com"
                 className="w-full rounded-md px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: "var(--app-card-bg-strong)",
+                  border: "1px solid var(--app-border-strong)",
                 }}
               />
               {errors.email && <p className="mt-2 text-xs text-red-400">{errors.email.message}</p>}
@@ -769,7 +769,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
           type="submit"
           disabled={isSubmitting}
           className="inline-flex items-center gap-2 text-sm font-medium px-5 py-3 rounded-md transition-colors duration-200 disabled:opacity-50"
-          style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+          style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
         >
           {isSubmitting ? "Generating…" : "Get my results →"}
         </button>
@@ -819,8 +819,8 @@ const Results = ({ results }: { results: AiTestResults }) => {
       <div
         className="mt-12 rounded-2xl p-8 text-center"
         style={{
-          backgroundColor: "rgba(59,130,246,0.05)",
-          border: "1px solid rgba(59,130,246,0.15)",
+          backgroundColor: "var(--app-blue-tint-strong)",
+          border: "1px solid var(--app-blue-tint-border)",
         }}
       >
         <p className="text-white font-semibold mb-2">Got a "needs building" idea you want to scope?</p>
@@ -833,7 +833,7 @@ const Results = ({ results }: { results: AiTestResults }) => {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
-          style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+          style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
         >
           Book a discovery call →
         </a>
@@ -850,13 +850,13 @@ const Section = ({ heading, ideas }: { heading: string; ideas: AiTestResults["at
         <div
           key={`${heading}-${i}`}
           className="rounded-2xl p-6"
-          style={{ backgroundColor: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ backgroundColor: "var(--app-card-bg)", border: "1px solid var(--app-border-med)" }}
         >
           <div className="flex items-start gap-3 mb-2">
             <span
               className="font-mono text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 mt-1"
               style={{
-                backgroundColor: "rgba(255,255,255,0.04)",
+                backgroundColor: "var(--app-card-bg-strong)",
                 color: EFFORT_COLOR[idea.effort],
                 border: `1px solid ${EFFORT_COLOR[idea.effort]}`,
               }}
@@ -900,7 +900,7 @@ const AlreadyUsed = ({ message }: { message: string }) => (
       target="_blank"
       rel="noopener noreferrer"
       className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
-      style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+      style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
     >
       Book a 30-minute call instead →
     </a>
@@ -917,7 +917,7 @@ const ErrorState = ({ message, onRetry }: { message: string; onRetry: () => void
       type="button"
       onClick={onRetry}
       className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
-      style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+      style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
     >
       Try again
     </button>
@@ -929,7 +929,7 @@ const ErrorState = ({ message, onRetry }: { message: string; onRetry: () => void
 const Footer = () => (
   <footer
     className="py-8 px-6 text-center"
-    style={{ backgroundColor: "#09090b", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+    style={{ backgroundColor: "var(--app-page-bg)", borderTop: "1px solid var(--app-border-soft)" }}
   >
     <p className="text-xs text-gray-600">
       &copy; {__BUILD_YEAR__} Hudson Turansky &middot;{" "}
@@ -971,8 +971,8 @@ const FieldText = <T extends FieldPath<QuizForm>>({
           placeholder={placeholder}
           className="w-full rounded-md px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none"
           style={{
-            backgroundColor: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.1)",
+            backgroundColor: "var(--app-card-bg-strong)",
+            border: "1px solid var(--app-border-strong)",
           }}
         />
         {error?.message && <p className="mt-2 text-xs text-red-400">{error.message}</p>}
@@ -999,8 +999,8 @@ const FieldTextarea = <T extends FieldPath<QuizForm>>({
           placeholder={placeholder}
           className="w-full rounded-md px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none resize-y"
           style={{
-            backgroundColor: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.1)",
+            backgroundColor: "var(--app-card-bg-strong)",
+            border: "1px solid var(--app-border-strong)",
           }}
         />
         {error?.message && <p className="mt-2 text-xs text-red-400">{error.message}</p>}
