@@ -576,8 +576,8 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
           <>
             <FieldTextarea
               name="hand_to_ai"
-              label="If you could hand one thing to an AI assistant tomorrow, what would it be?"
-              placeholder="Be specific. This is the most important answer for your personalized results."
+              label="If you could wave a magic wand and make one part of your week disappear, what would it be?"
+              placeholder="Be specific. Even a single tedious task counts."
               control={control}
               error={errors.hand_to_ai}
               rows={5}
