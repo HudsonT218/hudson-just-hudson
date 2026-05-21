@@ -283,6 +283,72 @@ const Index = () => {
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       />
 
+      {/* Free AI use-case test promo — surfaces the /ai-test tool. */}
+      <section id="ai-test-promo" className="py-28 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <div
+              className="inline-flex items-center gap-3"
+              style={{
+                border: "1px solid rgba(255,255,255,0.1)",
+                backgroundColor: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(12px)",
+                borderRadius: "9999px",
+                padding: "4px 14px 4px 4px",
+              }}
+            >
+              <span
+                className="font-mono text-xs font-medium px-2 py-0.5 rounded-full"
+                style={{
+                  backgroundColor: "rgba(59,130,246,0.15)",
+                  color: "#60a5fa",
+                }}
+              >
+                FREE
+              </span>
+              <span className="text-sm text-gray-400">5-minute AI use-case test</span>
+            </div>
+          </div>
+
+          <h2
+            className="text-3xl sm:text-4xl font-extrabold text-white text-center leading-tight mb-5"
+            style={{ letterSpacing: "-0.03em" }}
+          >
+            Find out which AI ideas are{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              worth your time.
+            </span>
+          </h2>
+
+          <p className="text-gray-400 font-light leading-relaxed text-center max-w-2xl mx-auto mb-10">
+            Answer a few questions about your work and life. Get a personalized list of 6–10 specific
+            AI use-cases you could actually use — tagged by effort, with the build-worthy ones flagged.
+            Free, one use per email.
+          </p>
+
+          <div className="flex justify-center">
+            <Link
+              to="/ai-test"
+              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-3 rounded-md transition-colors duration-200"
+              style={{ backgroundColor: "#ffffff", color: "#09090b" }}
+            >
+              Take the test →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+      />
+
       {/* FAQ — visible content paired with FAQPage JSON-LD in <Helmet>. */}
       <section id="faq" className="py-28 px-6">
         <div className="max-w-3xl mx-auto">
