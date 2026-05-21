@@ -119,16 +119,17 @@
     --app-page-bg: #f5f5f5;
     /* Cards in light mode use white-with-alpha so they read as glass over the
        gradient body bg below; combined with the backdrop-filter rule near
-       the end of @layer base, that gives them a frosted look instead of
-       reading as flat boxes on a flat bg. */
-    --app-card-bg: rgba(255, 255, 255, 0.55);
-    --app-card-bg-strong: rgba(255, 255, 255, 0.68);
-    --app-card-bg-hover: rgba(255, 255, 255, 0.8);
-    --app-card-bg-bright: rgba(255, 255, 255, 0.9);
-    --app-border-soft: rgba(0, 0, 0, 0.08);
-    --app-border-med: rgba(0, 0, 0, 0.1);
-    --app-border-strong: rgba(0, 0, 0, 0.15);
-    --app-border-stronger: rgba(0, 0, 0, 0.2);
+       the end of @layer base, that gives them an Apple-glass look. Opacity
+       tuned high enough (0.78+) for text inside to read cleanly while still
+       letting the gradient + dot motion show through. */
+    --app-card-bg: rgba(255, 255, 255, 0.78);
+    --app-card-bg-strong: rgba(255, 255, 255, 0.85);
+    --app-card-bg-hover: rgba(255, 255, 255, 0.92);
+    --app-card-bg-bright: rgba(255, 255, 255, 0.96);
+    --app-border-soft: rgba(0, 0, 0, 0.1);
+    --app-border-med: rgba(0, 0, 0, 0.14);
+    --app-border-strong: rgba(0, 0, 0, 0.2);
+    --app-border-stronger: rgba(0, 0, 0, 0.28);
     --app-blue-tint: rgba(59, 130, 246, 0.08);
     --app-blue-tint-strong: rgba(59, 130, 246, 0.12);
     --app-blue-tint-border: rgba(59, 130, 246, 0.25);
@@ -249,19 +250,18 @@
     background-attachment: fixed;
   }
 
-  /* Frosted glass on cards in light mode. Combined with the
-     rgba-white card backgrounds above, this gives them the
-     "transparent grey glass" feel — see-through against the gradient
-     body bg, with content remaining readable. Excludes .dark-region so
-     admin cards stay solid. Excludes <details> so the FAQ accordion
-     keeps its open/closed behavior crisp. */
-  html.light .rounded-2xl:not(.dark-region .rounded-2xl):not(details) {
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-  }
+  /* Frosted-glass card surfaces in light mode. Combined with the
+     rgba-white card backgrounds above, this gives them an Apple-glass
+     look: high saturation, strong blur, and a subtle inner top-edge
+     highlight that mimics light catching the top lip of a frosted
+     pane. Excludes .dark-region so admin cards stay solid. */
+  html.light .rounded-2xl:not(.dark-region .rounded-2xl):not(details),
   html.light details.rounded-2xl {
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.6),
+      0 1px 2px 0 rgba(0, 0, 0, 0.03);
   }
 
   html {
