@@ -267,15 +267,18 @@ serve(async (req) => {
       console.warn('Lead upsert failed (non-fatal)', e);
     }
 
-    // 8. Best-effort email delivery via Resend. Failure here is non-fatal —
-    //    the user already has their results on screen.
+    // 8. Best-effort email delivery via Resend. Failure here is non-fatal,
+    //    the user already has their results on screen. `emailed` reports
+    //    whether the email actually went out so the frontend can decide
+    //    whether to show the "we also sent it to your email" confirmation.
+    let emailed = false;
     try {
-      await sendResultsEmail(email, extractName(cleanedAnswers), results);
+      emailed = await sendResultsEmail(email, extractName(cleanedAnswers), results);
     } catch (e) {
       console.warn('Email delivery failed (non-fatal)', e);
     }
 
-    return json({ ok: true, results });
+    return json({ ok: true, results, emailed });
   } catch (e) {
     console.error('Unhandled error', e);
     return json({ error: 'internal_error' }, 500);
@@ -354,11 +357,11 @@ async function sendResultsEmail(
   toEmail: string,
   name: string | null,
   results: any,
-): Promise<void> {
+): Promise<boolean> {
   const apiKey = Deno.env.get('RESEND_API_KEY');
   if (!apiKey) {
-    console.info('RESEND_API_KEY not set — skipping email');
-    return;
+    console.info('RESEND_API_KEY not set, skipping email');
+    return false;
   }
   const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') ?? 'builds@hudsonturansky.com';
   const appUrl = Deno.env.get('APP_URL') ?? 'https://hudsonturansky.com';
@@ -380,7 +383,7 @@ async function sendResultsEmail(
     body: JSON.stringify({
       from: `Hudson Turansky <${fromEmail}>`,
       to: [toEmail],
-      subject: 'Your AI Use-Case Test results',
+      subject: 'Your personalized AI brief',
       html,
       reply_to: 'hudsonturansky@gmail.com',
     }),
@@ -390,6 +393,7 @@ async function sendResultsEmail(
     const body = await response.text();
     throw new Error(`Resend error ${response.status}: ${body.slice(0, 500)}`);
   }
+  return true;
 }
 
 function renderResultsHtml(opts: {

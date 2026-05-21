@@ -49,7 +49,15 @@ export interface QuizAnswers {
   hand_to_ai?: string;
 }
 
-export type GenerateResponseOk = { ok: true; results: AiTestResults };
+export type GenerateResponseOk = {
+  ok: true;
+  results: AiTestResults;
+  // True iff a copy of the brief was actually emailed to the test-taker.
+  // False when RESEND_API_KEY is not set, or when the Resend call errored.
+  // The frontend uses this to decide whether to render the "we also sent
+  // it to your email" confirmation on the results page.
+  emailed?: boolean;
+};
 export type GenerateResponseErr = {
   ok?: false;
   error:
