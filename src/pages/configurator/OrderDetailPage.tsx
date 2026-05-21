@@ -81,7 +81,7 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Left — info */}
+        {/* Left, info */}
         <div className="lg:col-span-1 space-y-4">
           <Card>
             <CardHeader>
@@ -92,9 +92,9 @@ export default function OrderDetailPage() {
               </div>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              <Row label="Theme" value={theme?.name ?? '—'} />
+              <Row label="Theme" value={theme?.name ?? '-'} />
               <Row label="Sections" value={`${order.spec.sections.length}`} />
-              <Row label="Amount" value={order.amountPaid != null ? formatCurrency(order.amountPaid) : '—'} />
+              <Row label="Amount" value={order.amountPaid != null ? formatCurrency(order.amountPaid) : '-'} />
               <Row label="Ordered" value={formatDate(order.createdAt)} />
               {order.buildStartedAt && <Row label="Build started" value={formatDate(order.buildStartedAt)} />}
               {order.buildCompletedAt && <Row label="Build done" value={formatDate(order.buildCompletedAt)} />}
@@ -148,7 +148,7 @@ export default function OrderDetailPage() {
           )}
         </div>
 
-        {/* Right — preview + feedback */}
+        {/* Right, preview + feedback */}
         <div className="lg:col-span-2 space-y-4">
           {showPreview ? (
             <Card>
@@ -209,7 +209,7 @@ function PageShell({ children, title }: { children: React.ReactNode; title?: str
   return (
     <>
       <Helmet>
-        <title>{title ? `${title} — Hudson Turansky` : "Order — Hudson Turansky"}</title>
+        <title>{title ? `${title} · Hudson Turansky` : "Order · Hudson Turansky"}</title>
       </Helmet>
       <Navbar />
       <main className="min-h-screen pt-20">

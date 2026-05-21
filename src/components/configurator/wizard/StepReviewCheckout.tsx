@@ -24,7 +24,7 @@ interface StepReviewCheckoutProps {
 }
 
 /**
- * Step 5 — full-form layout. Order summary on the left, narrow preview on the
+ * Step 5, full-form layout. Order summary on the left, narrow preview on the
  * right (provided by WizardShell). Price + checkout in a sticky bottom bar
  * at the form's foot.
  */
@@ -60,7 +60,7 @@ export function StepReviewCheckout({ draft, onJumpToStep, onCheckout }: StepRevi
       <div className="space-y-3">
         <SummaryRow label="Model" onEdit={() => onJumpToStep(1)}>
           <div>
-            <div className="font-medium text-foreground">{model?.name ?? "—"}</div>
+            <div className="font-medium text-foreground">{model?.name ?? "-"}</div>
             <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{model?.description}</p>
           </div>
         </SummaryRow>
@@ -78,7 +78,7 @@ export function StepReviewCheckout({ draft, onJumpToStep, onCheckout }: StepRevi
                 ))}
               </div>
             )}
-            <span className="text-sm font-medium text-foreground">{theme?.name ?? "—"}</span>
+            <span className="text-sm font-medium text-foreground">{theme?.name ?? "-"}</span>
           </div>
         </SummaryRow>
 
@@ -116,7 +116,7 @@ export function StepReviewCheckout({ draft, onJumpToStep, onCheckout }: StepRevi
             </p>
           ) : (
             <p className="text-sm text-yellow-400 inline-flex items-center gap-1">
-              <AlertCircle className="h-4 w-4" /> No content yet — defaults will be used. You can
+              <AlertCircle className="h-4 w-4" /> No content yet, defaults will be used. You can
               always submit feedback after the first build.
             </p>
           )}
@@ -131,7 +131,7 @@ export function StepReviewCheckout({ draft, onJumpToStep, onCheckout }: StepRevi
             <div className="text-3xl font-extrabold text-foreground tracking-tight">
               {formatCurrency(price)}
             </div>
-            <div className="text-xs text-muted-foreground">flat — includes 5 revisions</div>
+            <div className="text-xs text-muted-foreground">flat, includes 5 revisions</div>
           </div>
         </div>
         <p className="text-xs text-muted-foreground inline-flex items-center gap-1.5 mb-4">
@@ -154,7 +154,7 @@ export function StepReviewCheckout({ draft, onJumpToStep, onCheckout }: StepRevi
 
         <Button size="lg" className="w-full" onClick={handleCheckout} disabled={checkingOut}>
           {checkingOut ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
-          Proceed to payment — {formatCurrency(price)}
+          Proceed to payment, {formatCurrency(price)}
         </Button>
       </div>
     </div>

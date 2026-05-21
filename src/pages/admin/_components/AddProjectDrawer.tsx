@@ -191,7 +191,7 @@ export const AddProjectDrawer = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">— none —</SelectItem>
+                  <SelectItem value="none">none</SelectItem>
                   {leads.map((l) => (
                     <SelectItem key={l.id} value={l.id}>
                       {l.name}

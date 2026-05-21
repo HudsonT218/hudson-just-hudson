@@ -8,7 +8,7 @@ interface StepThemePickerProps {
 }
 
 /**
- * Step 2 strip — compact theme pills with 3-dot swatch.
+ * Step 2 strip, compact theme pills with 3-dot swatch.
  * Used inside the WizardShell's bottom strip ("strip" mode).
  */
 export function StepThemePicker({ selected, onSelect }: StepThemePickerProps) {

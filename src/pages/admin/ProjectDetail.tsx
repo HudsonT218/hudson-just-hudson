@@ -202,7 +202,7 @@ const ProjectDetail = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>{project.name} — Admin</title>
+        <title>{project.name}, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-10 py-10 max-w-3xl" key={project.id}>
@@ -467,7 +467,7 @@ const ProjectDetail = () => {
           <Textarea
             rows={5}
             defaultValue={project.notes ?? ""}
-            placeholder="Project notes — auto-saves on blur."
+            placeholder="Project notes, auto-saves on blur."
             onBlur={(e) => saveField("notes", e.target.value.trim() || null)}
           />
         </Section>
@@ -480,7 +480,7 @@ const ProjectDetail = () => {
             color: admin.textDim,
           }}
         >
-          Proposal — coming in Phase 2.
+          Proposal, coming in Phase 2.
         </div>
 
         <div
@@ -491,7 +491,7 @@ const ProjectDetail = () => {
             color: admin.textDim,
           }}
         >
-          Contract & Payment — coming in Phase 3.
+          Contract & Payment, coming in Phase 3.
         </div>
       </div>
     </AdminLayout>

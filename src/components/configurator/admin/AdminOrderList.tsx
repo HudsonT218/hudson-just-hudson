@@ -129,13 +129,13 @@ export function AdminOrderList() {
                         {o.orderNumber}
                       </Link>
                     </Td>
-                    <Td>{model?.name ?? '—'}</Td>
-                    <Td>{theme?.name ?? '—'}</Td>
+                    <Td>{model?.name ?? '-'}</Td>
+                    <Td>{theme?.name ?? '-'}</Td>
                     <Td>
                       <Badge variant={variant}>{status?.label ?? o.status}</Badge>
                     </Td>
                     <Td>{o.iterationCount}/{o.maxIterations}</Td>
-                    <Td>{o.amountPaid != null ? formatCurrency(o.amountPaid) : '—'}</Td>
+                    <Td>{o.amountPaid != null ? formatCurrency(o.amountPaid) : '-'}</Td>
                     <Td>{formatDate(o.createdAt)}</Td>
                   </tr>
                 );

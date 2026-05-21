@@ -23,7 +23,7 @@ const ESTIMATES = [
 ];
 
 const HONEST_NOTES = [
-  "I'm early in client work. My rate reflects that — I'm not charging what a senior agency charges.",
+  "I'm early in client work. My rate reflects that, I'm not charging what a senior agency charges.",
   "AI is moving fast. I'll be honest with you if something we build might become obsolete. Sometimes the right answer is a simpler solution.",
 ];
 
@@ -31,11 +31,11 @@ const InterestedPage = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Pricing — Hudson Turansky</title>
+        <title>Pricing · Hudson Turansky</title>
         <meta name="description" content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises." />
         <link rel="canonical" href="https://hudsonturansky.com/interested" />
         <meta name="robots" content="noindex" />
-        <meta property="og:title" content="Pricing — Hudson Turansky" />
+        <meta property="og:title" content="Pricing · Hudson Turansky" />
         <meta property="og:description" content="Hourly rates for web development and AI solutions. Transparent pricing, no surprises." />
         <meta property="og:url" content="https://hudsonturansky.com/interested" />
       </Helmet>
@@ -215,7 +215,7 @@ const InterestedPage = () => {
                 key={i}
                 className="flex items-start gap-4 text-gray-400 font-light leading-relaxed"
               >
-                <span className="text-blue-400 mt-1.5 shrink-0">—</span>
+                <span className="text-blue-400 mt-1.5 shrink-0">-</span>
                 <span>{note}</span>
               </li>
             ))}

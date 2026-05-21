@@ -59,7 +59,7 @@ export default function ResetPasswordPage() {
           return;
         }
 
-        // 3) Hash-based recovery token — Supabase parses it on load.
+        // 3) Hash-based recovery token, Supabase parses it on load.
         // Give it a brief window to fire PASSWORD_RECOVERY / set the session.
         const hasRecoveryHash = hash.includes('access_token') || hashParams.get('type') === 'recovery';
 
@@ -85,7 +85,7 @@ export default function ResetPasswordPage() {
           return;
         }
 
-        // No code, no hash — nothing to verify.
+        // No code, no hash, nothing to verify.
         setInvalidReason('This reset link is missing or has expired.');
         setStatus('invalid');
       } catch (e) {

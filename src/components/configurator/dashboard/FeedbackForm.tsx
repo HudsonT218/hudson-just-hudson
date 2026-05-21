@@ -72,7 +72,7 @@ export function FeedbackForm({ order, userId, onSubmitted }: FeedbackFormProps) 
       iteration_count: order.iterationCount + 1,
     });
 
-    // Best-effort admin notification — don't block the success path on it.
+    // Best-effort admin notification, don't block the success path on it.
     try {
       const { data: profileRow } = await supabase
         .from('profiles')
@@ -141,7 +141,7 @@ export function FeedbackForm({ order, userId, onSubmitted }: FeedbackFormProps) 
               id={`desc-${idx}`}
               value={item.description}
               onChange={(e) => updateItem(idx, { description: e.target.value })}
-              placeholder="Be specific — copy changes, color tweaks, layout adjustments…"
+              placeholder="Be specific, copy changes, color tweaks, layout adjustments…"
             />
           </Field>
           <Field label="Priority" htmlFor={`prio-${idx}`}>

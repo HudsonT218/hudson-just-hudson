@@ -36,7 +36,7 @@ interface StepSectionBuilderProps {
 }
 
 /**
- * Step 3 panel — horizontal chips with variant popovers.
+ * Step 3 panel, horizontal chips with variant popovers.
  * Used inside the WizardShell's expanded panel ("panel" mode).
  */
 export function StepSectionBuilder({ sections, onChange }: StepSectionBuilderProps) {
@@ -84,7 +84,7 @@ export function StepSectionBuilder({ sections, onChange }: StepSectionBuilderPro
       <div className="flex items-baseline justify-between mb-2">
         <div>
           <h2 className="text-sm font-semibold text-foreground">
-            Sections —{" "}
+            Sections:{" "}
             <span className="text-muted-foreground font-normal">
               click ▾ to swap a variant, drag to reorder
             </span>

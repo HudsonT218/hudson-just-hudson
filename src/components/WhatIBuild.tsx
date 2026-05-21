@@ -11,7 +11,7 @@ const CAPABILITIES = [
   {
     label: "AI Solutions",
     title: "Real AI, not AI-flavored hype",
-    desc: "Custom assistants, agents, and automations built for your specific workflow. I'll tell you what's worth building and what's not — AI is moving fast and I'll be honest about what lasts.",
+    desc: "Custom assistants, agents, and automations built for your specific workflow. I'll tell you what's worth building and what's not, AI is moving fast and I'll be honest about what lasts.",
     rgb: "16,185,129",
   },
   {

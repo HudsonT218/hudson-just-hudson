@@ -45,7 +45,7 @@ export function useAutoScroll(
         const targetVisible = window.innerHeight - 120; // keep bottom 120px above fold
         if (containerBottom > targetVisible && containerBottom !== lastBottomRef.current) {
           const delta = containerBottom - targetVisible;
-          // Don't scroll past container's own bottom — implicit since we anchor to it.
+          // Don't scroll past container's own bottom, implicit since we anchor to it.
           programmaticScrollRef.current = true;
           window.scrollBy({ top: delta, behavior: "smooth" });
           // Release programmatic flag after the smooth scroll roughly settles.

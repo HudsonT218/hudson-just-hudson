@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (cancelled) return;
       setSession(newSession);
       setUser(newSession?.user ?? null);
-      // Defer the profile fetch — calling supabase from inside the auth callback
+      // Defer the profile fetch, calling supabase from inside the auth callback
       // can deadlock the auth client.
       if (newSession?.user) {
         setTimeout(() => {
@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     if (error) return { error: error.message };
     if (data.user) {
-      // Best-effort profile create — RLS policies allow self-insert.
+      // Best-effort profile create, RLS policies allow self-insert.
       await supabase.from('profiles').upsert({
         id: data.user.id,
         email: data.user.email,

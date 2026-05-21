@@ -1,5 +1,5 @@
 // Re-export of shadcn Button + a `loading` prop, used by the configurator UI.
-// The configurator's older code passed variant="primary" — map that to shadcn's "default".
+// The configurator's older code passed variant="primary", map that to shadcn's "default".
 import { forwardRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Button as ShadcnButton, type ButtonProps as ShadcnButtonProps } from '@/components/ui/button';

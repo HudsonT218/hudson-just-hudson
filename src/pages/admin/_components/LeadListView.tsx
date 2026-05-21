@@ -164,7 +164,7 @@ export function LeadListView({ leads, loading }: { leads: Lead[]; loading?: bool
                       {lead.name}
                     </TableCell>
                     <TableCell className="text-sm" style={{ color: admin.textMuted }}>
-                      {lead.company ?? "—"}
+                      {lead.company ?? "-"}
                     </TableCell>
                     <TableCell>
                       <LeadStatusBadge status={lead.status} />
@@ -184,7 +184,7 @@ export function LeadListView({ leads, loading }: { leads: Lead[]; loading?: bool
                           {formatDate(lead.next_action_date)}
                         </span>
                       ) : (
-                        <span style={{ color: admin.textDim }}>—</span>
+                        <span style={{ color: admin.textDim }}>-</span>
                       )}
                       {lead.next_action ? (
                         <span style={{ color: admin.textDim }}>

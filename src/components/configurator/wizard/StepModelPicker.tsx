@@ -15,7 +15,7 @@ interface StepModelPickerProps {
 }
 
 /**
- * Step 1 strip — compact model pills.
+ * Step 1 strip, compact model pills.
  * Used inside the WizardShell's bottom strip ("strip" mode).
  */
 export function StepModelPicker({ selected, onSelect }: StepModelPickerProps) {

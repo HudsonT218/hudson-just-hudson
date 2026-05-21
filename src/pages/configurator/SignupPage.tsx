@@ -11,7 +11,7 @@ export default function SignupPage() {
   return (
     <>
       <Helmet>
-        <title>Create account — Hudson Turansky</title>
+        <title>Create account · Hudson Turansky</title>
       </Helmet>
       <Navbar />
       <main className="min-h-screen pt-16 flex flex-col">

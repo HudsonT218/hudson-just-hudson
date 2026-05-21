@@ -34,7 +34,7 @@ interface StepContentIntakeProps {
 type IntakeMode = "url" | "manual";
 
 /**
- * Step 4 — full-form layout. Left vertical section nav + form fields for the
+ * Step 4, full-form layout. Left vertical section nav + form fields for the
  * selected section. Plain-English labels via SECTION_FORM_SCHEMA. AI Assist
  * tooltip placeholder on text fields.
  */
@@ -287,7 +287,7 @@ function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
             </div>
           ))}
           {items.length === 0 && (
-            <p className="text-xs text-muted-foreground">None yet — click {field.addLabel.toLowerCase()}.</p>
+            <p className="text-xs text-muted-foreground">None yet, click {field.addLabel.toLowerCase()}.</p>
           )}
         </div>
       </div>

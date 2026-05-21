@@ -113,7 +113,7 @@ const WarmLeads = () => {
     try {
       const r = await triggerScrapeNow();
       setScrapeMsg(
-        `Done — ${r.inserted} new lead${r.inserted === 1 ? "" : "s"}` +
+        `Done, ${r.inserted} new lead${r.inserted === 1 ? "" : "s"}` +
           (r.errors?.length ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}` : ""),
       );
       qc.invalidateQueries({ queryKey: KEYS.list });
@@ -130,7 +130,7 @@ const WarmLeads = () => {
   return (
     <AdminLayout>
       <Helmet>
-        <title>Warm Leads — Admin</title>
+        <title>Warm Leads, Admin</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <div className="px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
@@ -159,12 +159,12 @@ const WarmLeads = () => {
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          <StatCard label="New in inbox" value={stats?.total_new ?? "—"} />
-          <StatCard label="Found this week" value={stats?.total_this_week ?? "—"} />
-          <StatCard label="Sent this week" value={stats?.total_sent_this_week ?? "—"} />
+          <StatCard label="New in inbox" value={stats?.total_new ?? "-"} />
+          <StatCard label="Found this week" value={stats?.total_this_week ?? "-"} />
+          <StatCard label="Sent this week" value={stats?.total_sent_this_week ?? "-"} />
           <StatCard
             label="Avg score (30d)"
-            value={stats?.avg_score_30d ?? "—"}
+            value={stats?.avg_score_30d ?? "-"}
           />
         </div>
 
@@ -584,7 +584,7 @@ const ConfigDrawer = ({
             </div>
             <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Keywords and subreddits for each source live in the DB
-              (warm_lead_sources.config) — edit via SQL for now.
+              (warm_lead_sources.config), edit via SQL for now.
             </p>
           </div>
 

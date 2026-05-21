@@ -29,10 +29,10 @@ const Navbar = () => {
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const resolved = resolveHref(href);
 
-    // Hash-only link on the current page — let the browser scroll natively
+    // Hash-only link on the current page, let the browser scroll natively
     if (resolved.startsWith("#")) return;
 
-    // Route with hash (e.g. "/#services") — navigate then scroll
+    // Route with hash (e.g. "/#services"), navigate then scroll
     if (resolved.startsWith("/") && resolved.includes("#")) {
       e.preventDefault();
       const [path, hash] = resolved.split("#");
@@ -51,7 +51,7 @@ const Navbar = () => {
       return;
     }
 
-    // Pure route link (e.g. "/work") — client-side navigate
+    // Pure route link (e.g. "/work"), client-side navigate
     if (resolved.startsWith("/")) {
       e.preventDefault();
       navigate(resolved);
@@ -77,7 +77,7 @@ const Navbar = () => {
         <a
           href={logoHref}
           onClick={(e) => handleNav(e, logoHref)}
-          aria-label="Hudson Turansky — Home"
+          aria-label="Hudson Turansky · Home"
           className="text-xl font-extrabold text-white tracking-tight"
           style={{ letterSpacing: "-0.03em" }}
         >
