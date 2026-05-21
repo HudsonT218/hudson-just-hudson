@@ -12,6 +12,7 @@ Booking: https://calendly.com/hudsonturansky/30min
 
 - [Home](https://hudsonturansky.com/): Overview of services, philosophy, FAQ, and how to get in touch.
 - [Work](https://hudsonturansky.com/work): Capabilities, portfolio, and a live AI-meeting-assistant demo.
+- [Free AI Use-Case Test](https://hudsonturansky.com/ai-test): A 5-minute personalized test. Visitors answer ~14 questions about their work and life and an AI generates 6–10 specific use-case ideas grouped "At Work" / "In Your Life," tagged by effort (easy / medium / needs building). One use per email; free.
 - [Resources](https://hudsonturansky.com/resources/): Plain-English guides for small-business owners on adding AI, what custom builds cost, when to hire versus DIY.
 
 ## Resources

@@ -9,6 +9,7 @@ import DottedSurface from "./components/DottedSurface.tsx";
 import Index from "./pages/Index.tsx";
 import WorkPage from "./pages/WorkPage.tsx";
 import InterestedPage from "./pages/InterestedPage.tsx";
+import AiTestPage from "./pages/AiTestPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
 import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
@@ -125,6 +126,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Index />} />
           <Route path="/work" element={<WorkPage />} />
           <Route path="/interested" element={<InterestedPage />} />
+          <Route path="/ai-test" element={<AiTestPage />} />
           <Route path="/packages" element={<Navigate to="/work" replace />} />
           <Route path="/reference/:token" element={<ReferencePage />} />
 
