@@ -31,19 +31,19 @@ export interface AiTestResults {
 // Quiz answer shape — mirrors what we send to the edge function.
 export interface QuizAnswers {
   name?: string;
-  role: string;
-  industry: string;
-  team_size: string;
-  time_drains: string[];
-  daily_tools: string[];
+  role?: string;
+  industry?: string;
+  team_size?: string;
+  time_drains?: string[];
+  daily_tools?: string[];
   repetitive_part?: string;
-  life_streamline: string[];
+  life_streamline?: string[];
   personal_goal?: string;
   hobbies?: string;
-  ai_usage: string;
-  ai_tools_tried: string[];
-  tech_comfort: string;
-  hand_to_ai: string;
+  ai_usage?: string;
+  ai_tools_tried?: string[];
+  tech_comfort?: string;
+  hand_to_ai?: string;
 }
 
 export type GenerateResponseOk = { ok: true; results: AiTestResults };
