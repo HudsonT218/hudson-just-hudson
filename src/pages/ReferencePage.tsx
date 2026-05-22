@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
+import { useForceDark } from "@/lib/useForceDark";
 
 type InvalidReason = "invalid" | "expired" | "already_submitted" | "revoked";
 type State =
@@ -32,6 +33,7 @@ const inputClass =
   "bg-white/[0.02] border-white/10 text-white placeholder:text-gray-600 focus-visible:ring-blue-500/40";
 
 const ReferencePage = () => {
+  useForceDark();
   const { token } = useParams<{ token: string }>();
   const [state, setState] = useState<State>({ kind: "loading" });
 
