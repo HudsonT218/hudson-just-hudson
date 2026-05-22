@@ -533,7 +533,11 @@ const ConfigDrawer = ({
   const [target, setTarget] = useState(7);
   const [threshold, setThreshold] = useState(60);
   const [voice, setVoice] = useState("");
+  const [subreddits, setSubreddits] = useState<string[]>([]);
+  const [subredditInput, setSubredditInput] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const redditSource = sources.find((s) => s.id === "reddit");
 
   // Hydrate from settings whenever the drawer opens.
   useEffect(() => {
@@ -543,7 +547,39 @@ const ConfigDrawer = ({
       setThreshold(settings.threshold);
       setVoice(settings.outreach_voice);
     }
-  }, [open, settings]);
+    if (open && redditSource) {
+      const cfg = redditSource.config as { subreddits?: unknown };
+      setSubreddits(
+        Array.isArray(cfg?.subreddits)
+          ? (cfg.subreddits as unknown[]).map((s) => String(s))
+          : [],
+      );
+      setSubredditInput("");
+    }
+  }, [open, settings, redditSource]);
+
+  const addSubreddit = (raw: string) => {
+    const cleaned = raw
+      .trim()
+      .toLowerCase()
+      .replace(/^\/?r\//, "")
+      .replace(/\s+/g, "");
+    if (!cleaned) return;
+    setSubreddits((prev) => (prev.includes(cleaned) ? prev : [...prev, cleaned]));
+  };
+
+  const handleSubredditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      addSubreddit(subredditInput);
+      setSubredditInput("");
+    } else if (e.key === "Backspace" && !subredditInput && subreddits.length) {
+      setSubreddits((prev) => prev.slice(0, -1));
+    }
+  };
+
+  const removeSubreddit = (name: string) =>
+    setSubreddits((prev) => prev.filter((s) => s !== name));
 
   const handleSave = async () => {
     setSaving(true);
@@ -556,6 +592,10 @@ const ConfigDrawer = ({
         outreach_voice: voice,
       };
       await updateWarmLeadSettings(patch);
+      if (redditSource) {
+        const nextConfig = { ...(redditSource.config ?? {}), subreddits };
+        await updateWarmLeadSource("reddit", { config: nextConfig });
+      }
       onSaved();
       onOpenChange(false);
     } catch (e) {
