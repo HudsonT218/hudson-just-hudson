@@ -112,9 +112,11 @@ const WarmLeads = () => {
     setScrapeMsg(null);
     try {
       const r = await triggerScrapeNow();
+      const errPart = r.errors?.length
+        ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}`
+        : "";
       setScrapeMsg(
-        `Done, ${r.inserted} new lead${r.inserted === 1 ? "" : "s"}` +
-          (r.errors?.length ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}` : ""),
+        `Scanned ${r.scanned} · scored ${r.scored} · inserted ${r.inserted}${errPart}`,
       );
       qc.invalidateQueries({ queryKey: KEYS.list });
       qc.invalidateQueries({ queryKey: KEYS.stats });
