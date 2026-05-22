@@ -1,33 +1,34 @@
 // Warm Lead Generation — domain types.
-// Mirrors supabase/migrations/003_warm_leads_schema.sql.
+// Mirrors supabase/migrations/{003,004}_warm_leads_*.sql.
 // snake_case to match DB rows directly (same convention as lead-os-types).
 
 // ----------------------------------------------------------------------------
 // Sources
 // ----------------------------------------------------------------------------
-export type WarmLeadSourceId =
-  | "hackernews"
-  | "github_issues"
-  | "bluesky"
-  | "reddit";
+export type WarmLeadSourceId = "reddit" | "linkedin";
 
-export const WARM_LEAD_SOURCE_IDS: WarmLeadSourceId[] = [
-  "hackernews",
-  "github_issues",
-  "bluesky",
-  "reddit",
-];
+export const WARM_LEAD_SOURCE_IDS: WarmLeadSourceId[] = ["reddit", "linkedin"];
 
 export const WARM_LEAD_SOURCE_LABEL: Record<WarmLeadSourceId, string> = {
-  hackernews: "Hacker News",
-  github_issues: "GitHub Issues",
-  bluesky: "Bluesky",
   reddit: "Reddit",
+  linkedin: "LinkedIn",
+};
+
+// 'edge_function' sources are scraped by supabase/functions/scrape-warm-leads.
+// 'local_agent'  sources are pushed in by a browser agent running on Hudson's
+// PC (Hermes) via supabase/functions/intake-warm-lead. The kind determines
+// which runtime owns the source's execution.
+export type WarmLeadSourceKind = "edge_function" | "local_agent";
+
+export const WARM_LEAD_SOURCE_KIND_LABEL: Record<WarmLeadSourceKind, string> = {
+  edge_function: "Cloud",
+  local_agent: "Mac",
 };
 
 export interface WarmLeadSource {
   id: WarmLeadSourceId;
   label: string;
+  kind: WarmLeadSourceKind;
   enabled: boolean;
   config: Record<string, unknown>;
   last_run_at: string | null;
@@ -41,34 +42,20 @@ export type WarmLeadSourceUpdate = Partial<
 >;
 
 // ----------------------------------------------------------------------------
-// Settings
+// Settings (singleton row)
 // ----------------------------------------------------------------------------
-export type WarmLeadMode = "capped" | "always_on" | "paused";
-
-export const WARM_LEAD_MODES: WarmLeadMode[] = ["capped", "always_on", "paused"];
-
-export const WARM_LEAD_MODE_LABEL: Record<WarmLeadMode, string> = {
-  capped: "Capped (5–10 / week)",
-  always_on: "Always-on",
-  paused: "Paused",
-};
-
-export const WARM_LEAD_MODE_HELP: Record<WarmLeadMode, string> = {
-  capped:
-    "Stops surfacing new leads once the weekly target is hit. Threshold auto-tunes to keep you to ~the requested volume.",
-  always_on:
-    "Surfaces every candidate that clears the threshold. Use during a focused outreach push.",
-  paused: "Scraper is off. No new leads will be discovered.",
-};
-
 export interface WarmLeadSettings {
   id: "singleton";
-  mode: WarmLeadMode;
-  target_per_week: number;
+  // Master on/off. When false, the scraper bails out early and the intake
+  // endpoint rejects everything with reason=automation_off.
+  enabled: boolean;
+  // "Find me N leads per run". Each Run-Now (or each Hermes session) stops
+  // inserting once it has surfaced this many above-threshold candidates.
+  target_per_run: number;
+  // Min classifier score (0–100) for a candidate to enter the inbox.
   threshold: number;
+  // Voice/context Hudson's drafting LLM uses when writing replies.
   outreach_voice: string;
-  week_started_on: string;
-  this_week_count: number;
   last_run_at: string | null;
   created_at: string;
   updated_at: string;
@@ -77,7 +64,7 @@ export interface WarmLeadSettings {
 export type WarmLeadSettingsUpdate = Partial<
   Pick<
     WarmLeadSettings,
-    "mode" | "target_per_week" | "threshold" | "outreach_voice"
+    "enabled" | "target_per_run" | "threshold" | "outreach_voice"
   >
 >;
 

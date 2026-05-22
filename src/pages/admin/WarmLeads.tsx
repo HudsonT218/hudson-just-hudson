@@ -9,13 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -33,15 +26,12 @@ import {
   updateWarmLeadSource,
 } from "@/lib/warm-leads-db";
 import {
-  WARM_LEAD_MODES,
-  WARM_LEAD_MODE_LABEL,
-  WARM_LEAD_MODE_HELP,
   WARM_LEAD_STATUSES,
   WARM_LEAD_STATUS_LABEL,
-  type WarmLeadMode,
   type WarmLeadSettings,
   type WarmLeadSettingsUpdate,
   type WarmLeadSource,
+  type WarmLeadSourceId,
   type WarmLeadStatus,
   type WarmLeadWithSource,
 } from "@/lib/warm-leads-types";
@@ -70,6 +60,12 @@ const KEYS = {
   sources: ["admin", "warm-leads", "sources"] as const,
 };
 
+const clamp = (n: number, lo: number, hi: number) =>
+  Math.max(lo, Math.min(hi, n));
+
+const sourceKindBadge = (kind: WarmLeadSource["kind"]) =>
+  kind === "local_agent" ? "💻 Mac" : "☁ Cloud";
+
 const WarmLeads = () => {
   const qc = useQueryClient();
   const { data: leads = [], isLoading, error } = useQuery({
@@ -95,6 +91,14 @@ const WarmLeads = () => {
   const [scrapeMsg, setScrapeMsg] = useState<string | null>(null);
   const [mutationError, setMutationError] = useState<string | null>(null);
 
+  // Inline per-run target next to the Run-Now button. Pre-fills from settings;
+  // editing it doesn't persist back — it's a one-time override for this run.
+  // The persistent default lives in the settings drawer.
+  const [runTarget, setRunTarget] = useState<number>(5);
+  useEffect(() => {
+    if (settings?.target_per_run) setRunTarget(settings.target_per_run);
+  }, [settings?.target_per_run]);
+
   const loading = isLoading && leads.length === 0;
   const errMsg = mutationError ?? (error instanceof Error ? error.message : null);
 
@@ -113,13 +117,17 @@ const WarmLeads = () => {
     setScrapeRunning(true);
     setScrapeMsg(null);
     try {
-      const r = await triggerScrapeNow();
-      const errPart = r.errors?.length
-        ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}`
-        : "";
-      setScrapeMsg(
-        `Scanned ${r.scanned} · scored ${r.scored} · inserted ${r.inserted}${errPart}`,
-      );
+      const r = await triggerScrapeNow({ target_per_run: runTarget });
+      if (r.skipped) {
+        setScrapeMsg(`Skipped — ${r.reason ?? "see logs"}`);
+      } else {
+        const errPart = r.errors?.length
+          ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}`
+          : "";
+        setScrapeMsg(
+          `Scanned ${r.scanned} · scored ${r.scored} · inserted ${r.inserted}${errPart}`,
+        );
+      }
       qc.invalidateQueries({ queryKey: KEYS.list });
       qc.invalidateQueries({ queryKey: KEYS.stats });
       qc.invalidateQueries({ queryKey: KEYS.settings });
@@ -150,29 +158,63 @@ const WarmLeads = () => {
               >
                 ⚙ Configure
               </Button>
-              <Button onClick={handleRunNow} disabled={scrapeRunning}>
-                {scrapeRunning ? "Scraping…" : "Run now"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <span className="text-xs" style={{ color: admin.textDim }}>
+                  Find
+                </span>
+                <Input
+                  type="number"
+                  min={1}
+                  max={50}
+                  value={runTarget}
+                  onChange={(e) =>
+                    setRunTarget(clamp(parseInt(e.target.value, 10) || 1, 1, 50))
+                  }
+                  className="w-16 h-9 text-center"
+                  aria-label="Leads to find this run"
+                />
+                <span className="text-xs" style={{ color: admin.textDim }}>
+                  leads
+                </span>
+                <Button
+                  onClick={handleRunNow}
+                  disabled={scrapeRunning || !settings?.enabled}
+                  title={
+                    !settings?.enabled
+                      ? "Automation is off — turn it on in Configure"
+                      : undefined
+                  }
+                >
+                  {scrapeRunning ? "Scraping…" : "Run now"}
+                </Button>
+              </div>
             </>
           }
         />
 
         <p className="text-xs mt-2 mb-8" style={{ color: admin.textDim }}>
-          Automation surfaces public posts that look like "I need someone to build me X".
-          Review the drafted reply, then promote, edit, or skip.
+          Cloud sources are scraped by Run-Now. Local-agent sources (LinkedIn)
+          push leads in via Hermes — they only fill while the agent is running
+          on your Mac.
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           <StatCard label="New in inbox" value={stats?.total_new ?? "-"} />
-          <StatCard label="Found this week" value={stats?.total_this_week ?? "-"} />
-          <StatCard label="Sent this week" value={stats?.total_sent_this_week ?? "-"} />
+          <StatCard
+            label="Found this week"
+            value={stats?.total_this_week ?? "-"}
+          />
+          <StatCard
+            label="Sent this week"
+            value={stats?.total_sent_this_week ?? "-"}
+          />
           <StatCard
             label="Avg score (30d)"
             value={stats?.avg_score_30d ?? "-"}
           />
         </div>
 
-        <ModeBanner settings={settings} sources={sources} />
+        <StatusBanner settings={settings} sources={sources} />
 
         {scrapeMsg && (
           <div className="mb-6">
@@ -221,7 +263,9 @@ const WarmLeads = () => {
         )}
 
         {loading ? (
-          <p className="text-sm" style={{ color: admin.textDim }}>Loading…</p>
+          <p className="text-sm" style={{ color: admin.textDim }}>
+            Loading…
+          </p>
         ) : visible.length === 0 ? (
           <EmptyState filter={filter} settings={settings} />
         ) : (
@@ -245,6 +289,58 @@ const WarmLeads = () => {
         onError={setMutationError}
       />
     </AdminLayout>
+  );
+};
+
+// ----------------------------------------------------------------------------
+// Top-of-page status banner
+// ----------------------------------------------------------------------------
+const StatusBanner = ({
+  settings,
+  sources,
+}: {
+  settings: WarmLeadSettings | undefined;
+  sources: WarmLeadSource[];
+}) => {
+  if (!settings) return null;
+  const enabledSources = sources.filter((s) => s.enabled);
+  return (
+    <div
+      className="mb-6 rounded-2xl p-5 flex items-center justify-between gap-4 flex-wrap"
+      style={{
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
+      }}
+    >
+      <div>
+        <span
+          className="font-mono text-[10px] uppercase tracking-[0.14em] font-medium"
+          style={{ color: settings.enabled ? "#6ee7b7" : admin.textMuted }}
+        >
+          {settings.enabled ? "Automation ON" : "Automation OFF"}
+        </span>
+        <p className="text-sm mt-1" style={{ color: admin.text }}>
+          Find {settings.target_per_run} leads per run · Threshold ≥{" "}
+          {settings.threshold}
+        </p>
+        <p className="text-xs mt-0.5" style={{ color: admin.textDim }}>
+          Last run{" "}
+          {settings.last_run_at ? formatDate(settings.last_run_at) : "never"}
+        </p>
+      </div>
+      <div className="text-right">
+        <p className="text-xs mb-1" style={{ color: admin.textDim }}>
+          Enabled sources
+        </p>
+        <p className="text-sm font-mono" style={{ color: admin.text }}>
+          {enabledSources.length === 0
+            ? "none"
+            : enabledSources
+                .map((s) => `${s.label} ${sourceKindBadge(s.kind)}`)
+                .join(" · ")}
+        </p>
+      </div>
+    </div>
   );
 };
 
@@ -280,60 +376,6 @@ const StatCard = ({
   </div>
 );
 
-const ModeBanner = ({
-  settings,
-  sources,
-}: {
-  settings: WarmLeadSettings | undefined;
-  sources: WarmLeadSource[];
-}) => {
-  if (!settings) return null;
-  const enabledSources = sources.filter((s) => s.enabled);
-  const colors: Record<WarmLeadMode, { fg: string }> = {
-    capped: { fg: "#93c5fd" },
-    always_on: { fg: "#6ee7b7" },
-    paused: { fg: admin.textMuted },
-  };
-  const c = colors[settings.mode];
-  const progress =
-    settings.mode === "capped"
-      ? `${settings.this_week_count} / ${settings.target_per_week} this week`
-      : settings.mode === "always_on"
-        ? `${settings.this_week_count} this week (no cap)`
-        : "Paused";
-  return (
-    <div
-      className="mb-6 rounded-2xl p-5 flex items-center justify-between gap-4 flex-wrap"
-      style={{
-        backgroundColor: admin.surface,
-        border: `1px solid ${admin.border}`,
-      }}
-    >
-      <div>
-        <span
-          className="font-mono text-[10px] uppercase tracking-[0.14em] font-medium"
-          style={{ color: c.fg }}
-        >
-          {WARM_LEAD_MODE_LABEL[settings.mode]}
-        </span>
-        <p className="text-sm mt-1" style={{ color: admin.text }}>{progress}</p>
-        <p className="text-xs mt-0.5" style={{ color: admin.textDim }}>
-          Threshold ≥ {settings.threshold} · Last run{" "}
-          {settings.last_run_at ? formatDate(settings.last_run_at) : "never"}
-        </p>
-      </div>
-      <div className="text-right">
-        <p className="text-xs mb-1" style={{ color: admin.textDim }}>Enabled sources</p>
-        <p className="text-sm font-mono" style={{ color: admin.text }}>
-          {enabledSources.length === 0
-            ? "none"
-            : enabledSources.map((s) => s.label).join(" · ")}
-        </p>
-      </div>
-    </div>
-  );
-};
-
 const EmptyState = ({
   filter,
   settings,
@@ -356,10 +398,13 @@ const EmptyState = ({
         border: `1px dashed ${admin.border}`,
       }}
     >
-      <p className="text-sm mb-2" style={{ color: admin.textMuted }}>No warm leads yet.</p>
+      <p className="text-sm mb-2" style={{ color: admin.textMuted }}>
+        No warm leads yet.
+      </p>
       <p className="text-xs max-w-md mx-auto" style={{ color: admin.textDim }}>
-        Click <span style={{ color: admin.text }}>Run now</span> to scrape the enabled
-        sources. The classifier will surface posts that score{" "}
+        Click <span style={{ color: admin.text }}>Run now</span> to scrape the
+        enabled cloud sources, or start Hermes on your Mac to push LinkedIn
+        leads in. The classifier surfaces posts scoring{" "}
         {settings ? `≥ ${settings.threshold}` : "high"} as
         "actively-asking-for-help" candidates.
       </p>
@@ -378,7 +423,6 @@ const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
   const mutateStatus = async (status: WarmLeadStatus, label: string) => {
     if (busy) return;
     setBusy(true);
-    // Optimistic update
     const prev = qc.getQueryData<WarmLeadWithSource[]>(KEYS.list);
     if (prev) {
       qc.setQueryData<WarmLeadWithSource[]>(
@@ -434,20 +478,32 @@ const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
               {lead.source_label}
             </span>
             {lead.author_handle && (
-              <span className="font-mono text-[11px]" style={{ color: admin.textMuted }}>
+              <span
+                className="font-mono text-[11px]"
+                style={{ color: admin.textMuted }}
+              >
                 @{lead.author_handle}
               </span>
             )}
           </div>
           <WarmLeadStatusBadge status={lead.status} />
         </div>
-        <p className="text-sm font-medium mb-1 line-clamp-1" style={{ color: admin.text }}>
+        <p
+          className="text-sm font-medium mb-1 line-clamp-1"
+          style={{ color: admin.text }}
+        >
           {headline}
         </p>
-        <p className="text-xs line-clamp-2 mb-2" style={{ color: admin.textMuted }}>
+        <p
+          className="text-xs line-clamp-2 mb-2"
+          style={{ color: admin.textMuted }}
+        >
           {lead.raw_excerpt}
         </p>
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]" style={{ color: admin.textDim }}>
+        <div
+          className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]"
+          style={{ color: admin.textDim }}
+        >
           {lead.matched_keywords.length > 0 && (
             <span>matched: {lead.matched_keywords.join(", ")}</span>
           )}
@@ -472,12 +528,7 @@ const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
         >
           📋 Copy reply
         </Button>
-        <a
-          href={lead.url}
-          target="_blank"
-          rel="noreferrer"
-          onClick={stop}
-        >
+        <a href={lead.url} target="_blank" rel="noreferrer" onClick={stop}>
           <Button variant="ghost" size="sm" style={{ color: admin.textMuted }}>
             ↗ Open
           </Button>
@@ -512,7 +563,189 @@ const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
 };
 
 // ----------------------------------------------------------------------------
-// Config drawer
+// Reusable tag input (used for keywords + Reddit subreddits)
+// ----------------------------------------------------------------------------
+const TagInput = ({
+  label,
+  items,
+  onChange,
+  placeholder,
+  prefix = "",
+  normalize,
+}: {
+  label: string;
+  items: string[];
+  onChange: (next: string[]) => void;
+  placeholder: string;
+  prefix?: string;
+  normalize?: (raw: string) => string;
+}) => {
+  const [input, setInput] = useState("");
+  const add = (raw: string) => {
+    const cleaned = (normalize ? normalize(raw) : raw.trim()).trim();
+    if (!cleaned) return;
+    if (items.includes(cleaned)) return;
+    onChange([...items, cleaned]);
+  };
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      add(input);
+      setInput("");
+    } else if (e.key === "Backspace" && !input && items.length) {
+      onChange(items.slice(0, -1));
+    }
+  };
+  return (
+    <div>
+      <Label className="mb-1.5 block text-[11px]" style={{ color: admin.textDim }}>
+        {label}
+      </Label>
+      <div
+        className="rounded-md p-2 flex flex-wrap gap-1.5 min-h-[36px]"
+        style={{
+          backgroundColor: admin.surface2,
+          border: `1px solid ${admin.border}`,
+        }}
+      >
+        {items.map((item) => (
+          <span
+            key={item}
+            className="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full"
+            style={{
+              backgroundColor: admin.surface,
+              border: `1px solid ${admin.border}`,
+              color: admin.text,
+            }}
+          >
+            {prefix}
+            {item}
+            <button
+              type="button"
+              onClick={() => onChange(items.filter((i) => i !== item))}
+              aria-label={`Remove ${item}`}
+              className="ml-1 hover:[color:rgb(252,165,165)]"
+              style={{ color: admin.textDim }}
+            >
+              ×
+            </button>
+          </span>
+        ))}
+        {items.length === 0 && (
+          <span className="text-xs" style={{ color: admin.textDim }}>
+            None set.
+          </span>
+        )}
+      </div>
+      <Input
+        className="mt-2"
+        placeholder={placeholder}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={onKeyDown}
+        onBlur={() => {
+          if (input.trim()) {
+            add(input);
+            setInput("");
+          }
+        }}
+      />
+    </div>
+  );
+};
+
+// ----------------------------------------------------------------------------
+// Per-source config row inside the settings drawer
+// ----------------------------------------------------------------------------
+type SourceConfigState = {
+  enabled: boolean;
+  keywords: string[];
+  subreddits?: string[];
+};
+
+const SourceConfigRow = ({
+  source,
+  config,
+  onChange,
+}: {
+  source: WarmLeadSource;
+  config: SourceConfigState;
+  onChange: (next: SourceConfigState) => void;
+}) => {
+  return (
+    <div
+      className="rounded-md p-3 space-y-3"
+      style={{
+        backgroundColor: admin.surface,
+        border: `1px solid ${admin.border}`,
+      }}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p
+            className="text-sm font-medium flex items-center gap-2"
+            style={{ color: admin.text }}
+          >
+            {source.label}
+            <span
+              className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+              style={{
+                backgroundColor: admin.surface2,
+                color: admin.textDim,
+              }}
+            >
+              {sourceKindBadge(source.kind)}
+            </span>
+          </p>
+          <p
+            className="text-[10px] font-mono mt-0.5"
+            style={{ color: admin.textDim }}
+          >
+            {source.last_run_at
+              ? `last run ${formatDate(source.last_run_at)}`
+              : "not yet run"}
+            {source.last_error
+              ? ` · ⚠ ${source.last_error.slice(0, 30)}…`
+              : ""}
+          </p>
+        </div>
+        <Switch
+          checked={config.enabled}
+          onCheckedChange={(checked) => onChange({ ...config, enabled: checked })}
+        />
+      </div>
+
+      <TagInput
+        label="Keywords"
+        items={config.keywords}
+        onChange={(keywords) => onChange({ ...config, keywords })}
+        placeholder="add keyword, press Enter (e.g. need a website)"
+      />
+
+      {config.subreddits !== undefined && (
+        <TagInput
+          label="Subreddits"
+          items={config.subreddits}
+          onChange={(subreddits) => onChange({ ...config, subreddits })}
+          placeholder="add subreddit, press Enter (e.g. smallbusiness)"
+          prefix="r/"
+          normalize={(s) =>
+            s.trim().toLowerCase().replace(/^\/?r\//, "").replace(/\s+/g, "")
+          }
+        />
+      )}
+
+      {source.kind === "local_agent" && (
+        <p className="text-[11px]" style={{ color: admin.textDim }}>
+          Push-only source. Triggered by your local agent (Hermes), not by Run-Now.
+        </p>
+      )}
+    </div>
+  );
+};
+
+// ----------------------------------------------------------------------------
+// Settings drawer
 // ----------------------------------------------------------------------------
 const ConfigDrawer = ({
   open,
@@ -529,72 +762,71 @@ const ConfigDrawer = ({
   onSaved: () => void;
   onError: (msg: string | null) => void;
 }) => {
-  const [mode, setMode] = useState<WarmLeadMode>("capped");
-  const [target, setTarget] = useState(7);
+  const [enabled, setEnabled] = useState(false);
+  const [targetPerRun, setTargetPerRun] = useState(5);
   const [threshold, setThreshold] = useState(60);
   const [voice, setVoice] = useState("");
-  const [subreddits, setSubreddits] = useState<string[]>([]);
-  const [subredditInput, setSubredditInput] = useState("");
+  const [sourceState, setSourceState] = useState<
+    Record<string, SourceConfigState>
+  >({});
   const [saving, setSaving] = useState(false);
 
-  const redditSource = sources.find((s) => s.id === "reddit");
-
-  // Hydrate from settings whenever the drawer opens.
+  // Hydrate from settings + sources whenever the drawer opens.
   useEffect(() => {
-    if (open && settings) {
-      setMode(settings.mode);
-      setTarget(settings.target_per_week);
+    if (!open) return;
+    if (settings) {
+      setEnabled(settings.enabled);
+      setTargetPerRun(settings.target_per_run);
       setThreshold(settings.threshold);
       setVoice(settings.outreach_voice);
     }
-    if (open && redditSource) {
-      const cfg = redditSource.config as { subreddits?: unknown };
-      setSubreddits(
-        Array.isArray(cfg?.subreddits)
-          ? (cfg.subreddits as unknown[]).map((s) => String(s))
+    const next: Record<string, SourceConfigState> = {};
+    for (const s of sources) {
+      const cfg = (s.config ?? {}) as {
+        keywords?: unknown;
+        subreddits?: unknown;
+      };
+      next[s.id] = {
+        enabled: s.enabled,
+        keywords: Array.isArray(cfg.keywords)
+          ? (cfg.keywords as unknown[]).map(String)
           : [],
-      );
-      setSubredditInput("");
+        subreddits: Array.isArray(cfg.subreddits)
+          ? (cfg.subreddits as unknown[]).map(String)
+          : s.id === "reddit"
+            ? []
+            : undefined,
+      };
     }
-  }, [open, settings, redditSource]);
-
-  const addSubreddit = (raw: string) => {
-    const cleaned = raw
-      .trim()
-      .toLowerCase()
-      .replace(/^\/?r\//, "")
-      .replace(/\s+/g, "");
-    if (!cleaned) return;
-    setSubreddits((prev) => (prev.includes(cleaned) ? prev : [...prev, cleaned]));
-  };
-
-  const handleSubredditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addSubreddit(subredditInput);
-      setSubredditInput("");
-    } else if (e.key === "Backspace" && !subredditInput && subreddits.length) {
-      setSubreddits((prev) => prev.slice(0, -1));
-    }
-  };
-
-  const removeSubreddit = (name: string) =>
-    setSubreddits((prev) => prev.filter((s) => s !== name));
+    setSourceState(next);
+  }, [open, settings, sources]);
 
   const handleSave = async () => {
     setSaving(true);
     onError(null);
     try {
       const patch: WarmLeadSettingsUpdate = {
-        mode,
-        target_per_week: Math.max(1, Math.min(100, target)),
-        threshold: Math.max(0, Math.min(100, threshold)),
+        enabled,
+        target_per_run: clamp(targetPerRun, 1, 50),
+        threshold: clamp(threshold, 0, 100),
         outreach_voice: voice,
       };
       await updateWarmLeadSettings(patch);
-      if (redditSource) {
-        const nextConfig = { ...(redditSource.config ?? {}), subreddits };
-        await updateWarmLeadSource("reddit", { config: nextConfig });
+
+      for (const s of sources) {
+        const next = sourceState[s.id];
+        if (!next) continue;
+        const newConfig: Record<string, unknown> = {
+          ...(s.config ?? {}),
+          keywords: next.keywords,
+        };
+        if (next.subreddits !== undefined) {
+          newConfig.subreddits = next.subreddits;
+        }
+        await updateWarmLeadSource(s.id as WarmLeadSourceId, {
+          enabled: next.enabled,
+          config: newConfig,
+        });
       }
       onSaved();
       onOpenChange(false);
@@ -602,16 +834,6 @@ const ConfigDrawer = ({
       onError(e instanceof Error ? e.message : "Failed to save settings");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const handleToggleSource = async (id: WarmLeadSource["id"], enabled: boolean) => {
-    onError(null);
-    try {
-      await updateWarmLeadSource(id, { enabled });
-      onSaved();
-    } catch (e) {
-      onError(e instanceof Error ? e.message : "Failed to update source");
     }
   };
 
@@ -623,43 +845,55 @@ const ConfigDrawer = ({
         </SheetHeader>
 
         <div className="space-y-6 mt-6">
+          {/* Master toggle */}
+          <div
+            className="flex items-center justify-between rounded-md px-3 py-3"
+            style={{
+              backgroundColor: admin.surface,
+              border: `1px solid ${admin.border}`,
+            }}
+          >
+            <div className="pr-3">
+              <p
+                className="text-sm font-medium"
+                style={{ color: admin.text }}
+              >
+                Automation
+              </p>
+              <p
+                className="text-xs"
+                style={{ color: admin.textDim }}
+              >
+                When on, Run-Now scrapes cloud sources and your local agent can
+                push leads in. When off, everything pauses.
+              </p>
+            </div>
+            <Switch checked={enabled} onCheckedChange={setEnabled} />
+          </div>
+
+          {/* Per-run target */}
           <div>
-            <Label>Mode</Label>
-            <Select value={mode} onValueChange={(v) => setMode(v as WarmLeadMode)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {WARM_LEAD_MODES.map((m) => (
-                  <SelectItem key={m} value={m}>
-                    {WARM_LEAD_MODE_LABEL[m]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label htmlFor="wl-target">Find me leads per run</Label>
+            <Input
+              id="wl-target"
+              type="number"
+              min={1}
+              max={50}
+              value={targetPerRun}
+              onChange={(e) =>
+                setTargetPerRun(
+                  clamp(parseInt(e.target.value, 10) || 1, 1, 50),
+                )
+              }
+            />
             <p className="text-xs mt-2" style={{ color: admin.textDim }}>
-              {WARM_LEAD_MODE_HELP[mode]}
+              Each run stops once {targetPerRun} above-threshold lead
+              {targetPerRun === 1 ? "" : "s"} have been surfaced. The Run-Now
+              button can override this for a single run.
             </p>
           </div>
 
-          {mode === "capped" && (
-            <div>
-              <Label htmlFor="wl-target">Target leads per week</Label>
-              <Input
-                id="wl-target"
-                type="number"
-                min={1}
-                max={100}
-                value={target}
-                onChange={(e) => setTarget(parseInt(e.target.value, 10) || 0)}
-              />
-              <p className="text-xs mt-2" style={{ color: admin.textDim }}>
-                Scraper stops adding to the inbox once {target} leads have been
-                surfaced this week.
-              </p>
-            </div>
-          )}
-
+          {/* Threshold */}
           <div>
             <Label htmlFor="wl-threshold">
               Score threshold ({threshold} / 100)
@@ -670,7 +904,11 @@ const ConfigDrawer = ({
               min={0}
               max={100}
               value={threshold}
-              onChange={(e) => setThreshold(parseInt(e.target.value, 10) || 0)}
+              onChange={(e) =>
+                setThreshold(
+                  clamp(parseInt(e.target.value, 10) || 0, 0, 100),
+                )
+              }
             />
             <p className="text-xs mt-2" style={{ color: admin.textDim }}>
               Minimum classifier score to surface in the inbox. 60+ is a good
@@ -678,6 +916,7 @@ const ConfigDrawer = ({
             </p>
           </div>
 
+          {/* Outreach voice */}
           <div>
             <Label htmlFor="wl-voice">Outreach voice / context</Label>
             <Textarea
@@ -692,96 +931,31 @@ const ConfigDrawer = ({
             </p>
           </div>
 
+          {/* Sources */}
           <div>
             <Label className="mb-3 block">Sources</Label>
-            <div className="space-y-2">
-              {sources.map((s) => (
-                <div
-                  key={s.id}
-                  className="flex items-center justify-between rounded-md px-3 py-2"
-                  style={{
-                    backgroundColor: admin.surface,
-                    border: `1px solid ${admin.border}`,
-                  }}
-                >
-                  <div>
-                    <p className="text-sm" style={{ color: admin.text }}>{s.label}</p>
-                    <p className="text-[10px] font-mono" style={{ color: admin.textDim }}>
-                      {s.last_run_at
-                        ? `last run ${formatDate(s.last_run_at)}`
-                        : "not yet run"}
-                      {s.last_error ? ` · ⚠ ${s.last_error.slice(0, 30)}…` : ""}
-                    </p>
-                  </div>
-                  <Switch
-                    checked={s.enabled}
-                    onCheckedChange={(c) => handleToggleSource(s.id, c)}
+            <div className="space-y-3">
+              {sources.map((s) => {
+                const cfg = sourceState[s.id];
+                if (!cfg) return null;
+                return (
+                  <SourceConfigRow
+                    key={s.id}
+                    source={s}
+                    config={cfg}
+                    onChange={(next) =>
+                      setSourceState((prev) => ({ ...prev, [s.id]: next }))
+                    }
                   />
-                </div>
-              ))}
+                );
+              })}
+              {sources.length === 0 && (
+                <p className="text-xs" style={{ color: admin.textDim }}>
+                  No sources configured.
+                </p>
+              )}
             </div>
-            <p className="text-xs mt-2" style={{ color: admin.textDim }}>
-              Other source keywords still live in DB config — edit via SQL.
-            </p>
           </div>
-
-          {redditSource && (
-            <div>
-              <Label className="mb-2 block">Reddit subreddits</Label>
-              <div
-                className="rounded-md p-2 flex flex-wrap gap-2 min-h-[44px]"
-                style={{
-                  backgroundColor: admin.surface,
-                  border: `1px solid ${admin.border}`,
-                }}
-              >
-                {subreddits.map((s) => (
-                  <span
-                    key={s}
-                    className="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full"
-                    style={{
-                      backgroundColor: admin.surface2,
-                      border: `1px solid ${admin.border}`,
-                      color: admin.text,
-                    }}
-                  >
-                    r/{s}
-                    <button
-                      type="button"
-                      onClick={() => removeSubreddit(s)}
-                      aria-label={`Remove ${s}`}
-                      className="ml-1 hover:[color:rgb(252,165,165)]"
-                      style={{ color: admin.textDim }}
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-                {subreddits.length === 0 && (
-                  <span className="text-xs" style={{ color: admin.textDim }}>
-                    No subreddits — add some below.
-                  </span>
-                )}
-              </div>
-              <Input
-                className="mt-2"
-                placeholder="add subreddit, press Enter (e.g. smallbusiness)"
-                value={subredditInput}
-                onChange={(e) => setSubredditInput(e.target.value)}
-                onKeyDown={handleSubredditKeyDown}
-                onBlur={() => {
-                  if (subredditInput.trim()) {
-                    addSubreddit(subredditInput);
-                    setSubredditInput("");
-                  }
-                }}
-              />
-              <p className="text-xs mt-2" style={{ color: admin.textDim }}>
-                Enter or comma to add. Leading "r/" and whitespace are stripped.
-                Saved with Save settings.
-              </p>
-            </div>
-          )}
 
           <div className="flex gap-3 pt-2">
             <Button onClick={handleSave} disabled={saving}>

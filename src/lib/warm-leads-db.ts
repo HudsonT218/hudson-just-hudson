@@ -182,15 +182,23 @@ export async function promoteWarmLead(id: string): Promise<{
 
 // ============================================================================
 // Trigger the scraper edge function on demand (the "Run now" button).
+// `target_per_run` overrides the persisted value for this one invocation.
 // ============================================================================
-export async function triggerScrapeNow(): Promise<{
+export async function triggerScrapeNow(opts?: {
+  target_per_run?: number;
+}): Promise<{
   inserted: number;
   scanned: number;
   scored: number;
   errors: string[];
+  skipped?: boolean;
+  reason?: string;
 }> {
   const { data, error } = await supabase.functions.invoke("scrape-warm-leads", {
-    body: { trigger: "manual" },
+    body: {
+      trigger: "manual",
+      ...(opts?.target_per_run ? { target_per_run: opts.target_per_run } : {}),
+    },
   });
   if (error) throw error;
   return (data ?? { inserted: 0, scanned: 0, scored: 0, errors: [] }) as {
@@ -198,6 +206,8 @@ export async function triggerScrapeNow(): Promise<{
     scanned: number;
     scored: number;
     errors: string[];
+    skipped?: boolean;
+    reason?: string;
   };
 }
 
