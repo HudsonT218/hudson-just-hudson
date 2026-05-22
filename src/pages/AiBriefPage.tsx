@@ -719,9 +719,9 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
                       onClick={() => field.onChange(opt)}
                       className="text-sm font-light px-3 py-2 rounded-full transition-colors"
                       style={{
-                        backgroundColor: selected ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.04)",
-                        border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "rgba(255,255,255,0.08)"}`,
-                        color: selected ? "#fff" : "#9ca3af",
+                        backgroundColor: selected ? "rgba(59,130,246,0.15)" : "var(--app-card-bg)",
+                        border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "var(--app-border-med)"}`,
+                        color: selected ? "var(--app-text-strong)" : "var(--app-text-med)",
                       }}
                     >
                       {opt}
@@ -1030,9 +1030,9 @@ const FieldSingleSelect = <T extends FieldPath<QuizForm>>({
                 onClick={() => field.onChange(opt)}
                 className="text-sm font-light px-3 py-2 rounded-full transition-colors"
                 style={{
-                  backgroundColor: selected ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.04)",
-                  border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "rgba(255,255,255,0.08)"}`,
-                  color: selected ? "#fff" : "#9ca3af",
+                  backgroundColor: selected ? "rgba(59,130,246,0.15)" : "var(--app-card-bg)",
+                  border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "var(--app-border-med)"}`,
+                  color: selected ? "var(--app-text-strong)" : "var(--app-text-med)",
                 }}
               >
                 {opt}
@@ -1074,9 +1074,9 @@ const FieldMultiSelect = <T extends FieldPath<QuizForm>>({
                   onClick={() => toggle(opt)}
                   className="text-sm font-light px-3 py-2 rounded-full transition-colors"
                   style={{
-                    backgroundColor: selected ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "rgba(255,255,255,0.08)"}`,
-                    color: selected ? "#fff" : "#9ca3af",
+                    backgroundColor: selected ? "rgba(59,130,246,0.15)" : "var(--app-card-bg)",
+                    border: `1px solid ${selected ? "rgba(96,165,250,0.6)" : "var(--app-border-med)"}`,
+                    color: selected ? "var(--app-text-strong)" : "var(--app-text-med)",
                   }}
                 >
                   {opt}

@@ -74,6 +74,15 @@
     --app-button-fg: #09090b;
     --app-radial-tint: rgba(59, 130, 246, 0.06);
 
+    /* Text-color tokens for inline styles. Tailwind `.text-{white,gray-200..700}`
+       already remap via the rules below, but pages with `style={{ color }}` need
+       these to invert in light mode. Levels: strong (titles), med (body),
+       muted (small labels), soft (placeholder / inactive). */
+    --app-text-strong: #ffffff;
+    --app-text-med: rgba(255, 255, 255, 0.5);
+    --app-text-muted: rgba(255, 255, 255, 0.3);
+    --app-text-soft: rgba(255, 255, 255, 0.2);
+
     /* DottedSurface shader uniforms, read at theme switch time. */
     --dotted-neutral-r: 0.55;
     --dotted-neutral-g: 0.58;
@@ -139,6 +148,14 @@
     --app-button-bg-hover: rgba(10, 10, 10, 0.85);
     --app-button-fg: #f5f5f5;
     --app-radial-tint: rgba(59, 130, 246, 0.12);
+
+    /* Text tokens flip from white-alpha to black-alpha so inline-styled
+       text (portfolio card titles, demo body, etc.) reads against the
+       light gradient bg. */
+    --app-text-strong: #0a0a0a;
+    --app-text-med: rgba(0, 0, 0, 0.55);
+    --app-text-muted: rgba(0, 0, 0, 0.4);
+    --app-text-soft: rgba(0, 0, 0, 0.3);
 
     /* Darker dot palette so the DottedSurface reads against the light
        gradient bg rather than disappearing. */
@@ -208,6 +225,12 @@
     --app-button-bg: #ffffff;
     --app-button-bg-hover: rgba(255, 255, 255, 0.9);
     --app-button-fg: #09090b;
+
+    /* Restore the dark text tokens for elements opted out of light mode. */
+    --app-text-strong: #ffffff;
+    --app-text-med: rgba(255, 255, 255, 0.5);
+    --app-text-muted: rgba(255, 255, 255, 0.3);
+    --app-text-soft: rgba(255, 255, 255, 0.2);
 
     color-scheme: dark;
   }
