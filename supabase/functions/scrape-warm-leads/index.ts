@@ -11,8 +11,8 @@
 // Required env vars:
 //   SUPABASE_URL                 (auto-provided by Supabase)
 //   SUPABASE_SERVICE_ROLE_KEY    (auto-provided by Supabase)
-//   OPENAI_API_KEY               (for the classifier + drafter)
-//   OPENAI_MODEL                 (optional, default: gpt-4o-mini)
+//   LOVABLE_API_KEY              (auto-provided; used for Lovable AI classifier+drafter)
+//   LOVABLE_AI_MODEL             (optional, default: google/gemini-3-flash-preview)
 //
 // Sources currently implemented (no-account-required):
 //   • hackernews    — Algolia HN Search API (https://hn.algolia.com/api)
