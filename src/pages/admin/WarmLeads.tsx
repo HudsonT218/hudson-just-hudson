@@ -721,10 +721,67 @@ const ConfigDrawer = ({
               ))}
             </div>
             <p className="text-xs mt-2" style={{ color: admin.textDim }}>
-              Keywords and subreddits for each source live in the DB
-              (warm_lead_sources.config), edit via SQL for now.
+              Other source keywords still live in DB config — edit via SQL.
             </p>
           </div>
+
+          {redditSource && (
+            <div>
+              <Label className="mb-2 block">Reddit subreddits</Label>
+              <div
+                className="rounded-md p-2 flex flex-wrap gap-2 min-h-[44px]"
+                style={{
+                  backgroundColor: admin.surface,
+                  border: `1px solid ${admin.border}`,
+                }}
+              >
+                {subreddits.map((s) => (
+                  <span
+                    key={s}
+                    className="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: admin.surface2,
+                      border: `1px solid ${admin.border}`,
+                      color: admin.text,
+                    }}
+                  >
+                    r/{s}
+                    <button
+                      type="button"
+                      onClick={() => removeSubreddit(s)}
+                      aria-label={`Remove ${s}`}
+                      className="ml-1 hover:[color:rgb(252,165,165)]"
+                      style={{ color: admin.textDim }}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                {subreddits.length === 0 && (
+                  <span className="text-xs" style={{ color: admin.textDim }}>
+                    No subreddits — add some below.
+                  </span>
+                )}
+              </div>
+              <Input
+                className="mt-2"
+                placeholder="add subreddit, press Enter (e.g. smallbusiness)"
+                value={subredditInput}
+                onChange={(e) => setSubredditInput(e.target.value)}
+                onKeyDown={handleSubredditKeyDown}
+                onBlur={() => {
+                  if (subredditInput.trim()) {
+                    addSubreddit(subredditInput);
+                    setSubredditInput("");
+                  }
+                }}
+              />
+              <p className="text-xs mt-2" style={{ color: admin.textDim }}>
+                Enter or comma to add. Leading "r/" and whitespace are stripped.
+                Saved with Save settings.
+              </p>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <Button onClick={handleSave} disabled={saving}>
