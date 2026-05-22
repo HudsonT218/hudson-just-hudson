@@ -11,8 +11,8 @@
 // Required env vars:
 //   SUPABASE_URL                 (auto-provided by Supabase)
 //   SUPABASE_SERVICE_ROLE_KEY    (auto-provided by Supabase)
-//   OPENAI_API_KEY               (for the classifier + drafter)
-//   OPENAI_MODEL                 (optional, default: gpt-4o-mini)
+//   LOVABLE_API_KEY              (auto-provided; used for Lovable AI classifier+drafter)
+//   LOVABLE_AI_MODEL             (optional, default: google/gemini-3-flash-preview)
 //
 // Sources currently implemented (no-account-required):
 //   • hackernews    — Algolia HN Search API (https://hn.algolia.com/api)
@@ -256,7 +256,7 @@ async function scoreAndDraft(
   candidate: Candidate,
   settings: WarmLeadSettings,
 ): Promise<ScoreResult> {
-  const apiKey = Deno.env.get("OPENAI_API_KEY");
+  const apiKey = Deno.env.get("LOVABLE_API_KEY");
   if (!apiKey) {
     // Heuristic fallback so the system still works without an LLM.
     const score =
@@ -264,12 +264,12 @@ async function scoreAndDraft(
       (candidate.raw_excerpt.length > 200 ? 10 : 0);
     return {
       score,
-      reasoning: "(heuristic — no OPENAI_API_KEY set)",
+      reasoning: "(heuristic — no LOVABLE_API_KEY set)",
       draft: null,
     };
   }
 
-  const model = Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini";
+  const model = Deno.env.get("LOVABLE_AI_MODEL") ?? "google/gemini-3-flash-preview";
   const prompt = `
 You are screening public posts for a freelance developer named Hudson, who builds custom AI-powered web projects (landing pages, agent automations, lightweight SaaS).
 
@@ -298,7 +298,7 @@ The reply must sound like Hudson wrote it — relaxed, lowercase-leaning, no mar
 Respond in this exact JSON format:
 {"score": <int>, "reasoning": "<one sentence>", "draft": "<reply or null>"}`;
 
-  const r = await fetch("https://api.openai.com/v1/chat/completions", {
+  const r = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -308,15 +308,13 @@ Respond in this exact JSON format:
       model,
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
-      temperature: 0.4,
     }),
   });
   if (!r.ok) {
-    return {
-      score: 0,
-      reasoning: `LLM error: ${r.status}`,
-      draft: null,
-    };
+    let reasoning = `LLM error: ${r.status}`;
+    if (r.status === 429) reasoning = "LLM rate-limited (429) — try again shortly";
+    else if (r.status === 402) reasoning = "Lovable AI credits exhausted (402) — top up in Settings → Workspace → Usage";
+    return { score: 0, reasoning, draft: null };
   }
   const json = await r.json();
   const content = json.choices?.[0]?.message?.content ?? "{}";

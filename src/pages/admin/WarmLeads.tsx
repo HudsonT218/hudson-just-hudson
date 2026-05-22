@@ -21,12 +21,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { toast } from "sonner";
 import {
   getWarmLeadSettings,
   getWarmLeadStats,
   listWarmLeads,
   listWarmLeadSources,
   triggerScrapeNow,
+  updateWarmLead,
   updateWarmLeadSettings,
   updateWarmLeadSource,
 } from "@/lib/warm-leads-db";
@@ -47,7 +49,7 @@ import {
   WarmLeadScorePill,
   WarmLeadStatusBadge,
 } from "./_components/WarmLeadStatusBadge";
-import { formatDate } from "./_components/format";
+import { formatDate, formatRelative } from "./_components/format";
 import { AdminPageHeader, ErrorBanner, InfoBanner } from "./_components/ui";
 import { admin } from "./_components/theme";
 
@@ -112,9 +114,11 @@ const WarmLeads = () => {
     setScrapeMsg(null);
     try {
       const r = await triggerScrapeNow();
+      const errPart = r.errors?.length
+        ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}`
+        : "";
       setScrapeMsg(
-        `Done, ${r.inserted} new lead${r.inserted === 1 ? "" : "s"}` +
-          (r.errors?.length ? ` · ${r.errors.length} error${r.errors.length === 1 ? "" : "s"}` : ""),
+        `Scanned ${r.scanned} · scored ${r.scored} · inserted ${r.inserted}${errPart}`,
       );
       qc.invalidateQueries({ queryKey: KEYS.list });
       qc.invalidateQueries({ queryKey: KEYS.stats });
@@ -367,49 +371,143 @@ const EmptyState = ({
 // Lead card
 // ----------------------------------------------------------------------------
 const WarmLeadCard = ({ lead }: { lead: WarmLeadWithSource }) => {
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
   const headline = lead.raw_title?.trim() || lead.raw_excerpt.slice(0, 120);
+
+  const mutateStatus = async (status: WarmLeadStatus, label: string) => {
+    if (busy) return;
+    setBusy(true);
+    // Optimistic update
+    const prev = qc.getQueryData<WarmLeadWithSource[]>(KEYS.list);
+    if (prev) {
+      qc.setQueryData<WarmLeadWithSource[]>(
+        KEYS.list,
+        prev.map((l) => (l.id === lead.id ? { ...l, status } : l)),
+      );
+    }
+    try {
+      await updateWarmLead(lead.id, { status });
+      toast.success(label);
+      qc.invalidateQueries({ queryKey: KEYS.list });
+      qc.invalidateQueries({ queryKey: KEYS.stats });
+    } catch (e) {
+      if (prev) qc.setQueryData(KEYS.list, prev);
+      toast.error(e instanceof Error ? e.message : "Failed to update");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!lead.drafted_message) return;
+    try {
+      await navigator.clipboard.writeText(lead.drafted_message);
+      toast.success("Draft copied");
+    } catch {
+      toast.error("Couldn't copy to clipboard");
+    }
+  };
+
+  const stop = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <Link
-      to={`/admin/warm-leads/${lead.id}`}
-      className="block rounded-2xl p-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)] hover:[border-color:rgba(255,255,255,0.12)]"
+    <div
+      className="rounded-2xl p-4 transition-colors hover:[background-color:rgba(255,255,255,0.04)] hover:[border-color:rgba(255,255,255,0.12)]"
       style={{
         backgroundColor: admin.surface,
         border: `1px solid ${admin.border}`,
       }}
     >
-      <div className="flex items-start justify-between gap-4 mb-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <WarmLeadScorePill score={lead.score} />
-          <span
-            className="font-mono text-[10px] uppercase tracking-[0.14em]"
-            style={{ color: admin.textDim }}
-          >
-            {lead.source_label}
-          </span>
-          {lead.author_handle && (
-            <span className="font-mono text-[11px]" style={{ color: admin.textMuted }}>
-              @{lead.author_handle}
+      <Link to={`/admin/warm-leads/${lead.id}`} className="block">
+        <div className="flex items-start justify-between gap-4 mb-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <WarmLeadScorePill score={lead.score} />
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.14em]"
+              style={{ color: admin.textDim }}
+            >
+              {lead.source_label}
             </span>
-          )}
+            {lead.author_handle && (
+              <span className="font-mono text-[11px]" style={{ color: admin.textMuted }}>
+                @{lead.author_handle}
+              </span>
+            )}
+          </div>
+          <WarmLeadStatusBadge status={lead.status} />
         </div>
-        <WarmLeadStatusBadge status={lead.status} />
+        <p className="text-sm font-medium mb-1 line-clamp-1" style={{ color: admin.text }}>
+          {headline}
+        </p>
+        <p className="text-xs line-clamp-2 mb-2" style={{ color: admin.textMuted }}>
+          {lead.raw_excerpt}
+        </p>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]" style={{ color: admin.textDim }}>
+          {lead.matched_keywords.length > 0 && (
+            <span>matched: {lead.matched_keywords.join(", ")}</span>
+          )}
+          {lead.score_reasoning && (
+            <span className="italic">{lead.score_reasoning}</span>
+          )}
+          <span>{formatRelative(lead.posted_at ?? lead.created_at)}</span>
+        </div>
+      </Link>
+
+      <div
+        className="flex flex-wrap gap-1 mt-3 pt-3"
+        style={{ borderTop: `1px solid ${admin.border}` }}
+        onClick={stop}
+      >
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleCopy}
+          disabled={!lead.drafted_message}
+          style={{ color: admin.textMuted }}
+        >
+          📋 Copy reply
+        </Button>
+        <a
+          href={lead.url}
+          target="_blank"
+          rel="noreferrer"
+          onClick={stop}
+        >
+          <Button variant="ghost" size="sm" style={{ color: admin.textMuted }}>
+            ↗ Open
+          </Button>
+        </a>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            stop(e);
+            mutateStatus("sent", "Marked replied");
+          }}
+          disabled={busy || lead.status === "sent"}
+          style={{ color: admin.textMuted }}
+        >
+          ✓ Mark replied
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            stop(e);
+            mutateStatus("dismissed", "Dismissed");
+          }}
+          disabled={busy || lead.status === "dismissed"}
+          style={{ color: admin.textDim }}
+        >
+          Dismiss
+        </Button>
       </div>
-      <p className="text-sm font-medium mb-1 line-clamp-1" style={{ color: admin.text }}>
-        {headline}
-      </p>
-      <p className="text-xs line-clamp-2 mb-2" style={{ color: admin.textMuted }}>
-        {lead.raw_excerpt}
-      </p>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px]" style={{ color: admin.textDim }}>
-        {lead.matched_keywords.length > 0 && (
-          <span>matched: {lead.matched_keywords.join(", ")}</span>
-        )}
-        {lead.score_reasoning && (
-          <span className="italic">{lead.score_reasoning}</span>
-        )}
-        <span>{formatDate(lead.posted_at ?? lead.created_at)}</span>
-      </div>
-    </Link>
+    </div>
   );
 };
 
@@ -435,7 +533,11 @@ const ConfigDrawer = ({
   const [target, setTarget] = useState(7);
   const [threshold, setThreshold] = useState(60);
   const [voice, setVoice] = useState("");
+  const [subreddits, setSubreddits] = useState<string[]>([]);
+  const [subredditInput, setSubredditInput] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const redditSource = sources.find((s) => s.id === "reddit");
 
   // Hydrate from settings whenever the drawer opens.
   useEffect(() => {
@@ -445,7 +547,39 @@ const ConfigDrawer = ({
       setThreshold(settings.threshold);
       setVoice(settings.outreach_voice);
     }
-  }, [open, settings]);
+    if (open && redditSource) {
+      const cfg = redditSource.config as { subreddits?: unknown };
+      setSubreddits(
+        Array.isArray(cfg?.subreddits)
+          ? (cfg.subreddits as unknown[]).map((s) => String(s))
+          : [],
+      );
+      setSubredditInput("");
+    }
+  }, [open, settings, redditSource]);
+
+  const addSubreddit = (raw: string) => {
+    const cleaned = raw
+      .trim()
+      .toLowerCase()
+      .replace(/^\/?r\//, "")
+      .replace(/\s+/g, "");
+    if (!cleaned) return;
+    setSubreddits((prev) => (prev.includes(cleaned) ? prev : [...prev, cleaned]));
+  };
+
+  const handleSubredditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      addSubreddit(subredditInput);
+      setSubredditInput("");
+    } else if (e.key === "Backspace" && !subredditInput && subreddits.length) {
+      setSubreddits((prev) => prev.slice(0, -1));
+    }
+  };
+
+  const removeSubreddit = (name: string) =>
+    setSubreddits((prev) => prev.filter((s) => s !== name));
 
   const handleSave = async () => {
     setSaving(true);
@@ -458,6 +592,10 @@ const ConfigDrawer = ({
         outreach_voice: voice,
       };
       await updateWarmLeadSettings(patch);
+      if (redditSource) {
+        const nextConfig = { ...(redditSource.config ?? {}), subreddits };
+        await updateWarmLeadSource("reddit", { config: nextConfig });
+      }
       onSaved();
       onOpenChange(false);
     } catch (e) {
@@ -583,10 +721,67 @@ const ConfigDrawer = ({
               ))}
             </div>
             <p className="text-xs mt-2" style={{ color: admin.textDim }}>
-              Keywords and subreddits for each source live in the DB
-              (warm_lead_sources.config), edit via SQL for now.
+              Other source keywords still live in DB config — edit via SQL.
             </p>
           </div>
+
+          {redditSource && (
+            <div>
+              <Label className="mb-2 block">Reddit subreddits</Label>
+              <div
+                className="rounded-md p-2 flex flex-wrap gap-2 min-h-[44px]"
+                style={{
+                  backgroundColor: admin.surface,
+                  border: `1px solid ${admin.border}`,
+                }}
+              >
+                {subreddits.map((s) => (
+                  <span
+                    key={s}
+                    className="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: admin.surface2,
+                      border: `1px solid ${admin.border}`,
+                      color: admin.text,
+                    }}
+                  >
+                    r/{s}
+                    <button
+                      type="button"
+                      onClick={() => removeSubreddit(s)}
+                      aria-label={`Remove ${s}`}
+                      className="ml-1 hover:[color:rgb(252,165,165)]"
+                      style={{ color: admin.textDim }}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                {subreddits.length === 0 && (
+                  <span className="text-xs" style={{ color: admin.textDim }}>
+                    No subreddits — add some below.
+                  </span>
+                )}
+              </div>
+              <Input
+                className="mt-2"
+                placeholder="add subreddit, press Enter (e.g. smallbusiness)"
+                value={subredditInput}
+                onChange={(e) => setSubredditInput(e.target.value)}
+                onKeyDown={handleSubredditKeyDown}
+                onBlur={() => {
+                  if (subredditInput.trim()) {
+                    addSubreddit(subredditInput);
+                    setSubredditInput("");
+                  }
+                }}
+              />
+              <p className="text-xs mt-2" style={{ color: admin.textDim }}>
+                Enter or comma to add. Leading "r/" and whitespace are stripped.
+                Saved with Save settings.
+              </p>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <Button onClick={handleSave} disabled={saving}>

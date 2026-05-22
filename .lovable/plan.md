@@ -1,61 +1,89 @@
-## Goal
 
-Get per-route titles, meta, OG tags, and JSON-LD into the HTML that crawlers (Google, GPTBot, ClaudeBot, PerplexityBot, LinkedIn, Slack) see — while staying on Lovable hosting.
+# Warm-leads — finish UX + swap OpenAI → Lovable AI
 
-## Why the current setup doesn't work on Lovable
+Adapt to the schema we already have. No DB changes. No new statuses. Only file touched outside the warm-leads UI is the scraper edge function (minimum-surgery provider swap).
 
-The repo already has a full SSR + prerender pipeline (`src/entry-server.tsx`, `scripts/prerender.mjs`, the long `build` npm script). It just isn't running on Lovable: the published site at hudsonturansky.com serves the same ~3KB SPA shell on every route with an empty `<div id="root">` and a single generic `<title>`. Lovable's publish step only runs the equivalent of `vite build` (client only), so the SSR build + prerender steps never execute.
+## Status mapping (reuse existing enum)
 
-## Approach
+Existing enum stays as-is: `new | approved | sent | rejected | converted | dismissed`.
 
-Two layers, both compatible with Lovable's vanilla `vite build`:
+- "Mark replied" → write `status = 'sent'` (same as detail page)
+- "Archive / dismiss" → write `status = 'dismissed'`
+- Default inbox filter stays `new`; existing filter pills cover all 6 statuses
 
-1. **Commit prerendered HTML into `public/`** for the small set of public, indexable routes. Lovable's build copies `public/` verbatim into `dist/`, and its static hosting serves `public/work/index.html` for `/work` before falling back to the SPA shell. Result: crawlers get fully-rendered HTML with correct meta, JSON-LD, and visible content — exactly like the existing prerender output, just shipped via a different mechanism.
+## 1. Swap classifier provider: OpenAI → Lovable AI (minimum-surgery)
 
-2. **Add `react-helmet-async` for per-route head** so any non-prerendered route (and client-side navigation) still gets correct title/description/canonical/OG tags for Googlebot.
+Only the network call is touched. Prompts, scoring rubric, threshold, draft logic, and the new auth gate stay byte-for-byte identical.
 
-## What changes
+In `supabase/functions/scrape-warm-leads/index.ts`:
 
-### 1. New script: `scripts/prerender-to-public.mjs`
-Adapted from the existing `scripts/prerender.mjs`. Runs the SSR build, renders each route, writes the output into `public/<route>/index.html` instead of `dist/`. Routes to prerender: `/`, `/work`, `/interested`, `/ai-test`. The root `/` writes to `public/index.html` — but we keep the source `index.html` (Vite's entry) untouched; the prerender output overrides only at build time via `public/` copy. Actually we'll write `/` output to a separate name and let Vite's index.html handling stay normal — details in the technical section.
+- Replace the `OPENAI_API_KEY` lookup with `LOVABLE_API_KEY`. If missing → same heuristic fallback as today (no behavior change).
+- Replace the URL `https://api.openai.com/v1/chat/completions` → `https://ai.gateway.lovable.dev/v1/chat/completions`.
+- Replace the default model `gpt-4o-mini` → `google/gemini-3-flash-preview` (per Lovable AI default-model guidance). Allow override via a new optional env `LOVABLE_AI_MODEL`.
+- Keep the request body shape — Lovable AI is OpenAI-compatible (`messages`, `response_format`, `tools`, `tool_choice` all pass through).
+- Add explicit `429` (rate limit) and `402` (credits) branches that surface a clear error string into the existing `errors[]` array so the admin toast shows it. No crash, no behavior change for the rest of the pipeline.
+- Update the top-of-file comment block to list the new env vars.
 
-### 2. New npm script: `prerender:commit`
-`"prerender:commit": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender-to-public.mjs"`. You run this locally before clicking Publish whenever public-page content changes. Output files get committed.
+Deploy after edit. Verify with one manual "Run now" from the admin UI; confirm `inserted`/`scored`/`scanned` still come back.
 
-### 3. Add `react-helmet-async`
-- Install package.
-- Wrap app in `<HelmetProvider>` in `src/main.tsx`.
-- Add `<Helmet>` blocks to `Index`, `WorkPage`, `InterestedPage`, `AiTestPage` with the right title/description/canonical/OG/JSON-LD per page.
-- Remove the static `<link rel="canonical">` from `index.html` so it doesn't conflict with per-route Helmet canonicals.
+`OPENAI_API_KEY` secret is left in place (don't delete) until you've validated a real run — that way you can roll back the file from git with no extra secret-management step.
 
-### 4. Update sitemap (already exists, just verify)
-Make sure `public/sitemap.xml` lists the four public routes pointing at `https://hudsonturansky.com`.
+## 2. Run-now toast — surface scanned / scored / inserted
 
-## What this gets you
+Edge function already returns `{ scanned, scored, inserted, errors }`.
 
-| Crawler | Behavior |
-|---|---|
-| Googlebot | Sees full prerendered HTML for `/`, `/work`, `/interested`, `/ai-test`. Other routes: shell + Helmet-updated head after JS executes (Google does run JS). |
-| GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot | Full prerendered HTML on the four key routes. (These don't run JS, so other routes still look empty — but admin/auth/configurator routes shouldn't be indexed anyway.) |
-| LinkedIn / Slack / Facebook OG | Correct per-page OG tags on the four prerendered routes. |
+- Update `TriggerScrapeResult` (or inline type) in `src/lib/warm-leads-db.ts` to include `scored: number`.
+- Update `handleRunNow` in `WarmLeads.tsx` so the message reads:
+  `"Scanned N · scored M · inserted K"` (+ `· P error(s)` when present).
 
-## Workflow you adopt
+## 3. Inline action buttons on each card
 
-Whenever you change content on a public page, run `npm run prerender:commit` locally, then commit the updated `public/**/*.html` files, then Publish from Lovable. One extra command before publishing — that's the trade for staying on Lovable without losing build-time SEO.
+`WarmLeadCard` is currently a single `<Link>` wrapper. Refactor so the body stays a link to the detail page, but action buttons sit in their own row and don't trigger navigation:
 
-If you'd rather not run a local command each time, the alternative is migrating to a host that runs the full `npm run build` (Vercel/Netlify/Cloudflare Pages). I'd recommend trying this approach first since you want to stay on Lovable.
+- **Copy reply** — copies `drafted_message`, sonner toast confirm, disabled when empty.
+- **Open ↗** — `lead.url` in new tab.
+- **Mark replied** — `updateWarmLead(id, { status: 'sent' })`.
+- **Dismiss** — `updateWarmLead(id, { status: 'dismissed' })`.
+- `e.stopPropagation()` + `e.preventDefault()` on every button so clicks don't bubble into the wrapping `<Link>`.
+- Mutations: optimistic via React Query `setQueryData(KEYS.list, ...)`, then `invalidateQueries(KEYS.list)` and `KEYS.stats`. On error, roll back and show sonner error toast.
+- Buttons styled as ghost using existing `admin.textMuted` / `admin.surface2` theme tokens — same look as detail-page action bar.
 
-## Technical notes
+## 4. Subreddit chips editor in Configure drawer
 
-- The existing `scripts/prerender.mjs` writes to `dist/`. The new script reuses the same render function from `dist-server/entry-server.js` but writes to `public/` so the output survives Lovable's `vite build`.
-- For the root route, Vite's build uses `index.html` as its entry — we can't put a prerendered `public/index.html` because Vite would refuse (filename collision). Two options:
-  - **Option A (preferred):** generate prerendered content directly into `index.html` (root of repo), replacing the empty `<div id="root"></div>` with the rendered tree and injecting Helmet head tags. The prerender script writes there during `prerender:commit`. Vite's HMR in dev still works because `hydrateRoot` adopts existing DOM.
-  - **Option B:** post-build hook that copies a prerendered root file over `dist/index.html`. Requires Lovable to run something after vite build, which it doesn't.
-  Option A is the right move.
-- For sub-routes (`/work`, `/interested`, `/ai-test`), Lovable's static hosting will serve `public/work/index.html` when a request comes in for `/work` (standard static-server behavior) before falling back to the SPA `index.html`. If testing reveals Lovable doesn't do this, we fall back to react-helmet-async only and accept that AI crawlers see the shell on those routes — but we should test first.
-- Helmet conflict: keep sitewide OG tags in `index.html` as social-preview fallback for routes that aren't prerendered; remove canonical from `index.html` since it conflicts with per-route Helmet canonicals.
-- The existing `scripts/prerender.mjs` and the long `build` script can stay in the repo for future use (or if you ever migrate hosts) — they don't break anything.
+Add a section inside `ConfigDrawer`, rendered only when the Reddit source row exists (regardless of enabled, so you can edit while paused):
 
-## Open question before implementing
+- Read `sources.find(s => s.id === 'reddit').config.subreddits` (string array, default `[]`).
+- Render removable chips (× on each).
+- Below: text input. Enter or comma adds. Normalize: trim, lowercase, strip leading `r/`, dedupe.
+- Persist via `updateWarmLeadSource('reddit', { config: { ...existingConfig, subreddits } })` — spread existing config so we don't drop other JSONB keys.
+- Wire into the existing Save button (single save action). Source enable/disable toggles still save immediately as today.
 
-Confirm you're OK running `npm run prerender:commit` locally as part of your publish flow. If you'd rather not touch the command line at all, the realistic answer becomes "use react-helmet-async only" — Google will be fine but AI/social crawlers will see less. Let me know which trade-off you prefer.
+Bluesky terms editor explicitly skipped (per scope).
+
+## 5. Relative timestamps on cards
+
+- Add `formatRelative(iso)` to `src/pages/admin/_components/format.ts`: returns `just now`, `Nm ago`, `Nh ago`, `Nd ago`, falls back to `formatDate` after 7d. No deps.
+- Use it in `WarmLeadCard` only. Detail page keeps absolute `formatDate`.
+
+## Files touched
+
+- `supabase/functions/scrape-warm-leads/index.ts` — provider swap only
+- `src/lib/warm-leads-db.ts` — `scored` in return type
+- `src/pages/admin/_components/format.ts` — add `formatRelative`
+- `src/pages/admin/WarmLeads.tsx` — toast text, inline card actions, subreddit chips in drawer
+
+## Explicitly NOT doing
+
+- No DB migration, no new statuses, no RLS changes
+- No edits to the auth-gate logic in the edge function
+- No prompt / rubric / threshold changes
+- No Bluesky editor (source stays disabled)
+- No seed data
+- No changes to any non-warm-leads files
+- Not deleting `OPENAI_API_KEY` secret (kept for easy rollback)
+
+## Risk / safety
+
+- Provider swap is a 4-line diff in one function; rolls back via git revert + redeploy.
+- All UI changes are additive on the existing page; if anything regresses, the existing detail-page workflow still works unchanged.
+- Optimistic updates have rollback paths, so a failed mutation can't desync the list.

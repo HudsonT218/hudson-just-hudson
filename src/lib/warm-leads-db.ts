@@ -186,15 +186,17 @@ export async function promoteWarmLead(id: string): Promise<{
 export async function triggerScrapeNow(): Promise<{
   inserted: number;
   scanned: number;
+  scored: number;
   errors: string[];
 }> {
   const { data, error } = await supabase.functions.invoke("scrape-warm-leads", {
     body: { trigger: "manual" },
   });
   if (error) throw error;
-  return (data ?? { inserted: 0, scanned: 0, errors: [] }) as {
+  return (data ?? { inserted: 0, scanned: 0, scored: 0, errors: [] }) as {
     inserted: number;
     scanned: number;
+    scored: number;
     errors: string[];
   };
 }
