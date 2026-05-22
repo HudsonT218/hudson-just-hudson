@@ -26,6 +26,7 @@ import {
 import { generateOrderNumber } from "@/lib/utils";
 import { createOrder } from "@/lib/configurator-db";
 import { isStripeConfigured } from "@/lib/stripe";
+import { useForceDark } from "@/lib/useForceDark";
 import type {
   SectionSelection,
   SiteModel,
@@ -46,6 +47,7 @@ const STEP_MODES: Record<number, WizardLayoutMode> = {
 };
 
 export default function ConfiguratorPage() {
+  useForceDark();
   const { user, loading: authLoading } = useAuth();
   const { draftId } = useParams<{ draftId: string }>();
   const navigate = useNavigate();

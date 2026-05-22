@@ -14,6 +14,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/configurator/auth/AuthProvider";
 import { admin } from "@/pages/admin/_components/theme";
+import { useForceDark } from "@/lib/useForceDark";
 
 // Warm sibling admin chunks so tab switching never hits the suspense fallback.
 const preloadAdminChunks = () => {
@@ -54,6 +55,11 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile } = useAuth();
+
+  // Admin hosts Radix portals (Sheet, Dialog, Popover) that render
+  // outside the .dark-region wrapper. Force dark on <html> so they
+  // inherit the correct theme.
+  useForceDark();
 
   useEffect(() => {
     preloadAdminChunks();

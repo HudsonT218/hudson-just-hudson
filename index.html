@@ -9,10 +9,24 @@
       first, then falls back to the OS preference. Source of truth for
       the React-side hook is the `light` class on this <html> element
       (see src/lib/useTheme.ts).
+
+      Admin / configurator / reference routes are forced dark — they
+      contain dark-only styling and host Radix portals that render
+      outside the page's `.dark-region` wrapper. The matching React-side
+      enforcement lives in src/lib/useForceDark.ts.
     -->
     <script>
       (function () {
         try {
+          var path = window.location.pathname || "";
+          var forceDark =
+            path === "/admin" ||
+            path.indexOf("/admin/") === 0 ||
+            path === "/configure" ||
+            path.indexOf("/configure/") === 0 ||
+            path.indexOf("/reference/") === 0;
+          if (forceDark) return;
+
           var stored = window.localStorage.getItem("hudson-theme");
           var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
           if (stored === "light" || (!stored && prefersLight)) {
