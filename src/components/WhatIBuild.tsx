@@ -56,7 +56,7 @@ const WhatIBuild = () => {
                 style={{
                   backgroundColor: isActive
                     ? `rgba(${c.rgb},0.04)`
-                    : "rgba(255,255,255,0.02)",
+                    : "var(--app-card-bg)",
                   border: isActive
                     ? `1px solid rgba(${c.rgb},0.15)`
                     : "1px solid var(--app-border-soft)",

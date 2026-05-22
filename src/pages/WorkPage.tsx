@@ -216,7 +216,7 @@ const WorkPage = () => {
                       style={{
                         color: isLive
                           ? "hsl(217, 91%, 60%)"
-                          : "rgba(255,255,255,0.3)",
+                          : "var(--app-text-muted)",
                       }}
                     >
                       {p.label}
@@ -225,7 +225,9 @@ const WorkPage = () => {
                       className="text-base font-semibold mb-3"
                       style={{
                         letterSpacing: "-0.01em",
-                        color: isLive ? "#fff" : "rgba(255,255,255,0.5)",
+                        color: isLive
+                          ? "var(--app-text-strong)"
+                          : "var(--app-text-med)",
                       }}
                     >
                       {p.title}
@@ -234,8 +236,8 @@ const WorkPage = () => {
                       className="text-sm font-light leading-relaxed mb-6 flex-1"
                       style={{
                         color: isLive
-                          ? "rgba(255,255,255,0.5)"
-                          : "rgba(120,120,120,1)",
+                          ? "var(--app-text-med)"
+                          : "var(--app-text-muted)",
                       }}
                     >
                       {p.desc}
@@ -245,7 +247,7 @@ const WorkPage = () => {
                       style={{
                         color: isLive
                           ? "hsl(217, 91%, 60%)"
-                          : "rgba(255,255,255,0.25)",
+                          : "var(--app-text-soft)",
                       }}
                     >
                       {isLive ? "Visit →" : "View →"}
@@ -293,9 +295,24 @@ const WorkPage = () => {
             </p>
           </div>
 
-          <Suspense fallback={<div className="h-96 rounded-2xl border border-white/5 bg-white/[0.02]" />}>
-            <MeetingAssistantDemo />
-          </Suspense>
+          {/* The demo is a UI mockup of a real product I built. It stays in
+              its native dark theme even when the rest of the site is in light
+              mode — same way Apple / Stripe / Linear embed dark app screenshots
+              into light marketing pages. `dark-region` restores all dark CSS
+              vars + Tailwind text remaps inside; `boxShadow: none` suppresses
+              the light-mode top-edge highlight that would otherwise hit the
+              `.rounded-2xl` wrapper. */}
+          <div
+            className="dark-region rounded-2xl overflow-hidden"
+            style={{
+              backgroundColor: "var(--app-page-bg)",
+              boxShadow: "none",
+            }}
+          >
+            <Suspense fallback={<div className="h-96" />}>
+              <MeetingAssistantDemo />
+            </Suspense>
+          </div>
 
           <p className="text-sm text-gray-500 font-light mt-8 max-w-2xl leading-relaxed">
             A scripted walkthrough of a Q4 review meeting at a fake SaaS company.

@@ -195,7 +195,7 @@ const Index = () => {
           >
             <path
               d="M7 11L14 18L21 11"
-              stroke="rgba(255,255,255,0.25)"
+              stroke="var(--app-text-soft)"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
