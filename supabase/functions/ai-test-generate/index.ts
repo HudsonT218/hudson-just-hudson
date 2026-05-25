@@ -284,10 +284,24 @@ serve(async (req) => {
       console.warn('Lead upsert failed (non-fatal)', e);
     }
 
-    // 8. Best-effort email delivery via Resend. Failure here is non-fatal —
+    // 8. Best-effort email delivery via Lovable Email. Failure here is non-fatal —
     //    the user already has their results on screen.
     try {
-      await sendResultsEmail(email, extractName(cleanedAnswers), results);
+      const nm = extractName(cleanedAnswers);
+      const greetingName = nm?.trim() ? nm.trim().split(/\s+/)[0] : 'there';
+      await supabase.functions.invoke('send-transactional-email', {
+        body: {
+          templateName: 'ai-test-results',
+          recipientEmail: email,
+          idempotencyKey: `ai-test-results-${email}-${Date.now()}`,
+          templateData: {
+            greetingName,
+            summary: results?.summary,
+            at_work: results?.at_work ?? [],
+            in_your_life: results?.in_your_life ?? [],
+          },
+        },
+      });
     } catch (e) {
       console.warn('Email delivery failed (non-fatal)', e);
     }

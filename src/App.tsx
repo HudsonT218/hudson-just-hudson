@@ -18,6 +18,7 @@ import HireAiHelpOrDoItYourself from "./pages/resources/HireAiHelpOrDoItYourself
 import WhatSmallBusinessesUseAiFor from "./pages/resources/WhatSmallBusinessesUseAiFor.tsx";
 import AiGlossaryForBusinessOwners from "./pages/resources/AiGlossaryForBusinessOwners.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import UnsubscribePage from "./pages/UnsubscribePage.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
 import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
 import { AdminRoute } from "@/components/configurator/layout/AdminRoute";
@@ -149,6 +150,7 @@ const AppRoutes = () => {
           <Route path="/work" element={<WorkPage />} />
           <Route path="/interested" element={<InterestedPage />} />
           <Route path="/ai-brief" element={<AiBriefPage />} />
+          <Route path="/unsubscribe" element={<UnsubscribePage />} />
           <Route path="/free-build" element={<FreeBuildPage />} />
           {/* Redirect the previous /ai-test URL (renamed to /ai-brief). */}
           <Route path="/ai-test" element={<Navigate to="/ai-brief" replace />} />
