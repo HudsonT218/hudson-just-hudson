@@ -44,11 +44,10 @@ serve(async (req) => {
     if (userErr || !userData.user) return json({ error: 'unauthorized' }, 401);
 
     const admin = createClient(supabaseUrl, serviceKey);
-    const { data: isAdmin, error: roleErr } = await admin.rpc('has_role', {
-      _user_id: userData.user.id,
-      _role: 'admin',
-    });
-    if (roleErr || !isAdmin) return json({ error: 'forbidden' }, 403);
+    const { data: roleRow, error: roleErr } = await admin
+      .from('user_roles').select('role')
+      .eq('user_id', userData.user.id).eq('role', 'admin').maybeSingle();
+    if (roleErr || !roleRow) return json({ error: 'forbidden' }, 403);
 
     const body = (await req.json()) as { email?: string; name?: string; notes?: string };
     const email = (body.email ?? '').toLowerCase().trim();
