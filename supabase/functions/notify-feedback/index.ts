@@ -49,6 +49,19 @@ serve(async (req) => {
     changeCount: number;
   };
 
+  // Verify the authenticated user owns this order (server-side authorization).
+  const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+  const { data: orderRow } = await admin
+    .from('orders').select('id,user_id')
+    .eq('id', body.orderId).maybeSingle();
+  if (!orderRow || orderRow.user_id !== userData.user.id) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+
+
   const resendKey = Deno.env.get('RESEND_API_KEY');
   const adminEmail = Deno.env.get('ADMIN_EMAIL') ?? 'hudsonturansky@gmail.com';
   const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') ?? 'builds@hudsonturansky.com';
