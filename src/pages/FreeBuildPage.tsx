@@ -656,7 +656,7 @@ const SuccessState = () => (
     }}
   >
     <h2
-      className="text-3xl sm:text-4xl font-bold mb-4"
+      className="text-3xl sm:text-4xl font-extrabold mb-4"
       style={{ color: "var(--app-text-strong)", letterSpacing: "-0.02em" }}
     >
       You're on the list.
