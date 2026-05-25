@@ -151,7 +151,7 @@ serve(async (req) => {
             message:
               'This email has already used the free AI use-case test. Book a discovery call to talk through your results in more detail.',
           },
-          409,
+          200,
         );
       }
     }
