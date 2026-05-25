@@ -144,26 +144,80 @@ const FreeBuildPage = () => {
             could help your business, let's talk.
           </p>
 
-          <div
-            className="inline-flex items-baseline gap-3 rounded-2xl px-5 py-3 mb-8"
-            style={{
-              backgroundColor: "var(--app-card-bg-strong)",
-              border: "1px solid var(--app-border-strong)",
-              backdropFilter: "blur(20px) saturate(180%)",
-              WebkitBackdropFilter: "blur(20px) saturate(180%)",
-            }}
-          >
-            <span
-              className="text-xl sm:text-2xl font-semibold tabular-nums"
-              style={{
-                color: "var(--app-text-strong)",
-                letterSpacing: "-0.02em",
-                fontVariantNumeric: "tabular-nums",
-              }}
+          {settings === null ? (
+            <p
+              className="text-sm font-medium mb-8"
+              style={{ color: "var(--app-text-dim)" }}
             >
-              {counterText}
-            </span>
-          </div>
+              {SKELETON_COUNTER}
+            </p>
+          ) : isFull ? (
+            <p
+              className="text-sm font-medium mb-8"
+              style={{ color: "var(--app-text-dim)" }}
+            >
+              All {settings.free_projects_total} spots are currently full — join the waitlist
+            </p>
+          ) : (
+            <div className="inline-flex items-center gap-3 mb-8">
+              {/* tally */}
+              <div className="flex items-baseline gap-1">
+                <span
+                  className="text-xl sm:text-2xl font-semibold tabular-nums"
+                  style={{
+                    color: "#3b82f6",
+                    letterSpacing: "-0.03em",
+                    fontVariantNumeric: "tabular-nums",
+                  }}
+                >
+                  {settings.free_projects_remaining}
+                </span>
+                <span
+                  className="text-lg sm:text-xl font-light"
+                  style={{ color: "var(--app-text-muted)" }}
+                >
+                  /
+                </span>
+                <span
+                  className="text-xl sm:text-2xl font-semibold tabular-nums"
+                  style={{
+                    color: "var(--app-text-med)",
+                    letterSpacing: "-0.03em",
+                    fontVariantNumeric: "tabular-nums",
+                  }}
+                >
+                  {settings.free_projects_total}
+                </span>
+              </div>
+
+              {/* hairline divider */}
+              <div
+                className="h-px w-3"
+                style={{ backgroundColor: "var(--app-border)" }}
+              />
+
+              {/* label */}
+              <span
+                className="text-xs uppercase tracking-widest font-medium"
+                style={{ color: "var(--app-text-dim)" }}
+              >
+                Free spots left
+              </span>
+
+              {/* underglow */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  bottom: -2,
+                  left: 0,
+                  right: 0,
+                  height: 1,
+                  background: "rgba(59,130,246,0.3)",
+                  filter: "blur(1px)",
+                }}
+              />
+            </div>
+          )}
 
           <div>
             <a
