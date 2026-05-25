@@ -795,7 +795,7 @@ const Submitting = () => (
 
 // ---- Results -------------------------------------------------------------
 
-const Results = ({ results }: { results: AiTestResults }) => {
+const Results = ({ results, email }: { results: AiTestResults; email: string }) => {
   const atWork = results.at_work ?? [];
   const inLife = results.in_your_life ?? [];
 
@@ -815,6 +815,10 @@ const Results = ({ results }: { results: AiTestResults }) => {
       {inLife.length > 0 && (
         <Section heading="In your life" ideas={inLife} />
       )}
+
+      <p className="mt-10 mb-6 text-center text-sm text-gray-400 font-light">
+        A copy of this report has been sent to <span className="text-white">{email}</span> so you can revisit it anytime. Check your spam folder if you don't see it.
+      </p>
 
       <div
         className="mt-12 rounded-2xl p-8 text-center"
