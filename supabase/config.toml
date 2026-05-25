@@ -1,1 +1,6 @@
 project_id = "kiqdnhckkbydgmcuqack"
+[functions.intake-warm-lead]
+verify_jwt = false
+
+[functions.agent-config]
+verify_jwt = false
