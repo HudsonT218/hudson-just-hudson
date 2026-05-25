@@ -87,47 +87,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           borderRight: `1px solid ${admin.border}`,
         }}
       >
-        {/* Brand block */}
-        <div className="px-5 pt-5 pb-6">
-          <Link to="/admin" className="flex items-center gap-3 group">
-            <div
-              className="flex items-center justify-center shrink-0"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                boxShadow: "0 4px 12px rgba(59,130,246,0.25)",
-              }}
-            >
-              <Target size={18} color="#fff" strokeWidth={2.5} />
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span
-                className="font-semibold"
-                style={{
-                  color: admin.text,
-                  fontSize: 16,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Lead OS
-              </span>
-              <span
-                style={{
-                  color: admin.textDim,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                v1 · admin
-              </span>
-            </div>
-          </Link>
-        </div>
-
         {/* Nav */}
-        <nav className="flex-1 px-3 flex flex-col gap-0.5">
+        <nav className="flex-1 px-3 pt-5 flex flex-col gap-0.5">
           {NAV.map((item) => {
             const active = isActive(location.pathname, item.to);
             const Icon = item.icon;
