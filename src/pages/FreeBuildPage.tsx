@@ -135,7 +135,7 @@ const FreeBuildPage = () => {
             I'm building 20 projects for free.
           </h1>
           <p
-            className="text-lg sm:text-xl font-light leading-relaxed mb-8"
+            className="text-base sm:text-lg font-light leading-relaxed mb-8"
             style={{ color: "var(--app-text-med)" }}
           >
             I'd rather show you than tell you. I'm taking on a limited batch of free builds —
