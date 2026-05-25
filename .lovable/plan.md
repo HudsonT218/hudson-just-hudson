@@ -1,39 +1,41 @@
-## Remove em dashes from /free-build copy
+## What to change
 
-Rewrite all user-visible text in `src/pages/FreeBuildPage.tsx` to eliminate `—` (em dash). Code comments are left as-is.
+### 1. Whitelist `@hudsonturansky.com` in the edge function
+File: `supabase/functions/ai-test-generate/index.ts`
 
-### Edits
+Right after we lowercase the email (around line 90–100), set a flag:
+```ts
+const isOwner = email.endsWith('@hudsonturansky.com');
+```
+Then skip both gates when `isOwner`:
+- skip the `daily_cap_reached` check (lines 110–131)
+- skip the `already_used` check (lines 133–152)
 
-**L11** — Skeleton counter
-- Before: `"— free spots left"`
-- After: `"... free spots left"`
+This lets you re-submit the brief as many times as you want from any `@hudsonturansky.com` address. Everyone else still gets one use per email + the daily cost cap.
 
-**L58 & L159** — Full state message
-- Before: `All N spots are currently full — join the waitlist`
-- After: `All N spots are currently full. Join the waitlist.`
+### 2. Make `name` required on the AI Brief form
+File: `src/pages/AiBriefPage.tsx`
 
-**L74, L83, L92** — Meta descriptions
-- Before: `A limited batch of free builds — websites, AI tools, automations. No payment, no catch.`
-- After: `A limited batch of free builds: websites, AI tools, and automations. No payment, no catch.`
+- Line 37: change the zod schema from
+  `name: z.string().max(100).optional()`
+  to
+  `name: z.string().trim().min(1, "Please enter your name").max(100)`
+- Line 540: change the label from `"Your name (optional)"` to `"Your name"` and add the `required` prop so the field shows the required asterisk and validates.
 
-**L141-142** — Hero paragraph
-- Before: `...free builds — websites, AI tools, automations — to do great work and let it speak for itself.`
-- After: `...free builds across websites, AI tools, and automations. The goal is to do great work and let it speak for itself.`
+### 3. Add "Delete lead" on the admin side
+The data layer already has `deleteLead(id)` in `src/lib/lead-os-db.ts` — we just need UI.
 
-**L308** — Booking section
-- Before: `somewhere — they just can't point at exactly what.`
-- After: `somewhere, they just can't point at exactly what.`
+Files:
+- `src/pages/admin/_components/LeadDetailModal.tsx` — add a small destructive "Delete lead" button in the modal footer that:
+  1. Confirms via `window.confirm("Delete this lead? This cannot be undone.")`
+  2. Calls `deleteLead(id)`
+  3. Invalidates the `["admin", "leads"]` query and closes the modal
+- `src/pages/admin/Leads.tsx` — wire an `onDelete` handler into the modal so the parent can close + refresh after a successful delete.
 
-**L388** — Step description
-- Before: `We talk through your business — how it runs, where the friction is.`
-- After: `We talk through your business: how it runs, and where the friction is.`
+This gives you a clean way to remove the duplicate leads created while testing.
 
-**L393** — Step description
-- Before: `I'll pin down a project worth doing — and tell you honestly if AI isn't the answer.`
-- After: `I'll pin down a project worth doing, and tell you honestly if AI isn't the answer.`
+### 4. The runtime error you saw
+That overlay is just the `409 already_used` response from the edge function being logged by `supabase.functions.invoke` before the frontend handles it. The frontend already shows the proper "you've already used this" screen. After change #1, that response will not fire for your email at all, which makes the overlay go away during your testing. No additional code change needed.
 
-**L571** — Form placeholder
-- Before: `Describe it if you know — or leave this blank, that's completely fine.`
-- After: `Describe it if you know, or leave this blank. That's completely fine.`
-
-Code-only em dashes inside `style={{ ... "var(--...)" }}` and comments are not text and are left untouched.
+## Out of scope
+- Editing the AI Brief content/results UI itself — happy to do that as a follow-up once you can get to the end of the form again.
