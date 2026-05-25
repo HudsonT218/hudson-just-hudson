@@ -611,7 +611,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
 
 interface EmailGateProps {
   onSubmitting: () => void;
-  onSuccess: (results: AiTestResults) => void;
+  onSuccess: (results: AiTestResults, email: string) => void;
   onAlreadyUsed: (message: string) => void;
   onError: (message: string) => void;
 }
