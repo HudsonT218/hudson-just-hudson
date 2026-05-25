@@ -254,8 +254,8 @@ serve(async (req) => {
           console.error('Owner submission update failed after duplicate insert', updateError);
         }
       } else {
-      console.error('Submission insert failed', insertError);
-      return json({ error: 'store_error', message: 'Could not save your results.' }, 500);
+        console.error('Submission insert failed', insertError);
+        return json({ error: 'store_error', message: 'Could not save your results.' }, 500);
       }
     }
 
