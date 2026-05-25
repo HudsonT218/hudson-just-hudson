@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getLead, listProjects, updateLead } from "@/lib/lead-os-db";
+import { deleteLead, getLead, listProjects, updateLead } from "@/lib/lead-os-db";
 import {
   LEAD_STATUSES,
   LEAD_STATUS_LABEL,
