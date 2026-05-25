@@ -10,6 +10,7 @@ import Index from "./pages/Index.tsx";
 import WorkPage from "./pages/WorkPage.tsx";
 import InterestedPage from "./pages/InterestedPage.tsx";
 import AiBriefPage from "./pages/AiBriefPage.tsx";
+import FreeBuildPage from "./pages/FreeBuildPage.tsx";
 import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
 import AiForSmallBusiness from "./pages/resources/AiForSmallBusiness.tsx";
 import WhatCustomAiCosts from "./pages/resources/WhatCustomAiCosts.tsx";
@@ -148,6 +149,7 @@ const AppRoutes = () => {
           <Route path="/work" element={<WorkPage />} />
           <Route path="/interested" element={<InterestedPage />} />
           <Route path="/ai-brief" element={<AiBriefPage />} />
+          <Route path="/free-build" element={<FreeBuildPage />} />
           {/* Redirect the previous /ai-test URL (renamed to /ai-brief). */}
           <Route path="/ai-test" element={<Navigate to="/ai-brief" replace />} />
           <Route path="/resources" element={<ResourcesIndexPage />} />
