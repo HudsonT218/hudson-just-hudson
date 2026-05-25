@@ -236,15 +236,27 @@ serve(async (req) => {
     }
 
     // 6. Store submission
-    const { error: insertError } = await admin.from('ai_test_submissions').insert({
+    const submission = {
       email,
       answers: cleanedAnswers,
       results,
       status: 'completed',
-    });
+    };
+    const { error: insertError } = await admin.from('ai_test_submissions').insert(submission);
     if (insertError) {
-      console.error('Submission insert failed', insertError);
-      return json({ error: 'store_error', message: 'Could not save your results.' }, 500);
+      if (isOwner && insertError.code === '23505') {
+        const { error: updateError } = await admin
+          .from('ai_test_submissions')
+          .update({ answers: cleanedAnswers, results, status: 'completed' })
+          .eq('email', email);
+
+        if (updateError) {
+          console.error('Owner submission update failed after duplicate insert', updateError);
+        }
+      } else {
+        console.error('Submission insert failed', insertError);
+        return json({ error: 'store_error', message: 'Could not save your results.' }, 500);
+      }
     }
 
     // 7. Best-effort lead insert. Failure here is non-fatal — the user still
