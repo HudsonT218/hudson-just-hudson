@@ -34,7 +34,7 @@ import { SOURCE_OPTIONS } from "@/lib/tracking";
 // ---------------------------------------------------------------------------
 
 const quizSchema = z.object({
-  name: z.string().max(100).optional(),
+  name: z.string().trim().min(1, "Please enter your name").max(100),
   role: z.string().min(2, "Tell me what you do, even one word helps.").max(200),
   industry: z.string().min(1, "Pick the closest match.").max(80),
   team_size: z.string().min(1, "Pick one."),
