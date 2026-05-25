@@ -1,25 +1,39 @@
-## Match `/free-build` text sizing to the home page
+## Remove em dashes from /free-build copy
 
-The home page uses `text-3xl sm:text-4xl font-extrabold` for section headings (e.g. "I'm a builder."). The `/free-build` hero is currently `text-4xl sm:text-5xl md:text-6xl font-bold`, which makes it dramatically larger than anything on the rest of the site.
+Rewrite all user-visible text in `src/pages/FreeBuildPage.tsx` to eliminate `—` (em dash). Code comments are left as-is.
 
-### Changes (all in `src/pages/FreeBuildPage.tsx`)
+### Edits
 
-1. **Hero heading** ("I'm building 20 projects for free.") — line 128
-   - From: `text-4xl sm:text-5xl md:text-6xl font-bold`
-   - To: `text-3xl sm:text-4xl font-extrabold`
+**L11** — Skeleton counter
+- Before: `"— free spots left"`
+- After: `"... free spots left"`
 
-2. **Hero subhead paragraph** — line 138
-   - From: `text-lg sm:text-xl font-light`
-   - To: `text-base sm:text-lg font-light` (matches home body copy weight/size)
+**L58 & L159** — Full state message
+- Before: `All N spots are currently full — join the waitlist`
+- After: `All N spots are currently full. Join the waitlist.`
 
-3. **Counter "17 of 20 free spots left"** — line 157
-   - From: `text-2xl sm:text-3xl font-semibold`
-   - To: `text-xl sm:text-2xl font-semibold` (one step smaller so it sits below the new, smaller H1)
+**L74, L83, L92** — Meta descriptions
+- Before: `A limited batch of free builds — websites, AI tools, automations. No payment, no catch.`
+- After: `A limited batch of free builds: websites, AI tools, and automations. No payment, no catch.`
 
-4. **Success card heading** ("You're in.") — line 659
-   - From: `text-3xl sm:text-4xl font-bold`
-   - To: `text-3xl sm:text-4xl font-extrabold` (just weight, to match home)
+**L141-142** — Hero paragraph
+- Before: `...free builds — websites, AI tools, automations — to do great work and let it speak for itself.`
+- After: `...free builds across websites, AI tools, and automations. The goal is to do great work and let it speak for itself.`
 
-No other size changes. Section subheads (`text-2xl sm:text-3xl font-semibold` for "How it works", "What you get", "Apply" etc.) already sit reasonably with the home page's secondary headings and are left alone to preserve hierarchy on this dense page.
+**L308** — Booking section
+- Before: `somewhere — they just can't point at exactly what.`
+- After: `somewhere, they just can't point at exactly what.`
 
-No layout, copy, color, or component-structure changes.
+**L388** — Step description
+- Before: `We talk through your business — how it runs, where the friction is.`
+- After: `We talk through your business: how it runs, and where the friction is.`
+
+**L393** — Step description
+- Before: `I'll pin down a project worth doing — and tell you honestly if AI isn't the answer.`
+- After: `I'll pin down a project worth doing, and tell you honestly if AI isn't the answer.`
+
+**L571** — Form placeholder
+- Before: `Describe it if you know — or leave this blank, that's completely fine.`
+- After: `Describe it if you know, or leave this blank. That's completely fine.`
+
+Code-only em dashes inside `style={{ ... "var(--...)" }}` and comments are not text and are left untouched.
