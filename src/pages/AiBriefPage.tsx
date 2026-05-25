@@ -221,7 +221,7 @@ const AiBriefPage = () => {
           {phase.kind === "email" && (
             <EmailGate
               onSubmitting={() => setPhase({ kind: "submitting" })}
-              onSuccess={(results) => setPhase({ kind: "results", results })}
+              onSuccess={(results, email) => setPhase({ kind: "results", results, email })}
               onAlreadyUsed={(message) => setPhase({ kind: "already_used", message })}
               onError={(message) => setPhase({ kind: "error", message })}
             />
