@@ -227,7 +227,7 @@ const AiBriefPage = () => {
             />
           )}
           {phase.kind === "submitting" && <Submitting />}
-          {phase.kind === "results" && <Results results={phase.results} />}
+          {phase.kind === "results" && <Results results={phase.results} email={phase.email} />}
           {phase.kind === "already_used" && <AlreadyUsed message={phase.message} />}
           {phase.kind === "error" && (
             <ErrorState
