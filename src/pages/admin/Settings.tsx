@@ -49,6 +49,19 @@ const Settings = () => {
     queryFn: getSiteSettings,
   });
   const [draft, setDraft] = useState<Draft | null>(null);
+  const [copied, setCopied] = useState(false);
+  const shareUrl = "https://hudsonturansky.com/free-build";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast.success("Link copied");
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
 
   useEffect(() => {
     if (saved) setDraft(toDraft(saved));
