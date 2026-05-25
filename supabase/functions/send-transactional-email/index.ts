@@ -49,6 +49,38 @@ Deno.serve(async (req) => {
     )
   }
 
+  // Restrict to service_role callers or authenticated admins. The function
+  // accepts the anon JWT at the gateway, so without this check anyone could
+  // send templated emails to arbitrary addresses.
+  const authHeader = req.headers.get('Authorization') ?? ''
+  const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : ''
+  let authorized = false
+  if (bearer && bearer === supabaseServiceKey) {
+    authorized = true
+  } else if (bearer) {
+    try {
+      const payload = JSON.parse(atob(bearer.split('.')[1] ?? ''))
+      if (payload?.role === 'service_role') {
+        authorized = true
+      } else if (payload?.sub) {
+        const adminClient = createClient(supabaseUrl, supabaseServiceKey)
+        const { data: roleRow } = await adminClient
+          .from('user_roles').select('role')
+          .eq('user_id', payload.sub).eq('role', 'admin').maybeSingle()
+        if (roleRow) authorized = true
+      }
+    } catch {
+      /* fall through to 401 */
+    }
+  }
+  if (!authorized) {
+    return new Response(
+      JSON.stringify({ error: 'Unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
+
+
   // Parse request body
   let templateName: string
   let recipientEmail: string
