@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Check, Copy, ExternalLink } from "lucide-react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,19 @@ const Settings = () => {
     queryFn: getSiteSettings,
   });
   const [draft, setDraft] = useState<Draft | null>(null);
+  const [copied, setCopied] = useState(false);
+  const shareUrl = "https://hudsonturansky.com/free-build";
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast.success("Link copied");
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
 
   useEffect(() => {
     if (saved) setDraft(toDraft(saved));
@@ -208,6 +222,66 @@ const Settings = () => {
                   No changes to save.
                 </span>
               )}
+            </div>
+          </div>
+
+          <div
+            className="mt-6 rounded-2xl p-6"
+            style={{
+              backgroundColor: admin.surface,
+              border: `1px solid ${admin.border}`,
+            }}
+          >
+            <h2
+              className="text-base font-medium"
+              style={{ color: admin.text, letterSpacing: "-0.01em" }}
+            >
+              Shareable link
+            </h2>
+            <p className="mt-1 text-sm" style={{ color: admin.textMuted }}>
+              Send this to prospects. Opens the public free-projects landing page.
+            </p>
+
+            <div className="mt-6 flex items-center gap-2">
+              <Input
+                readOnly
+                value={shareUrl}
+                onFocus={(e) => e.currentTarget.select()}
+                style={{
+                  backgroundColor: admin.surface2,
+                  border: `1px solid ${admin.border}`,
+                  color: admin.text,
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCopy}
+                className="shrink-0"
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-4 w-4" />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-4 w-4" />
+                    Copy
+                  </>
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                asChild
+                className="shrink-0"
+              >
+                <a href={shareUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4" />
+                  Open
+                </a>
+              </Button>
             </div>
           </div>
         </div>

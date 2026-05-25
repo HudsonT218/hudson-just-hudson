@@ -1,26 +1,22 @@
-## Problem
+## Add shareable link section to Settings page
 
-On `/admin/settings`, the inputs and toggle are disabled and nothing can be saved. Root cause: `src/lib/site-settings-db.ts` reads from a `site_settings` table that doesn't exist in the database. The query throws, the `draft` state stays `null`, so every field is rendered with `disabled={!draft}`.
+Add a new card on `/admin/settings`, directly below the existing "Free-projects landing page" card, that displays the public URL for the free projects landing page with a one-click copy button.
 
-## Fix
+### What it looks like
 
-Create the missing table via migration and seed the singleton row. No frontend changes needed.
+- New card styled identically to the existing settings card (same `admin.surface`, border, radius, spacing).
+- Heading: "Shareable link"
+- Subtext: "Send this to prospects. Opens the public free-projects landing page."
+- Read-only input showing the full URL: `https://hudsonturansky.com/free-build`
+- Copy button next to the input. On click:
+  - Uses `navigator.clipboard.writeText`
+  - Shows a `sonner` toast ("Link copied")
+  - Briefly swaps the button label/icon to "Copied" with a checkmark for ~1.5s
+- Small "Open" link beside it that opens the URL in a new tab (nice-to-have, matches admin patterns).
 
-### Migration
+### Technical notes
 
-- Create `public.site_settings`:
-  - `id text primary key check (id = 'singleton')`
-  - `free_projects_total int not null default 5`
-  - `free_projects_remaining int not null default 5`
-  - `campaign_open boolean not null default true`
-  - `updated_at timestamptz not null default now()`
-- Trigger to bump `updated_at` on update.
-- Insert the singleton row (`id = 'singleton'`) with sensible defaults.
-- Enable RLS. Policies:
-  - `select` allowed to everyone (anon + authenticated) so the public `/free-build` page can read counter state.
-  - `update` allowed only to admins via the existing `has_role(auth.uid(), 'admin')` function.
-  - No insert/delete policies (singleton is seeded by the migration).
-
-### Verification
-
-After migration, reload `/admin/settings`. Fields populate, Save enables when values change, and updates persist.
+- Edit only `src/pages/admin/Settings.tsx`. No new files, no backend changes.
+- URL is hardcoded to the production custom domain: `https://hudsonturansky.com/free-build`.
+- Uses existing `Button`, `Input`, `toast` (sonner), and `Copy` / `Check` icons from `lucide-react` already used elsewhere in admin.
+- Self-contained — no new state in the query/mutation flow; just a small local `useState` for the copied indicator.
