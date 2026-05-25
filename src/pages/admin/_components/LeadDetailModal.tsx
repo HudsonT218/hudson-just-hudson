@@ -299,6 +299,30 @@ export function LeadDetailModal({
                 >
                   Outreach drafts, coming in Phase 2 (Claude-powered draft generator).
                 </div>
+
+                <div
+                  className="mt-8 pt-6 flex justify-end"
+                  style={{ borderTop: `1px solid ${admin.border}` }}
+                >
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                    onClick={async () => {
+                      if (!lead) return;
+                      if (!window.confirm(`Delete "${lead.name}"? This cannot be undone.`)) return;
+                      try {
+                        await deleteLead(lead.id);
+                        onDeleted?.();
+                        onClose();
+                      } catch (e) {
+                        setError(e instanceof Error ? e.message : "Failed to delete");
+                      }
+                    }}
+                  >
+                    Delete lead
+                  </Button>
+                </div>
               </div>
             </>
           )}
