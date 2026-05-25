@@ -117,6 +117,38 @@ serve(async (req) => {
     auth: { persistSession: false },
   });
 
+  // Authentication: accept either a valid AGENT_API_KEY bearer (used by cron /
+  // local scripts) OR an authenticated admin user JWT (used by the dashboard
+  // "Run now" button). Prevents anyone from triggering paid LLM calls.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const agentKey = Deno.env.get("AGENT_API_KEY");
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  let authorized = false;
+  if (agentKey && bearer && bearer.length === agentKey.length) {
+    // constant-time compare
+    let diff = 0;
+    for (let i = 0; i < bearer.length; i++) diff |= bearer.charCodeAt(i) ^ agentKey.charCodeAt(i);
+    if (diff === 0) authorized = true;
+  }
+  if (!authorized && authHeader.startsWith("Bearer ")) {
+    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: userData } = await userClient.auth.getUser();
+    if (userData?.user) {
+      const { data: roleRow } = await supabase
+        .from("user_roles").select("role")
+        .eq("user_id", userData.user.id).eq("role", "admin").maybeSingle();
+      if (roleRow) authorized = true;
+    }
+  }
+  if (!authorized) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+
   // Per-run cap can be overridden by the caller (e.g. the Run-Now button).
   let bodyOverride: { target_per_run?: number } = {};
   try {
