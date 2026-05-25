@@ -537,7 +537,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
         {/* Step 1, About you */}
         {step === 0 && (
           <>
-            <FieldText name="name" label="Your name (optional)" placeholder="e.g. Maria" control={control} error={errors.name} />
+            <FieldText name="name" label="Your name" placeholder="e.g. Maria" control={control} error={errors.name} required />
             <FieldText name="role" label="What work do you currently do?" placeholder="e.g. Real estate agent, solo accountant, agency owner…" control={control} error={errors.role} required />
             <FieldSingleSelect name="industry" label="Closest industry" options={INDUSTRIES} control={control} error={errors.industry} required />
             <FieldSingleSelect name="team_size" label="Team / business size" options={TEAM_SIZES} control={control} error={errors.team_size} required />
