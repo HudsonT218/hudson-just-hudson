@@ -580,39 +580,33 @@ export type Database = {
       warm_lead_settings: {
         Row: {
           created_at: string
+          enabled: boolean
           id: string
           last_run_at: string | null
-          mode: string
           outreach_voice: string
-          target_per_week: number
-          this_week_count: number
+          target_per_run: number
           threshold: number
           updated_at: string
-          week_started_on: string
         }
         Insert: {
           created_at?: string
+          enabled?: boolean
           id?: string
           last_run_at?: string | null
-          mode?: string
           outreach_voice?: string
-          target_per_week?: number
-          this_week_count?: number
+          target_per_run?: number
           threshold?: number
           updated_at?: string
-          week_started_on?: string
         }
         Update: {
           created_at?: string
+          enabled?: boolean
           id?: string
           last_run_at?: string | null
-          mode?: string
           outreach_voice?: string
-          target_per_week?: number
-          this_week_count?: number
+          target_per_run?: number
           threshold?: number
           updated_at?: string
-          week_started_on?: string
         }
         Relationships: []
       }
@@ -622,6 +616,7 @@ export type Database = {
           created_at: string
           enabled: boolean
           id: string
+          kind: string
           label: string
           last_error: string | null
           last_run_at: string | null
@@ -632,6 +627,7 @@ export type Database = {
           created_at?: string
           enabled?: boolean
           id: string
+          kind?: string
           label: string
           last_error?: string | null
           last_run_at?: string | null
@@ -642,6 +638,7 @@ export type Database = {
           created_at?: string
           enabled?: boolean
           id?: string
+          kind?: string
           label?: string
           last_error?: string | null
           last_run_at?: string | null
