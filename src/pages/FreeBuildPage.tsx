@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getSiteSettings, type SiteSettings } from "@/lib/site-settings-db";
 import { readUtmParams } from "@/lib/tracking";
 
-const SKELETON_COUNTER = "— free spots left";
+const SKELETON_COUNTER = "... free spots left";
 
 const signupSchema = z.object({
   name: z.string().trim().min(1, "Please enter your name.").max(100),
@@ -55,7 +55,7 @@ const FreeBuildPage = () => {
     settings === null
       ? SKELETON_COUNTER
       : isFull
-        ? `All ${settings.free_projects_total} spots are currently full — join the waitlist`
+        ? `All ${settings.free_projects_total} spots are currently full. Join the waitlist.`
         : `${settings.free_projects_remaining} of ${settings.free_projects_total} free spots left`;
 
   const submitButtonLabel = isFull ? "Join the waitlist" : "Claim my free spot";
@@ -71,7 +71,7 @@ const FreeBuildPage = () => {
         <title>I'm building 20 projects for free · Hudson Turansky</title>
         <meta
           name="description"
-          content="A limited batch of free builds — websites, AI tools, automations. No payment, no catch. Book a free discovery call and I'll scope something useful for your business."
+          content="A limited batch of free builds: websites, AI tools, and automations. No payment, no catch. Book a free discovery call and I'll scope something useful for your business."
         />
         <meta name="robots" content="noindex" />
         <link rel="canonical" href="https://hudsonturansky.com/free-build" />
@@ -80,7 +80,7 @@ const FreeBuildPage = () => {
         <meta property="og:title" content="I'm building 20 projects for free" />
         <meta
           property="og:description"
-          content="A limited batch of free builds — websites, AI tools, automations. No payment, no catch. Book a free discovery call."
+          content="A limited batch of free builds: websites, AI tools, and automations. No payment, no catch. Book a free discovery call."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="og:image:width" content="1200" />
@@ -89,7 +89,7 @@ const FreeBuildPage = () => {
         <meta name="twitter:title" content="I'm building 20 projects for free" />
         <meta
           name="twitter:description"
-          content="A limited batch of free builds — websites, AI tools, automations. No payment, no catch."
+          content="A limited batch of free builds: websites, AI tools, and automations. No payment, no catch."
         />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
       </Helmet>
@@ -138,10 +138,10 @@ const FreeBuildPage = () => {
             className="text-base sm:text-lg font-light leading-relaxed mb-8"
             style={{ color: "var(--app-text-med)" }}
           >
-            I'd rather show you than tell you. I'm taking on a limited batch of free builds —
-            websites, AI tools, automations — to do great work and let it speak for itself. No
-            payment, no catch. If there's something you want built, or even just a hunch that AI
-            could help your business, let's talk.
+            I'd rather show you than tell you. I'm taking on a limited batch of free builds
+            across websites, AI tools, and automations. The goal is to do great work and let it
+            speak for itself. No payment, no catch. If there's something you want built, or even
+            just a hunch that AI could help your business, let's talk.
           </p>
 
           {settings === null ? (
@@ -156,7 +156,7 @@ const FreeBuildPage = () => {
               className="text-sm font-medium mb-8"
               style={{ color: "var(--app-text-dim)" }}
             >
-              All {settings.free_projects_total} spots are currently full — join the waitlist
+              All {settings.free_projects_total} spots are currently full. Join the waitlist.
             </p>
           ) : (
             <div className="relative inline-flex items-center gap-3 mb-8">
@@ -305,7 +305,7 @@ const FreeBuildPage = () => {
             >
               You do <strong style={{ color: "var(--app-text-strong)", fontWeight: 500 }}>not</strong> need a
               finished idea to book a call. Most business owners sense that AI could help them
-              somewhere — they just can't point at exactly what. That's the whole point of the call.
+              somewhere, they just can't point at exactly what. That's the whole point of the call.
               Tell me how your business actually works day to day, and I'll help you spot the
               automations, AI integrations, and small tools that would genuinely move the needle.
               You'll leave with a concrete idea whether or not we end up working together.
@@ -385,12 +385,12 @@ const HOW_IT_WORKS: Array<{ title: string; body: string }> = [
   {
     title: "Book a discovery call.",
     body:
-      "A relaxed 30 minutes. We talk through your business — how it runs, where the friction is.",
+      "A relaxed 30 minutes. We talk through your business: how it runs, and where the friction is.",
   },
   {
     title: "I scope something useful.",
     body:
-      "Based on the call, I'll pin down a project worth doing — and tell you honestly if AI isn't the answer.",
+      "Based on the call, I'll pin down a project worth doing, and tell you honestly if AI isn't the answer.",
   },
   {
     title: "I build it, free.",
@@ -568,7 +568,7 @@ const SignupForm = ({
               <textarea
                 {...field}
                 rows={4}
-                placeholder="Describe it if you know — or leave this blank, that's completely fine. We'll figure it out on the call."
+                placeholder="Describe it if you know, or leave this blank. That's completely fine. We'll figure it out on the call."
                 className="w-full rounded-md px-4 py-3 text-white placeholder:text-gray-600 focus:outline-none resize-none"
                 style={{
                   backgroundColor: "var(--app-card-bg-strong)",
