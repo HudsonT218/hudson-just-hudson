@@ -50,6 +50,7 @@ const AdminReferences = lazy(() => import("./pages/admin/References.tsx"));
 const AdminWarmLeads = lazy(() => import("./pages/admin/WarmLeads.tsx"));
 const AdminWarmLeadDetail = lazy(() => import("./pages/admin/WarmLeadDetail.tsx"));
 const AdminAiVisibility = lazy(() => import("./pages/admin/AiVisibility.tsx"));
+const AdminSettings = lazy(() => import("./pages/admin/Settings.tsx"));
 
 const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
 
@@ -224,6 +225,7 @@ const AppRoutes = () => {
           <Route path="/admin/projects/:id" element={<AdminRoute><AdminProjectDetail /></AdminRoute>} />
           <Route path="/admin/references" element={<AdminRoute><AdminReferences /></AdminRoute>} />
           <Route path="/admin/ai-visibility" element={<AdminRoute><AdminAiVisibility /></AdminRoute>} />
+          <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
