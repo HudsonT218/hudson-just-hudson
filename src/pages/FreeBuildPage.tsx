@@ -125,7 +125,7 @@ const FreeBuildPage = () => {
             Limited free projects
           </p>
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6"
+            className="text-3xl sm:text-4xl font-extrabold mb-6"
             style={{
               color: "var(--app-text-strong)",
               letterSpacing: "-0.03em",
