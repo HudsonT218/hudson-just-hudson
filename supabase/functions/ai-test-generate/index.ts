@@ -289,7 +289,7 @@ serve(async (req) => {
     try {
       const nm = extractName(cleanedAnswers);
       const greetingName = nm?.trim() ? nm.trim().split(/\s+/)[0] : 'there';
-      await supabase.functions.invoke('send-transactional-email', {
+      const { error: emailError } = await admin.functions.invoke('send-transactional-email', {
         body: {
           templateName: 'ai-test-results',
           recipientEmail: email,
@@ -302,6 +302,10 @@ serve(async (req) => {
           },
         },
       });
+
+      if (emailError) {
+        throw emailError;
+      }
     } catch (e) {
       console.warn('Email delivery failed (non-fatal)', e);
     }
