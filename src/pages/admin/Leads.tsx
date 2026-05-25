@@ -148,6 +148,9 @@ const Leads = () => {
             qc.invalidateQueries({ queryKey: LEADS_KEY });
             navigate("/admin/leads");
           }}
+          onDeleted={() => {
+            qc.invalidateQueries({ queryKey: LEADS_KEY });
+          }}
         />
       )}
     </AdminLayout>
