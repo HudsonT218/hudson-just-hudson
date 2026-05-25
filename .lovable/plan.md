@@ -1,22 +1,25 @@
-## Add shareable link section to Settings page
+## Match `/free-build` text sizing to the home page
 
-Add a new card on `/admin/settings`, directly below the existing "Free-projects landing page" card, that displays the public URL for the free projects landing page with a one-click copy button.
+The home page uses `text-3xl sm:text-4xl font-extrabold` for section headings (e.g. "I'm a builder."). The `/free-build` hero is currently `text-4xl sm:text-5xl md:text-6xl font-bold`, which makes it dramatically larger than anything on the rest of the site.
 
-### What it looks like
+### Changes (all in `src/pages/FreeBuildPage.tsx`)
 
-- New card styled identically to the existing settings card (same `admin.surface`, border, radius, spacing).
-- Heading: "Shareable link"
-- Subtext: "Send this to prospects. Opens the public free-projects landing page."
-- Read-only input showing the full URL: `https://hudsonturansky.com/free-build`
-- Copy button next to the input. On click:
-  - Uses `navigator.clipboard.writeText`
-  - Shows a `sonner` toast ("Link copied")
-  - Briefly swaps the button label/icon to "Copied" with a checkmark for ~1.5s
-- Small "Open" link beside it that opens the URL in a new tab (nice-to-have, matches admin patterns).
+1. **Hero heading** ("I'm building 20 projects for free.") — line 128
+   - From: `text-4xl sm:text-5xl md:text-6xl font-bold`
+   - To: `text-3xl sm:text-4xl font-extrabold`
 
-### Technical notes
+2. **Hero subhead paragraph** — line 138
+   - From: `text-lg sm:text-xl font-light`
+   - To: `text-base sm:text-lg font-light` (matches home body copy weight/size)
 
-- Edit only `src/pages/admin/Settings.tsx`. No new files, no backend changes.
-- URL is hardcoded to the production custom domain: `https://hudsonturansky.com/free-build`.
-- Uses existing `Button`, `Input`, `toast` (sonner), and `Copy` / `Check` icons from `lucide-react` already used elsewhere in admin.
-- Self-contained — no new state in the query/mutation flow; just a small local `useState` for the copied indicator.
+3. **Counter "17 of 20 free spots left"** — line 157
+   - From: `text-2xl sm:text-3xl font-semibold`
+   - To: `text-xl sm:text-2xl font-semibold` (one step smaller so it sits below the new, smaller H1)
+
+4. **Success card heading** ("You're in.") — line 659
+   - From: `text-3xl sm:text-4xl font-bold`
+   - To: `text-3xl sm:text-4xl font-extrabold` (just weight, to match home)
+
+No other size changes. Section subheads (`text-2xl sm:text-3xl font-semibold` for "How it works", "What you get", "Apply" etc.) already sit reasonably with the home page's secondary headings and are left alone to preserve hierarchy on this dense page.
+
+No layout, copy, color, or component-structure changes.

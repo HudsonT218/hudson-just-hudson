@@ -125,7 +125,7 @@ const FreeBuildPage = () => {
             Limited free projects
           </p>
           <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6"
+            className="text-3xl sm:text-4xl font-extrabold mb-6"
             style={{
               color: "var(--app-text-strong)",
               letterSpacing: "-0.03em",
@@ -135,7 +135,7 @@ const FreeBuildPage = () => {
             I'm building 20 projects for free.
           </h1>
           <p
-            className="text-lg sm:text-xl font-light leading-relaxed mb-8"
+            className="text-base sm:text-lg font-light leading-relaxed mb-8"
             style={{ color: "var(--app-text-med)" }}
           >
             I'd rather show you than tell you. I'm taking on a limited batch of free builds —
@@ -154,7 +154,7 @@ const FreeBuildPage = () => {
             }}
           >
             <span
-              className="text-2xl sm:text-3xl font-semibold tabular-nums"
+              className="text-xl sm:text-2xl font-semibold tabular-nums"
               style={{
                 color: "var(--app-text-strong)",
                 letterSpacing: "-0.02em",
@@ -656,7 +656,7 @@ const SuccessState = () => (
     }}
   >
     <h2
-      className="text-3xl sm:text-4xl font-bold mb-4"
+      className="text-3xl sm:text-4xl font-extrabold mb-4"
       style={{ color: "var(--app-text-strong)", letterSpacing: "-0.02em" }}
     >
       You're on the list.
