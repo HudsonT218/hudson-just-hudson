@@ -653,7 +653,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
         return;
       }
       if (resp.ok && "results" in resp) {
-        onSuccess(resp.results);
+        onSuccess(resp.results, data.email);
         return;
       }
       const err = resp as { error?: string; message?: string };
