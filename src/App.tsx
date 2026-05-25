@@ -18,6 +18,7 @@ import HireAiHelpOrDoItYourself from "./pages/resources/HireAiHelpOrDoItYourself
 import WhatSmallBusinessesUseAiFor from "./pages/resources/WhatSmallBusinessesUseAiFor.tsx";
 import AiGlossaryForBusinessOwners from "./pages/resources/AiGlossaryForBusinessOwners.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import UnsubscribePage from "./pages/UnsubscribePage.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
 import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
 import { AdminRoute } from "@/components/configurator/layout/AdminRoute";
