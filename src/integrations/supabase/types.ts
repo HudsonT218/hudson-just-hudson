@@ -488,6 +488,30 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          campaign_open: boolean
+          free_projects_remaining: number
+          free_projects_total: number
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          campaign_open?: boolean
+          free_projects_remaining?: number
+          free_projects_total?: number
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          campaign_open?: boolean
+          free_projects_remaining?: number
+          free_projects_total?: number
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       time_entries: {
         Row: {
           created_at: string | null
