@@ -107,48 +107,53 @@ serve(async (req) => {
     }
     const admin = createClient(supabaseUrl, serviceKey);
 
-    // 3. Circuit breaker — global daily cap (cost protection)
-    const dailyCap = Number(Deno.env.get('AI_TEST_DAILY_CAP') ?? '200');
-    const todayStart = new Date();
-    todayStart.setUTCHours(0, 0, 0, 0);
-    const { count: todayCount, error: countError } = await admin
-      .from('ai_test_submissions')
-      .select('id', { count: 'exact', head: true })
-      .gte('created_at', todayStart.toISOString());
-    if (countError) {
-      console.error('Daily-count query failed', countError);
-      return json({ error: 'internal_error' }, 500);
-    }
-    if ((todayCount ?? 0) >= dailyCap) {
-      return json(
-        {
-          error: 'daily_cap_reached',
-          message:
-            "We have hit today's free-test limit. Please try again tomorrow, or book a free 30-minute call.",
-        },
-        429,
-      );
-    }
+    // Owner bypass — allow unlimited submissions from @hudsonturansky.com for testing.
+    const isOwner = email.endsWith('@hudsonturansky.com');
 
-    // 4. One-use-per-email — BEFORE any LLM call (this is the main cost guard)
-    const { data: existing, error: existingError } = await admin
-      .from('ai_test_submissions')
-      .select('id, created_at')
-      .eq('email', email)
-      .maybeSingle();
-    if (existingError) {
-      console.error('Existing-email query failed', existingError);
-      return json({ error: 'internal_error' }, 500);
-    }
-    if (existing) {
-      return json(
-        {
-          error: 'already_used',
-          message:
-            'This email has already used the free AI use-case test. Book a discovery call to talk through your results in more detail.',
-        },
-        409,
-      );
+    if (!isOwner) {
+      // 3. Circuit breaker — global daily cap (cost protection)
+      const dailyCap = Number(Deno.env.get('AI_TEST_DAILY_CAP') ?? '200');
+      const todayStart = new Date();
+      todayStart.setUTCHours(0, 0, 0, 0);
+      const { count: todayCount, error: countError } = await admin
+        .from('ai_test_submissions')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', todayStart.toISOString());
+      if (countError) {
+        console.error('Daily-count query failed', countError);
+        return json({ error: 'internal_error' }, 500);
+      }
+      if ((todayCount ?? 0) >= dailyCap) {
+        return json(
+          {
+            error: 'daily_cap_reached',
+            message:
+              "We have hit today's free-test limit. Please try again tomorrow, or book a free 30-minute call.",
+          },
+          429,
+        );
+      }
+
+      // 4. One-use-per-email — BEFORE any LLM call (this is the main cost guard)
+      const { data: existing, error: existingError } = await admin
+        .from('ai_test_submissions')
+        .select('id, created_at')
+        .eq('email', email)
+        .maybeSingle();
+      if (existingError) {
+        console.error('Existing-email query failed', existingError);
+        return json({ error: 'internal_error' }, 500);
+      }
+      if (existing) {
+        return json(
+          {
+            error: 'already_used',
+            message:
+              'This email has already used the free AI use-case test. Book a discovery call to talk through your results in more detail.',
+          },
+          409,
+        );
+      }
     }
 
     // 5. LLM call — via Lovable AI Gateway (no OpenAI key needed)

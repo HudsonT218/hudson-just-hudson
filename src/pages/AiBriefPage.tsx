@@ -34,7 +34,7 @@ import { SOURCE_OPTIONS } from "@/lib/tracking";
 // ---------------------------------------------------------------------------
 
 const quizSchema = z.object({
-  name: z.string().max(100).optional(),
+  name: z.string().trim().min(1, "Please enter your name").max(100),
   role: z.string().min(2, "Tell me what you do, even one word helps.").max(200),
   industry: z.string().min(1, "Pick the closest match.").max(80),
   team_size: z.string().min(1, "Pick one."),
@@ -537,7 +537,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
         {/* Step 1, About you */}
         {step === 0 && (
           <>
-            <FieldText name="name" label="Your name (optional)" placeholder="e.g. Maria" control={control} error={errors.name} />
+            <FieldText name="name" label="Your name" placeholder="e.g. Maria" control={control} error={errors.name} required />
             <FieldText name="role" label="What work do you currently do?" placeholder="e.g. Real estate agent, solo accountant, agency owner…" control={control} error={errors.role} required />
             <FieldSingleSelect name="industry" label="Closest industry" options={INDUSTRIES} control={control} error={errors.industry} required />
             <FieldSingleSelect name="team_size" label="Team / business size" options={TEAM_SIZES} control={control} error={errors.team_size} required />
