@@ -159,7 +159,7 @@ const FreeBuildPage = () => {
               All {settings.free_projects_total} spots are currently full — join the waitlist
             </p>
           ) : (
-            <div className="inline-flex items-center gap-3 mb-8">
+            <div className="relative inline-flex items-center gap-3 mb-8">
               {/* tally */}
               <div className="flex items-baseline gap-1">
                 <span
