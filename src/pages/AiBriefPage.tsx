@@ -165,7 +165,7 @@ type Phase =
   | { kind: "quiz" }
   | { kind: "email" }
   | { kind: "submitting" }
-  | { kind: "results"; results: AiTestResults }
+  | { kind: "results"; results: AiTestResults; email: string }
   | { kind: "already_used"; message: string }
   | { kind: "error"; message: string };
 
