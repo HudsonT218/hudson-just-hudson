@@ -165,7 +165,7 @@ type Phase =
   | { kind: "quiz" }
   | { kind: "email" }
   | { kind: "submitting" }
-  | { kind: "results"; results: AiTestResults }
+  | { kind: "results"; results: AiTestResults; email: string }
   | { kind: "already_used"; message: string }
   | { kind: "error"; message: string };
 
@@ -221,13 +221,13 @@ const AiBriefPage = () => {
           {phase.kind === "email" && (
             <EmailGate
               onSubmitting={() => setPhase({ kind: "submitting" })}
-              onSuccess={(results) => setPhase({ kind: "results", results })}
+              onSuccess={(results, email) => setPhase({ kind: "results", results, email })}
               onAlreadyUsed={(message) => setPhase({ kind: "already_used", message })}
               onError={(message) => setPhase({ kind: "error", message })}
             />
           )}
           {phase.kind === "submitting" && <Submitting />}
-          {phase.kind === "results" && <Results results={phase.results} />}
+          {phase.kind === "results" && <Results results={phase.results} email={phase.email} />}
           {phase.kind === "already_used" && <AlreadyUsed message={phase.message} />}
           {phase.kind === "error" && (
             <ErrorState
@@ -611,7 +611,7 @@ const Quiz = ({ onComplete, onBackToIntro }: QuizProps) => {
 
 interface EmailGateProps {
   onSubmitting: () => void;
-  onSuccess: (results: AiTestResults) => void;
+  onSuccess: (results: AiTestResults, email: string) => void;
   onAlreadyUsed: (message: string) => void;
   onError: (message: string) => void;
 }
@@ -653,7 +653,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
         return;
       }
       if (resp.ok && "results" in resp) {
-        onSuccess(resp.results);
+        onSuccess(resp.results, data.email);
         return;
       }
       const err = resp as { error?: string; message?: string };
@@ -795,7 +795,7 @@ const Submitting = () => (
 
 // ---- Results -------------------------------------------------------------
 
-const Results = ({ results }: { results: AiTestResults }) => {
+const Results = ({ results, email }: { results: AiTestResults; email: string }) => {
   const atWork = results.at_work ?? [];
   const inLife = results.in_your_life ?? [];
 
@@ -815,6 +815,10 @@ const Results = ({ results }: { results: AiTestResults }) => {
       {inLife.length > 0 && (
         <Section heading="In your life" ideas={inLife} />
       )}
+
+      <p className="mt-10 mb-6 text-center text-sm text-gray-400 font-light">
+        A copy of this report has been sent to <span className="text-white">{email}</span> so you can revisit it anytime. Check your spam folder if you don't see it.
+      </p>
 
       <div
         className="mt-12 rounded-2xl p-8 text-center"
