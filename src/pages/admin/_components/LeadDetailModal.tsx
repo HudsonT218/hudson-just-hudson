@@ -31,10 +31,12 @@ export function LeadDetailModal({
   leadId,
   open,
   onClose,
+  onDeleted,
 }: {
   leadId: string;
   open: boolean;
   onClose: () => void;
+  onDeleted?: () => void;
 }) {
   const [lead, setLead] = useState<Lead | null>(null);
   const [projects, setProjects] = useState<ProjectWithStats[]>([]);
