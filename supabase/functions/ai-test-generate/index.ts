@@ -107,8 +107,8 @@ serve(async (req) => {
     }
     const admin = createClient(supabaseUrl, serviceKey);
 
-    // Owner bypass — allow unlimited submissions from @hudsonturansky.com for testing.
-    const isOwner = email.endsWith('@hudsonturansky.com');
+    // Owner bypass — allow unlimited submissions from Hudson's own emails for testing.
+    const isOwner = email === 'hudsonturansky@gmail.com' || email.endsWith('@hudsonturansky.com');
 
     if (!isOwner) {
       // 3. Circuit breaker — global daily cap (cost protection)
