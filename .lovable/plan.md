@@ -1,26 +1,33 @@
-## Plan
+## Goal
+Replace the stale Resend notification in `discovery-call-signup` with the new Lovable transactional email pipeline so notifications get logged in `email_send_log` and routed through the verified `notify.hudsonturansky.com` queue.
 
-### 1. Add "report also sent to your email" message
-In `src/pages/AiBriefPage.tsx`, inside the `Results` component, add a small notice between the last `Section` and the discovery-call CTA block. Copy:
+## Steps
 
-> A copy of this report has been sent to **{email}** so you can revisit it anytime. Check your spam folder if you don't see it.
+1. **Create new email template** `supabase/functions/_shared/transactional-email-templates/free-build-signup.tsx`
+   - React Email component matching the site's dark/blue brand styling (white body per rule)
+   - Props: `name`, `email`, `company?`, `phone?`, `message?`, `utmSource?`
+   - Subject: `New free-project signup: {name}`
+   - Fixed `to:` = ADMIN_EMAIL (hudsonturansky@gmail.com) so it always lands in Hudson's inbox
+   - `previewData` with sample values
 
-To show the recipient email, thread the submitted email from `Form` → `onSuccess` → `Results` (currently only `results` is passed). Update the `phase` state to also carry `email`, and update `<Results>` props.
+2. **Register template** in `supabase/functions/_shared/transactional-email-templates/registry.ts`
+   - Add import + `'free-build-signup'` entry
 
-Style: muted gray text, centered, small, sits above the CTA card with appropriate spacing.
+3. **Update `supabase/functions/discovery-call-signup/index.ts`**
+   - Remove the `sendAdminNotification` Resend helper and all Resend env vars from the header comment
+   - Replace with a single `admin.functions.invoke('send-transactional-email', { body: { templateName: 'free-build-signup', recipientEmail: 'hudsonturansky@gmail.com', idempotencyKey: \`free-build-signup-${leadId}\`, templateData: {...} } })` call
+   - Service-role client → passes auth check in `send-transactional-email`
+   - Keep best-effort try/catch — failure must not fail the signup
+   - Capture `leadId` from the insert/update path for the idempotency key
 
-### 2. Email automation
-Good news — the automation already exists. `supabase/functions/ai-test-generate/index.ts` already calls `sendResultsEmail(email, name, results)` after generating the report (line 290), using Resend with the `RESEND_API_KEY` and `RESEND_FROM_EMAIL` secrets (both already configured). It renders a branded HTML version of the report and sends it to the email entered in the form.
+4. **Deploy** both edge functions (`send-transactional-email`, `discovery-call-signup`)
 
-Steps to confirm it's actually working end-to-end:
-1. Pull recent `ai-test-generate` edge function logs and check for `Email delivery failed` warnings or Resend errors.
-2. If logs show success → nothing to build, just confirm to user.
-3. If logs show a Resend error (e.g. domain not verified, from-address rejected), report the exact error and propose the fix (most likely verifying the sending domain in Resend, or switching `RESEND_FROM_EMAIL` to a verified address).
+5. **Verify**
+   - Submit a test entry on /free-build
+   - Confirm row in `leads` table
+   - Confirm row in `email_send_log` with `template_name='free-build-signup'`, status `pending`→`sent`
+   - Confirm email arrives at hudsonturansky@gmail.com
 
-No edge function code changes planned unless logs reveal an issue.
-
-### Files touched
-- `src/pages/AiBriefPage.tsx` — pass email into Results, render the new notice.
-
-### Out of scope
-- Rebuilding the email pipeline on Lovable Emails infra (current Resend path already works and matches the rest of the project's email functions).
+## Out of scope
+- Not touching the user-facing confirmation flow (currently there is none — could be added later if desired)
+- Not removing the old `RESEND_API_KEY` / `RESEND_FROM_EMAIL` secrets (they're unused after this; can be deleted manually anytime)

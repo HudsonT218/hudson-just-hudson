@@ -10,7 +10,9 @@ export interface TemplateEntry {
 }
 
 import { template as aiTestResults } from './ai-test-results.tsx'
+import { template as freeBuildSignup } from './free-build-signup.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'ai-test-results': aiTestResults,
+  'free-build-signup': freeBuildSignup,
 }
