@@ -128,15 +128,17 @@ serve(async (req) => {
     }
 
     // Best-effort admin notification via the Lovable transactional email pipeline.
+    // NOTE: We pass SUPABASE_ANON_KEY (JWT format) as the Bearer token to pass the
+    // Supabase Edge gateway. The new SUPABASE_SERVICE_ROLE_KEY is `sb_secret_…`
+    // format and is rejected by the gateway as "invalid JWT format".
     try {
+      const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
       const { error: emailError } = await admin.functions.invoke(
         'send-transactional-email',
         {
-          headers: { Authorization: `Bearer ${serviceKey}` },
+          headers: { Authorization: `Bearer ${anonKey}` },
           body: {
             templateName: 'free-build-signup',
-            // Recipient is set by the template's fixed `to` (ADMIN_EMAIL),
-            // but we still pass a fallback for safety.
             recipientEmail: Deno.env.get('ADMIN_EMAIL') ?? 'hudsonturansky@gmail.com',
             idempotencyKey: `free-build-signup-${leadId}-${today}`,
             templateData: { name, email, company, phone, message, utmSource },
