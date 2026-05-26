@@ -128,23 +128,36 @@ serve(async (req) => {
     }
 
     // Best-effort admin notification via the Lovable transactional email pipeline.
+    // The Edge gateway requires a JWT-format `Authorization` (so we send the
+    // public anon JWT), but `send-transactional-email` requires the service-role
+    // key to authorize the actual send. The new `sb_secret_…` service-role key
+    // is not a JWT, so we pass it via the side-channel `x-internal-key` header.
+    const PUBLISHABLE_ANON_JWT =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpcWRuaGNra2J5ZGdtY3VxYWNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MTc2NjcsImV4cCI6MjA5MTA5MzY2N30.xfuxzlSeDk3Qh0Zv47KKmBSQ_VAHuIiq4hFeQooqgRI';
     try {
-      const { error: emailError } = await admin.functions.invoke(
-        'send-transactional-email',
-        {
-          headers: { Authorization: `Bearer ${serviceKey}` },
-          body: {
-            templateName: 'free-build-signup',
-            // Recipient is set by the template's fixed `to` (ADMIN_EMAIL),
-            // but we still pass a fallback for safety.
-            recipientEmail: Deno.env.get('ADMIN_EMAIL') ?? 'hudsonturansky@gmail.com',
-            idempotencyKey: `free-build-signup-${leadId}-${today}`,
-            templateData: { name, email, company, phone, message, utmSource },
-          },
+      const sendResp = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: PUBLISHABLE_ANON_JWT,
+          Authorization: `Bearer ${PUBLISHABLE_ANON_JWT}`,
+          'x-internal-key': serviceKey,
         },
-      );
-      if (emailError) {
-        console.warn('Admin notification email failed (non-fatal)', emailError);
+        body: JSON.stringify({
+          templateName: 'free-build-signup',
+          recipientEmail: Deno.env.get('ADMIN_EMAIL') ?? 'hudsonturansky@gmail.com',
+          idempotencyKey: `free-build-signup-${leadId}-${today}`,
+          templateData: { name, email, company, phone, message, utmSource },
+        }),
+      });
+      if (!sendResp.ok) {
+        const errBody = await sendResp.text();
+        console.warn(
+          `Admin notification email failed (non-fatal): ${sendResp.status} ${errBody}`,
+        );
+      } else {
+        await sendResp.text();
+        console.log('Admin notification email enqueued for lead', leadId);
       }
     } catch (e) {
       console.warn('Admin notification email threw (non-fatal)', e);

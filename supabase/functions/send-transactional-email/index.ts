@@ -54,8 +54,16 @@ Deno.serve(async (req) => {
   // send templated emails to arbitrary addresses.
   const authHeader = req.headers.get('Authorization') ?? ''
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : ''
+  // Side-channel for internal function-to-function calls. The Edge gateway
+  // requires a JWT in `Authorization`, but the new sb_secret_… service role
+  // key is not a JWT, so internal callers send the publishable anon JWT in
+  // `Authorization` (to pass the gateway) and the service-role key in
+  // `x-internal-key` (to authorize here).
+  const internalKey = req.headers.get('x-internal-key') ?? ''
   let authorized = false
-  if (bearer && bearer === supabaseServiceKey) {
+  if (internalKey && internalKey === supabaseServiceKey) {
+    authorized = true
+  } else if (bearer && bearer === supabaseServiceKey) {
     authorized = true
   } else if (bearer) {
     try {
