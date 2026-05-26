@@ -128,10 +128,10 @@ serve(async (req) => {
     }
 
     // Best-effort admin notification via the Lovable transactional email pipeline.
-    // The Edge gateway requires a JWT-format Bearer token. This project's
-    // SERVICE_ROLE_KEY is `sb_secret_…` (non-JWT) and ANON_KEY isn't reliably
-    // present as a JWT in the function env, so we use the project's publishable
-    // anon JWT (safe to embed — it's the same key shipped to every browser).
+    // The Edge gateway requires a JWT-format `Authorization` (so we send the
+    // public anon JWT), but `send-transactional-email` requires the service-role
+    // key to authorize the actual send. The new `sb_secret_…` service-role key
+    // is not a JWT, so we pass it via the side-channel `x-internal-key` header.
     const PUBLISHABLE_ANON_JWT =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpcWRuaGNra2J5ZGdtY3VxYWNrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MTc2NjcsImV4cCI6MjA5MTA5MzY2N30.xfuxzlSeDk3Qh0Zv47KKmBSQ_VAHuIiq4hFeQooqgRI';
     try {
@@ -141,6 +141,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
           apikey: PUBLISHABLE_ANON_JWT,
           Authorization: `Bearer ${PUBLISHABLE_ANON_JWT}`,
+          'x-internal-key': serviceKey,
         },
         body: JSON.stringify({
           templateName: 'free-build-signup',
