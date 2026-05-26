@@ -132,6 +132,7 @@ serve(async (req) => {
       const { error: emailError } = await admin.functions.invoke(
         'send-transactional-email',
         {
+          headers: { Authorization: `Bearer ${serviceKey}` },
           body: {
             templateName: 'free-build-signup',
             // Recipient is set by the template's fixed `to` (ADMIN_EMAIL),
