@@ -128,22 +128,16 @@ serve(async (req) => {
     }
 
     // Best-effort admin notification via the Lovable transactional email pipeline.
-    // We bypass `admin.functions.invoke` because supabase-js merges the client's
-    // own `Authorization` header (set from `SUPABASE_SERVICE_ROLE_KEY`, which is
-    // the new `sb_secret_…` format) into the request, and the Edge gateway
-    // rejects that as "invalid JWT format". Calling fetch directly with the
-    // anon JWT lets the request pass the gateway.
+    // The Edge gateway rejects non-JWT bearer tokens with INVALID_JWT_FORMAT, and
+    // both this project's SERVICE_ROLE and ANON keys are the new `sb_*` (non-JWT)
+    // format. So we send the service-role key ONLY in the `apikey` header (no
+    // Authorization header) — the gateway accepts that and routes to the function.
     try {
-      const anonKey =
-        Deno.env.get('SUPABASE_ANON_KEY') ??
-        Deno.env.get('SUPABASE_PUBLISHABLE_KEY') ??
-        '';
       const sendResp = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          apikey: anonKey,
-          Authorization: `Bearer ${anonKey}`,
+          apikey: serviceKey,
         },
         body: JSON.stringify({
           templateName: 'free-build-signup',
