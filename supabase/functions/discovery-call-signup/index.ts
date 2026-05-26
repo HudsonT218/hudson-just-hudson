@@ -128,25 +128,38 @@ serve(async (req) => {
     }
 
     // Best-effort admin notification via the Lovable transactional email pipeline.
-    // NOTE: We pass SUPABASE_ANON_KEY (JWT format) as the Bearer token to pass the
-    // Supabase Edge gateway. The new SUPABASE_SERVICE_ROLE_KEY is `sb_secret_…`
-    // format and is rejected by the gateway as "invalid JWT format".
+    // We bypass `admin.functions.invoke` because supabase-js merges the client's
+    // own `Authorization` header (set from `SUPABASE_SERVICE_ROLE_KEY`, which is
+    // the new `sb_secret_…` format) into the request, and the Edge gateway
+    // rejects that as "invalid JWT format". Calling fetch directly with the
+    // anon JWT lets the request pass the gateway.
     try {
-      const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
-      const { error: emailError } = await admin.functions.invoke(
-        'send-transactional-email',
-        {
-          headers: { Authorization: `Bearer ${anonKey}` },
-          body: {
-            templateName: 'free-build-signup',
-            recipientEmail: Deno.env.get('ADMIN_EMAIL') ?? 'hudsonturansky@gmail.com',
-            idempotencyKey: `free-build-signup-${leadId}-${today}`,
-            templateData: { name, email, company, phone, message, utmSource },
-          },
+      const anonKey =
+        Deno.env.get('SUPABASE_ANON_KEY') ??
+        Deno.env.get('SUPABASE_PUBLISHABLE_KEY') ??
+        '';
+      const sendResp = await fetch(`${supabaseUrl}/functions/v1/send-transactional-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: anonKey,
+          Authorization: `Bearer ${anonKey}`,
         },
-      );
-      if (emailError) {
-        console.warn('Admin notification email failed (non-fatal)', emailError);
+        body: JSON.stringify({
+          templateName: 'free-build-signup',
+          recipientEmail: Deno.env.get('ADMIN_EMAIL') ?? 'hudsonturansky@gmail.com',
+          idempotencyKey: `free-build-signup-${leadId}-${today}`,
+          templateData: { name, email, company, phone, message, utmSource },
+        }),
+      });
+      if (!sendResp.ok) {
+        const errBody = await sendResp.text();
+        console.warn(
+          `Admin notification email failed (non-fatal): ${sendResp.status} ${errBody}`,
+        );
+      } else {
+        await sendResp.text();
+        console.log('Admin notification email enqueued for lead', leadId);
       }
     } catch (e) {
       console.warn('Admin notification email threw (non-fatal)', e);
