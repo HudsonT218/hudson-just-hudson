@@ -27,6 +27,13 @@ const TOOLS: ResourceCard[] = [
 
 const GUIDES: ResourceCard[] = [
   {
+    to: "/resources/is-your-data-safe-with-ai",
+    label: "Guide · 2026",
+    title: "Is your data safe when you use AI?",
+    description:
+      "A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, what the real risks are, and the defensive moves that don't require a security team.",
+  },
+  {
     to: "/resources/ai-for-small-business",
     label: "Guide · 2026",
     title: "How to add AI to your small business in 2026",

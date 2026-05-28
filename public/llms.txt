@@ -22,6 +22,7 @@ Booking: https://calendly.com/hudsonturansky/30min
 - [Should you hire someone to build AI, or use ChatGPT yourself?](https://hudsonturansky.com/resources/hire-ai-help-or-do-it-yourself): A decision guide. When DIY ChatGPT is genuinely the right answer, when it isn't, and a one-question test that sorts most decisions correctly.
 - [12 things small businesses are actually using AI for in 2026](https://hudsonturansky.com/resources/what-small-businesses-use-ai-for): Twelve concrete, real-world AI use cases, each with rough effort, cost, and whether to DIY it or have it built.
 - [A plain-English AI glossary for business owners](https://hudsonturansky.com/resources/ai-glossary-for-business-owners): The dozen-or-so AI terms that actually matter to a business owner, with plain definitions and a "decision impact" tag on each.
+- [Is your data safe when you use AI? A small-business owner's guide](https://hudsonturansky.com/resources/is-your-data-safe-with-ai): A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, the four real risks that hurt small businesses, and the defensive moves that don't require a security team.
 
 ## Services
 

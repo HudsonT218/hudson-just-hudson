@@ -49,6 +49,10 @@ const ROUTE_LIST = [
     url: "/resources/ai-glossary-for-business-owners",
     outFile: "resources/ai-glossary-for-business-owners/index.html",
   },
+  {
+    url: "/resources/is-your-data-safe-with-ai",
+    outFile: "resources/is-your-data-safe-with-ai/index.html",
+  },
 ];
 
 // --- Browser-global polyfills (minimal) -----------------------------------
