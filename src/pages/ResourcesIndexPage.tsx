@@ -27,6 +27,27 @@ const TOOLS: ResourceCard[] = [
 
 const GUIDES: ResourceCard[] = [
   {
+    to: "/resources/ai-for-small-ecommerce",
+    label: "Guide · 2026",
+    title: "AI for small e-commerce in 2026",
+    description:
+      "What sub-$5M Shopify and WooCommerce stores are actually doing with AI in 2026, top tools, real prices, agentic commerce, the PCI traps, and what to stop wasting money on.",
+  },
+  {
+    to: "/resources/ai-for-professional-services",
+    label: "Guide · 2026",
+    title: "AI for professional services in 2026",
+    description:
+      "What small law firms, CPA practices, and financial advisors are actually doing with AI in 2026, top tools, real prices, the ethics rules that matter, the privilege-destroying mistake to avoid, and the first project worth doing.",
+  },
+  {
+    to: "/resources/ai-for-contractors",
+    label: "Guide · 2026",
+    title: "AI for contractors in 2026",
+    description:
+      "What home-service contractors, roofers, HVAC, plumbing, and GCs are actually doing with AI in 2026, top use cases, real prices, what to avoid, and a realistic first project that pays for itself in month one.",
+  },
+  {
     to: "/resources/is-your-data-safe-with-ai",
     label: "Guide · 2026",
     title: "Is your data safe when you use AI?",

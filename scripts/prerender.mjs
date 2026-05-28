@@ -53,6 +53,18 @@ const ROUTE_LIST = [
     url: "/resources/is-your-data-safe-with-ai",
     outFile: "resources/is-your-data-safe-with-ai/index.html",
   },
+  {
+    url: "/resources/ai-for-contractors",
+    outFile: "resources/ai-for-contractors/index.html",
+  },
+  {
+    url: "/resources/ai-for-professional-services",
+    outFile: "resources/ai-for-professional-services/index.html",
+  },
+  {
+    url: "/resources/ai-for-small-ecommerce",
+    outFile: "resources/ai-for-small-ecommerce/index.html",
+  },
 ];
 
 // --- Browser-global polyfills (minimal) -----------------------------------

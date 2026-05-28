@@ -18,6 +18,9 @@ import HireAiHelpOrDoItYourself from "./pages/resources/HireAiHelpOrDoItYourself
 import WhatSmallBusinessesUseAiFor from "./pages/resources/WhatSmallBusinessesUseAiFor.tsx";
 import AiGlossaryForBusinessOwners from "./pages/resources/AiGlossaryForBusinessOwners.tsx";
 import IsYourDataSafeWithAi from "./pages/resources/IsYourDataSafeWithAi.tsx";
+import AiForContractors from "./pages/resources/AiForContractors.tsx";
+import AiForProfessionalServices from "./pages/resources/AiForProfessionalServices.tsx";
+import AiForSmallEcommerce from "./pages/resources/AiForSmallEcommerce.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import UnsubscribePage from "./pages/UnsubscribePage.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
@@ -173,6 +176,18 @@ const AppRoutes = () => {
           <Route
             path="/resources/is-your-data-safe-with-ai"
             element={<IsYourDataSafeWithAi />}
+          />
+          <Route
+            path="/resources/ai-for-contractors"
+            element={<AiForContractors />}
+          />
+          <Route
+            path="/resources/ai-for-professional-services"
+            element={<AiForProfessionalServices />}
+          />
+          <Route
+            path="/resources/ai-for-small-ecommerce"
+            element={<AiForSmallEcommerce />}
           />
           {/* 301-style redirects for the older static .html URLs in case anyone
               shared them (the static files used to live in public/resources/). */}
