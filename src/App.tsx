@@ -17,6 +17,7 @@ import WhatCustomAiCosts from "./pages/resources/WhatCustomAiCosts.tsx";
 import HireAiHelpOrDoItYourself from "./pages/resources/HireAiHelpOrDoItYourself.tsx";
 import WhatSmallBusinessesUseAiFor from "./pages/resources/WhatSmallBusinessesUseAiFor.tsx";
 import AiGlossaryForBusinessOwners from "./pages/resources/AiGlossaryForBusinessOwners.tsx";
+import IsYourDataSafeWithAi from "./pages/resources/IsYourDataSafeWithAi.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import UnsubscribePage from "./pages/UnsubscribePage.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
@@ -168,6 +169,10 @@ const AppRoutes = () => {
           <Route
             path="/resources/ai-glossary-for-business-owners"
             element={<AiGlossaryForBusinessOwners />}
+          />
+          <Route
+            path="/resources/is-your-data-safe-with-ai"
+            element={<IsYourDataSafeWithAi />}
           />
           {/* 301-style redirects for the older static .html URLs in case anyone
               shared them (the static files used to live in public/resources/). */}
