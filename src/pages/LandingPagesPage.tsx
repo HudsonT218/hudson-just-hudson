@@ -197,6 +197,10 @@ const LandingPagesPage = () => {
             <li>Your photos and branding, not stock templates.</li>
             <li>A clear call-to-action and contact path so people can actually reach you.</li>
             <li>Basic SEO so you show up when people Google you.</li>
+            <li>
+              AI search visibility so you show up when people ask ChatGPT, Claude, or Perplexity
+              for local businesses.
+            </li>
             <li>Live on your own domain, yours from day one.</li>
           </ul>
         </div>
