@@ -22,6 +22,7 @@ const ROUTES: RouteEntry[] = [
   { url: "/interested", outFile: "interested/index.html" },
   { url: "/ai-brief", outFile: "ai-brief/index.html" },
   { url: "/free-build", outFile: "free-build/index.html" },
+  { url: "/landing-pages", outFile: "landing-pages/index.html" },
   { url: "/resources", outFile: "resources/index.html" },
   { url: "/resources/ai-for-small-business", outFile: "resources/ai-for-small-business/index.html" },
   { url: "/resources/what-custom-ai-costs", outFile: "resources/what-custom-ai-costs/index.html" },

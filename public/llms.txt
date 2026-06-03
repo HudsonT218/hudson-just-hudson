@@ -12,6 +12,7 @@ Booking: https://calendly.com/hudsonturansky/30min
 
 - [Home](https://hudsonturansky.com/): Overview of services, philosophy, FAQ, and how to get in touch.
 - [Work](https://hudsonturansky.com/work): Capabilities, portfolio, and a live AI-meeting-assistant demo.
+- [Landing Pages](https://hudsonturansky.com/landing-pages): Productized landing-page offer for local businesses. $200 flat, $100 for the first five clients, live in about a week. Includes design, copy support, photos and branding, basic SEO, and deploy to the client's domain.
 - [Free Personalized AI Brief](https://hudsonturansky.com/ai-brief): A free 5-minute personalized brief. Visitors answer ~14 questions about their work and life and an AI generates 6–10 specific use-case ideas grouped "At Work" / "In Your Life," tagged by effort (easy / medium / needs building). One brief per email.
 - [Resources](https://hudsonturansky.com/resources/): Plain-English guides for small-business owners on adding AI, what custom builds cost, when to hire versus DIY.
 
