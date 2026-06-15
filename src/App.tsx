@@ -12,6 +12,8 @@ import InterestedPage from "./pages/InterestedPage.tsx";
 import AiBriefPage from "./pages/AiBriefPage.tsx";
 import FreeBuildPage from "./pages/FreeBuildPage.tsx";
 import LandingPagesPage from "./pages/LandingPagesPage.tsx";
+import FinanceToolsPage from "./pages/FinanceToolsPage.tsx";
+import FilingSummarizerPage from "./pages/FilingSummarizerPage.tsx";
 import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
 import AiForSmallBusiness from "./pages/resources/AiForSmallBusiness.tsx";
 import WhatCustomAiCosts from "./pages/resources/WhatCustomAiCosts.tsx";
@@ -158,6 +160,8 @@ const AppRoutes = () => {
           <Route path="/unsubscribe" element={<UnsubscribePage />} />
           <Route path="/free-build" element={<FreeBuildPage />} />
           <Route path="/landing-pages" element={<LandingPagesPage />} />
+          <Route path="/finance-tools" element={<FinanceToolsPage />} />
+          <Route path="/finance-tools/filing-summarizer" element={<FilingSummarizerPage />} />
           {/* Redirect the previous /ai-test URL (renamed to /ai-brief). */}
           <Route path="/ai-test" element={<Navigate to="/ai-brief" replace />} />
           <Route path="/resources" element={<ResourcesIndexPage />} />
