@@ -779,7 +779,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
 };
 
 const alreadyUsedFallback =
-  "This email has already received a free personalized AI brief. Book a discovery call to talk through your results in more detail.";
+  "This email has already received a free personalized AI brief. Send me an email if you'd like to talk through your results in more detail.";
 
 // ---- Submitting ----------------------------------------------------------
 
@@ -829,17 +829,15 @@ const Results = ({ results, email }: { results: AiTestResults; email: string }) 
       >
         <p className="text-white font-semibold mb-2">Got a "needs building" idea you want to scope?</p>
         <p className="text-gray-400 text-sm font-light mb-5">
-          Book a free 30-minute call. I'll tell you honestly whether it's worth building, what it would cost,
-          and how long it would take.
+          I'm not taking on new projects right now, but send an email and I'll get back
+          to you when I'm available again.
         </p>
         <a
-          href="https://calendly.com/hudsonturansky/30min"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="mailto:hudsonturansky@gmail.com"
           className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
           style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
         >
-          Book a discovery call →
+          Email me →
         </a>
       </div>
     </div>
@@ -876,12 +874,10 @@ const Section = ({ heading, ideas }: { heading: string; ideas: AiTestResults["at
           </p>
           {idea.effort === "needs_building" && (
             <a
-              href="https://calendly.com/hudsonturansky/30min"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:hudsonturansky@gmail.com"
               className="inline-flex items-center gap-2 text-xs font-medium mt-3 text-blue-400 hover:text-blue-300"
             >
-              Scope this with Hudson →
+              Email Hudson about this →
             </a>
           )}
         </div>
@@ -900,13 +896,11 @@ const AlreadyUsed = ({ message }: { message: string }) => (
     </h2>
     <p className="text-gray-400 font-light max-w-xl mx-auto mb-8 leading-relaxed">{message}</p>
     <a
-      href="https://calendly.com/hudsonturansky/30min"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="mailto:hudsonturansky@gmail.com"
       className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
       style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
     >
-      Book a 30-minute call instead →
+      Email me instead →
     </a>
   </div>
 );

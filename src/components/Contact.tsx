@@ -24,11 +24,8 @@ const Contact = () => {
       <div className="relative max-w-5xl mx-auto">
         <div className="max-w-2xl">
           {/* OPEN badge */}
-          <a
-            href="https://calendly.com/hudsonturansky/30min"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 mb-8 group"
+          <div
+            className="inline-flex items-center gap-3 mb-8"
             style={{
               border: "1px solid var(--app-border-strong)",
               backgroundColor: "var(--app-card-bg-hover)",
@@ -40,31 +37,16 @@ const Contact = () => {
             <span
               className="font-mono text-xs font-medium px-2 py-0.5 rounded-full"
               style={{
-                backgroundColor: "rgba(59,130,246,0.15)",
-                color: "#60a5fa",
+                backgroundColor: "rgba(234,179,8,0.15)",
+                color: "#facc15",
               }}
             >
-              OPEN
+              PAUSED
             </span>
             <span className="text-sm text-gray-400">
-              scheduling discovery calls now
+              not taking on new projects right now
             </span>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              fill="none"
-              className="text-gray-500 transition-transform duration-200 group-hover:translate-x-0.5"
-            >
-              <path
-                d="M5.5 3L9.5 7L5.5 11"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
+          </div>
 
           {/* Heading */}
           <h2
@@ -78,15 +60,13 @@ const Contact = () => {
             className="text-gray-500 text-sm sm:text-lg font-light mb-10"
             style={{ letterSpacing: "0.02em" }}
           >
-            Book a free 30-minute call. No pitch, no pressure, just a
-            conversation about what you're working on and whether I can help.
+            I'm on a break from new projects at the moment. Drop me an email and
+            I'll get back to you when I'm taking on work again.
           </p>
 
           <div className="mb-6">
             <a
-              href="https://calendly.com/hudsonturansky/30min"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:hudsonturansky@gmail.com"
               className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
               style={{
                 border: "1px solid var(--app-border-stronger)",
@@ -101,18 +81,12 @@ const Contact = () => {
                 e.currentTarget.style.backgroundColor = "var(--app-card-bg)";
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path
-                  d="M13.3 2.7H12V1.3a.67.67 0 0 0-1.33 0v1.34H5.33V1.3A.67.67 0 0 0 4 1.3v1.34H2.67A1.33 1.33 0 0 0 1.33 4v9.33a1.33 1.33 0 0 0 1.34 1.34h10.66a1.33 1.33 0 0 0 1.34-1.34V4a1.33 1.33 0 0 0-1.34-1.3ZM2.67 4H13.3v1.33H2.67V4Zm10.66 9.33H2.67V6.67h10.66v6.66Z"
-                  fill="currentColor"
-                />
-              </svg>
-              Book a Call
+              Email me
             </a>
           </div>
 
           <p className="text-gray-700 text-xs">
-            Free 30-minute discovery call. No commitment.
+            hudsonturansky@gmail.com
           </p>
         </div>
       </div>
