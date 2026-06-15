@@ -1,28 +1,30 @@
-## Problem
+## Goal
+Pause new project intake: replace all "Book a Call" Calendly links with email (`mailto:hudsonturansky@gmail.com`), and replace the Free Builds page hero with a "not taking on new work" message.
 
-Even after passing `Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}` on the invoke call, `send-transactional-email` still returns **401 UNAUTHORIZED_INVALID_JWT_FORMAT**. The service-role key in this project is the new `sb_secret_…` format, not a JWT — so the Supabase Edge gateway rejects it on the way in. The gateway requires a JWT-formatted token (the legacy anon key still works).
+## Changes
 
-## Fix
+### 1. Replace Calendly CTAs with email
+For each occurrence, swap `https://calendly.com/hudsonturansky/30min` → `mailto:hudsonturansky@gmail.com`, change button labels from "Book a Call" / "Book a discovery call" → "Email me", and soften surrounding copy where it references scheduling.
 
-In `supabase/functions/discovery-call-signup/index.ts`, send the invoke with the `SUPABASE_ANON_KEY` as the Bearer token (it's a JWT). The downstream `send-transactional-email` function uses the service role internally — it doesn't need the caller to be the service role, it just needs to pass the gateway.
+Files:
+- `src/components/Contact.tsx` — OPEN badge → "PAUSED — not taking on new projects right now"; button "Book a Call" → "Email me"; subtext → "Reach out by email and I'll get back when I'm taking on work again."
+- `src/pages/InterestedPage.tsx` (line 258) — swap link + label to email.
+- `src/pages/LandingPagesPage.tsx` (line 139) — swap link + label to email.
+- `src/pages/AiBriefPage.tsx` (lines 836, 879, 903 and "Book a discovery call" copy at 782/842) — swap to email + relabel.
 
-```ts
-const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-await admin.functions.invoke('send-transactional-email', {
-  headers: { Authorization: `Bearer ${anonKey}` },
-  body: { ... },
-});
-```
+### 2. Free Builds page hero pause
+`src/pages/FreeBuildPage.tsx`: replace the hero (badge, headline, subhead, counter, signup CTA) with a centered pause message:
+- Badge: "Currently paused"
+- Headline: "Not taking on new work at the moment."
+- Subhead: "I've stepped back from new projects for now. If you'd like to be in touch about future availability, send me an email."
+- Single button: "Email me" → `mailto:hudsonturansky@gmail.com`
+- Hide the form, the "Why free" CTA buttons, and the discovery-call signup flow below.
+- Keep page route and SEO title/meta updated to reflect the pause.
 
-## Steps
+### 3. llms.txt
+`public/llms.txt`: replace the three Calendly references with "Currently not taking on new projects — email hudsonturansky@gmail.com."
 
-1. Update `discovery-call-signup/index.ts` to use `SUPABASE_ANON_KEY` for the bearer header on the invoke.
-2. Deploy `discovery-call-signup`.
-3. Smoke test by hitting the deployed function directly with a unique email (e.g. `smoke-test+<timestamp>@hudsonturansky.com`).
-4. Verify:
-   - `discovery-call-signup` logs show no "Admin notification email failed" warning.
-   - A new row appears in `email_send_log` with `template_name='free-build-signup'`, status `pending` → `sent`.
-   - `send-transactional-email` logs show a clean run.
-5. Tell user to also check Gmail Spam — first-time sends from `notify.hudsonturansky.com` can land there until reputation builds.
-
-No template, schema, or frontend changes needed.
+## Out of scope
+- Configurator `contentSchema.ts` placeholders (internal tool examples, user-facing only inside the configurator).
+- Admin pages.
+- No backend/edge function changes.
