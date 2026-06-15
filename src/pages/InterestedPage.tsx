@@ -246,25 +246,24 @@ const InterestedPage = () => {
             className="text-4xl md:text-5xl font-medium text-white leading-tight mb-6"
             style={{ textWrap: "balance", letterSpacing: "-0.03em" }}
           >
-            Book a free call.
+            Get in touch.
           </h2>
           <p
             className="text-gray-500 text-sm sm:text-lg font-light mb-10"
             style={{ letterSpacing: "0.02em" }}
           >
-            30 minutes. Tell me what you're working on. No commitment.
+            I'm not taking on new projects right now. Send an email and I'll get
+            back to you when I'm available again.
           </p>
           <a
-            href="https://calendly.com/hudsonturansky/30min"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:hudsonturansky@gmail.com"
             className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
             style={{
               backgroundColor: "var(--app-button-bg)",
               color: "var(--app-button-fg)",
             }}
           >
-            Schedule a Call →
+            Email me →
           </a>
         </div>
       </section>

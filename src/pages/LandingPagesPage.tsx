@@ -136,9 +136,7 @@ const LandingPagesPage = () => {
 
           <div className="flex flex-wrap justify-center gap-3">
             <a
-              href="https://calendly.com/hudsonturansky/30min"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:hudsonturansky@gmail.com"
               className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
               style={{
                 backgroundColor: "var(--app-button-bg)",
@@ -151,7 +149,7 @@ const LandingPagesPage = () => {
                 e.currentTarget.style.backgroundColor = "var(--app-button-bg)";
               }}
             >
-              Book a Call
+              Email me
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path
                   d="M5.5 3L9.5 7L5.5 11"
