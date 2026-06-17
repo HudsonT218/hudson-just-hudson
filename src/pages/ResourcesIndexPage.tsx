@@ -27,27 +27,6 @@ const TOOLS: ResourceCard[] = [
 
 const GUIDES: ResourceCard[] = [
   {
-    to: "/resources/ai-for-small-ecommerce",
-    label: "Guide · 2026",
-    title: "AI for small e-commerce in 2026",
-    description:
-      "What sub-$5M Shopify and WooCommerce stores are actually doing with AI in 2026, top tools, real prices, agentic commerce, the PCI traps, and what to stop wasting money on.",
-  },
-  {
-    to: "/resources/ai-for-professional-services",
-    label: "Guide · 2026",
-    title: "AI for professional services in 2026",
-    description:
-      "What small law firms, CPA practices, and financial advisors are actually doing with AI in 2026, top tools, real prices, the ethics rules that matter, the privilege-destroying mistake to avoid, and the first project worth doing.",
-  },
-  {
-    to: "/resources/ai-for-contractors",
-    label: "Guide · 2026",
-    title: "AI for contractors in 2026",
-    description:
-      "What home-service contractors, roofers, HVAC, plumbing, and GCs are actually doing with AI in 2026, top use cases, real prices, what to avoid, and a realistic first project that pays for itself in month one.",
-  },
-  {
     to: "/resources/is-your-data-safe-with-ai",
     label: "Guide · 2026",
     title: "Is your data safe when you use AI?",
@@ -55,39 +34,11 @@ const GUIDES: ResourceCard[] = [
       "A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, what the real risks are, and the defensive moves that don't require a security team.",
   },
   {
-    to: "/resources/ai-for-small-business",
+    to: "/resources/ai-glossary",
     label: "Guide · 2026",
-    title: "How to add AI to your small business in 2026",
+    title: "A plain-English AI glossary",
     description:
-      "A 4-step framework: audit your week, match each task to the right level of investment ($20 / $50–200/mo / $1,500–$15,000 custom), pick a first project, and avoid the most common mistakes.",
-  },
-  {
-    to: "/resources/what-custom-ai-costs",
-    label: "Guide · 2026",
-    title: "What custom AI actually costs for a small business",
-    description:
-      "An honest breakdown of the three AI cost tiers, $20/mo tools, $50–200/mo software, and $1,500–$15,000 custom builds, and how to tell which one your problem belongs in.",
-  },
-  {
-    to: "/resources/hire-ai-help-or-do-it-yourself",
-    label: "Guide · 2026",
-    title: "Should you hire someone to build AI, or use ChatGPT yourself?",
-    description:
-      "An honest decision guide, when DIY ChatGPT is genuinely enough, the signs you've outgrown it, and a simple test for which side of the line your problem is on.",
-  },
-  {
-    to: "/resources/what-small-businesses-use-ai-for",
-    label: "Guide · 2026",
-    title: "12 things small businesses are actually using AI for in 2026",
-    description:
-      "Twelve concrete, real-world uses, customer inquiries, scheduling, quotes, document data, and more, each with rough effort, cost, and whether to DIY it or have it built.",
-  },
-  {
-    to: "/resources/ai-glossary-for-business-owners",
-    label: "Guide · 2026",
-    title: "A plain-English AI glossary for business owners",
-    description:
-      "The dozen-or-so AI terms that actually matter to a business owner, each with a plain definition, why you'd care, and whether it affects a real decision.",
+      "The dozen-or-so AI terms that actually matter, each with a plain definition, why you'd care, and whether it affects a real decision.",
   },
 ];
 

@@ -1,7 +1,6 @@
-// /resources/is-your-data-safe-with-ai, sixth long-form guide.
-// Pattern source: src/pages/resources/AiForSmallBusiness.tsx — copy structure
-// verbatim. SPA route, prerendered via prerenderPlugin so crawlers see the
-// full article HTML on first fetch.
+// /resources/is-your-data-safe-with-ai, long-form guide. SPA route,
+// prerendered via prerenderPlugin so crawlers see the full article HTML on
+// first fetch.
 
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -43,7 +42,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 const ARTICLE_JSONLD = {
   "@context": "https://schema.org",
   "@type": "Article",
-  headline: "Is your data safe when you use AI? A small-business owner's guide",
+  headline: "Is your data safe when you use AI?",
   description:
     "A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, what the real risks are, and the defensive moves that don't require a security team.",
   url: CANONICAL,
@@ -71,23 +70,21 @@ const IsYourDataSafeWithAi = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>
-          Is your data safe when you use AI? A small business owner's guide · Hudson Turansky
-        </title>
+        <title>Is your data safe when you use AI? · Hudson Turansky</title>
         <meta
           name="description"
-          content="A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data — which tier protects you, what the real risks are, and the defensive moves that don't require a security team."
+          content="A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, what the real risks are, and the defensive moves that don't require a security team."
         />
         <link rel="canonical" href={CANONICAL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={CANONICAL} />
         <meta
           property="og:title"
-          content="Is your data safe when you use AI? A small business owner's guide · Hudson Turansky"
+          content="Is your data safe when you use AI? · Hudson Turansky"
         />
         <meta
           property="og:description"
-          content="What ChatGPT, Claude, Gemini, and Copilot actually do with your data — which tier protects you, what the real risks are, and the defensive moves that don't require a security team."
+          content="What ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, what the real risks are, and the defensive moves that don't require a security team."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="article:published_time" content={PUBLISHED} />
@@ -95,7 +92,7 @@ const IsYourDataSafeWithAi = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Is your data safe when you use AI? A small business owner's guide"
+          content="Is your data safe when you use AI?"
         />
         <meta
           name="twitter:description"

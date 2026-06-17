@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 
-const CANONICAL = "https://hudsonturansky.com/resources/ai-glossary-for-business-owners";
+const CANONICAL = "https://hudsonturansky.com/resources/ai-glossary";
 const PUBLISHED = "2026-05-21";
 
 interface Term {
@@ -260,9 +260,9 @@ const FAQ: Array<{ q: string; a: string }> = [
 const ARTICLE_JSONLD = {
   "@context": "https://schema.org",
   "@type": "Article",
-  headline: "A Plain-English AI Glossary for Business Owners (2026)",
+  headline: "A Plain-English AI Glossary (2026)",
   description:
-    "The AI terms that actually matter to a small business owner, each explained simply, with why you'd care and whether it affects your decisions.",
+    "The AI terms that actually matter, each explained simply, with why you'd care and whether it affects your decisions.",
   url: CANONICAL,
   datePublished: PUBLISHED,
   dateModified: PUBLISHED,
@@ -288,21 +288,21 @@ const AiGlossaryForBusinessOwners = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>A plain-English AI glossary for business owners (2026) · Hudson Turansky</title>
+        <title>A plain-English AI glossary (2026) · Hudson Turansky</title>
         <meta
           name="description"
-          content="The AI terms that actually matter to a small business owner, each explained simply, with why you'd care and whether it affects your decisions."
+          content="The AI terms that actually matter, each explained simply, with why you'd care and whether it affects your decisions."
         />
         <link rel="canonical" href={CANONICAL} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={CANONICAL} />
         <meta
           property="og:title"
-          content="A plain-English AI glossary for business owners (2026)"
+          content="A plain-English AI glossary (2026)"
         />
         <meta
           property="og:description"
-          content="A dozen-or-so AI terms that actually matter to a business owner, with plain definitions and decision impact for each."
+          content="A dozen-or-so AI terms that actually matter, with plain definitions and decision impact for each."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="article:published_time" content={PUBLISHED} />
@@ -310,11 +310,11 @@ const AiGlossaryForBusinessOwners = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="A plain-English AI glossary for business owners (2026)"
+          content="A plain-English AI glossary (2026)"
         />
         <meta
           name="twitter:description"
-          content="The AI terms that actually matter to a small business owner."
+          content="The AI terms that actually matter."
         />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
         <script type="application/ld+json">{JSON.stringify(ARTICLE_JSONLD)}</script>
@@ -357,7 +357,7 @@ const AiGlossaryForBusinessOwners = () => {
             >
               plain-English AI glossary
             </span>{" "}
-            for business owners (2026)
+            (2026)
           </h1>
 
           <div

@@ -39,36 +39,11 @@ const ROUTE_LIST = [
     outFile: "finance-tools/filing-summarizer/index.html",
   },
   { url: "/resources", outFile: "resources/index.html" },
-  { url: "/resources/ai-for-small-business", outFile: "resources/ai-for-small-business/index.html" },
-  { url: "/resources/what-custom-ai-costs", outFile: "resources/what-custom-ai-costs/index.html" },
-  {
-    url: "/resources/hire-ai-help-or-do-it-yourself",
-    outFile: "resources/hire-ai-help-or-do-it-yourself/index.html",
-  },
-  {
-    url: "/resources/what-small-businesses-use-ai-for",
-    outFile: "resources/what-small-businesses-use-ai-for/index.html",
-  },
-  {
-    url: "/resources/ai-glossary-for-business-owners",
-    outFile: "resources/ai-glossary-for-business-owners/index.html",
-  },
   {
     url: "/resources/is-your-data-safe-with-ai",
     outFile: "resources/is-your-data-safe-with-ai/index.html",
   },
-  {
-    url: "/resources/ai-for-contractors",
-    outFile: "resources/ai-for-contractors/index.html",
-  },
-  {
-    url: "/resources/ai-for-professional-services",
-    outFile: "resources/ai-for-professional-services/index.html",
-  },
-  {
-    url: "/resources/ai-for-small-ecommerce",
-    outFile: "resources/ai-for-small-ecommerce/index.html",
-  },
+  { url: "/resources/ai-glossary", outFile: "resources/ai-glossary/index.html" },
 ];
 
 // --- Browser-global polyfills (minimal) -----------------------------------
