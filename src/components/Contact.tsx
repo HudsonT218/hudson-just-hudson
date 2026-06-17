@@ -23,32 +23,10 @@ const Contact = () => {
 
       <div className="relative max-w-5xl mx-auto">
         <div className="max-w-2xl">
-          {/* OPEN badge */}
-          <div
-            className="inline-flex items-center gap-3 mb-8"
-            style={{
-              border: "1px solid var(--app-border-strong)",
-              backgroundColor: "var(--app-card-bg-hover)",
-              borderRadius: "9999px",
-              padding: "4px 14px 4px 4px",
-              backdropFilter: "blur(12px)",
-            }}
-          >
-            <span
-              className="font-mono text-xs font-medium px-2 py-0.5 rounded-full"
-              style={{
-                backgroundColor: "rgba(234,179,8,0.15)",
-                color: "#facc15",
-              }}
-            >
-              PAUSED
-            </span>
-            <span className="text-sm text-gray-400">
-              not taking on new projects right now
-            </span>
-          </div>
+          <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
+            Contact
+          </p>
 
-          {/* Heading */}
           <h2
             className="text-4xl md:text-5xl font-medium text-white leading-tight mb-6"
             style={{ textWrap: "balance", letterSpacing: "-0.03em" }}
@@ -57,14 +35,21 @@ const Contact = () => {
           </h2>
 
           <p
-            className="text-gray-500 text-sm sm:text-lg font-light mb-10"
-            style={{ letterSpacing: "0.02em" }}
+            className="text-gray-400 text-base sm:text-lg font-light mb-10 leading-relaxed"
+            style={{ letterSpacing: "0.01em" }}
           >
-            I'm on a break from new projects at the moment. Drop me an email and
-            I'll get back to you when I'm taking on work again.
+            Email me at{" "}
+            <a
+              href="mailto:hudsonturansky@gmail.com"
+              className="text-white underline decoration-1 underline-offset-4 hover:text-blue-300 transition-colors"
+            >
+              hudsonturansky@gmail.com
+            </a>
+            . I read everything, whether it's feedback on something I built or you're working on
+            something at the same AI and finance intersection.
           </p>
 
-          <div className="mb-6">
+          <div>
             <a
               href="mailto:hudsonturansky@gmail.com"
               className="inline-flex items-center gap-2 text-sm font-medium text-white px-5 py-2.5 rounded-md transition-colors duration-200"
@@ -84,10 +69,6 @@ const Contact = () => {
               Email me
             </a>
           </div>
-
-          <p className="text-gray-700 text-xs">
-            hudsonturansky@gmail.com
-          </p>
         </div>
       </div>
     </section>
