@@ -128,7 +128,7 @@ serve(async (req) => {
           {
             error: 'daily_cap_reached',
             message:
-              "We have hit today's free-test limit. Please try again tomorrow, or book a free 30-minute call.",
+              "We have hit today's free-test limit. Please try again tomorrow.",
           },
           429,
         );
@@ -149,7 +149,7 @@ serve(async (req) => {
           {
             error: 'already_used',
             message:
-              'This email has already used the free AI use-case test. Book a discovery call to talk through your results in more detail.',
+              'This email has already used the free AI use-case test.',
           },
           200,
         );
@@ -369,157 +369,3 @@ function json(payload: unknown, status = 200) {
   });
 }
 
-// ---------------------------------------------------------------------------
-// Email delivery (Resend)
-// ---------------------------------------------------------------------------
-
-const EFFORT_LABEL_EMAIL: Record<string, string> = {
-  easy: 'Easy',
-  medium: 'Medium',
-  needs_building: 'Needs building',
-};
-
-const EFFORT_COLOR_EMAIL: Record<string, string> = {
-  easy: '#10b981',
-  medium: '#f59e0b',
-  needs_building: '#3b82f6',
-};
-
-async function sendResultsEmail(
-  toEmail: string,
-  name: string | null,
-  results: any,
-): Promise<void> {
-  const apiKey = Deno.env.get('RESEND_API_KEY');
-  if (!apiKey) {
-    console.info('RESEND_API_KEY not set — skipping email');
-    return;
-  }
-  const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') ?? 'builds@hudsonturansky.com';
-  const appUrl = Deno.env.get('APP_URL') ?? 'https://hudsonturansky.com';
-  const greetingName = name?.trim() ? name.trim().split(/\s+/)[0] : 'there';
-
-  const html = renderResultsHtml({
-    greetingName,
-    results,
-    bookingUrl: 'https://calendly.com/hudsonturansky/30min',
-    siteUrl: appUrl,
-  });
-
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: `Hudson Turansky <${fromEmail}>`,
-      to: [toEmail],
-      subject: 'Your AI Use-Case Test results',
-      html,
-      reply_to: 'hudsonturansky@gmail.com',
-    }),
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Resend error ${response.status}: ${body.slice(0, 500)}`);
-  }
-}
-
-function renderResultsHtml(opts: {
-  greetingName: string;
-  results: any;
-  bookingUrl: string;
-  siteUrl: string;
-}): string {
-  const summary: string | undefined = opts.results?.summary;
-  const atWork: any[] = Array.isArray(opts.results?.at_work) ? opts.results.at_work : [];
-  const inLife: any[] = Array.isArray(opts.results?.in_your_life) ? opts.results.in_your_life : [];
-
-  const renderIdeas = (heading: string, ideas: any[]) => {
-    if (!ideas.length) return '';
-    const items = ideas
-      .map((idea) => {
-        const effort = String(idea?.effort ?? 'medium');
-        const color = EFFORT_COLOR_EMAIL[effort] ?? '#6b7280';
-        const label = EFFORT_LABEL_EMAIL[effort] ?? effort;
-        const buildCta =
-          effort === 'needs_building'
-            ? `<p style="margin: 12px 0 0 0; font-size: 13px;"><a href="${esc(opts.bookingUrl)}" style="color: #3b82f6; text-decoration: none; font-weight: 500;">Scope this with Hudson →</a></p>`
-            : '';
-        return `
-          <tr><td style="padding: 16px 0; border-top: 1px solid #e5e7eb;">
-            <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-              <tr>
-                <td style="padding-bottom: 8px;">
-                  <span style="display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; border-radius: 999px; color: ${color}; border: 1px solid ${color};">${esc(label)}</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p style="margin: 0 0 6px 0; font-size: 16px; font-weight: 600; color: #111827; line-height: 1.4;">${esc(idea?.title ?? '')}</p>
-                  <p style="margin: 0 0 8px 0; font-size: 14px; color: #4b5563; line-height: 1.55;">${esc(idea?.description ?? '')}</p>
-                  <p style="margin: 0; font-size: 13px; color: #6b7280; line-height: 1.55;"><strong style="color: #4b5563;">How this helps you:</strong> ${esc(idea?.how_it_helps ?? '')}</p>
-                  ${buildCta}
-                </td>
-              </tr>
-            </table>
-          </td></tr>
-        `;
-      })
-      .join('');
-    return `
-      <h2 style="margin: 32px 0 4px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: #6b7280; font-weight: 600;">${esc(heading)}</h2>
-      <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
-        ${items}
-      </table>
-    `;
-  };
-
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your AI Use-Case Test results</title>
-  </head>
-  <body style="margin: 0; padding: 0; background: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; background: #f3f4f6;">
-      <tr><td align="center" style="padding: 32px 16px;">
-        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; max-width: 600px; background: #ffffff; border-radius: 16px; padding: 32px;">
-          <tr><td>
-            <p style="margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.15em; color: #3b82f6; font-weight: 500;">Your results</p>
-            <h1 style="margin: 0 0 16px 0; font-size: 26px; font-weight: 700; color: #111827; line-height: 1.2; letter-spacing: -0.02em;">Hey ${esc(opts.greetingName)} — here's your personalized AI use-case map.</h1>
-            ${summary ? `<p style="margin: 0 0 24px 0; font-size: 15px; color: #4b5563; line-height: 1.6;">${esc(summary)}</p>` : ''}
-            ${renderIdeas('At work', atWork)}
-            ${renderIdeas('In your life', inLife)}
-
-            <div style="margin: 32px 0 0 0; padding: 24px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; text-align: center;">
-              <p style="margin: 0 0 6px 0; font-size: 16px; font-weight: 600; color: #1e3a8a;">Want to scope a build?</p>
-              <p style="margin: 0 0 16px 0; font-size: 14px; color: #4b5563; line-height: 1.55;">Free 30-minute discovery call. No pitch, just a conversation about whether it's worth building.</p>
-              <a href="${esc(opts.bookingUrl)}" style="display: inline-block; padding: 10px 20px; background: #111827; color: #ffffff; font-size: 14px; font-weight: 500; text-decoration: none; border-radius: 8px;">Book a call</a>
-            </div>
-
-            <p style="margin: 32px 0 0 0; font-size: 12px; color: #9ca3af; line-height: 1.55; text-align: center;">
-              You took the free AI use-case test on <a href="${esc(opts.siteUrl)}/ai-test" style="color: #6b7280; text-decoration: underline;">${esc(opts.siteUrl)}/ai-test</a>. Reply to this email if you want to talk anything through — I read everything.
-            </p>
-            <p style="margin: 8px 0 0 0; font-size: 11px; color: #d1d5db; line-height: 1.55; text-align: center;">
-              — Hudson
-            </p>
-          </td></tr>
-        </table>
-      </td></tr>
-    </table>
-  </body>
-</html>`;
-}
-
-function esc(s: unknown): string {
-  return String(s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}

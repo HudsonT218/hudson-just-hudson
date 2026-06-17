@@ -1,11 +1,10 @@
 import * as React from 'npm:react@18.3.1'
 import {
-  Body, Button, Container, Head, Heading, Hr, Html, Preview, Section, Text,
+  Body, Container, Head, Heading, Hr, Html, Preview, Section, Text,
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
 const SITE_NAME = 'Hudson Turansky'
-const BOOKING_URL = 'https://calendly.com/hudsonturansky/30min'
 
 const EFFORT_LABEL: Record<string, string> = {
   easy: 'Easy',
@@ -52,13 +51,6 @@ const IdeaCard = ({ idea }: { idea: Idea }) => {
       <Text style={{ margin: 0, fontSize: '13px', color: '#6b7280', lineHeight: 1.55 }}>
         <strong style={{ color: '#4b5563' }}>How this helps you:</strong> {idea.how_it_helps}
       </Text>
-      {effort === 'needs_building' && (
-        <Text style={{ margin: '12px 0 0', fontSize: '13px' }}>
-          <a href={BOOKING_URL} style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 500 }}>
-            Scope this with Hudson →
-          </a>
-        </Text>
-      )}
     </Section>
   )
 }
@@ -76,7 +68,7 @@ const AiTestResultsEmail = ({
       <Container style={container}>
         <Text style={kicker}>YOUR RESULTS</Text>
         <Heading style={h1}>
-          Hey {greetingName} — here's your personalized AI use-case map.
+          Hey {greetingName}, here's your personalized AI use-case map.
         </Heading>
         {summary && <Text style={text}>{summary}</Text>}
 
@@ -94,21 +86,11 @@ const AiTestResultsEmail = ({
           </>
         )}
 
-        <Section style={ctaBox}>
-          <Text style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: 600, color: '#1e3a8a' }}>
-            Want to scope a build?
-          </Text>
-          <Text style={{ margin: '0 0 16px', fontSize: '14px', color: '#4b5563', lineHeight: 1.55 }}>
-            Free 30-minute discovery call. No pitch, just a conversation about whether it's worth building.
-          </Text>
-          <Button href={BOOKING_URL} style={button}>Book a call</Button>
-        </Section>
-
         <Hr style={{ borderColor: '#e5e7eb', margin: '32px 0 16px' }} />
         <Text style={footer}>
-          Reply to this email if you want to talk anything through — I read everything.
+          Reply to this email if you want to talk anything through. I read everything.
         </Text>
-        <Text style={footerSmall}>— Hudson</Text>
+        <Text style={footerSmall}>Hudson</Text>
       </Container>
     </Body>
   </Html>
@@ -137,7 +119,5 @@ const kicker = { margin: '0 0 8px', fontSize: '13px', textTransform: 'uppercase'
 const h1 = { margin: '0 0 16px', fontSize: '26px', fontWeight: 700, color: '#111827', lineHeight: 1.2, letterSpacing: '-0.02em' }
 const h2 = { margin: '32px 0 4px', fontSize: '13px', textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: '#6b7280', fontWeight: 600 }
 const text = { margin: '0 0 24px', fontSize: '15px', color: '#4b5563', lineHeight: 1.6 }
-const ctaBox = { margin: '32px 0 0', padding: '24px', backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '12px', textAlign: 'center' as const }
-const button = { padding: '10px 20px', backgroundColor: '#111827', color: '#ffffff', fontSize: '14px', fontWeight: 500, textDecoration: 'none', borderRadius: '8px' }
 const footer = { margin: '0', fontSize: '12px', color: '#9ca3af', lineHeight: 1.55, textAlign: 'center' as const }
 const footerSmall = { margin: '8px 0 0', fontSize: '11px', color: '#d1d5db', lineHeight: 1.55, textAlign: 'center' as const }

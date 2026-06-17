@@ -779,7 +779,7 @@ const EmailGate = ({ onSubmitting, onSuccess, onAlreadyUsed, onError }: EmailGat
 };
 
 const alreadyUsedFallback =
-  "This email has already received a free personalized AI brief. Send me an email if you'd like to talk through your results in more detail.";
+  "This email has already received a free personalized AI brief.";
 
 // ---- Submitting ----------------------------------------------------------
 
@@ -819,27 +819,6 @@ const Results = ({ results, email }: { results: AiTestResults; email: string }) 
       <p className="mt-10 mb-6 text-center text-sm text-gray-400 font-light">
         A copy of this report has been sent to <span className="text-white">{email}</span> so you can revisit it anytime. Check your spam folder if you don't see it.
       </p>
-
-      <div
-        className="mt-12 rounded-2xl p-8 text-center"
-        style={{
-          backgroundColor: "var(--app-blue-tint-strong)",
-          border: "1px solid var(--app-blue-tint-border)",
-        }}
-      >
-        <p className="text-white font-semibold mb-2">Got a "needs building" idea you want to scope?</p>
-        <p className="text-gray-400 text-sm font-light mb-5">
-          I'm not taking on new projects right now, but send an email and I'll get back
-          to you when I'm available again.
-        </p>
-        <a
-          href="mailto:hudsonturansky@gmail.com"
-          className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
-          style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
-        >
-          Email me →
-        </a>
-      </div>
     </div>
   );
 };
@@ -872,14 +851,6 @@ const Section = ({ heading, ideas }: { heading: string; ideas: AiTestResults["at
           <p className="text-gray-500 text-sm font-light leading-relaxed">
             <span className="text-gray-600">How this helps you:</span> {idea.how_it_helps}
           </p>
-          {idea.effort === "needs_building" && (
-            <a
-              href="mailto:hudsonturansky@gmail.com"
-              className="inline-flex items-center gap-2 text-xs font-medium mt-3 text-blue-400 hover:text-blue-300"
-            >
-              Email Hudson about this →
-            </a>
-          )}
         </div>
       ))}
     </div>
@@ -895,13 +866,13 @@ const AlreadyUsed = ({ message }: { message: string }) => (
       You've already received your brief.
     </h2>
     <p className="text-gray-400 font-light max-w-xl mx-auto mb-8 leading-relaxed">{message}</p>
-    <a
-      href="mailto:hudsonturansky@gmail.com"
+    <Link
+      to="/resources"
       className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md"
       style={{ backgroundColor: "var(--app-button-bg)", color: "var(--app-button-fg)" }}
     >
-      Email me instead →
-    </a>
+      See more free resources →
+    </Link>
   </div>
 );
 
