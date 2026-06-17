@@ -7,10 +7,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import DottedSurface from "./components/DottedSurface.tsx";
 import Index from "./pages/Index.tsx";
-import WorkPage from "./pages/WorkPage.tsx";
+import BuildsPage from "./pages/BuildsPage.tsx";
 import AiBriefPage from "./pages/AiBriefPage.tsx";
 import FinanceToolsPage from "./pages/FinanceToolsPage.tsx";
 import FilingSummarizerPage from "./pages/FilingSummarizerPage.tsx";
+import UpdatesPage from "./pages/UpdatesPage.tsx";
 import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
 import AiGlossaryForBusinessOwners from "./pages/resources/AiGlossaryForBusinessOwners.tsx";
 import IsYourDataSafeWithAi from "./pages/resources/IsYourDataSafeWithAi.tsx";
@@ -137,11 +138,13 @@ const AppRoutes = () => {
       <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/work" element={<WorkPage />} />
+          <Route path="/builds" element={<BuildsPage />} />
+          <Route path="/work" element={<Navigate to="/builds" replace />} />
           <Route path="/ai-brief" element={<AiBriefPage />} />
           <Route path="/unsubscribe" element={<UnsubscribePage />} />
           <Route path="/finance-tools" element={<FinanceToolsPage />} />
           <Route path="/finance-tools/filing-summarizer" element={<FilingSummarizerPage />} />
+          <Route path="/updates" element={<UpdatesPage />} />
           {/* Redirect the previous /ai-test URL (renamed to /ai-brief). */}
           <Route path="/ai-test" element={<Navigate to="/ai-brief" replace />} />
           <Route path="/resources" element={<ResourcesIndexPage />} />
@@ -166,7 +169,7 @@ const AppRoutes = () => {
           <Route path="/interested" element={<Navigate to="/" replace />} />
           <Route path="/free-build" element={<Navigate to="/" replace />} />
           <Route path="/landing-pages" element={<Navigate to="/" replace />} />
-          <Route path="/packages" element={<Navigate to="/work" replace />} />
+          <Route path="/packages" element={<Navigate to="/builds" replace />} />
           <Route path="/reference/:token" element={<ReferencePage />} />
 
           {/* Auth — kept for the admin CRM login. */}

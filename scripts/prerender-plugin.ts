@@ -18,13 +18,14 @@ interface RouteEntry {
 // Public, indexable routes only. Admin/auth/configurator/reference stay SPA.
 const ROUTES: RouteEntry[] = [
   { url: "/", outFile: "index.html" },
-  { url: "/work", outFile: "work/index.html" },
+  { url: "/builds", outFile: "builds/index.html" },
   { url: "/ai-brief", outFile: "ai-brief/index.html" },
   { url: "/finance-tools", outFile: "finance-tools/index.html" },
   {
     url: "/finance-tools/filing-summarizer",
     outFile: "finance-tools/filing-summarizer/index.html",
   },
+  { url: "/updates", outFile: "updates/index.html" },
   { url: "/resources", outFile: "resources/index.html" },
   {
     url: "/resources/is-your-data-safe-with-ai",

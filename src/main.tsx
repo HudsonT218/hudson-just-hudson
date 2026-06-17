@@ -11,14 +11,14 @@ import "./index.css";
 // here and switching to createRoot avoids the warning.
 const PRERENDERED_ROUTES = new Set([
   "/",
-  "/work",
+  "/builds",
   "/ai-brief",
+  "/finance-tools",
+  "/finance-tools/filing-summarizer",
+  "/updates",
   "/resources",
-  "/resources/ai-for-small-business",
-  "/resources/what-custom-ai-costs",
-  "/resources/hire-ai-help-or-do-it-yourself",
-  "/resources/what-small-businesses-use-ai-for",
-  "/resources/ai-glossary-for-business-owners",
+  "/resources/is-your-data-safe-with-ai",
+  "/resources/ai-glossary",
 ]);
 
 const rootElement = document.getElementById("root")!;

@@ -20,24 +20,30 @@ type PortfolioItem = {
 
 const CAPABILITIES = [
   {
-    label: "Web Development",
-    body: "Landing pages, business sites, internal dashboards. Single-page or multi-page. Fast turnaround, clean code, always deployed and documented on handoff.",
-  },
-  {
     label: "AI Agents & Assistants",
-    body: "Custom AI tools built on top of models like Claude and Gemini, including OpenClaw Agents and Hermes Agents. I work with MCP and CLI agents, chatbots, research assistants, document processors, workflow agents. I scope what's actually feasible before we build anything.",
-  },
-  {
-    label: "Operations Software",
-    body: "Full-stack internal applications. Custom admin panels, client portals, CRMs, ops dashboards. Built around how your team actually works, not a generic SaaS template.",
+    body: "Custom AI tools built on top of models like Claude and Gemini, including OpenClaw Agents and Hermes Agents. I work with MCP and CLI agents, chatbots, research assistants, document processors, and workflow agents. I scope what's actually feasible before building anything.",
   },
   {
     label: "Automation & Integrations",
-    body: "Scripts, bots, and pipelines that connect your tools and automate repetitive work. Python or Node, depending on what fits.",
+    body: "Scripts, bots, and pipelines that connect tools and automate repetitive work. Python or Node, depending on what fits.",
+  },
+  {
+    label: "Operations Software",
+    body: "Full-stack internal applications. Custom admin panels, client portals, CRMs, and ops dashboards, built around how a team actually works rather than a generic SaaS template.",
+  },
+  {
+    label: "Web Development",
+    body: "Landing pages, business sites, and internal dashboards. Single-page or multi-page. Fast turnaround, clean code, deployed and documented.",
   },
 ];
 
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
+  {
+    label: "Finance Tool · 2026",
+    title: "Filing Summarizer",
+    desc: "A tool that turns any company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief. Live on this site, with 3 free runs per email.",
+    url: "/finance-tools/filing-summarizer",
+  },
   {
     label: "Web · 2026",
     title: "Happy Tails Dog Walking",
@@ -48,29 +54,32 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
     label: "Software · 2026",
     title: "Chesapeake Community Pantry",
-    desc: "An example volunteer tracking OS I built, shift scheduling, hour tracking, leaderboards, and manager reports for a food bank.",
+    desc: "An example volunteer tracking OS I built: shift scheduling, hour tracking, leaderboards, and manager reports for a food bank.",
     url: "https://chesapeake-pantry.lovable.app",
     image: chesapeakePantryCover,
   },
 ];
 
-const WorkPage = () => {
+const BuildsPage = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Work · Hudson Turansky</title>
-        <meta name="description" content="Web development, AI solutions, and custom software. A look at what I build and what I've shipped." />
-        <link rel="canonical" href="https://hudsonturansky.com/work" />
+        <title>Builds · Hudson Turansky</title>
+        <meta
+          name="description"
+          content="Things I'm building with AI: finance tools, agents, automations, and software. Some live, some demos, more on the way."
+        />
+        <link rel="canonical" href="https://hudsonturansky.com/builds" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hudsonturansky.com/work" />
-        <meta property="og:title" content="Work · Hudson Turansky" />
-        <meta property="og:description" content="Capabilities and portfolio. Web, AI, software." />
+        <meta property="og:url" content="https://hudsonturansky.com/builds" />
+        <meta property="og:title" content="Builds · Hudson Turansky" />
+        <meta property="og:description" content="Things I'm building with AI: finance tools, agents, automations, and software." />
         <meta property="og:image" content="https://hudsonturansky.com/og-work.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Work · Hudson Turansky" />
-        <meta name="twitter:description" content="Capabilities and portfolio. Web, AI, software." />
+        <meta name="twitter:title" content="Builds · Hudson Turansky" />
+        <meta name="twitter:description" content="Things I'm building with AI: finance tools, agents, automations, and software." />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-work.png" />
       </Helmet>
       <Navbar />
@@ -86,13 +95,13 @@ const WorkPage = () => {
         />
         <div className="relative max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
-            Work
+            Builds
           </p>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6"
             style={{ letterSpacing: "-0.04em" }}
           >
-            What I Do.{" "}
+            Things I'm{" "}
             <span
               style={{
                 background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
@@ -100,56 +109,12 @@ const WorkPage = () => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              What I've Built.
+              building.
             </span>
           </h1>
           <p className="text-lg text-gray-400 font-light max-w-xl mx-auto">
-            A look at the types of projects I take on and a few things I've
-            already made.
+            Tools, agents, automations, and software. Some live, some demos, and more on the way.
           </p>
-        </div>
-      </section>
-
-      {/* Divider */}
-      <div
-        className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid var(--app-border-soft)" }}
-      />
-
-      {/* Capabilities */}
-      <section className="py-28 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-16">
-            <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
-              Capabilities
-            </p>
-            <h2
-              className="text-3xl sm:text-4xl font-extrabold leading-tight"
-              style={{ letterSpacing: "-0.03em" }}
-            >
-              <span className="block text-white">What I build.</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {CAPABILITIES.map((c) => (
-              <div
-                key={c.label}
-                className="rounded-2xl p-8"
-                style={{
-                  backgroundColor: "var(--app-card-bg)",
-                  border: "1px solid var(--app-border-soft)",
-                }}
-              >
-                <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-4">
-                  {c.label}
-                </p>
-                <p className="text-gray-400 text-sm font-light leading-relaxed">
-                  {c.body}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -164,7 +129,7 @@ const WorkPage = () => {
         <div className="max-w-5xl mx-auto">
           <div className="mb-16">
             <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
-              Portfolio
+              Projects
             </p>
             <h2
               className="text-3xl sm:text-4xl font-extrabold leading-tight"
@@ -179,11 +144,15 @@ const WorkPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {PORTFOLIO_ITEMS.map((p, i) => {
+              const isInternal = !!p.url && p.url.startsWith("/");
+              const isExternal = !!p.url && !isInternal;
               const isLive = !!p.url;
-              const Wrapper: React.ElementType = isLive ? "a" : "div";
-              const wrapperProps = isLive
-                ? { href: p.url, target: "_blank", rel: "noopener noreferrer" }
-                : {};
+              const Wrapper: React.ElementType = isInternal ? Link : isExternal ? "a" : "div";
+              const wrapperProps = isInternal
+                ? { to: p.url }
+                : isExternal
+                  ? { href: p.url, target: "_blank", rel: "noopener noreferrer" }
+                  : {};
               return (
                 <Wrapper
                   key={i}
@@ -250,12 +219,55 @@ const WorkPage = () => {
                           : "var(--app-text-soft)",
                       }}
                     >
-                      {isLive ? "Visit →" : "View →"}
+                      {isInternal ? "Open →" : isExternal ? "Visit →" : "View →"}
                     </span>
                   </div>
                 </Wrapper>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div
+        className="max-w-5xl mx-auto"
+        style={{ borderTop: "1px solid var(--app-border-soft)" }}
+      />
+
+      {/* Capabilities */}
+      <section className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-16">
+            <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
+              What I build
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold leading-tight"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              <span className="block text-white">The kind of work I do.</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {CAPABILITIES.map((c) => (
+              <div
+                key={c.label}
+                className="rounded-2xl p-8"
+                style={{
+                  backgroundColor: "var(--app-card-bg)",
+                  border: "1px solid var(--app-border-soft)",
+                }}
+              >
+                <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-4">
+                  {c.label}
+                </p>
+                <p className="text-gray-400 text-sm font-light leading-relaxed">
+                  {c.body}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -285,23 +297,23 @@ const WorkPage = () => {
               className="text-3xl sm:text-4xl font-extrabold leading-tight"
               style={{ letterSpacing: "-0.03em" }}
             >
-              <span className="block text-white">AI meeting assistant I built.</span>
+              <span className="block text-white">An AI meeting assistant I built.</span>
             </h2>
             <p className="text-lg text-gray-400 font-light mt-4 max-w-2xl">
-              Before the meeting, the assistant reads in a stack of company documents, reports, dashboards, contracts, market feeds. During the meeting, one model transcribes the conversation in real time while a second model runs silently in the background, cross-referencing what's said against the loaded context. When it catches a misstated number, an unanswered question, or a piece of relevant context no one raised, it drops a note with a citation back to the source. The conversation flows uninterrupted.
+              Before the meeting, the assistant reads in a stack of company documents: reports, dashboards, contracts, market feeds. During the meeting, one model transcribes the conversation in real time while a second model runs silently in the background, cross-referencing what's said against the loaded context. When it catches a misstated number, an unanswered question, or a piece of relevant context no one raised, it drops a note with a citation back to the source. The conversation flows uninterrupted.
             </p>
             <p className="text-lg text-gray-300 font-light mt-4 max-w-2xl">
-              This is one example of a custom AI assistant I can build for your team.
+              One example of the kind of custom AI assistant I build.
             </p>
           </div>
 
           {/* The demo is a UI mockup of a real product I built. It stays in
               its native dark theme even when the rest of the site is in light
-              mode — same way Apple / Stripe / Linear embed dark app screenshots
-              into light marketing pages. `dark-region` restores all dark CSS
-              vars + Tailwind text remaps inside; `boxShadow: none` suppresses
-              the light-mode top-edge highlight that would otherwise hit the
-              `.rounded-2xl` wrapper. */}
+              mode, the same way Apple / Stripe / Linear embed dark app
+              screenshots into light marketing pages. `dark-region` restores all
+              dark CSS vars + Tailwind text remaps inside; `boxShadow: none`
+              suppresses the light-mode top-edge highlight that would otherwise
+              hit the `.rounded-2xl` wrapper. */}
           <div
             className="dark-region rounded-2xl overflow-hidden"
             style={{
@@ -315,9 +327,9 @@ const WorkPage = () => {
           </div>
 
           <p className="text-sm text-gray-500 font-light mt-8 max-w-2xl leading-relaxed">
-            A scripted walkthrough of a Q4 review meeting at a fake SaaS company.
-            The demo isn't connected to a live LLM, it's a faithful recreation of
-            a prototype I built and previously deployed. I'd build a real version for you.
+            A scripted walkthrough of a Q4 review meeting at a fake SaaS company. The demo isn't
+            connected to a live LLM, it's a faithful recreation of a prototype I built and
+            previously deployed.
           </p>
         </div>
       </section>
@@ -328,28 +340,41 @@ const WorkPage = () => {
         style={{ borderTop: "1px solid var(--app-border-soft)" }}
       />
 
-      {/* Interested CTA */}
+      {/* Contact CTA */}
       <section className="py-20 px-6 text-center">
         <div className="max-w-xl mx-auto">
           <h2
             className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Interested in working together?
+            Building in the same space?
           </h2>
           <p className="text-gray-400 font-light mb-8">
-            See how I charge and what a typical project looks like.
+            I like comparing notes and shipping things. If you work in AI or finance, say hi.
           </p>
-          <Link
-            to="/interested"
-            className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
-            style={{
-              backgroundColor: "var(--app-button-bg)",
-              color: "var(--app-button-fg)",
-            }}
-          >
-            See Pricing →
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="mailto:hudsonturansky@gmail.com"
+              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors duration-200"
+              style={{
+                backgroundColor: "var(--app-button-bg)",
+                color: "var(--app-button-fg)",
+              }}
+            >
+              Email me →
+            </a>
+            <Link
+              to="/finance-tools"
+              className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
+              style={{
+                backgroundColor: "var(--app-card-bg-strong)",
+                color: "#ffffff",
+                border: "1px solid var(--app-border-strong)",
+              }}
+            >
+              Explore the finance tools →
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -362,7 +387,7 @@ const WorkPage = () => {
         }}
       >
         <p className="text-xs text-gray-600">
-          &copy; {__BUILD_YEAR__} Hudson Turansky &middot;{' '}
+          &copy; {__BUILD_YEAR__} Hudson Turansky &middot;{" "}
           <a href="mailto:hudsonturansky@gmail.com" className="hover:text-gray-400 transition-colors">
             hudsonturansky@gmail.com
           </a>
@@ -372,4 +397,4 @@ const WorkPage = () => {
   );
 };
 
-export default WorkPage;
+export default BuildsPage;
