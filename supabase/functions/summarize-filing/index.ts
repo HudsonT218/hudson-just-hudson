@@ -221,6 +221,17 @@ serve(async (req) => {
     let parsed: any;
     try {
       parsed = JSON.parse(generatedText);
+      // Some models wrap the object in a single-element array — unwrap it.
+      if (Array.isArray(parsed) && parsed.length === 1) parsed = parsed[0];
+      // Or nest under a top-level key like { brief: {...} } / { result: {...} }
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && !('headline' in parsed)) {
+        for (const k of ['brief', 'result', 'data', 'output', 'summary']) {
+          if (k in parsed && parsed[k] && typeof parsed[k] === 'object') {
+            parsed = parsed[k];
+            break;
+          }
+        }
+      }
     } catch (e) {
       console.error('LLM JSON parse failed', e, generatedText.slice(0, 500));
       return json(
