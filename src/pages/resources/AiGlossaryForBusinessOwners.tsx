@@ -1,5 +1,5 @@
-// /resources/ai-glossary-for-business-owners, "A Plain-English AI Glossary
-// for Business Owners" guide. SPA route, prerendered via prerenderPlugin.
+// /resources/ai-glossary, "A Plain-English AI Glossary" guide. SPA route,
+// prerendered via prerenderPlugin.
 // The differentiator on this page (kept structurally intact per the
 // markdown handoff): every term has a plain definition, a "why you'd care"
 // line, and a "Decision impact" tag.
