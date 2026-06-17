@@ -24,7 +24,6 @@ import AiForSmallEcommerce from "./pages/resources/AiForSmallEcommerce.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import UnsubscribePage from "./pages/UnsubscribePage.tsx";
 import { AuthProvider } from "@/components/configurator/auth/AuthProvider";
-import { ProtectedRoute } from "@/components/configurator/layout/ProtectedRoute";
 import { AdminRoute } from "@/components/configurator/layout/AdminRoute";
 
 const queryClient = new QueryClient({
@@ -38,14 +37,10 @@ const queryClient = new QueryClient({
   },
 });
 
+// Auth pages kept for the admin CRM login (configurator product was removed).
 const LoginPage = lazy(() => import("./pages/configurator/LoginPage.tsx"));
-const SignupPage = lazy(() => import("./pages/configurator/SignupPage.tsx"));
 const ForgotPasswordPage = lazy(() => import("./pages/configurator/ForgotPasswordPage.tsx"));
 const ResetPasswordPage = lazy(() => import("./pages/configurator/ResetPasswordPage.tsx"));
-const ConfiguratorPage = lazy(() => import("./pages/configurator/ConfiguratorPage.tsx"));
-const DashboardPage = lazy(() => import("./pages/configurator/DashboardPage.tsx"));
-const OrderDetailPage = lazy(() => import("./pages/configurator/OrderDetailPage.tsx"));
-const PreviewPage = lazy(() => import("./pages/configurator/PreviewPage.tsx"));
 
 // Lead Management OS — Hudson's personal CRM
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard.tsx"));
@@ -60,13 +55,11 @@ const AdminSettings = lazy(() => import("./pages/admin/Settings.tsx"));
 
 const ReferencePage = lazy(() => import("./pages/ReferencePage.tsx"));
 
+// Surfaces that opt out of the public DottedSurface background (admin CRM +
+// auth pages). The customer configurator/checkout flow was removed.
 const CONFIGURATOR_PREFIXES = [
-  "/configure",
-  "/dashboard",
-  "/preview",
   "/admin",
   "/login",
-  "/signup",
   "/forgot-password",
   "/reset-password",
 ];
@@ -203,45 +196,18 @@ const AppRoutes = () => {
           <Route path="/packages" element={<Navigate to="/work" replace />} />
           <Route path="/reference/:token" element={<ReferencePage />} />
 
-          {/* Configurator product */}
+          {/* Auth — kept for the admin CRM login. */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-          <Route path="/configure" element={<ConfiguratorPage />} />
-          <Route
-            path="/configure/:draftId"
-            element={
-              <ProtectedRoute>
-                <ConfiguratorPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard/order/:orderId"
-            element={
-              <ProtectedRoute>
-                <OrderDetailPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/preview/:orderId"
-            element={
-              <ProtectedRoute>
-                <PreviewPage />
-              </ProtectedRoute>
-            }
-          />
+          {/* Retired configurator/checkout flow — redirect, no 404s. */}
+          <Route path="/signup" element={<Navigate to="/login" replace />} />
+          <Route path="/configure" element={<Navigate to="/" replace />} />
+          <Route path="/configure/:draftId" element={<Navigate to="/" replace />} />
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
+          <Route path="/dashboard/order/:orderId" element={<Navigate to="/" replace />} />
+          <Route path="/preview/:orderId" element={<Navigate to="/" replace />} />
 
           {/* Lead Management OS */}
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
