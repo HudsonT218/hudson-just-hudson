@@ -78,7 +78,7 @@ const FilingSummarizerPage = () => {
       style={{ color: "var(--app-text-strong)" }}
     >
       <Helmet>
-        <title>Filing Summarizer — SEC filings in plain English · Hudson Turansky</title>
+        <title>Filing Summarizer: SEC filings in plain English · Hudson Turansky</title>
         <meta
           name="description"
           content="Turn any company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary. 3 free runs, just an email."
@@ -86,7 +86,7 @@ const FilingSummarizerPage = () => {
         <link rel="canonical" href="https://hudsonturansky.com/finance-tools/filing-summarizer" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hudsonturansky.com/finance-tools/filing-summarizer" />
-        <meta property="og:title" content="Filing Summarizer — SEC filings in plain English" />
+        <meta property="og:title" content="Filing Summarizer: SEC filings in plain English" />
         <meta
           property="og:description"
           content="A one-page, plain-English brief of any company's latest SEC filing. 3 free runs."
@@ -95,7 +95,7 @@ const FilingSummarizerPage = () => {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Filing Summarizer — SEC filings in plain English" />
+        <meta name="twitter:title" content="Filing Summarizer: SEC filings in plain English" />
         <meta
           name="twitter:description"
           content="A one-page, plain-English brief of any company's latest SEC filing."
@@ -206,7 +206,7 @@ const Hero = () => (
       className="text-lg font-light max-w-2xl mb-8 leading-relaxed"
       style={{ color: "var(--app-text-med)" }}
     >
-      Enter a ticker and get a one-page brief of the company's latest 10-K or 10-Q — the key
+      Enter a ticker and get a one-page brief of the company's latest 10-K or 10-Q: the key
       numbers, what changed, the risks that matter, and a glossary for any jargon. Built for normal
       humans, not Wall Street. <strong style={{ color: "var(--app-text-strong)", fontWeight: 500 }}>3 free runs</strong>, just an email.
     </p>
@@ -244,8 +244,8 @@ const LandingContent = () => (
       <ul className="space-y-3 font-light leading-relaxed" style={{ color: "var(--app-text-med)" }}>
         {WHATS_INSIDE.map((item) => (
           <li key={item.title}>
-            · <strong style={{ color: "var(--app-text-strong)", fontWeight: 500 }}>{item.title}</strong>{" "}
-            — {item.body}
+            · <strong style={{ color: "var(--app-text-strong)", fontWeight: 500 }}>{item.title}</strong>:{" "}
+            {item.body}
           </li>
         ))}
       </ul>
@@ -259,12 +259,12 @@ const LandingContent = () => (
 
 const HOW_IT_WORKS = [
   "Enter a stock ticker (e.g. AAPL), pick which report you want, and drop in your email.",
-  "We pull that company's latest filing straight from the SEC's public EDGAR database — no logins, no paywalls.",
+  "We pull that company's latest filing straight from the SEC's public EDGAR database, no logins, no paywalls.",
   "A purpose-built assistant reads it and writes a clear one-page brief. Email yourself the PDF or print it.",
 ];
 
 const WHATS_INSIDE: Array<{ title: string; body: string }> = [
-  { title: "Key numbers", body: "revenue, profit, cash flow, EPS — with the change vs. last period and a one-line 'why'." },
+  { title: "Key numbers", body: "revenue, profit, cash flow, EPS, with the change vs. last period and a one-line 'why'." },
   { title: "What changed", body: "the handful of things that actually moved this quarter or year." },
   { title: "Risks & watch-outs", body: "the material risks in plain words, plus things to be careful interpreting." },
   { title: "Glossary", body: "every finance term defined in one sentence, so nothing is a black box." },
@@ -277,7 +277,7 @@ const Disclaimer = () => (
       style={{ backgroundColor: "var(--app-card-bg)", border: "1px solid var(--app-border-soft)" }}
     >
       <p className="text-sm font-light leading-relaxed" style={{ color: "var(--app-text-muted)" }}>
-        <strong style={{ color: "var(--app-text-med)", fontWeight: 500 }}>Educational only — not investment advice.</strong>{" "}
+        <strong style={{ color: "var(--app-text-med)", fontWeight: 500 }}>Educational only. Not investment advice.</strong>{" "}
         This tool summarizes public SEC filings to help you understand them. It can make mistakes and
         may omit detail. Always verify against the original filing before making any decision. Source
         data: SEC EDGAR.
@@ -800,7 +800,7 @@ const RequestReport = ({ summaryId, defaultRecipient }: { summaryId: string; def
         Email me the report (PDF)
       </p>
       <p className="text-xs font-light mb-3" style={{ color: "var(--app-text-muted)" }}>
-        A clean one-pager you can keep. Send it anywhere — change the address if you like.
+        A clean one-pager you can keep. Send it anywhere, change the address if you like.
       </p>
       <div className="flex flex-col sm:flex-row gap-2">
         <input

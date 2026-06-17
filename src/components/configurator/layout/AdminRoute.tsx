@@ -17,7 +17,7 @@ export function AdminRoute({ children }: { children: ReactNode }) {
 
   // Profile is fetched asynchronously after the session resolves. Don't make
   // an admin-vs-not decision until we actually have it, otherwise we redirect
-  // legit admins to /dashboard on every nav.
+  // legit admins to the homepage on every nav.
   if (!profile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
@@ -26,6 +26,6 @@ export function AdminRoute({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!profile.isAdmin) return <Navigate to="/dashboard" replace />;
+  if (!profile.isAdmin) return <Navigate to="/" replace />;
   return <>{children}</>;
 }

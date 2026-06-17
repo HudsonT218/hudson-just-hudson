@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@/lib/useTheme";
 
 const NAV_LINKS: Array<{ label: string; href: string }> = [
-  { label: "About",     href: "#about" },
-  { label: "Work",      href: "/work" },
-  { label: "Resources", href: "/resources" },
-  { label: "Contact",   href: "#contact" },
+  { label: "About",         href: "#about" },
+  { label: "Builds",        href: "/builds" },
+  { label: "Finance Tools", href: "/finance-tools" },
+  { label: "Resources",     href: "/resources" },
+  { label: "Updates",       href: "/updates" },
 ];
 
 const Navbar = () => {
@@ -114,6 +115,12 @@ const Navbar = () => {
               </a>
             );
           })}
+          <a
+            href="mailto:hudsonturansky@gmail.com"
+            className="text-sm text-gray-500 hover:text-white transition-colors duration-200"
+          >
+            Contact
+          </a>
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </div>
 
@@ -180,6 +187,13 @@ const Navbar = () => {
               </a>
             );
           })}
+          <a
+            href="mailto:hudsonturansky@gmail.com"
+            onClick={() => setOpen(false)}
+            className="block py-2.5 text-sm text-gray-500 hover:text-white transition-colors"
+          >
+            Contact
+          </a>
         </div>
       </div>
     </nav>

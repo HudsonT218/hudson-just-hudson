@@ -7,8 +7,8 @@
 export type Effort = "easy" | "medium" | "needs_building";
 
 export const EFFORT_LABEL: Record<Effort, string> = {
-  easy: "Easy — do it yourself with ChatGPT",
-  medium: "Medium — needs an off-the-shelf AI tool",
+  easy: "Easy, do it yourself with ChatGPT",
+  medium: "Medium, needs an off-the-shelf AI tool",
   needs_building: "Needs building",
 };
 

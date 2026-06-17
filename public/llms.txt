@@ -1,90 +1,40 @@
 # Hudson Turansky
 
-> Independent builder of custom websites, AI tools, and software for small businesses and solo founders. Hourly, transparent pricing. Most projects ship in 2–6 weeks. AI-assisted workflows let me deliver faster and leaner than a traditional agency.
+> Builder who uses AI to make tools for finance, plus agents, automations, and custom software. Learning markets by shipping in them.
 
-Hudson Turansky is a US-based one-person studio focused on small businesses and solo founders who need real software built well, not gated wizard templates, not bloated agency engagements. He scopes hourly, ships projects end-to-end (idea → deployed), and uses AI throughout the build to keep velocity high. He is early in client work and prices accordingly while building a track record.
+Hudson Turansky is a builder. AI is the work, whether that is AI tools, agents, automations, or custom software. His current focus is finance: he is early in the field, studying for the SIE, and learning markets by building tools for them. The way he frames it, he is a custom builder for finance, where you bring the domain knowledge and he brings the ability to build it and get it shipped.
 
 Live site: https://hudsonturansky.com
 Email: hudsonturansky@gmail.com
-Status: Currently on a break from new projects — reach out by email and Hudson will follow up when taking on new work again.
 
 ## Pages
 
-- [Home](https://hudsonturansky.com/): Overview of services, philosophy, FAQ, and how to get in touch.
-- [Work](https://hudsonturansky.com/work): Capabilities, portfolio, and a live AI-meeting-assistant demo.
-- [Landing Pages](https://hudsonturansky.com/landing-pages): Productized landing-page offer for local businesses. $200 flat, $100 for the first five clients, live in about a week. Includes design, copy support, photos and branding, basic SEO, and deploy to the client's domain.
-- [Free Personalized AI Brief](https://hudsonturansky.com/ai-brief): A free 5-minute personalized brief. Visitors answer ~14 questions about their work and life and an AI generates 6–10 specific use-case ideas grouped "At Work" / "In Your Life," tagged by effort (easy / medium / needs building). One brief per email.
-- [Resources](https://hudsonturansky.com/resources/): Plain-English guides for small-business owners on adding AI, what custom builds cost, when to hire versus DIY.
+- [Home](https://hudsonturansky.com/): Who Hudson is, what he is building, and how to get in touch.
+- [Builds](https://hudsonturansky.com/builds): Projects and a live AI meeting-assistant demo, plus the kinds of work he does: AI agents and assistants, automations and integrations, operations software, and web.
+- [Finance Tools](https://hudsonturansky.com/finance-tools): Free finance tools, 3 free runs each. The first is the Filing Summarizer.
+- [Filing Summarizer](https://hudsonturansky.com/finance-tools/filing-summarizer): Turns a company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary. Pulls the filing from SEC EDGAR. 3 free runs per email, with the option to receive the brief as a PDF.
+- [Updates](https://hudsonturansky.com/updates): Building in public. Short notes on what he is making and learning.
+- [Resources](https://hudsonturansky.com/resources): Free tools and plain-English writing on AI and finance.
+- [Free Personalized AI Brief](https://hudsonturansky.com/ai-brief): Answer a few questions about your work and life and get 6 to 10 specific AI use-case ideas, grouped "At Work" and "In Your Life" and tagged by effort. One brief per email.
 
 ## Resources
 
-- [How to add AI to your small business in 2026](https://hudsonturansky.com/resources/ai-for-small-business): A 4-step framework, audit your week, match each task to the right level of investment ($20/mo ChatGPT, $50–200/mo vertical AI tool, or $1,500–$15,000 custom build), pick a first project, and avoid the 3 most common mistakes.
-- [What custom AI actually costs for a small business](https://hudsonturansky.com/resources/what-custom-ai-costs): Honest breakdown of the three AI cost tiers, what drives the price of a custom build, the ongoing costs people forget, and how to tell which tier your problem belongs in.
-- [Should you hire someone to build AI, or use ChatGPT yourself?](https://hudsonturansky.com/resources/hire-ai-help-or-do-it-yourself): A decision guide. When DIY ChatGPT is genuinely the right answer, when it isn't, and a one-question test that sorts most decisions correctly.
-- [12 things small businesses are actually using AI for in 2026](https://hudsonturansky.com/resources/what-small-businesses-use-ai-for): Twelve concrete, real-world AI use cases, each with rough effort, cost, and whether to DIY it or have it built.
-- [A plain-English AI glossary for business owners](https://hudsonturansky.com/resources/ai-glossary-for-business-owners): The dozen-or-so AI terms that actually matter to a business owner, with plain definitions and a "decision impact" tag on each.
-- [Is your data safe when you use AI? A small-business owner's guide](https://hudsonturansky.com/resources/is-your-data-safe-with-ai): A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, the four real risks that hurt small businesses, and the defensive moves that don't require a security team.
-- [AI for contractors in 2026](https://hudsonturansky.com/resources/ai-for-contractors): What home-service contractors are actually doing with AI in 2026, the five use cases worth paying for, what the realistic stack costs, the contractor-specific risks (code, lien notices, drone-tag verification), and the one first project (AI voice receptionist) that usually pays for itself in the first month.
-- [AI for professional services in 2026](https://hudsonturansky.com/resources/ai-for-professional-services): What small law firms, CPA practices, and financial advisors are actually doing with AI in 2026, the six use cases worth paying for, the ethics and risk landscape (ABA Opinion 512, the Heppner privilege ruling, §7216, SEC AI-washing enforcement), and the first project worth doing.
-- [AI for small e-commerce in 2026](https://hudsonturansky.com/resources/ai-for-small-ecommerce): What sub-$5M Shopify and WooCommerce stores are actually doing with AI in 2026, the eight use cases worth paying for, agentic commerce and discoverability in ChatGPT and Perplexity, the PCI and CCPA traps, and what to stop wasting money on.
+- [Is your data safe when you use AI?](https://hudsonturansky.com/resources/is-your-data-safe-with-ai): A plain-English guide to what ChatGPT, Claude, Gemini, and Copilot actually do with your data, which tier protects you, the real risks, and the defensive moves that do not require a security team.
+- [A plain-English AI glossary](https://hudsonturansky.com/resources/ai-glossary): The dozen-or-so AI terms that actually matter, each with a plain definition, why you would care, and whether it affects a real decision.
 
-## Services
+## What Hudson builds
 
-- **Custom Websites**, Landing pages, business sites, and internal tools built with React, TypeScript, and modern web standards. Fast turnaround, clean code, documented on handoff.
-- **Custom AI Agents and Assistants**, Personal AI assistants, company AI agents, and integrations built on Claude, Gemini, OpenAI, and MCP. Tuned to the client's data and workflow. Examples: meeting assistants that cross-reference documents in real time, document processors, research assistants, customer-support agents tied to a knowledge base.
-- **Operations Software**, Custom internal applications. Admin panels, client portals, CRMs, ops dashboards. Built around how the team actually works, not a generic SaaS template.
-- **Automation and Integrations**, Scripts, bots, and pipelines that connect tools and automate repetitive work. Python or Node. Common integrations: Stripe, Google Workspace, Notion, Slack, Shopify, internal CRMs.
+- AI agents and assistants: custom tools built on models like Claude and Gemini. MCP and CLI agents, chatbots, research assistants, document processors, and workflow agents.
+- Automation and integrations: scripts, bots, and pipelines that connect tools and automate repetitive work. Python or Node.
+- Operations software: full-stack internal apps. Admin panels, client portals, CRMs, and ops dashboards.
+- Web: landing pages, business sites, and internal dashboards.
 
-## Process
+## About
 
-1. **Free 30-minute discovery call.** Hudson tells you honestly whether the project is worth building, scopes it, and sends a written estimate with an hourly rate and a rough total. No commitment until both parties agree on scope.
-2. **Build hourly.** Hours are tracked transparently; the client sees them as the project progresses.
-3. **Ship in iterations.** Most projects deploy in 2–6 weeks; custom AI agents and operations software run longer depending on scope. Each iteration is reviewable before the next starts.
-4. **Handoff with documentation.** Deployed, documented, and explained well enough that the client (or another developer) can take it forward.
-
-## Who this is for / not for
-
-**Good fit:**
-- Small-business owners and solo founders who have an idea and need someone to actually build it.
-- Non-technical buyers who want plain-language scoping and honest "is AI even the right tool here" advice.
-- Contractors, professional services (legal, accounting, consulting), and e-commerce, three industries where Hudson sees the highest ROI for custom AI and operations software.
-- Anyone who has been quoted by an agency and feels the price is way out of proportion to the actual scope.
-
-**Not a fit:**
-- Pre-seed startups looking for a co-founder rather than a builder.
-- Projects requiring a large team (multi-person engineering, designers, PMs, separate QA).
-- Anyone wanting a fixed bid before scope is locked, Hudson works hourly and scopes carefully because flat-rate quotes incentivize cutting corners.
-- Anyone whose problem is already solved by a $20/month ChatGPT subscription. Hudson will tell you that on the discovery call instead of taking the money.
-
-## FAQ
-
-**How do I add AI to my small business?**
-Start by listing the 3 most repetitive things in your week, intake forms, scheduling, email triage, document processing, customer FAQs. Then decide whether a $20 ChatGPT subscription, an off-the-shelf AI tool ($50–200/mo), or a custom build is the right level of investment. Most small businesses get the biggest first win from automating customer intake or email triage with a custom assistant tied to their own knowledge base.
-
-**How much does custom AI cost?**
-Hourly, transparent rates. A focused custom AI assistant or automation typically runs $1,500–$5,000 total. A larger custom agent that does multi-step work or operates inside an existing workflow tool usually lands $5,000–$15,000. Hudson scopes before quoting, and the client sees hours as the project progresses.
-
-**How long does it take to build a custom AI tool?**
-Most custom AI tools ship in 3–8 weeks from kickoff to deployed. A small focused automation can be done in under 2 weeks; an end-to-end custom AI agent integrated with the client's existing tools (CRM, Slack, Notion, Google Workspace) typically takes 4–8 weeks. AI-assisted workflows let Hudson build faster than a traditional agency.
-
-**Should I hire a consultant or use ChatGPT myself?**
-Use ChatGPT yourself first for everything you can, it is the cheapest test. Hire a builder when you need something embedded in your existing tools, tuned to your specific data, reliable enough to put in front of customers, or automating work across multiple steps that ChatGPT alone cannot reach. If a $20 ChatGPT subscription solves your problem, Hudson will tell you that on the discovery call.
-
-**Do you work with contractors, professional services, or e-commerce businesses?**
-Yes, those are the three buckets where Hudson sees the highest ROI for small businesses. Contractors typically need scheduling and intake automation plus document handling. Professional services (legal, accounting, consulting) need document processing and client-facing assistants. E-commerce needs custom inventory tools, customer support agents, and analytics dashboards. Different industries, similar building blocks.
-
-**How do we get started?**
-Hudson is currently on a break from new projects. Email hudsonturansky@gmail.com and he'll be in touch when he's taking on new work again.
-
-## Examples
-
-- **Happy Tails Dog Walking** (Web · 2026, https://happytailsdogwalking.lovable.app), Example landing page demonstrating the kind of small-business website Hudson can ship in a single sprint. Built for demo purposes, not for an actual client.
-- **Chesapeake Community Pantry** (Software · 2026, https://chesapeake-pantry.lovable.app), Example volunteer tracking OS for a food bank: shift scheduling, hour tracking, leaderboards, and manager reports. Custom internal application, the kind of operations software Hudson builds for ongoing-use teams.
-- **AI Meeting Assistant** (AI · 2026), Prototype that pre-loads a stack of company documents (reports, dashboards, contracts), transcribes meetings in real time, and runs a second model in the background that cross-references what's said against the loaded context. Drops citation-backed notes when it catches misstated numbers or relevant unraised context. Demo at https://hudsonturansky.com/work, Hudson would build a real production version for a team.
+Hudson is a builder working with AI, now focused on finance. He is early in the field and studying for the SIE, and he wants to learn markets from the people who know them while doing what he is already good at: turning an idea into something that actually works. If you work in finance and need things built, get in touch.
 
 ## Contact
 
 - Email: hudsonturansky@gmail.com
-- Status: Currently not taking on new projects — email and Hudson will follow up when available again.
 - Site: https://hudsonturansky.com
 - Service area: United States

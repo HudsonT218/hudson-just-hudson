@@ -1,4 +1,4 @@
-// Finance Tools hub — /finance-tools.
+// Finance Tools hub (/finance-tools).
 //
 // The home for a growing set of small, free finance tools. The first is the
 // Filing Summarizer; more cards (backtester, watchlist monitor, …) slot in as
@@ -21,7 +21,7 @@ const TOOLS: ToolCard[] = [
   {
     name: "Filing Summarizer",
     blurb:
-      "Turn a company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief — key numbers, what changed, risks, and a jargon glossary.",
+      "Turn a company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary.",
     to: "/finance-tools/filing-summarizer",
     badge: "3 free runs",
     status: "live",
@@ -29,7 +29,7 @@ const TOOLS: ToolCard[] = [
   {
     name: "Backtester",
     blurb:
-      "Test a simple rules-based strategy against historical prices and see how it would have done — no spreadsheet wrangling.",
+      "Test a simple rules-based strategy against historical prices and see how it would have done, no spreadsheet wrangling.",
     badge: "Coming soon",
     status: "soon",
   },
@@ -127,8 +127,8 @@ const FinanceToolsPage = () => {
             actually read. Each one gives you{" "}
             <strong style={{ color: "var(--app-text-strong)", fontWeight: 500 }}>
               3 free runs
-            </strong>{" "}
-            — just an email, no account.
+            </strong>
+            , just an email, no account.
           </p>
         </div>
       </section>
@@ -142,15 +142,15 @@ const FinanceToolsPage = () => {
 
         <div className="max-w-4xl mx-auto mt-10">
           <p className="text-xs font-light leading-relaxed" style={{ color: "var(--app-text-muted)" }}>
-            Free runs are tracked per email — light friction so I can keep these tools free, not a
+            Free runs are tracked per email, light friction so I can keep these tools free, not a
             hard paywall. Want a custom finance tool, dashboard, or automation built?{" "}
-            <Link
-              to="/free-build"
+            <a
+              href="mailto:hudsonturansky@gmail.com"
               className="underline decoration-1 underline-offset-4"
               style={{ color: "var(--app-text-strong)" }}
             >
               I build those →
-            </Link>
+            </a>
           </p>
         </div>
       </section>

@@ -7,7 +7,7 @@ import { useAuth } from "@/components/configurator/auth/AuthProvider";
 export default function LoginPage() {
   const { user, loading } = useAuth();
   if (loading) return null;
-  if (user) return <Navigate to="/dashboard" replace />;
+  if (user) return <Navigate to="/" replace />;
   return (
     <>
       <Helmet>
