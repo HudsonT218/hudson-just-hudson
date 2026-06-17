@@ -117,10 +117,15 @@ serve(async (req) => {
     if (!response.ok) {
       const text = await response.text();
       console.error('Resend error', response.status, text.slice(0, 500));
-      return json(
-        { error: 'send_failed', message: 'Could not send the email. Please try again.' },
-        502,
-      );
+      let detail = '';
+      try {
+        const parsed = JSON.parse(text);
+        detail = String(parsed?.message ?? '');
+      } catch { /* ignore */ }
+      const message = detail
+        ? `Could not send the email: ${detail}`
+        : 'Could not send the email. Please try again.';
+      return json({ error: 'send_failed', message }, 502);
     }
 
     return json({ ok: true });
@@ -129,6 +134,13 @@ serve(async (req) => {
     return json({ error: 'internal_error' }, 500);
   }
 });
+
+function json(payload: unknown, status = 200) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
