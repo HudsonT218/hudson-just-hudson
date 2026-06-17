@@ -8,10 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import DottedSurface from "./components/DottedSurface.tsx";
 import Index from "./pages/Index.tsx";
 import WorkPage from "./pages/WorkPage.tsx";
-import InterestedPage from "./pages/InterestedPage.tsx";
 import AiBriefPage from "./pages/AiBriefPage.tsx";
-import FreeBuildPage from "./pages/FreeBuildPage.tsx";
-import LandingPagesPage from "./pages/LandingPagesPage.tsx";
 import FinanceToolsPage from "./pages/FinanceToolsPage.tsx";
 import FilingSummarizerPage from "./pages/FilingSummarizerPage.tsx";
 import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
@@ -155,11 +152,8 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/work" element={<WorkPage />} />
-          <Route path="/interested" element={<InterestedPage />} />
           <Route path="/ai-brief" element={<AiBriefPage />} />
           <Route path="/unsubscribe" element={<UnsubscribePage />} />
-          <Route path="/free-build" element={<FreeBuildPage />} />
-          <Route path="/landing-pages" element={<LandingPagesPage />} />
           <Route path="/finance-tools" element={<FinanceToolsPage />} />
           <Route path="/finance-tools/filing-summarizer" element={<FilingSummarizerPage />} />
           {/* Redirect the previous /ai-test URL (renamed to /ai-brief). */}
@@ -202,6 +196,10 @@ const AppRoutes = () => {
             path="/resources/ai-for-small-business.html"
             element={<Navigate to="/resources/ai-for-small-business" replace />}
           />
+          {/* Retired sales-funnel pages redirect to home. */}
+          <Route path="/interested" element={<Navigate to="/" replace />} />
+          <Route path="/free-build" element={<Navigate to="/" replace />} />
+          <Route path="/landing-pages" element={<Navigate to="/" replace />} />
           <Route path="/packages" element={<Navigate to="/work" replace />} />
           <Route path="/reference/:token" element={<ReferencePage />} />
 

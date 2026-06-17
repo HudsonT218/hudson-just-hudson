@@ -19,10 +19,7 @@ interface RouteEntry {
 const ROUTES: RouteEntry[] = [
   { url: "/", outFile: "index.html" },
   { url: "/work", outFile: "work/index.html" },
-  { url: "/interested", outFile: "interested/index.html" },
   { url: "/ai-brief", outFile: "ai-brief/index.html" },
-  { url: "/free-build", outFile: "free-build/index.html" },
-  { url: "/landing-pages", outFile: "landing-pages/index.html" },
   { url: "/finance-tools", outFile: "finance-tools/index.html" },
   {
     url: "/finance-tools/filing-summarizer",
