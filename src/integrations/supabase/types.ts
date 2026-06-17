@@ -261,6 +261,39 @@ export type Database = {
           },
         ]
       }
+      filing_summaries: {
+        Row: {
+          created_at: string
+          email: string
+          form: string
+          id: string
+          meta: Json | null
+          results: Json
+          status: string
+          ticker: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          form: string
+          id?: string
+          meta?: Json | null
+          results: Json
+          status?: string
+          ticker: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          form?: string
+          id?: string
+          meta?: Json | null
+          results?: Json
+          status?: string
+          ticker?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           company: string | null

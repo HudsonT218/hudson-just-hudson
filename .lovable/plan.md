@@ -1,30 +1,15 @@
-## Goal
-Pause new project intake: replace all "Book a Call" Calendly links with email (`mailto:hudsonturansky@gmail.com`), and replace the Free Builds page hero with a "not taking on new work" message.
+## Problem
 
-## Changes
+The `/finance-tools/filing-summarizer` page shows "Failed to fetch" because the `summarize-filing` edge function returns 404 — it exists in the repo at `supabase/functions/summarize-filing/index.ts` but has never been deployed to Lovable Cloud. The Lovable AI key (`LOVABLE_API_KEY`) is already provisioned, so no key wiring is needed.
 
-### 1. Replace Calendly CTAs with email
-For each occurrence, swap `https://calendly.com/hudsonturansky/30min` → `mailto:hudsonturansky@gmail.com`, change button labels from "Book a Call" / "Book a discovery call" → "Email me", and soften surrounding copy where it references scheduling.
+## Fix
 
-Files:
-- `src/components/Contact.tsx` — OPEN badge → "PAUSED — not taking on new projects right now"; button "Book a Call" → "Email me"; subtext → "Reach out by email and I'll get back when I'm taking on work again."
-- `src/pages/InterestedPage.tsx` (line 258) — swap link + label to email.
-- `src/pages/LandingPagesPage.tsx` (line 139) — swap link + label to email.
-- `src/pages/AiBriefPage.tsx` (lines 836, 879, 903 and "Book a discovery call" copy at 782/842) — swap to email + relabel.
-
-### 2. Free Builds page hero pause
-`src/pages/FreeBuildPage.tsx`: replace the hero (badge, headline, subhead, counter, signup CTA) with a centered pause message:
-- Badge: "Currently paused"
-- Headline: "Not taking on new work at the moment."
-- Subhead: "I've stepped back from new projects for now. If you'd like to be in touch about future availability, send me an email."
-- Single button: "Email me" → `mailto:hudsonturansky@gmail.com`
-- Hide the form, the "Why free" CTA buttons, and the discovery-call signup flow below.
-- Keep page route and SEO title/meta updated to reflect the pause.
-
-### 3. llms.txt
-`public/llms.txt`: replace the three Calendly references with "Currently not taking on new projects — email hudsonturansky@gmail.com."
+1. Deploy `summarize-filing` (and its companion `email-filing-report`, which the same page also invokes) to Lovable Cloud.
+2. Test by calling `summarize-filing` with `{ ticker: "AAPL", form: "latest", email: "test@example.com" }` and confirm a 200 with a brief, not a 404.
+3. If the test surfaces a missing-table error (e.g. `filing_summaries`), report back before adding migrations — no schema changes are in scope yet.
 
 ## Out of scope
-- Configurator `contentSchema.ts` placeholders (internal tool examples, user-facing only inside the configurator).
-- Admin pages.
-- No backend/edge function changes.
+
+- No UI changes to `FilingSummarizerPage.tsx`.
+- No prompt/model changes (default `google/gemini-3-flash-preview` stays).
+- No new secrets or DB migrations unless the deploy test reveals one is missing.
