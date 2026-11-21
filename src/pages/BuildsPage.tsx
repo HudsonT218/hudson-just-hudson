@@ -4,6 +4,9 @@ import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import happyTailsCover from "@/assets/happy-tails.png";
 import chesapeakePantryCover from "@/assets/chesapeake-pantry.png";
+import surgewiseCover from "@/assets/surgewise-cover.png.asset.json";
+import cedarValeCover from "@/assets/cedar-vale-cover.png.asset.json";
+import lapwingCover from "@/assets/lapwing-cover.png.asset.json";
 import Collaborators from "@/components/Collaborators";
 
 const MeetingAssistantDemo = lazy(() =>
@@ -51,6 +54,27 @@ const PORTFOLIO_ITEMS: PortfolioItem[] = [
     desc: "An example volunteer tracking OS I built: shift scheduling, hour tracking, leaderboards, and manager reports for a food bank.",
     url: "https://chesapeake-pantry.lovable.app",
     image: chesapeakePantryCover,
+  },
+  {
+    label: "App · 2026",
+    title: "Surgewise",
+    desc: "A personal project: a DoorDash assistant app that helps you find the best hours to go out and deliver.",
+    url: "https://surgewise.site/",
+    image: surgewiseCover.url,
+  },
+  {
+    label: "Web · 2026",
+    title: "Cedar Vale Outdoor Living",
+    desc: "An example business site I built, not for an actual client, a demo of the kind of site I can ship.",
+    url: "https://cedar-vale-outdoor-living.vercel.app/",
+    image: cedarValeCover.url,
+  },
+  {
+    label: "Web · 2026",
+    title: "Lapwing",
+    desc: "An example landing page for a fitness app concept, not for an actual client, a demo of the kind of site I can ship.",
+    url: "https://lapwing-omega.vercel.app/",
+    image: lapwingCover.url,
   },
 ];
 
