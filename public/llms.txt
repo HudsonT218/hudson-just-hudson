@@ -1,8 +1,8 @@
 # Hudson Turansky
 
-> Builder who uses AI to make tools for finance, plus agents, automations, and custom software. Learning markets by shipping in them.
+> Builder of custom operating systems, AI agent systems, and websites, and an AI consultant.
 
-Hudson Turansky is a builder. AI is the work, whether that is AI tools, agents, automations, or custom software. His current focus is finance: he is early in the field, studying for the SIE, and learning markets by building tools for them. The way he frames it, he is a custom builder for finance, where you bring the domain knowledge and he brings the ability to build it and get it shipped.
+Hudson Turansky is a builder. AI is the work, whether that is AI tools, agents, automations, or custom software. He builds bespoke operating systems for businesses, sets up AI agent systems, helps teams integrate AI, consults on AI, and builds websites.
 
 Live site: https://hudsonturansky.com
 Email: hudsonturansky@gmail.com
@@ -11,10 +11,9 @@ Email: hudsonturansky@gmail.com
 
 - [Home](https://hudsonturansky.com/): Who Hudson is, what he is building, and how to get in touch.
 - [Builds](https://hudsonturansky.com/builds): Projects and a live AI meeting-assistant demo, plus the kinds of work he does: AI agents and assistants, automations and integrations, operations software, and web.
-- [Finance Tools](https://hudsonturansky.com/finance-tools): Free finance tools, 3 free runs each. The first is the Filing Summarizer.
-- [Filing Summarizer](https://hudsonturansky.com/finance-tools/filing-summarizer): Turns a company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary. Pulls the filing from SEC EDGAR. 3 free runs per email, with the option to receive the brief as a PDF.
+- [Filing Summarizer (free resource)](https://hudsonturansky.com/resources/filing-summarizer): Turns a company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary. Pulls the filing from SEC EDGAR. 3 free runs per email, with the option to receive the brief as a PDF.
 - [Updates](https://hudsonturansky.com/updates): Building in public. Short notes on what he is making and learning.
-- [Resources](https://hudsonturansky.com/resources): Free tools and plain-English writing on AI and finance.
+- [Resources](https://hudsonturansky.com/resources): Free tools and plain-English writing on AI for business.
 - [Free Personalized AI Brief](https://hudsonturansky.com/ai-brief): Answer a few questions about your work and life and get 6 to 10 specific AI use-case ideas, grouped "At Work" and "In Your Life" and tagged by effort. One brief per email.
 
 ## Resources
@@ -31,7 +30,7 @@ Email: hudsonturansky@gmail.com
 
 ## About
 
-Hudson is a builder working with AI, now focused on finance. He is early in the field and studying for the SIE, and he wants to learn markets from the people who know them while doing what he is already good at: turning an idea into something that actually works. If you work in finance and need things built, get in touch.
+Hudson is a builder working with AI: custom operating systems, AI agents and integrations, AI consulting, and websites. He turns an idea into something that actually works. If you need something built or want help with AI, get in touch.
 
 ## Contact
 

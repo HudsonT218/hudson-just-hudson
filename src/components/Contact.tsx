@@ -46,7 +46,7 @@ const Contact = () => {
               hudsonturansky@gmail.com
             </a>
             . I read everything, whether it's feedback on something I built or you're working on
-            something at the same AI and finance intersection.
+            something with AI you want help with.
           </p>
 
           <div>

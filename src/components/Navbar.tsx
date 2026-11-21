@@ -5,7 +5,6 @@ import { useTheme } from "@/lib/useTheme";
 const NAV_LINKS: Array<{ label: string; href: string }> = [
   { label: "About",         href: "#about" },
   { label: "Builds",        href: "/builds" },
-  { label: "Finance Tools", href: "/finance-tools" },
   { label: "Resources",     href: "/resources" },
   { label: "Updates",       href: "/updates" },
 ];

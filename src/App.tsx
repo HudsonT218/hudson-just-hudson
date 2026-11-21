@@ -9,7 +9,6 @@ import DottedSurface from "./components/DottedSurface.tsx";
 import Index from "./pages/Index.tsx";
 import BuildsPage from "./pages/BuildsPage.tsx";
 import AiBriefPage from "./pages/AiBriefPage.tsx";
-import FinanceToolsPage from "./pages/FinanceToolsPage.tsx";
 import FilingSummarizerPage from "./pages/FilingSummarizerPage.tsx";
 import UpdatesPage from "./pages/UpdatesPage.tsx";
 import ResourcesIndexPage from "./pages/ResourcesIndexPage.tsx";
@@ -142,8 +141,9 @@ const AppRoutes = () => {
           <Route path="/work" element={<Navigate to="/builds" replace />} />
           <Route path="/ai-brief" element={<AiBriefPage />} />
           <Route path="/unsubscribe" element={<UnsubscribePage />} />
-          <Route path="/finance-tools" element={<FinanceToolsPage />} />
-          <Route path="/finance-tools/filing-summarizer" element={<FilingSummarizerPage />} />
+          <Route path="/resources/filing-summarizer" element={<FilingSummarizerPage />} />
+          <Route path="/finance-tools" element={<Navigate to="/resources" replace />} />
+          <Route path="/finance-tools/filing-summarizer" element={<Navigate to="/resources/filing-summarizer" replace />} />
           <Route path="/updates" element={<UpdatesPage />} />
           {/* Redirect the previous /ai-test URL (renamed to /ai-brief). */}
           <Route path="/ai-test" element={<Navigate to="/ai-brief" replace />} />

@@ -39,12 +39,6 @@ const CAPABILITIES = [
 
 const PORTFOLIO_ITEMS: PortfolioItem[] = [
   {
-    label: "Finance Tool · 2026",
-    title: "Filing Summarizer",
-    desc: "A tool that turns any company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief. Live on this site, with 3 free runs per email.",
-    url: "/finance-tools/filing-summarizer",
-  },
-  {
     label: "Web · 2026",
     title: "Happy Tails Dog Walking",
     desc: "An example landing page I built, not for an actual client, just a demo of the kind of site I can ship fast.",
@@ -67,19 +61,19 @@ const BuildsPage = () => {
         <title>Builds · Hudson Turansky</title>
         <meta
           name="description"
-          content="Things I'm building with AI: finance tools, agents, automations, and software. Some live, some demos, more on the way."
+          content="Things I'm building with AI: operating systems, AI agents, automations, and websites. Some live, some demos, more on the way."
         />
         <link rel="canonical" href="https://hudsonturansky.com/builds" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hudsonturansky.com/builds" />
         <meta property="og:title" content="Builds · Hudson Turansky" />
-        <meta property="og:description" content="Things I'm building with AI: finance tools, agents, automations, and software." />
+        <meta property="og:description" content="Things I'm building with AI: operating systems, AI agents, automations, and websites." />
         <meta property="og:image" content="https://hudsonturansky.com/og-work.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Builds · Hudson Turansky" />
-        <meta name="twitter:description" content="Things I'm building with AI: finance tools, agents, automations, and software." />
+        <meta name="twitter:description" content="Things I'm building with AI: operating systems, AI agents, automations, and websites." />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-work.png" />
       </Helmet>
       <Navbar />
@@ -350,7 +344,7 @@ const BuildsPage = () => {
             Building in the same space?
           </h2>
           <p className="text-gray-400 font-light mb-8">
-            I like comparing notes and shipping things. If you work in AI or finance, say hi.
+            I like comparing notes and shipping things. If you're working with AI, say hi.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -364,7 +358,7 @@ const BuildsPage = () => {
               Email me →
             </a>
             <Link
-              to="/finance-tools"
+              to="/resources"
               className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-md transition-colors"
               style={{
                 backgroundColor: "var(--app-card-bg-strong)",
@@ -372,7 +366,7 @@ const BuildsPage = () => {
                 border: "1px solid var(--app-border-strong)",
               }}
             >
-              Explore the finance tools →
+              Explore free resources →
             </Link>
           </div>
         </div>

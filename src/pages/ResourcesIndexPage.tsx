@@ -1,5 +1,5 @@
 // /resources, the doorway to free tools and plain-English writing on AI and
-// finance. SPA route, prerendered via prerenderPlugin so crawlers see the
+// business. SPA route, prerendered via prerenderPlugin so crawlers see the
 // rendered cards on first fetch.
 //
 // Content is a small data model (TOOLS + CATEGORIES) so new resources drop in
@@ -28,8 +28,8 @@ interface Category {
 // Interactive tools (highest engagement, shown first).
 const TOOLS: ResourceCard[] = [
   {
-    to: "/finance-tools/filing-summarizer",
-    label: "Tool · Finance",
+    to: "/resources/filing-summarizer",
+    label: "Tool · Free",
     title: "Filing Summarizer",
     description:
       "Turn any company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary. 3 free runs.",
@@ -67,13 +67,6 @@ const CATEGORIES: Category[] = [
       },
     ],
   },
-  {
-    key: "finance",
-    title: "Finance and markets",
-    blurb: "Notes from learning finance by building in it. More as I go.",
-    items: [],
-    note: "Notes are on the way. In the meantime, the Filing Summarizer above is the first finance tool.",
-  },
 ];
 
 const COLLECTION_JSONLD = {
@@ -81,7 +74,7 @@ const COLLECTION_JSONLD = {
   "@type": "CollectionPage",
   name: "Resources · Hudson Turansky",
   description:
-    "Free tools and plain-English writing on AI and finance: an SEC filing summarizer, a personalized AI brief, and guides on using AI safely.",
+    "Free tools and plain-English writing on AI: an SEC filing summarizer, a personalized AI brief, and guides on using AI safely.",
   url: "https://hudsonturansky.com/resources",
   isPartOf: {
     "@type": "WebSite",
@@ -97,7 +90,7 @@ const ResourcesIndexPage = () => {
         <title>Resources · Hudson Turansky</title>
         <meta
           name="description"
-          content="Free tools and plain-English writing on AI and finance: an SEC filing summarizer, a personalized AI brief, and guides on using AI safely."
+          content="Free tools and plain-English writing on AI: an SEC filing summarizer, a personalized AI brief, and guides on using AI safely."
         />
         <link rel="canonical" href="https://hudsonturansky.com/resources" />
         <meta property="og:type" content="website" />
@@ -105,14 +98,14 @@ const ResourcesIndexPage = () => {
         <meta property="og:title" content="Resources · Hudson Turansky" />
         <meta
           property="og:description"
-          content="Free tools and plain-English writing on AI and finance."
+          content="Free tools and plain-English writing on AI."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Resources · Hudson Turansky" />
         <meta
           name="twitter:description"
-          content="Free tools and plain-English writing on AI and finance."
+          content="Free tools and plain-English writing on AI."
         />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
         <script type="application/ld+json">{JSON.stringify(COLLECTION_JSONLD)}</script>
@@ -143,12 +136,11 @@ const ResourcesIndexPage = () => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              AI and finance.
+              AI.
             </span>
           </h1>
           <p className="text-lg text-gray-400 font-light max-w-2xl leading-relaxed mb-16">
-            Interactive tools you can use right now, plus plain-English notes on AI and, as I get
-            deeper into it, finance.
+            Interactive tools you can use right now, plus plain-English notes on AI for business.
           </p>
 
           {/* Tools */}

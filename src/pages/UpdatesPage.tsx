@@ -28,9 +28,9 @@ const UPDATES: Update[] = [
     body: (
       <>
         <p>
-          The first finance tool is live. The{" "}
+          A new free tool is live. The{" "}
           <Link
-            to="/finance-tools/filing-summarizer"
+            to="/resources/filing-summarizer"
             className="text-blue-400 hover:text-blue-300 transition-colors"
           >
             Filing Summarizer
@@ -40,13 +40,13 @@ const UPDATES: Update[] = [
           matter, and a glossary for the jargon.
         </p>
         <p>
-          I built it mostly to learn the filings myself. Reading a 10-Q cold is rough, so I made the
+          I built it as a test of AI document processing. Reading a 10-Q cold is rough, so I made the
           thing I wanted: pull the document straight from SEC EDGAR, strip it down, and hand it to a
           model with a tight brief. You get 3 free runs per email, and you can have the brief sent to
           you as a PDF.
         </p>
         <p>
-          Next up: more finance tools, and notes on what I'm learning about markets as I go.
+          It now lives in Free Resources.
         </p>
       </>
     ),
@@ -57,7 +57,7 @@ const JSONLD = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   name: "Updates · Hudson Turansky",
-  description: "Short notes on what Hudson Turansky is building and learning across AI and finance.",
+  description: "Short notes on what Hudson Turansky is building and learning across AI, agents, and custom systems.",
   url: "https://hudsonturansky.com/updates",
   isPartOf: { "@type": "WebSite", name: "Hudson Turansky", url: "https://hudsonturansky.com" },
 };
@@ -73,7 +73,7 @@ const UpdatesPage = () => {
         <title>Updates · Hudson Turansky</title>
         <meta
           name="description"
-          content="Building in public: short notes on what I'm making and learning across AI and finance."
+          content="Building in public: short notes on what I'm making and learning across AI, agents, and custom systems."
         />
         <link rel="canonical" href="https://hudsonturansky.com/updates" />
         <meta property="og:type" content="website" />
@@ -81,7 +81,7 @@ const UpdatesPage = () => {
         <meta property="og:title" content="Updates · Hudson Turansky" />
         <meta
           property="og:description"
-          content="Building in public: short notes on what I'm making and learning across AI and finance."
+          content="Building in public: short notes on what I'm making and learning across AI, agents, and custom systems."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />

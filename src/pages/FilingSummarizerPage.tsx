@@ -1,4 +1,4 @@
-// Filing Summarizer — /finance-tools/filing-summarizer.
+// Filing Summarizer — /resources/filing-summarizer.
 //
 // Email-gated tool (3 free runs per email). Enter a ticker + pick a form, and a
 // purpose-built assistant turns the company's latest SEC filing into a
@@ -65,7 +65,7 @@ const ACTIONABLE_ERRORS = new Set([
 ]);
 
 const limitFallback =
-  "You've used all your free filing summaries for this email. Book a call if you'd like a custom finance tool built.";
+  "You've used all your free filing summaries for this email. Book a call if you'd like a custom tool built.";
 
 const FilingSummarizerPage = () => {
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
@@ -83,9 +83,9 @@ const FilingSummarizerPage = () => {
           name="description"
           content="Turn any company's latest SEC filing (10-K or 10-Q) into a plain-English one-page brief: key numbers, what changed, risks, and a jargon glossary. 3 free runs, just an email."
         />
-        <link rel="canonical" href="https://hudsonturansky.com/finance-tools/filing-summarizer" />
+        <link rel="canonical" href="https://hudsonturansky.com/resources/filing-summarizer" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hudsonturansky.com/finance-tools/filing-summarizer" />
+        <meta property="og:url" content="https://hudsonturansky.com/resources/filing-summarizer" />
         <meta property="og:title" content="Filing Summarizer: SEC filings in plain English" />
         <meta
           property="og:description"
@@ -116,11 +116,11 @@ const FilingSummarizerPage = () => {
         />
         <div className="relative max-w-3xl mx-auto">
           <Link
-            to="/finance-tools"
+            to="/resources"
             className="text-xs font-medium transition-colors"
             style={{ color: "var(--app-text-muted)" }}
           >
-            ← Finance Tools
+            ← Resources
           </Link>
 
           {phase.kind === "idle" && (
@@ -175,7 +175,7 @@ const JSONLD = {
   name: "Filing Summarizer",
   description:
     "Turns a company's latest SEC filing into a plain-English one-page brief with key numbers, what changed, risks, and a jargon glossary.",
-  url: "https://hudsonturansky.com/finance-tools/filing-summarizer",
+  url: "https://hudsonturansky.com/resources/filing-summarizer",
   applicationCategory: "FinanceApplication",
   operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -894,8 +894,8 @@ const Footer = () => (
   >
     <p className="text-xs" style={{ color: "var(--app-text-muted)" }}>
       &copy; {__BUILD_YEAR__} Hudson Turansky &middot;{" "}
-      <Link to="/finance-tools" className="hover:underline" style={{ color: "var(--app-text-med)" }}>
-        Finance Tools
+      <Link to="/resources" className="hover:underline" style={{ color: "var(--app-text-med)" }}>
+        Resources
       </Link>
     </p>
   </footer>

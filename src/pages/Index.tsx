@@ -18,27 +18,27 @@ const Index = () => {
   return (
     <div id="main-content" role="main" className="min-h-screen relative z-10">
       <Helmet>
-        <title>Hudson Turansky · AI builder for finance</title>
+        <title>Hudson Turansky · Custom AI systems, agents and websites</title>
         <meta
           name="description"
-          content="I'm Hudson. I use AI to build tools for finance, agents, automations, and custom software. Here's what I'm making and what I'm learning as I go."
+          content="I'm Hudson. I build custom operating systems, AI agent systems, and websites, and help businesses integrate AI."
         />
         <link rel="canonical" href="https://hudsonturansky.com/" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hudsonturansky.com/" />
-        <meta property="og:title" content="Hudson Turansky · AI builder for finance" />
+        <meta property="og:title" content="Hudson Turansky · Custom AI systems, agents and websites" />
         <meta
           property="og:description"
-          content="Builder, working with AI. Tools for finance, plus what I'm learning as I go."
+          content="Custom operating systems, AI agents, AI consulting, and websites."
         />
         <meta property="og:image" content="https://hudsonturansky.com/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Hudson Turansky · AI builder for finance" />
+        <meta name="twitter:title" content="Hudson Turansky · Custom AI systems, agents and websites" />
         <meta
           name="twitter:description"
-          content="Builder, working with AI. Tools for finance, plus what I'm learning as I go."
+          content="Custom operating systems, AI agents, AI consulting, and websites."
         />
         <meta name="twitter:image" content="https://hudsonturansky.com/og-image.png" />
       </Helmet>
@@ -59,7 +59,7 @@ const Index = () => {
 
         <div className="relative max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-widest text-blue-400 font-medium mb-5">
-            Builder · AI · Finance
+            Builder · AI · Systems
           </p>
 
           <h1
@@ -74,7 +74,7 @@ const Index = () => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              tools for finance.
+              systems that run your business.
             </span>
           </h1>
 
@@ -113,15 +113,8 @@ const Index = () => {
           </div>
 
           <p className="text-sm text-gray-500 font-light max-w-xl mx-auto leading-relaxed">
-            <span className="text-gray-400">Right now:</span> using AI to build tools for working
-            with markets, and learning finance by shipping them. Latest:{" "}
-            <Link
-              to="/finance-tools/filing-summarizer"
-              className="text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              a tool that turns any SEC filing into a one-page analyst brief
-            </Link>
-            .
+            <span className="text-gray-400">Right now:</span> building custom operating systems, setting up
+            AI agents, and helping businesses put AI to work.
           </p>
         </div>
       </section>
@@ -177,17 +170,15 @@ const Index = () => {
               works.
             </p>
             <p>
-              My focus now is finance, even though I don't come from it. I'm early in the field and
-              studying for my SIE, and that's exactly the point: I want to learn markets from the
-              people who know them while doing what I'm already good at.
+              Most of my work is building bespoke operating systems for businesses, setting up AI agent
+              systems, integrating AI into the tools people already use, and building websites.
             </p>
             <p>
-              The way I see it, I'm a custom builder for finance. You bring the domain knowledge and
-              know what needs to exist, and I bring the ability to build it and get it shipped.
-              That's the work I'm after.
+              I also consult on AI. You know your business and what needs to exist, and I figure out
+              where AI fits, then build it and get it shipped.
             </p>
             <p>
-              If you work in finance and need things built,{" "}
+              If you need something built or want help with AI,{" "}
               <a
                 href="mailto:hudsonturansky@gmail.com"
                 className="text-white underline decoration-1 underline-offset-4 hover:text-blue-300 transition-colors"
@@ -209,14 +200,14 @@ const Index = () => {
               See what I'm building <span aria-hidden>→</span>
             </Link>
             <Link
-              to="/finance-tools"
+              to="/resources"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white transition-colors"
               style={{
                 backgroundColor: "var(--app-card-bg-strong)",
                 border: "1px solid var(--app-border-strong)",
               }}
             >
-              Finance tools <span aria-hidden>→</span>
+              Free resources <span aria-hidden>→</span>
             </Link>
           </div>
         </div>
