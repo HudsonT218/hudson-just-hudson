@@ -188,7 +188,7 @@ const BuildsPage = () => {
                   }}
                 >
                   {p.image && (
-                    <div className="h-48 overflow-hidden">
+                    <div className="h-56 overflow-hidden">
                       <img
                         src={p.image}
                         alt={p.title}

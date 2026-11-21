@@ -144,12 +144,6 @@ const Index = () => {
         </div>
       )}
 
-      {/* Divider */}
-      <div
-        className="max-w-5xl mx-auto"
-        style={{ borderTop: "1px solid var(--app-border-soft)" }}
-      />
-
       {/* About */}
       <section id="about" className="py-28 px-6">
         <div className="max-w-2xl mx-auto">
